@@ -9,9 +9,8 @@ public class City {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Column(name = "name",nullable = false, unique = true)
-    private String name;
-
+    @Column(name = "city",nullable = false, unique = true)
+    private String city;
 }
