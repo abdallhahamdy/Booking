@@ -3,7 +3,12 @@ spring:
     url: jdbc:mysql://localhost:3306/booking
     username: root
     password: root
-
+  messages:
+    basename: messages
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
   #spring:
 #  datasource:
 #    url: jdbc:mysql://node6720-spring-boot-app2.fin.libyanspider.cloud/Booking
