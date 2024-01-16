@@ -6,6 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface RoleMapper {
 
@@ -16,4 +18,7 @@ public interface RoleMapper {
 
     @Mapping(source = "roleName", target = "role")
     Role roleDtoToRole(RoleDto roleDto);
+
+    List<RoleDto> rolesToRoleDtos(List<Role> roles); // Add this method
+
 }

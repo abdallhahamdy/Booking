@@ -3,12 +3,14 @@ package com.AlTaraf.Booking.controller;
 import com.AlTaraf.Booking.dto.CityDto;
 import com.AlTaraf.Booking.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/api/cities")
@@ -21,6 +23,9 @@ public class CityController {
         this.cityService = cityService;
     }
 
+    @Autowired
+    private MessageSource messageSource;
+
     @GetMapping("/all")
     public ResponseEntity<List<CityDto>> getAllCities() {
         List<CityDto> cities = cityService.getAllCities();
@@ -29,6 +34,40 @@ public class CityController {
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.ok(cities);
+        }
+    }
+
+
+    @PostMapping("/create")
+    public ResponseEntity<CityDto> createCity(@RequestBody CityDto cityDto) {
+        CityDto savedCityDto = cityService.saveCity(cityDto);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedCityDto);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<CityDto> updateCity(@PathVariable Long id, @RequestBody CityDto cityDto) {
+        CityDto existingCity = cityService.getCityById(id);
+
+        if (existingCity != null) {
+            existingCity.setCityName(cityDto.getCityName());  // Assuming cityName property in CityDto
+            CityDto updatedCityDto = cityService.saveCity(existingCity);
+
+            return ResponseEntity.ok(updatedCityDto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteCity(@PathVariable Long id) {
+        CityDto existingCity = cityService.getCityById(id);
+
+        if (existingCity != null) {
+            cityService.deleteCity(id);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 }

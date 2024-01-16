@@ -1,15 +1,22 @@
-#spring:
-#  datasource:
-#    url: jdbc:mysql://localhost:3306/booking
-#    username: root
-#    password: root
-
 spring:
   datasource:
-    url: jdbc:mysql://168.119.132.30:3306/Booking
+    url: jdbc:mysql://localhost:3306/booking
     username: root
-    password: LCQcxx37460
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: root
+
+  #spring:
+#  datasource:
+#    url: jdbc:mysql://node6720-spring-boot-app2.fin.libyanspider.cloud/Booking
+#    username: root
+#    password: VSInnl48944
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+
+#spring:
+#  datasource:
+#    url: jdbc:mysql://159.69.234.82:3306/Booking
+#    username: root
+#    password: VSInnl48944
+#    driver-class-name: com.mysql.cj.jdbc.Driver
 
   # Hibernate ddl auto (create, create-drop, validate, update)
   jpa:
@@ -26,4 +33,34 @@ spring:
 logging:
   level:
     org.springframework.security: DEBUG
+
+#springdoc:
+#  api-docs:
+#    enabled: false
+#  swagger-ui:
+#    enabled: false
+#  packages-to-scan: com.bezkoder.spring.swagger.controller
+springdoc:
+
+  swagger-ui:
+    path: /bezkoder-documentation
+  api-docs:
+    path: /bezkoder-api-docs
+
+    tryItOutEnabled: true
+    filter: true
+
+bezkoder:
+  openapi:
+#    dev-url: http://localhost:8080
+    dev-url: http://168.119.132.22:8080
+    prod-url:
+
+schemes:
+  - https
+# App Properties
+app:
+  jwtCookieName: bezkoder
+  jwtSecret: ======================BezKoder=Spring===========================
+  jwtExpirationMs: 86400000
 

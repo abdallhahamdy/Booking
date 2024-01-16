@@ -32,8 +32,8 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToOne
-    @JoinColumn(name = "city_id")
+    @ManyToOne
+    @JoinColumn(name = "city_id")  // Many users can have the same city
     private City city;
 
     @ManyToMany(fetch = FetchType.EAGER)
