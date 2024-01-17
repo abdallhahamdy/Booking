@@ -1,12 +1,8 @@
 package com.AlTaraf.Booking.controller;
 
-import com.AlTaraf.Booking.Translator;
 import com.AlTaraf.Booking.dto.CityDto;
 import com.AlTaraf.Booking.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,35 +22,15 @@ public class CityController {
         this.cityService = cityService;
     }
 
-    @Autowired
-    private Translator translator;
-
-    @GetMapping(value = "/all", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<List<CityDto>> getAllCities(@RequestParam("lang") String lang) {
-        System.out.println("Received lang parameter: " + lang);
-
+    @GetMapping("/all")
+    public ResponseEntity<List<CityDto>> getAllCities() {
         List<CityDto> cities = cityService.getAllCities();
-
-        cities.forEach(cityDto -> {
-            cityDto.setCityName("city.name." + cityDto.getCityName());
-        });
-
-        Locale locale = new Locale(lang);
-        cities.forEach(cityDto -> {
-            System.out.println("CityNameKey before translation: " + cityDto.getCityName());
-            cityDto.setCityName(translator.toLocale(cityDto.getCityName(), locale));
-            System.out.println("CityNameKey after translation: " + cityDto.getCityName());
-        });
-
         if (cities.isEmpty()) {
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_JSON_UTF8)
-                    .body(cities);
+            return ResponseEntity.ok(cities);
         }
     }
-
 
     @PostMapping("/create")
     public ResponseEntity<CityDto> createCity(@RequestBody CityDto cityDto) {
