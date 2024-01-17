@@ -14,13 +14,14 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-//    Boolean existsByUsername(String name);
+    Optional<User> findByUsername(String username);
+
+    Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
 
-    Optional<User> findByEmail(String email);
-//    User findByEmail(String email);
     Optional<User> findByPhone(BigInteger phone);
+
 
     @Query("SELECT COUNT(u.id) > 0 FROM User u " +
             "JOIN u.roles r " +

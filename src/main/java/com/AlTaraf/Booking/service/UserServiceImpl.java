@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
         // Map UserRegisterDto to User entity
         User user = new User();
-        user.setName(userRegisterDto.getName());
+        user.setUsername(userRegisterDto.getName());
         user.setEmail(userRegisterDto.getEmail());
         user.setPassword(userRegisterDto.getPassword());
         user.setPhone(userRegisterDto.getPhoneNumber());
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
 
         // Update user properties based on the UserRegisterDto
-        existingUser.setName(userRegisterDto.getName());
+        existingUser.setUsername(userRegisterDto.getName());
         existingUser.setEmail(userRegisterDto.getEmail());
         existingUser.setPassword(userRegisterDto.getPassword());
         existingUser.setPhone(userRegisterDto.getPhoneNumber());

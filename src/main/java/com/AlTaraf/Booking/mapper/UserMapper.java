@@ -17,7 +17,7 @@ public interface UserMapper {
     @Mapping(source = "city.cityName", target = "city.city")
     @Mapping(source = "roles", target = "roles")  // Map the whole Set<RoleDto>
     @Mapping(source = "password", target = "password")
-    @Mapping(source = "name", target = "name")
+    @Mapping(source = "name", target = "username")
     @Mapping(source = "email", target = "email")
     User userRegisterDtoToUser(UserRegisterDto userRegisterDto);
 

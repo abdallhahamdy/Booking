@@ -17,6 +17,9 @@ public class City {
     @Column(name = "city", nullable = false, unique = true)
     private String city;  // Renamed the property to avoid conflict with the entity name
 
+    @Column(name = "arabic_name")
+    private String arabicCityName;
+
     @OneToMany(mappedBy = "city")  // Refers to the 'city' property in the User entity
     private Set<User> users = new HashSet<>();
 }
