@@ -23,7 +23,7 @@ public class User  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false, unique = true, name = "name")
     @Size(max = 20)
@@ -35,7 +35,7 @@ public class User  {
     private String email;
 
     @Column(nullable = false, unique = true)
-    private BigInteger phone;
+    private String phone;
 
     @Column(nullable = false)
     @Size(max = 120)

@@ -10,7 +10,7 @@ import java.util.Set;
 public class UserRegisterDto {
     private String name;
     private String email;
-    private BigInteger phoneNumber;
+    private String phoneNumber;
     private String password;
     private CityDto city;
     private Set<RoleDto> roles = new HashSet<>();

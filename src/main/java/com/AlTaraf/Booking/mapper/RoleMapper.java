@@ -15,17 +15,17 @@ public interface RoleMapper {
 
     @Mapping(source = "role", target = "roleName")
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "arabicName", target = "arabicRoleName")
+    @Mapping(source = "arabicRoleName", target = "arabicRoleName")
     RoleDto roleToRoleDto(Role role);
 
     @Mapping(source = "roleName", target = "role")
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "arabicRoleName", target = "arabicName")
+    @Mapping(source = "arabicRoleName", target = "arabicRoleName")
     Role roleDtoToRole(RoleDto roleDto);
 
     @Mapping(source = "role", target = "roleName")
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "arabicName", target = "arabicRoleName")
+    @Mapping(source = "arabicRoleName", target = "arabicRoleName")
     List<RoleDto> rolesToRoleDtos(List<Role> roles); // Add this method
 
 }

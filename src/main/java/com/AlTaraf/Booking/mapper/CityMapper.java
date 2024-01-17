@@ -16,12 +16,12 @@ CityMapper INSTANCE = Mappers.getMapper(CityMapper.class);
 
     @Mapping(source = "city", target = "cityName")
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "arabicName", target = "arabicName")
+    @Mapping(source = "arabicCityName", target = "arabicCityName")
     CityDto cityToCityDTO(City city);
 
     @Mapping(source = "cityName", target = "city")
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "arabicName", target = "arabicName")
+    @Mapping(source = "arabicCityName", target = "arabicCityName")
     City cityDTOToCity(CityDto cityDto);
 
 

@@ -10,8 +10,12 @@ import com.AlTaraf.Booking.exception.DuplicateUserException;
 import com.AlTaraf.Booking.exception.UserNotFoundException;
 import com.AlTaraf.Booking.mapper.CityMapper;
 import com.AlTaraf.Booking.mapper.UserMapper;
+import com.AlTaraf.Booking.repository.RoleRepository;
 import com.AlTaraf.Booking.repository.UserRepository;
+import com.AlTaraf.Booking.security.jwt.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -37,6 +41,19 @@ public class UserServiceImpl implements UserService {
         this.cityMapper  = cityMapper;
         this.userMapper = userMapper;
     }
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    RoleRepository roleRepository;
+
+    @Autowired
+    PasswordEncoder encoder;
+
+    @Autowired
+    JwtUtils jwtUtils;
+
 
     @Override
     public User registerUser(UserRegisterDto userRegisterDto) {
@@ -74,7 +91,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setUsername(userRegisterDto.getName());
         user.setEmail(userRegisterDto.getEmail());
-        user.setPassword(userRegisterDto.getPassword());
+        user.setPassword(encoder.encode(userRegisterDto.getPassword()));
         user.setPhone(userRegisterDto.getPhoneNumber());
         user.setCity(city);
         user.setRoles(roles);
@@ -82,6 +99,8 @@ public class UserServiceImpl implements UserService {
         // Save the user entity
         return userRepository.save(user);
     }
+
+
 
     @Override
     public User updateUser(Long id, UserRegisterDto userRegisterDto) {
