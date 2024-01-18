@@ -62,9 +62,9 @@ public class UserServiceImpl implements UserService {
         Set<RoleDto> roleDtos = userRegisterDto.getRoles();
         Set<Role> roles = new HashSet<>();
         for (RoleDto roleDto : roleDtos) {
-            Role role = roleService.getRoleByName(roleDto.getRoleName());
+            Role role = roleService.getRoleByName(roleDto.getArabicRoleNameDto());
             if (role == null) {
-                throw new RuntimeException("Role " + roleDto.getRoleName() + " not found");
+                throw new RuntimeException("Role " + roleDto.getRoleNameDto() + " not found");
             }
             roles.add(role);
         }
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
                 userRegisterDto.getEmail(),
                 userRegisterDto.getPhoneNumber(),
                 userRegisterDto.getRoles().stream()
-                        .map(RoleDto::getRoleName)
+                        .map(RoleDto::getRoleNameDto)
                         .collect(Collectors.toList()))) {
             throw new DuplicateUserException("User with the same email, phone number, and role already exists.");
         }
@@ -125,9 +125,9 @@ public class UserServiceImpl implements UserService {
         Set<RoleDto> roleDtos = userRegisterDto.getRoles();
         Set<Role> roles = new HashSet<>();
         for (RoleDto roleDto : roleDtos) {
-            Role role = roleService.getRoleByName(roleDto.getRoleName());
+            Role role = roleService.getRoleByName(roleDto.getRoleNameDto());
             if (role == null) {
-                throw new RuntimeException("Role " + roleDto.getRoleName() + " not found");
+                throw new RuntimeException("Role " + roleDto.getRoleNameDto() + " not found");
             }
             roles.add(role);
         }
@@ -154,5 +154,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    // Example method to generate OTP (replace with your implementation)
+    public String generateOtpForUser(User user) {
+        // Your OTP generation logic here (e.g., using a library or custom logic)
+        // For simplicity, let's assume a random 6-digit OTP
+        return String.valueOf((int) (Math.random() * 900000) + 100000);
     }
 }

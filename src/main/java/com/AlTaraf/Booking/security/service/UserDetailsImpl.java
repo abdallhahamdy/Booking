@@ -1,6 +1,5 @@
 package com.AlTaraf.Booking.security.service;
 
-import java.math.BigInteger;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -11,8 +10,6 @@ import com.AlTaraf.Booking.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;

@@ -38,7 +38,7 @@ public class RoleServiceImpl implements RoleService {
 
         if (existingRole != null) {
             // Update the existing role
-            existingRole.setRole(roleDto.getRoleName()); // Assuming roleName property in RoleDto
+            existingRole.setRole(roleDto.getRoleNameDto()); // Assuming roleName property in RoleDto
             return roleRepository.save(existingRole);
         } else {
             // Handle case where the role with the given id is not found

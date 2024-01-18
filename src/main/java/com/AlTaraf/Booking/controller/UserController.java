@@ -1,16 +1,17 @@
 package com.AlTaraf.Booking.controller;
 
 import com.AlTaraf.Booking.dto.UserRegisterDto;
+import com.AlTaraf.Booking.entity.User;
 import com.AlTaraf.Booking.payload.request.LoginRequest;
+import com.AlTaraf.Booking.payload.response.ApiResponse;
+import com.AlTaraf.Booking.payload.response.AuthenticationResponse;
 import com.AlTaraf.Booking.payload.response.JwtResponse;
 import com.AlTaraf.Booking.security.jwt.JwtUtils;
 import com.AlTaraf.Booking.security.service.UserDetailsImpl;
 import com.AlTaraf.Booking.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,19 +39,29 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/register")
+    @PostMapping("/Register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDto userRegisterDto) {
         try {
-            userService.registerUser(userRegisterDto);
-            return ResponseEntity.ok("User registered successfully!");
+
+            // Perform user registration
+            User registeredUser = userService.registerUser(userRegisterDto);
+
+            // Generate and send OTP (you need to implement this logic)
+            String otp = userService.generateOtpForUser(registeredUser);
+
+            AuthenticationResponse response = new AuthenticationResponse(200, "User registered successfully!", otp);
+
+            return ResponseEntity.ok(response);
+
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error registering user: " + e.getMessage());
+            ApiResponse errorResponse = new ApiResponse(400, "Error registering user: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(errorResponse);
         }
     }
 
-    @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getPhone(), loginRequest.getPassword()));
@@ -68,6 +79,7 @@ public class UserController {
                 userDetails.getUsername(),
                 userDetails.getEmail(),
                 userDetails.getPhone(),
+                userDetails.getCity(),
                 roles));
     }
 
@@ -91,23 +103,26 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<UserRegisterDto>> getAllUsers() {
+    public ResponseEntity<?> getAllUsers() {
         List<UserRegisterDto> users = userService.getAllUsers();
         if (!users.isEmpty()) {
             return ResponseEntity.ok(users);
         } else {
-            return ResponseEntity.noContent().build();
+            ApiResponse response = new ApiResponse(204, "No Content for Roles!");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
             userService.deleteUser(id);
-            return ResponseEntity.ok("User deleted successfully!");
+            ApiResponse response = new ApiResponse(200, "Role deleted successfully!");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error deleting user: " + e.getMessage());
+            ApiResponse response = new ApiResponse(404, "Not Found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
+        }
+
     }
-}

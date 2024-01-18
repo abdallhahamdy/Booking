@@ -3,6 +3,7 @@ package com.AlTaraf.Booking.controller;
 import com.AlTaraf.Booking.dto.RoleDto;
 import com.AlTaraf.Booking.entity.Role;
 import com.AlTaraf.Booking.mapper.RoleMapper;
+import com.AlTaraf.Booking.payload.response.ApiResponse;
 import com.AlTaraf.Booking.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,52 +25,58 @@ public class RoleController {
 
     // Create a new role
     @PostMapping("/create")
-    public ResponseEntity<RoleDto> createRole(@RequestBody RoleDto roleDto) {
+    public ResponseEntity<?> createRole(@RequestBody RoleDto roleDto) {
         Role createdRole = roleService.createRole(roleDto);
-        RoleDto createdRoleDto = RoleMapper.INSTANCE.roleToRoleDto(createdRole);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdRoleDto);
+        RoleMapper.INSTANCE.roleToRoleDto(createdRole);
+        ApiResponse response = new ApiResponse(200, "Added Role successfully!");
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     // Update an existing role
     @PutMapping("/update/{id}")
-    public ResponseEntity<RoleDto> updateRole(@PathVariable Long id, @RequestBody RoleDto roleDto) {
+    public ResponseEntity<?> updateRole(@PathVariable Long id, @RequestBody RoleDto roleDto) {
         Role updatedRole = roleService.updateRole(id, roleDto);
-        RoleDto updatedRoleDto = RoleMapper.INSTANCE.roleToRoleDto(updatedRole);
-        return ResponseEntity.ok(updatedRoleDto);
+        RoleMapper.INSTANCE.roleToRoleDto(updatedRole);
+        ApiResponse response = new ApiResponse(205, "Reset Content successfully!");
+        return ResponseEntity.ok(response);
     }
 
     // Get a role by ID
     @GetMapping("/{id}")
-    public ResponseEntity<RoleDto> getRoleById(@PathVariable Long id) {
+    public ResponseEntity<?> getRoleById(@PathVariable Long id) {
         Role role = roleService.getRoleById(id);
         if (role != null) {
             RoleDto roleDto = RoleMapper.INSTANCE.roleToRoleDto(role);
             return ResponseEntity.ok(roleDto);
         } else {
-            return ResponseEntity.notFound().build();
+            ApiResponse response = new ApiResponse(404, "Not Found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
     // Get all roles
     @GetMapping("/all")
-    public ResponseEntity<List<RoleDto>> getAllRoles() {
+    public ResponseEntity<?> getAllRoles() {
         List<Role> roles = roleService.getAllRoles();
         if (!roles.isEmpty()) {
             List<RoleDto> roleDtos = RoleMapper.INSTANCE.rolesToRoleDtos(roles);
             return ResponseEntity.ok(roleDtos);
         } else {
-            return ResponseEntity.noContent().build();
+            ApiResponse response = new ApiResponse(204, "No Content for Roles!");
+
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
 
     // Delete a role by ID
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteRole(@PathVariable Long id) {
+    public ResponseEntity<?> deleteRole(@PathVariable Long id) {
         if (roleService.deleteRole(id)) {
-            return ResponseEntity.noContent().build();
+            ApiResponse response = new ApiResponse(200, "Role deleted successfully!");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         } else {
-            return ResponseEntity.notFound().build();
-        }
+            ApiResponse response = new ApiResponse(404, "Not Found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);        }
     }
 }
 
