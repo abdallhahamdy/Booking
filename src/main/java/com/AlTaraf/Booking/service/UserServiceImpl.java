@@ -10,6 +10,7 @@ import com.AlTaraf.Booking.exception.DuplicateUserException;
 import com.AlTaraf.Booking.exception.UserNotFoundException;
 import com.AlTaraf.Booking.mapper.CityMapper;
 import com.AlTaraf.Booking.mapper.UserMapper;
+import com.AlTaraf.Booking.payload.request.PasswordResetDto;
 import com.AlTaraf.Booking.repository.RoleRepository;
 import com.AlTaraf.Booking.repository.UserRepository;
 import com.AlTaraf.Booking.security.jwt.JwtUtils;
@@ -113,6 +114,17 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).get();
     }
 
+    public void resetPasswordByPhone(String phone, PasswordResetDto passwordResetDto) {
+        // Retrieve the user from the database using phone number
+        User user = userRepository.findByPhone(phone)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Update the password
+        user.setPassword(encoder.encode(passwordResetDto.getNewPassword()));
+
+        // Save the updated user
+        userRepository.save(user);
+    }
 
 //    @Override
 //    public User updateUser(Long id, UserRegisterDto userRegisterDto) {
