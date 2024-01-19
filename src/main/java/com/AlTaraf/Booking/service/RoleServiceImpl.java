@@ -12,39 +12,37 @@ import java.util.List;
 
 @Service
 public class RoleServiceImpl implements RoleService {
-    private final RoleRepository roleRepository;
-    private final RoleMapper roleMapper;
 
     @Autowired
-    public RoleServiceImpl(RoleRepository roleRepository, RoleMapper roleMapper) {
-        this.roleRepository = roleRepository;
-        this.roleMapper = roleMapper;
-    }
+    RoleRepository roleRepository;
+
+    @Autowired
+    RoleMapper roleMapper;
 
     @Override
     public Role getRoleByName(String roleName) {
         return roleRepository.findByRole(roleName).orElse(null);
     }
 
-    @Override
-    public Role createRole(RoleDto roleDto) {
-        Role role = roleMapper.roleDtoToRole(roleDto);
-        return roleRepository.save(role);
-    }
+//    @Override
+//    public Role createRole(RoleDto roleDto) {
+//        Role role = roleMapper.roleDtoToRole(roleDto);
+//        return roleRepository.save(role);
+//    }
 
-    @Override
-    public Role updateRole(Long id, RoleDto roleDto) {
-        Role existingRole = roleRepository.findById(id).orElse(null);
-
-        if (existingRole != null) {
-            // Update the existing role
-            existingRole.setRole(roleDto.getRoleNameDto()); // Assuming roleName property in RoleDto
-            return roleRepository.save(existingRole);
-        } else {
-            // Handle case where the role with the given id is not found
-            throw new RoleNotFoundException("Role with id " + id + " not found");
-        }
-    }
+//    @Override
+//    public Role updateRole(Long id, RoleDto roleDto) {
+//        Role existingRole = roleRepository.findById(id).orElse(null);
+//
+//        if (existingRole != null) {
+//            // Update the existing role
+//            existingRole.setRole(roleDto.getRoleNameDto()); // Assuming roleName property in RoleDto
+//            return roleRepository.save(existingRole);
+//        } else {
+//            // Handle case where the role with the given id is not found
+//            throw new RoleNotFoundException("Role with id " + id + " not found");
+//        }
+//    }
 
     @Override
     public Role getRoleById(Long id) {
@@ -56,15 +54,15 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findAll();
     }
 
-    @Override
-    public boolean deleteRole(Long id) {
-        if (roleRepository.existsById(id)) {
-            roleRepository.deleteById(id);
-            return true;
-        } else {
-            // Handle case where the role with the given id is not found
-            return false;
-        }
-    }
+//    @Override
+//    public boolean deleteRole(Long id) {
+//        if (roleRepository.existsById(id)) {
+//            roleRepository.deleteById(id);
+//            return true;
+//        } else {
+//            // Handle case where the role with the given id is not found
+//            return false;
+//        }
+//    }
 }
 
