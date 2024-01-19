@@ -18,10 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,6 +52,26 @@ public class UserServiceImpl implements UserService {
     JwtUtils jwtUtils;
 
 
+    public String generateOtpForUser() {
+        // For simplicity, let's assume a random 4-digit OTP
+        return String.valueOf((int) (Math.random() * 9000) + 1000);
+    }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public Boolean existsByPhone(String phone) {
+        return userRepository.existsByPhone(phone);
+    }
+
+    @Override
+    public Boolean existsByEmailAndRolesOrPhoneNumberAndRoles(String email, String phone, Collection<Long> roleIds) {
+        return userRepository.existsByEmailAndRolesOrPhoneNumberAndRoles(email, phone, roleIds);
+    }
+
     @Override
     public User registerUser(UserRegisterDto userRegisterDto) {
 
@@ -77,14 +94,14 @@ public class UserServiceImpl implements UserService {
         }
 
         // Check if a user with the same email or phone number and the same role already exists using custom SQL query
-        if (userRepository.existsByEmailAndRolesOrPhoneNumberAndRoles(
-                userRegisterDto.getEmail(),
-                userRegisterDto.getPhoneNumber(),
-                userRegisterDto.getRoles().stream()
-                        .map(RoleDto::getRoleNameDto)
-                        .collect(Collectors.toList()))) {
-            throw new DuplicateUserException("User with the same email, phone number, and role already exists.");
-        }
+//        if (userRepository.existsByEmailAndRolesOrPhoneNumberAndRoles(
+//                userRegisterDto.getEmail(),
+//                userRegisterDto.getPhoneNumber(),
+//                userRegisterDto.getRoles().stream()
+//                        .map(RoleDto::getRoleNameDto)
+//                        .collect(Collectors.toList()))) {
+//            throw new DuplicateUserException("User with the same email, phone number, and role already exists.");
+//        }
 
 
         // Map UserRegisterDto to User entity
@@ -157,8 +174,5 @@ public class UserServiceImpl implements UserService {
 //    }
 
     // Example method to generate OTP (replace with your implementation)
-    public String generateOtpForUser() {
-        // For simplicity, let's assume a random 4-digit OTP
-        return String.valueOf((int) (Math.random() * 9000) + 1000);
-    }
+
 }

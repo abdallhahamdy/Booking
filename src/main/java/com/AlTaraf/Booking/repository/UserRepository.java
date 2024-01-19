@@ -20,14 +20,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByEmail(String email);
 
+    Boolean existsByPhone(String phone);
+
+
     Optional<User> findByPhone(String phone);
 
 
     @Query("SELECT COUNT(u.id) > 0 FROM User u " +
             "JOIN u.roles r " +
-            "WHERE (u.email = :email OR u.phone = :phone) AND r.role IN :roleNames")
+            "WHERE (u.email = :email OR u.phone = :phone) AND r.id IN :roleIds")
     boolean existsByEmailAndRolesOrPhoneNumberAndRoles(@Param("email") String email,
                                                        @Param("phone") String phone,
-                                                       @Param("roleNames") Collection<String> roleNames);
+                                                       @Param("roleIds") Collection<Long> roleIds);
 }
 
