@@ -6,6 +6,7 @@ import com.AlTaraf.Booking.payload.request.LoginRequest;
 import com.AlTaraf.Booking.payload.request.PasswordResetDto;
 import com.AlTaraf.Booking.payload.response.ApiResponse;
 import com.AlTaraf.Booking.payload.response.AuthenticationResponse;
+import com.AlTaraf.Booking.payload.response.CheckApiResponse;
 import com.AlTaraf.Booking.payload.response.JwtResponse;
 import com.AlTaraf.Booking.security.jwt.JwtUtils;
 import com.AlTaraf.Booking.security.service.UserDetailsImpl;
@@ -62,24 +63,26 @@ public class UserController {
 
 
         if (existsByEmailAndRolesOrPhoneNumberAndRoles) {
-            ApiResponse response = new ApiResponse(204, "User with the same email, phone number, and role already exists.");
+            CheckApiResponse response = new CheckApiResponse(204, "User with the same email, phone number, and role already exists.", false);
 
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(response);
-        } else if (isPhoneAvailable) {
+        } else if (isPhoneAvailable){
 
-            ApiResponse response = new ApiResponse(204, "Phone is already taken.");
+            CheckApiResponse response = new CheckApiResponse(204, "Phone is already taken.", false);
 
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(response);
-        } else if (isEmailAvailable) {
-            ApiResponse response = new ApiResponse(204, "Email is already taken.");
+        } else if (isEmailAvailable){
+            CheckApiResponse response = new CheckApiResponse(204, "Email is already taken.", false);
 
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(response);
         }
 
-        ApiResponse response = new ApiResponse(200, "User is available.");
+
+        CheckApiResponse response = new CheckApiResponse(200, "", true);
+
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
