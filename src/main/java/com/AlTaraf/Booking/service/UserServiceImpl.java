@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
         Set<RoleDto> roleDtos = userRegisterDto.getRoles();
         Set<Role> roles = new HashSet<>();
         for (RoleDto roleDto : roleDtos) {
-            Role role = roleService.getRoleByName(roleDto.getArabicRoleNameDto());
+            Role role = roleService.getRoleById(roleDto.getId());
             if (role == null) {
                 throw new RuntimeException("Role " + roleDto.getRoleNameDto() + " not found");
             }
@@ -92,16 +92,6 @@ public class UserServiceImpl implements UserService {
         if (city == null) {
             throw new RuntimeException("City " + cityDto.getCityName() + " not found");
         }
-
-        // Check if a user with the same email or phone number and the same role already exists using custom SQL query
-//        if (userRepository.existsByEmailAndRolesOrPhoneNumberAndRoles(
-//                userRegisterDto.getEmail(),
-//                userRegisterDto.getPhoneNumber(),
-//                userRegisterDto.getRoles().stream()
-//                        .map(RoleDto::getRoleNameDto)
-//                        .collect(Collectors.toList()))) {
-//            throw new DuplicateUserException("User with the same email, phone number, and role already exists.");
-//        }
 
 
         // Map UserRegisterDto to User entity

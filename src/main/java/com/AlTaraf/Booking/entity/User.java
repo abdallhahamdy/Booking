@@ -29,12 +29,12 @@ public class User  {
     @Size(max = 20)
     private String username;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @Size(max = 50)
     @Email
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String phone;
 
     @Column(nullable = false)
