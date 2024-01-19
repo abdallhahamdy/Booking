@@ -17,6 +17,9 @@ public interface UserService {
     Boolean existsByPhone(String phone);
 
     User registerUser(UserRegisterDto userRegisterDto);
+
+    User getUserById(Long id);
+
 //    User updateUser(Long id, UserRegisterDto userRegisterDto);
 //    UserRegisterDto getUserById(Long id);
 //    List<UserRegisterDto> getAllUsers();

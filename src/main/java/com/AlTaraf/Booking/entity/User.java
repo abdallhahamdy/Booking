@@ -45,7 +45,7 @@ public class User  {
     @JoinColumn(name = "city_id")  // Many users can have the same city
     private City city;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),

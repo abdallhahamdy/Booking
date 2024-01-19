@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.controller;
 
 import com.AlTaraf.Booking.dto.UserRegisterDto;
+import com.AlTaraf.Booking.entity.User;
 import com.AlTaraf.Booking.payload.request.LoginRequest;
 import com.AlTaraf.Booking.payload.response.ApiResponse;
 import com.AlTaraf.Booking.payload.response.AuthenticationResponse;
@@ -114,6 +115,18 @@ public class UserController {
                 userDetails.getPhone(),
                 userDetails.getCity(),
                 roles));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            ApiResponse response = new ApiResponse(404, "Not Found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
     }
 
 //    @PutMapping("/update/{id}")

@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,6 +9,7 @@ import java.util.Set;
 
 @Data
 @Entity
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class City {
 
     @Id
