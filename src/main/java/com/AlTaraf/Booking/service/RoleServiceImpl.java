@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.service;
 
 import com.AlTaraf.Booking.dto.RoleDto;
+import com.AlTaraf.Booking.entity.ERole;
 import com.AlTaraf.Booking.entity.Role;
 import com.AlTaraf.Booking.exception.RoleNotFoundException;
 import com.AlTaraf.Booking.mapper.RoleMapper;
@@ -20,8 +21,9 @@ public class RoleServiceImpl implements RoleService {
     RoleMapper roleMapper;
 
     @Override
-    public Role getRoleByName(String roleName) {
-        return roleRepository.findByRole(roleName).orElse(null);
+    public Role getRoleByName(ERole name) {
+//        return roleRepository.findByRole(roleName).orElse(null);
+        return roleRepository.findByName(name).orElse(null);
     }
 
 //    @Override

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
@@ -20,7 +21,7 @@ public class JwtResponse {
     private String email;
     private String phone;
     private City city;
-    private List<RoleDto> roles;
+    private List<String> role;
 
     public JwtResponse(String jwt,
                        Long id,
@@ -35,6 +36,7 @@ public class JwtResponse {
         this.email = email;
         this.phone = phone;
         this.city = city;
+        this.role = roles;
         // Assuming RoleDto has a constructor that accepts three parameters (id, roleName, arabicRoleName)
 //        this.roles = roles.stream().map(role -> new RoleDto(role)).collect(Collectors.toList());
 

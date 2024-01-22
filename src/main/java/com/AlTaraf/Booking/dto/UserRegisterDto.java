@@ -13,6 +13,6 @@ public class UserRegisterDto {
     private String phoneNumber;
     private String password;
     private CityDto city;
-    private Set<RoleDto> roles = new HashSet<>();
+    private Set<String> roles;
 
 }

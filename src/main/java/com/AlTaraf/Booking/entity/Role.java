@@ -17,9 +17,8 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "role", unique = true)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, name = "role", nullable = false)
+    private ERole name;
 
-    @Column(name = "arabic_name")
-    private String arabicRoleName;
 }

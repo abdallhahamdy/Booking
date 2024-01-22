@@ -4,6 +4,7 @@ import com.AlTaraf.Booking.dto.CityDto;
 import com.AlTaraf.Booking.dto.RoleDto;
 import com.AlTaraf.Booking.dto.UserRegisterDto;
 import com.AlTaraf.Booking.entity.City;
+import com.AlTaraf.Booking.entity.ERole;
 import com.AlTaraf.Booking.entity.Role;
 import com.AlTaraf.Booking.entity.User;
 import com.AlTaraf.Booking.exception.DuplicateUserException;
@@ -77,15 +78,69 @@ public class UserServiceImpl implements UserService {
     public User registerUser(UserRegisterDto userRegisterDto) {
 
         // Check if the roles exist
-        Set<RoleDto> roleDtos = userRegisterDto.getRoles();
+//        Set<String> roleDtos = userRegisterDto.getRoles();
+//        Set<Role> roles = new HashSet<>();
+//        for (String roleDto : roleDtos) {
+//            Role role = roleService.getRoleById(roleDto.());
+//            if (role == null) {
+//                throw new RuntimeException("Role " + roleDto.getRoleNameDto() + " not found");
+//            }
+//            roles.add(role);
+//        }
+//
+//        Set<String> role2 = userRegisterDto.getRoles();
+//        Role role = roleRepository.findByName(role2);
+
+
+
+        Set<String> strRoles = userRegisterDto.getRoles();
         Set<Role> roles = new HashSet<>();
-        for (RoleDto roleDto : roleDtos) {
-            Role role = roleService.getRoleById(roleDto.getId());
-            if (role == null) {
-                throw new RuntimeException("Role " + roleDto.getRoleNameDto() + " not found");
-            }
-            roles.add(role);
+
+//        if (strRoles == null || strRoles == "") {
+//            Role userRole = roleRepository.findByName(ERole.ROLE_GUEST)
+//                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+//            roles.add(userRole);
+//        } else {
+//            strRoles.forEach(role -> {
+//                if (role.equals("lessor")) {
+//                    Role modRole = roleRepository.findByName(ERole.ROLE_LESSOR)
+//                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+//                    roles.add(modRole);
+//                } else {
+//                    Role userRole = roleRepository.findByName(ERole.ROLE_GUEST)
+//                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+//                    roles.add(userRole);
+//                }
+//            });
+//        }
+
+        if (strRoles == null) {
+            Role userRole = roleRepository.findByName(ERole.ROLE_GUEST)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            roles.add(userRole);
+        } else {
+            strRoles.forEach(role -> {
+                switch (role) {
+                    case "lessor":
+                        Role adminRole = roleRepository.findByName(ERole.ROLE_LESSOR)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(adminRole);
+
+                        break;
+                    case "guest":
+                        Role modRole = roleRepository.findByName(ERole.ROLE_GUEST)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(modRole);
+
+                        break;
+                    default:
+                        Role userRole = roleRepository.findByName(ERole.ROLE_GUEST)
+                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(userRole);
+                }
+            });
         }
+
 
         // Check if the city exists
         CityDto cityDto = userRegisterDto.getCity();
