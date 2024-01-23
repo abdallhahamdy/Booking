@@ -29,7 +29,6 @@ public class User  {
     @Size(max = 20)
     private String username;
 
-    @Column(nullable = false)
     @Size(max = 50)
     @Email
     private String email;
