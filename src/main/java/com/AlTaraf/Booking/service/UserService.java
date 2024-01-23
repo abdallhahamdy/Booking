@@ -1,17 +1,19 @@
 package com.AlTaraf.Booking.service;
 
 import com.AlTaraf.Booking.dto.UserRegisterDto;
+import com.AlTaraf.Booking.entity.ERole;
 import com.AlTaraf.Booking.entity.User;
 import com.AlTaraf.Booking.payload.request.PasswordResetDto;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
 
     String generateOtpForUser ();
 
-    Boolean existsByEmailAndRolesOrPhoneNumberAndRoles(String email, String phone, Collection<Long> roleIds);
+    Boolean existsByEmailAndRolesOrPhoneNumberAndRoles(String email, String phone, Set<ERole> roleNames);
 
     Boolean existsByEmail(String email);
 

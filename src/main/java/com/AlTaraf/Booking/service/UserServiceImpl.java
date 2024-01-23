@@ -1,7 +1,6 @@
 package com.AlTaraf.Booking.service;
 
 import com.AlTaraf.Booking.dto.CityDto;
-import com.AlTaraf.Booking.dto.RoleDto;
 import com.AlTaraf.Booking.dto.UserRegisterDto;
 import com.AlTaraf.Booking.entity.City;
 import com.AlTaraf.Booking.entity.ERole;
@@ -70,49 +69,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean existsByEmailAndRolesOrPhoneNumberAndRoles(String email, String phone, Collection<Long> roleIds) {
-        return userRepository.existsByEmailAndRolesOrPhoneNumberAndRoles(email, phone, roleIds);
+    public Boolean existsByEmailAndRolesOrPhoneNumberAndRoles(String email, String phone, Set<ERole> roleNames) {
+        return userRepository.existsByEmailAndRolesOrPhoneNumberAndRoles(email, phone, roleNames);
     }
 
     @Override
     public User registerUser(UserRegisterDto userRegisterDto) {
 
-        // Check if the roles exist
-//        Set<String> roleDtos = userRegisterDto.getRoles();
-//        Set<Role> roles = new HashSet<>();
-//        for (String roleDto : roleDtos) {
-//            Role role = roleService.getRoleById(roleDto.());
-//            if (role == null) {
-//                throw new RuntimeException("Role " + roleDto.getRoleNameDto() + " not found");
-//            }
-//            roles.add(role);
-//        }
-//
-//        Set<String> role2 = userRegisterDto.getRoles();
-//        Role role = roleRepository.findByName(role2);
-
-
-
         Set<String> strRoles = userRegisterDto.getRoles();
         Set<Role> roles = new HashSet<>();
 
-//        if (strRoles == null || strRoles == "") {
-//            Role userRole = roleRepository.findByName(ERole.ROLE_GUEST)
-//                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//            roles.add(userRole);
-//        } else {
-//            strRoles.forEach(role -> {
-//                if (role.equals("lessor")) {
-//                    Role modRole = roleRepository.findByName(ERole.ROLE_LESSOR)
-//                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                    roles.add(modRole);
-//                } else {
-//                    Role userRole = roleRepository.findByName(ERole.ROLE_GUEST)
-//                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-//                    roles.add(userRole);
-//                }
-//            });
-//        }
 
         if (strRoles == null) {
             Role userRole = roleRepository.findByName(ERole.ROLE_GUEST)

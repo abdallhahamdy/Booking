@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.controller;
 
 import com.AlTaraf.Booking.dto.UserRegisterDto;
+import com.AlTaraf.Booking.entity.ERole;
 import com.AlTaraf.Booking.entity.User;
 import com.AlTaraf.Booking.payload.request.LoginRequest;
 import com.AlTaraf.Booking.payload.request.PasswordResetDto;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -55,9 +57,11 @@ public class UserController {
     @GetMapping("/check-availability")
     public ResponseEntity<?> checkAvailability(@RequestParam(value = "email") String email,
                                                @RequestParam(value = "phone") String phone,
-                                               @RequestParam(value = "roleIds") Collection<Long> roleIds) {
+                                               @RequestParam(value = "roleNames") Set<String> roleNames) {
 
-        boolean existsByEmailAndRolesOrPhoneNumberAndRoles = userService.existsByEmailAndRolesOrPhoneNumberAndRoles(email, phone, roleIds);
+        Set<ERole> roleNamesSet = roleNames.stream().map(ERole::valueOf).collect(Collectors.toSet());
+
+        boolean existsByEmailAndRolesOrPhoneNumberAndRoles = userService.existsByEmailAndRolesOrPhoneNumberAndRoles(email, phone, roleNamesSet);
         boolean isEmailAvailable = userService.existsByEmail(email);
         boolean isPhoneAvailable = userService.existsByPhone(phone);
 
