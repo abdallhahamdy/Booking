@@ -1,18 +1,17 @@
-package com.AlTaraf.Booking.entity;
-
-import static jakarta.persistence.TemporalType.TIMESTAMP;
-
-import java.util.Date;
+package com.AlTaraf.Booking.entity.common;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Temporal;
-
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.Date;
+
+import static jakarta.persistence.TemporalType.TIMESTAMP;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
