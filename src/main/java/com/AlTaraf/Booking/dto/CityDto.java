@@ -14,4 +14,37 @@ public class CityDto {
     private String cityName;
 
     private String arabicCityName;
+
+    public CityDto() {
+    }
+
+    public CityDto(Long id, String cityName, String arabicCityName) {
+        this.id = id;
+        this.cityName = cityName;
+        this.arabicCityName = arabicCityName;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+    public String getArabicCityName() {
+        return arabicCityName;
+    }
+
+    public void setArabicCityName(String arabicCityName) {
+        this.arabicCityName = arabicCityName;
+    }
 }
