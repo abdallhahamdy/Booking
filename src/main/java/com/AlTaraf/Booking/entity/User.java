@@ -1,6 +1,6 @@
 package com.AlTaraf.Booking.entity;
 
-import com.AlTaraf.Booking.entity.common.JPAEntity;
+import com.AlTaraf.Booking.entity.common.Auditable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
@@ -9,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
 
