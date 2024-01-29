@@ -1,6 +1,6 @@
 package com.AlTaraf.Booking.dto;
 
-import com.AlTaraf.Booking.entity.ERole;
+import com.AlTaraf.Booking.entity.enums.ERole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

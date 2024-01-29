@@ -1,12 +1,10 @@
 package com.AlTaraf.Booking.service;
 
 import com.AlTaraf.Booking.dto.UserRegisterDto;
-import com.AlTaraf.Booking.entity.ERole;
 import com.AlTaraf.Booking.entity.User;
+import com.AlTaraf.Booking.entity.enums.ERole;
 import com.AlTaraf.Booking.payload.request.PasswordResetDto;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 public interface UserService {

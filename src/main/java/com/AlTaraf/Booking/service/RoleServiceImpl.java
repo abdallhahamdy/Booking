@@ -1,9 +1,7 @@
 package com.AlTaraf.Booking.service;
 
-import com.AlTaraf.Booking.dto.RoleDto;
-import com.AlTaraf.Booking.entity.ERole;
 import com.AlTaraf.Booking.entity.Role;
-import com.AlTaraf.Booking.exception.RoleNotFoundException;
+import com.AlTaraf.Booking.entity.enums.ERole;
 import com.AlTaraf.Booking.mapper.RoleMapper;
 import com.AlTaraf.Booking.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,10 +1,10 @@
 package com.AlTaraf.Booking.mapper;
 
 
-import com.AlTaraf.Booking.entity.ERole;
 import com.AlTaraf.Booking.entity.Role;
 import com.AlTaraf.Booking.entity.User;
 import com.AlTaraf.Booking.dto.UserRegisterDto;
+import com.AlTaraf.Booking.entity.enums.ERole;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
