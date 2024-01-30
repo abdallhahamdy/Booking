@@ -61,6 +61,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/Register/**").permitAll()
                                 .requestMatchers("/api/test/**").permitAll()
+                                .requestMatchers("/units/**").permitAll()
                                 .requestMatchers("/api/cities/**").permitAll() // Adjust roles as needed
                                 .requestMatchers("/api/roles/**").permitAll()  // Adjust roles as needed
                                 .requestMatchers("/api/users/**").permitAll()  // Adjust roles as needed
