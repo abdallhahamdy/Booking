@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -23,6 +24,7 @@ public class City {
     private String arabicCityName;
 
     @OneToMany(mappedBy = "city")  // Refers to the 'city' property in the User entity
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 
     public City() {
