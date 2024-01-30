@@ -1,16 +1,9 @@
 package com.AlTaraf.Booking.entity;
 
 import com.AlTaraf.Booking.entity.enums.ERole;
-import com.sun.jdi.PrimitiveValue;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Data
 @Table(name="roles")
 public class Role {
 

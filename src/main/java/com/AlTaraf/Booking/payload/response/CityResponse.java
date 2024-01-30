@@ -6,9 +6,6 @@ public class CityResponse {
     private CityDto cityDto;
     private ApiResponse apiResponse;
 
-    public CityResponse() {
-    }
-
     public CityResponse(CityDto cityDto, ApiResponse apiResponse) {
         this.cityDto = cityDto;
         this.apiResponse = apiResponse;

@@ -1,18 +1,9 @@
 package com.AlTaraf.Booking.payload.response;
 
-import com.AlTaraf.Booking.dto.RoleDto;
 import com.AlTaraf.Booking.entity.City;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class JwtResponse {
     private String token;
     private String type = "Bearer";
