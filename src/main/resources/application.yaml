@@ -5,6 +5,11 @@ spring:
     password: VSInnl48944
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -30,7 +35,7 @@ springdoc:
 
 bezkoder:
   openapi:
-    dev-url: http://168.119.132.18:8080
+    dev-url: http://localhost:8080
     prod-url: http://168.119.132.18:8080
 
   app:
@@ -41,6 +46,6 @@ bezkoder:
 schemes:
   - https
 
-# http://localhost:8081/swagger-ui/index.html#
+# http://localhost:8080/swagger-ui/index.html#
 
 

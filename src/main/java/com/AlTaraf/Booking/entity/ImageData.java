@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.entity;
 
 import jakarta.persistence.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 @Table(name = "imageData")
@@ -15,12 +16,15 @@ public class ImageData {
     private String type;
 
     @Lob
-    @Column(name = "imagedata", length = 1000)
+    @Column(name = "imagedata")
     private byte[] imageData;
 
     @ManyToOne
     @JoinColumn(name = "unit_id")
     private Unit unit;
+
+    @Transient
+    private MultipartFile file;
 
     public ImageData() {
     }
@@ -71,6 +75,14 @@ public class ImageData {
 
     public void setUnit(Unit unit) {
         this.unit = unit;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 
     public static ImageDataBuilder builder() {
