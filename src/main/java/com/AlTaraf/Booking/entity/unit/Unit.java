@@ -1,12 +1,6 @@
-package com.AlTaraf.Booking.entity;
+package com.AlTaraf.Booking.entity.unit;
 
-import com.AlTaraf.Booking.entity.enums.AccommodationType;
-import com.AlTaraf.Booking.entity.enums.HotelClassification;
-import com.AlTaraf.Booking.entity.enums.UnitType;
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "unit")
@@ -14,24 +8,39 @@ public class Unit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "UNIT_ID")
     private Long id;
-    @Enumerated(EnumType.STRING)
-    @Column(name="UNIT_TYPE")
+    @OneToOne
+    @JoinColumn(name = "UNIT_TYPE_ID", nullable = false)
     private UnitType unitType;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "ACCOMMODATION_TYPE")
+    @OneToOne
+    @JoinColumn(name = "ACCOMMODATION_TYPE_ID", nullable = false)
     private AccommodationType accommodationType;
     @Column(name = "NAME_UNIT")
     private String nameUnit;
     @Column(name = "DESCRIPTION")
     private String description;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "HOTEL_CLASSIFICATION")
+    @OneToOne
+    @JoinColumn(name = "HOTEL_CLASSIFICATION_ID", nullable = false)
     private HotelClassification hotelClassification;
     @Column(name = "ADULTS_ALLOWED")
     private int adultsAllowed;
     @Column(name = "CHILDREN_ALLOWED")
     private int childrenAllowed;
+
+    public Unit() {
+    }
+
+    public Unit(Long id, UnitType unitType, AccommodationType accommodationType, String nameUnit, String description, HotelClassification hotelClassification, int adultsAllowed, int childrenAllowed) {
+        this.id = id;
+        this.unitType = unitType;
+        this.accommodationType = accommodationType;
+        this.nameUnit = nameUnit;
+        this.description = description;
+        this.hotelClassification = hotelClassification;
+        this.adultsAllowed = adultsAllowed;
+        this.childrenAllowed = childrenAllowed;
+    }
 
     public Long getId() {
         return id;

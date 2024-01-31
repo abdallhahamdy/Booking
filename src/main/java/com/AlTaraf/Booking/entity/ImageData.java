@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.entity;
 
+import com.AlTaraf.Booking.entity.unit.Unit;
 import jakarta.persistence.*;
 import org.springframework.web.multipart.MultipartFile;
 
