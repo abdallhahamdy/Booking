@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.entity;
 
+import com.AlTaraf.Booking.entity.enums.AccommodationType;
 import com.AlTaraf.Booking.entity.enums.UnitType;
 import jakarta.persistence.*;
 
@@ -13,13 +14,12 @@ public class Unit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Enumerated(EnumType.STRING)
     private UnitType unitType;
-
+    @Enumerated(EnumType.STRING)
+    private AccommodationType accommodationType;
     @Column(name = "NAME_UNIT")
     private String nameUnit;
-
     @Column(name = "DESCRIPTION")
     private String description;
 
@@ -28,8 +28,6 @@ public class Unit {
 
     @Column(name = "CHILDREN_ALLOWED")
     private int childrenAllowed;
-
-
 
     public Long getId() {
         return id;
@@ -45,6 +43,14 @@ public class Unit {
 
     public void setUnitType(UnitType unitType) {
         this.unitType = unitType;
+    }
+
+    public AccommodationType getAccommodationType() {
+        return accommodationType;
+    }
+
+    public void setAccommodationType(AccommodationType accommodationType) {
+        this.accommodationType = accommodationType;
     }
 
     public String getNameUnit() {
