@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.entity;
 
+import com.AlTaraf.Booking.entity.enums.UnitType;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -13,6 +14,9 @@ public class Unit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    private UnitType unitType;
+
     @Column(name = "NAME_UNIT")
     private String nameUnit;
 
@@ -25,19 +29,7 @@ public class Unit {
     @Column(name = "CHILDREN_ALLOWED")
     private int childrenAllowed;
 
-    @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
-    private List<ImageData> imageDataList;
-    public Unit() {
-    }
 
-    public Unit(Long id, String nameUnit, String description, int adultsAllowed, int childrenAllowed, List<ImageData> imageDataList) {
-        this.id = id;
-        this.nameUnit = nameUnit;
-        this.description = description;
-        this.adultsAllowed = adultsAllowed;
-        this.childrenAllowed = childrenAllowed;
-        this.imageDataList = imageDataList;
-    }
 
     public Long getId() {
         return id;
@@ -45,6 +37,14 @@ public class Unit {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UnitType getUnitType() {
+        return unitType;
+    }
+
+    public void setUnitType(UnitType unitType) {
+        this.unitType = unitType;
     }
 
     public String getNameUnit() {
@@ -77,21 +77,5 @@ public class Unit {
 
     public void setChildrenAllowed(int childrenAllowed) {
         this.childrenAllowed = childrenAllowed;
-    }
-
-    public List<ImageData> getImageDataList() {
-        return imageDataList;
-    }
-
-    public void setImageDataList(List<ImageData> imageDataList) {
-        this.imageDataList = imageDataList;
-    }
-
-    public void addImageData(ImageData imageData) {
-        if (imageDataList == null) {
-            imageDataList = new ArrayList<>();
-        }
-        imageDataList.add(imageData);
-        imageData.setUnit(this); // Set the unit for the imageData
     }
 }
