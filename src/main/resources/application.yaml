@@ -35,7 +35,7 @@ springdoc:
 
 bezkoder:
   openapi:
-    dev-url: http://localhost:8080
+    dev-url: http://168.119.132.18:8080
     prod-url: http://168.119.132.18:8080
 
   app:
@@ -47,5 +47,6 @@ schemes:
   - https
 
 # http://localhost:8080/swagger-ui/index.html#
+# http://168.119.132.18:8080/swagger-ui/index.html#
 
 

@@ -10,17 +10,17 @@ public class Unit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "UNIT_ID")
     private Long id;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "UNIT_TYPE_ID", nullable = false)
     private UnitType unitType;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "ACCOMMODATION_TYPE_ID", nullable = false)
     private AccommodationType accommodationType;
     @Column(name = "NAME_UNIT")
     private String nameUnit;
     @Column(name = "DESCRIPTION")
     private String description;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "HOTEL_CLASSIFICATION_ID", nullable = false)
     private HotelClassification hotelClassification;
     @Column(name = "ADULTS_ALLOWED")
