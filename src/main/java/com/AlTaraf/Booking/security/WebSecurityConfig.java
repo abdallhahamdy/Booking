@@ -62,6 +62,7 @@ public class WebSecurityConfig {
                         auth.requestMatchers("/api/users/Register/**").permitAll()
                                 .requestMatchers("/units/**").permitAll()
                                 .requestMatchers("/api/cities/**").permitAll() // Adjust roles as needed
+                                .requestMatchers("/regions/byCity/**").permitAll() // Adjust roles as needed
                                 .requestMatchers("/api/roles/**").permitAll()  // Adjust roles as needed
                                 .requestMatchers("/api/users/**").permitAll()  // Adjust roles as needed
                                 .requestMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**", "/bezkoder-documentation/**", "/bezkoder-api-docs/**").permitAll()

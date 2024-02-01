@@ -1,7 +1,6 @@
 package com.AlTaraf.Booking;
 
 import com.AlTaraf.Booking.config.AuditorAwareImpl;
-import com.AlTaraf.Booking.entity.User;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

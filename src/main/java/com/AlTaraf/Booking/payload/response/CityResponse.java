@@ -1,6 +1,6 @@
 package com.AlTaraf.Booking.payload.response;
 
-import com.AlTaraf.Booking.dto.CityDto;
+import com.AlTaraf.Booking.dto.cityDtoAndRoleDto.CityDto;
 
 public class CityResponse {
     private CityDto cityDto;

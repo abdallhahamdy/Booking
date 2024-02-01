@@ -1,7 +1,7 @@
 package com.AlTaraf.Booking.mapper;
 
-import com.AlTaraf.Booking.entity.City;
-import com.AlTaraf.Booking.dto.CityDto;
+import com.AlTaraf.Booking.entity.cityAndregion.City;
+import com.AlTaraf.Booking.dto.cityDtoAndRoleDto.CityDto;
 import org.mapstruct.Mapper;
 
 import org.mapstruct.factory.Mappers;

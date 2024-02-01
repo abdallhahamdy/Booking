@@ -1,10 +1,11 @@
-package com.AlTaraf.Booking.dto;
+package com.AlTaraf.Booking.dto.cityDtoAndRoleDto;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Data;
-@Data
+
+import java.util.List;
+
 public class CityDto {
 
     @Id
@@ -14,14 +15,16 @@ public class CityDto {
     private String cityName;
 
     private String arabicCityName;
+    private List<RegionDto> regions;
 
     public CityDto() {
     }
 
-    public CityDto(Long id, String cityName, String arabicCityName) {
+    public CityDto(Long id, String cityName, String arabicCityName, List<RegionDto> regions) {
         this.id = id;
         this.cityName = cityName;
         this.arabicCityName = arabicCityName;
+        this.regions = regions;
     }
 
     public Long getId() {
@@ -46,5 +49,13 @@ public class CityDto {
 
     public void setArabicCityName(String arabicCityName) {
         this.arabicCityName = arabicCityName;
+    }
+
+    public List<RegionDto> getRegions() {
+        return regions;
+    }
+
+    public void setRegions(List<RegionDto> regions) {
+        this.regions = regions;
     }
 }

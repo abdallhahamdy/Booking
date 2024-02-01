@@ -1,14 +1,15 @@
-package com.AlTaraf.Booking.entity;
+package com.AlTaraf.Booking.entity.cityAndregion;
 
+import com.AlTaraf.Booking.entity.User.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
-import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-@Data
 @Entity
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class City {
@@ -23,6 +24,9 @@ public class City {
     @Column(name = "arabic_name")
     private String arabicCityName;
 
+    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
+    private List<Region> regions = new ArrayList<>();
+
     @OneToMany(mappedBy = "city")  // Refers to the 'city' property in the User entity
     @JsonIgnore
     private Set<User> users = new HashSet<>();
@@ -30,10 +34,11 @@ public class City {
     public City() {
     }
 
-    public City(Long id, String cityName, String arabicCityName, Set<User> users) {
+    public City(Long id, String cityName, String arabicCityName, List<Region> regions, Set<User> users) {
         this.id = id;
         this.cityName = cityName;
         this.arabicCityName = arabicCityName;
+        this.regions = regions;
         this.users = users;
     }
 
@@ -61,11 +66,24 @@ public class City {
         this.arabicCityName = arabicCityName;
     }
 
+    public List<Region> getRegions() {
+        return regions;
+    }
+
+    public void setRegions(List<Region> regions) {
+        this.regions = regions;
+    }
+
     public Set<User> getUsers() {
         return users;
     }
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public void addRegion(Region region) {
+        regions.add(region);
+        region.setCity(this);
     }
 }

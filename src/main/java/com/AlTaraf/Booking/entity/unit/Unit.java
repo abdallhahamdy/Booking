@@ -1,5 +1,7 @@
 package com.AlTaraf.Booking.entity.unit;
 
+import com.AlTaraf.Booking.entity.cityAndregion.City;
+import com.AlTaraf.Booking.entity.cityAndregion.Region;
 import jakarta.persistence.*;
 
 @Entity
@@ -21,6 +23,13 @@ public class Unit {
     @Column(name = "DESCRIPTION")
     private String description;
     @ManyToOne
+    @JoinColumn(name = "CITY_ID" , nullable = false)
+    private City city;
+    @ManyToOne
+    @JoinColumn(name = "REGION_ID", nullable = false)
+    private Region region;
+
+    @ManyToOne
     @JoinColumn(name = "HOTEL_CLASSIFICATION_ID", nullable = false)
     private HotelClassification hotelClassification;
     @Column(name = "ADULTS_ALLOWED")
@@ -31,12 +40,14 @@ public class Unit {
     public Unit() {
     }
 
-    public Unit(Long id, UnitType unitType, AccommodationType accommodationType, String nameUnit, String description, HotelClassification hotelClassification, int adultsAllowed, int childrenAllowed) {
+    public Unit(Long id, UnitType unitType, AccommodationType accommodationType, String nameUnit, String description, City city, Region region, HotelClassification hotelClassification, int adultsAllowed, int childrenAllowed) {
         this.id = id;
         this.unitType = unitType;
         this.accommodationType = accommodationType;
         this.nameUnit = nameUnit;
         this.description = description;
+        this.city = city;
+        this.region = region;
         this.hotelClassification = hotelClassification;
         this.adultsAllowed = adultsAllowed;
         this.childrenAllowed = childrenAllowed;
@@ -80,6 +91,22 @@ public class Unit {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public Region getRegion() {
+        return region;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
     }
 
     public HotelClassification getHotelClassification() {

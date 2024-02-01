@@ -1,6 +1,6 @@
-package com.AlTaraf.Booking.repository;
+package com.AlTaraf.Booking.repository.cityAndregion;
 
-import com.AlTaraf.Booking.entity.City;
+import com.AlTaraf.Booking.entity.cityAndregion.City;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

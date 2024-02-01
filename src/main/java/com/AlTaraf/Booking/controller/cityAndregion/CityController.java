@@ -1,9 +1,13 @@
-package com.AlTaraf.Booking.controller;
+package com.AlTaraf.Booking.controller.cityAndregion;
 
-import com.AlTaraf.Booking.dto.CityDto;
+import com.AlTaraf.Booking.dto.cityDtoAndRoleDto.CityDto;
+import com.AlTaraf.Booking.dto.cityDtoAndRoleDto.RegionDto;
+import com.AlTaraf.Booking.dto.cityDtoAndRoleDto.saveCityDto;
+import com.AlTaraf.Booking.entity.cityAndregion.City;
+import com.AlTaraf.Booking.entity.cityAndregion.Region;
 import com.AlTaraf.Booking.mapper.CityMapper;
 import com.AlTaraf.Booking.payload.response.ApiResponse;
-import com.AlTaraf.Booking.service.CityService;
+import com.AlTaraf.Booking.service.cityAndRegion.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +25,21 @@ public class CityController {
     @Autowired
     CityMapper cityMapper;
 
+    @PostMapping("/save")
+    public ResponseEntity<?> saveCityWithRegions(@RequestBody saveCityDto saveCityDto) {
+        City savedCity = cityService.saveCityWithRegions(saveCityDto);
+        return new ResponseEntity<>(savedCity, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/{cityId}/regions")
+    public ResponseEntity<Region> addRegionToCity(
+            @PathVariable Long cityId,
+            @RequestBody RegionDto regionDto) {
+
+        Region addedRegion = cityService.addRegionToCity(cityId, regionDto);
+        return new ResponseEntity<>(addedRegion, HttpStatus.CREATED);
+    }
+
     @GetMapping("/all")
     public ResponseEntity<?> getAllCities() {
         List<CityDto> cities = cityService.getAllCities();
@@ -31,6 +50,16 @@ public class CityController {
         } else {
             return ResponseEntity.ok(cities);
         }
+    }
+
+    @PutMapping("/{cityId}/regions/{regionId}")
+    public ResponseEntity<Region> updateRegionInCity(
+            @PathVariable Long cityId,
+            @PathVariable Long regionId,
+            @RequestBody RegionDto RegionDto) {
+
+        Region updatedRegion = cityService.updateRegionInCity(cityId, regionId, RegionDto);
+        return new ResponseEntity<>(updatedRegion, HttpStatus.OK);
     }
 
 //    @GetMapping("/{id}")
