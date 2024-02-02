@@ -35,7 +35,7 @@ springdoc:
 
 bezkoder:
   openapi:
-    dev-url: http://168.119.132.18:8080
+    dev-url: http://localhost:8080
     prod-url: http://168.119.132.18:8080
 
   app:
