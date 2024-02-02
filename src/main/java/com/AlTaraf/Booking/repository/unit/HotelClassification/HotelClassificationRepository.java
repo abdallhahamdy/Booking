@@ -1,6 +1,6 @@
-package com.AlTaraf.Booking.repository.unit;
+package com.AlTaraf.Booking.repository.unit.HotelClassification;
 
-import com.AlTaraf.Booking.entity.unit.HotelClassification;
+import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,6 @@
 package com.AlTaraf.Booking.service.unit.hotelClassification;
 
-import com.AlTaraf.Booking.entity.unit.HotelClassification;
-import com.AlTaraf.Booking.entity.unit.Unit;
+import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
 
 import java.util.List;
 

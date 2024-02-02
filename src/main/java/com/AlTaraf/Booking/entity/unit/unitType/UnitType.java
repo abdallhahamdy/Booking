@@ -1,4 +1,4 @@
-package com.AlTaraf.Booking.entity.unit;
+package com.AlTaraf.Booking.entity.unit.unitType;
 
 import jakarta.persistence.*;
 

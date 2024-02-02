@@ -1,8 +1,7 @@
 package com.AlTaraf.Booking.service.unit.hotelClassification;
 
-import com.AlTaraf.Booking.entity.unit.HotelClassification;
-import com.AlTaraf.Booking.repository.unit.HotelClassificationRepository;
-import com.AlTaraf.Booking.repository.unit.UnitRepository;
+import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
+import com.AlTaraf.Booking.repository.unit.HotelClassification.HotelClassificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
