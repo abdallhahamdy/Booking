@@ -1,9 +1,11 @@
 package com.AlTaraf.Booking.controller.unit;
 
-import com.AlTaraf.Booking.entity.unit.HotelClassification;
+import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.entity.unit.Unit;
+import com.AlTaraf.Booking.entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.service.unit.UnitService;
 import com.AlTaraf.Booking.service.unit.hotelClassification.HotelClassificationService;
+import com.AlTaraf.Booking.service.unit.statusUnit.StatusUnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,8 @@ public class UnitController {
     UnitService unitService;
     @Autowired
     HotelClassificationService hotelClassificationService;
+    @Autowired
+    StatusUnitService statusUnitService;
 
     // -----------------------------------------------------------------------------
 
@@ -97,6 +101,21 @@ public class UnitController {
 
     // -----------------------------------------------------------------------------
 
+    // =========== START STATUS UNIT ==================
+    @GetMapping("/get-All-Status-Unit")
+    public ResponseEntity<List<StatusUnit>> getAllStatusUnit() {
+        List<StatusUnit> statusUnitList = statusUnitService.getAllStatusUnit();
+
+        if (!statusUnitList.isEmpty()) {
+            return new ResponseEntity<>(statusUnitList, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    // =========== END STATUS UNIT ==================
+
+    // -----------------------------------------------------------------------------
+
     // ======== START CREATED DATE BETWEEN ==============
     @GetMapping("/added-today")
     public ResponseEntity<Page<Unit>> getUnitsAddedToday(
@@ -112,6 +131,21 @@ public class UnitController {
         }
     }
     // ======== END CREATED DATE BETWEEN ==============
+
+    // -----------------------------------------------------------------------------
+
+    // ======== START GET UNITS DEPEND ON STATUS UNIT =======
+    @GetMapping("/pending")
+    public ResponseEntity<Page<Unit>> getAllPendingUnits(@RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "4") int size) {
+        Page<Unit> units = unitService.getAllPendingUnits(page, size);
+        if (!units.isEmpty()) {
+            return new ResponseEntity<>(units, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    // ======== END GET UNITS DEPEND ON STATUS UNIT =======
 
     // -----------------------------------------------------------------------------
 }

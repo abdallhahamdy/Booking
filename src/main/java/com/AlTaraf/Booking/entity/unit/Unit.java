@@ -3,14 +3,17 @@ package com.AlTaraf.Booking.entity.unit;
 import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.cityAndregion.Region;
 import com.AlTaraf.Booking.entity.common.Auditable;
+import com.AlTaraf.Booking.entity.unit.accommodationType.AccommodationType;
+import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
+import com.AlTaraf.Booking.entity.unit.statusUnit.StatusUnit;
+import com.AlTaraf.Booking.entity.unit.unitType.UnitType;
 import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "unit")
-public class Unit  extends Auditable<String> {
-
+public class Unit extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "UNIT_ID")
@@ -31,7 +34,6 @@ public class Unit  extends Auditable<String> {
     @ManyToOne
     @JoinColumn(name = "REGION_ID", nullable = false)
     private Region region;
-
     @ManyToOne
     @JoinColumn(name = "HOTEL_CLASSIFICATION_ID")
     private HotelClassification hotelClassification;
@@ -39,14 +41,18 @@ public class Unit  extends Auditable<String> {
     private int adultsAllowed;
     @Column(name = "CHILDREN_ALLOWED")
     private int childrenAllowed;
-
     @Column(name = "FAVORITE")
     private Boolean favorite;
+    @ManyToOne
+    @JoinColumn(name = "STATUS_ID")
+    private StatusUnit statusUnit;
 
     public Unit() {
+        this.statusUnit = new StatusUnit();
+        this.statusUnit.setId(1L);
     }
 
-    public Unit(Long id, UnitType unitType, AccommodationType accommodationType, String nameUnit, String description, City city, Region region, HotelClassification hotelClassification, int adultsAllowed, int childrenAllowed, Boolean favorite) {
+    public Unit(Long id, UnitType unitType, AccommodationType accommodationType, String nameUnit, String description, City city, Region region, HotelClassification hotelClassification, int adultsAllowed, int childrenAllowed, Boolean favorite, StatusUnit statusUnit) {
         this.id = id;
         this.unitType = unitType;
         this.accommodationType = accommodationType;
@@ -58,6 +64,7 @@ public class Unit  extends Auditable<String> {
         this.adultsAllowed = adultsAllowed;
         this.childrenAllowed = childrenAllowed;
         this.favorite = favorite;
+        this.statusUnit = statusUnit;
     }
 
     public Long getId() {
@@ -146,5 +153,13 @@ public class Unit  extends Auditable<String> {
 
     public void setFavorite(Boolean favorite) {
         this.favorite = favorite;
+    }
+
+    public StatusUnit getStatusUnit() {
+        return statusUnit;
+    }
+
+    public void setStatusUnit(StatusUnit statusUnit) {
+        this.statusUnit = statusUnit;
     }
 }

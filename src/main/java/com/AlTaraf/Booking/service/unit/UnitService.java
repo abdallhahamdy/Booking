@@ -19,7 +19,10 @@ public interface UnitService {
     // ========= GET UNIT BY ID =============
     Unit getUnitById(Long id);
 
-    // ======== GET UNITS ADDED TODAY =======
+    // ======== GET ALL UNITS ADDED TODAY =======
     Page<Unit> getUnitsAddedToday(int page, int size);
+
+    // ======== GET UNITS WHICH HIS STATUS IS PENDING =======
+    Page<Unit> getAllPendingUnits(int page, int size);
 
 }

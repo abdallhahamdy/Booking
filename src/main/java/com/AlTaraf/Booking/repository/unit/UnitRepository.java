@@ -20,4 +20,8 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
     // =========== REPOSITORY FOR CREATED DATE BETWEEN ==================
     Page<Unit> findByCreatedDateBetween(Date startOfDay, Date endOfDay, Pageable pageable);
+
+    // =========== REPOSITORY FOR GET UNIT BY STATUS UNIT NAME ==================
+    Page<Unit> findByStatusUnit_StatusName(String statusName, Pageable pageable);
+
 }

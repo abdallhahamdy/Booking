@@ -69,4 +69,11 @@ public class UnitServiceImpl implements UnitService {
     // ========= END GET UNIT BY ID ================
 
     // --------------------------------------------------
+
+    // ========= START GET UNITS WHICH HIS STATUS IS PENDING =============
+    public Page<Unit> getAllPendingUnits(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return unitRepository.findByStatusUnit_StatusName("PENDING", pageRequest);
+    }
+    // ========= END GET UNITS WHICH HIS STATUS IS PENDING =============
 }
