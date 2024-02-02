@@ -96,4 +96,22 @@ public class UnitController {
     // =========== END HOTEL CLASSIFICATION ===========
 
     // -----------------------------------------------------------------------------
+
+    // ======== START CREATED DATE BETWEEN ==============
+    @GetMapping("/added-today")
+    public ResponseEntity<Page<Unit>> getUnitsAddedToday(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size) {
+
+        Page<Unit> units = unitService.getUnitsAddedToday(page, size);
+
+        if (!units.isEmpty()) {
+            return new ResponseEntity<>(units, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    // ======== END CREATED DATE BETWEEN ==============
+
+    // -----------------------------------------------------------------------------
 }

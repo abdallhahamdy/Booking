@@ -19,4 +19,7 @@ public interface UnitService {
     // ========= GET UNIT BY ID =============
     Unit getUnitById(Long id);
 
+    // ======== GET UNITS ADDED TODAY =======
+    Page<Unit> getUnitsAddedToday(int page, int size);
+
 }

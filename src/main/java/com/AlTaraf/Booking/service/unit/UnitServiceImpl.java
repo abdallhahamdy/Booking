@@ -1,14 +1,14 @@
 package com.AlTaraf.Booking.service.unit;
 
+import com.AlTaraf.Booking.config.utils.DateUtils;
 import com.AlTaraf.Booking.entity.unit.Unit;
 import com.AlTaraf.Booking.repository.unit.UnitRepository;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -38,6 +38,18 @@ public class UnitServiceImpl implements UnitService {
         return unitRepository.findByHotelClassification_HotelClassificationNameIn(hotelClassificationNames, pageRequest);
     }
     // ========= END GET UNITS BY HOTEL CLASSIFICATION NAMES ===============
+
+    // --------------------------------------------------
+
+    // ======== START CREATED DATE BETWEEN ==============
+    public Page<Unit> getUnitsAddedToday(int page, int size) {
+        Date startOfDay = DateUtils.getStartOfDay(new Date());
+        Date endOfDay = DateUtils.getEndOfDay(new Date());
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        return unitRepository.findByCreatedDateBetween(startOfDay, endOfDay, pageRequest);
+    }
+    // ======== END CREATED DATE BETWEEN ==============
 
     // --------------------------------------------------
 
