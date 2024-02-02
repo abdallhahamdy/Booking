@@ -1,7 +1,7 @@
-package com.AlTaraf.Booking.service;
+package com.AlTaraf.Booking.service.user;
 
 import com.AlTaraf.Booking.dto.UserRegisterDto;
-import com.AlTaraf.Booking.entity.User;
+import com.AlTaraf.Booking.entity.User.User;
 import com.AlTaraf.Booking.entity.enums.ERole;
 import com.AlTaraf.Booking.payload.request.PasswordResetDto;
 

@@ -1,6 +1,6 @@
-package com.AlTaraf.Booking.repository;
+package com.AlTaraf.Booking.repository.role;
 
-import com.AlTaraf.Booking.entity.Role;
+import com.AlTaraf.Booking.entity.Role.Role;
 import com.AlTaraf.Booking.entity.enums.ERole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

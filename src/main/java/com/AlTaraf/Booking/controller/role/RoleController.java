@@ -1,10 +1,10 @@
-package com.AlTaraf.Booking.controller;
+package com.AlTaraf.Booking.controller.role;
 
 import com.AlTaraf.Booking.dto.RoleDto;
-import com.AlTaraf.Booking.entity.Role;
+import com.AlTaraf.Booking.entity.Role.Role;
 import com.AlTaraf.Booking.mapper.RoleMapper;
 import com.AlTaraf.Booking.payload.response.ApiResponse;
-import com.AlTaraf.Booking.service.RoleService;
+import com.AlTaraf.Booking.service.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

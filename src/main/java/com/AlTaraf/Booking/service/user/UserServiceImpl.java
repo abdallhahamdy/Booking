@@ -1,17 +1,19 @@
-package com.AlTaraf.Booking.service;
+package com.AlTaraf.Booking.service.user;
 
-import com.AlTaraf.Booking.dto.CityDto;
+import com.AlTaraf.Booking.dto.cityDtoAndRoleDto.CityDto;
 import com.AlTaraf.Booking.dto.UserRegisterDto;
-import com.AlTaraf.Booking.entity.City;
-import com.AlTaraf.Booking.entity.Role;
-import com.AlTaraf.Booking.entity.User;
+import com.AlTaraf.Booking.entity.cityAndregion.City;
+import com.AlTaraf.Booking.entity.Role.Role;
+import com.AlTaraf.Booking.entity.User.User;
 import com.AlTaraf.Booking.entity.enums.ERole;
 import com.AlTaraf.Booking.mapper.CityMapper;
 import com.AlTaraf.Booking.mapper.UserMapper;
 import com.AlTaraf.Booking.payload.request.PasswordResetDto;
-import com.AlTaraf.Booking.repository.RoleRepository;
-import com.AlTaraf.Booking.repository.UserRepository;
+import com.AlTaraf.Booking.repository.role.RoleRepository;
+import com.AlTaraf.Booking.repository.user.UserRepository;
 import com.AlTaraf.Booking.security.jwt.JwtUtils;
+import com.AlTaraf.Booking.service.cityAndRegion.CityService;
+import com.AlTaraf.Booking.service.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;

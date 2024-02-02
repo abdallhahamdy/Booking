@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.AlTaraf.Booking.entity.City;
-import com.AlTaraf.Booking.entity.User;
+import com.AlTaraf.Booking.entity.cityAndregion.City;
+import com.AlTaraf.Booking.entity.User.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

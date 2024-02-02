@@ -1,7 +1,7 @@
-package com.AlTaraf.Booking.service;
+package com.AlTaraf.Booking.service.role;
 
 
-import com.AlTaraf.Booking.entity.Role;
+import com.AlTaraf.Booking.entity.Role.Role;
 import com.AlTaraf.Booking.entity.enums.ERole;
 
 import java.util.List;

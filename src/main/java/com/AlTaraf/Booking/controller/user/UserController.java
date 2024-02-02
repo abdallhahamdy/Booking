@@ -1,7 +1,7 @@
-package com.AlTaraf.Booking.controller;
+package com.AlTaraf.Booking.controller.user;
 
 import com.AlTaraf.Booking.dto.UserRegisterDto;
-import com.AlTaraf.Booking.entity.User;
+import com.AlTaraf.Booking.entity.User.User;
 import com.AlTaraf.Booking.entity.enums.ERole;
 import com.AlTaraf.Booking.payload.request.LoginRequest;
 import com.AlTaraf.Booking.payload.request.PasswordResetDto;
@@ -11,7 +11,7 @@ import com.AlTaraf.Booking.payload.response.CheckApiResponse;
 import com.AlTaraf.Booking.payload.response.JwtResponse;
 import com.AlTaraf.Booking.security.jwt.JwtUtils;
 import com.AlTaraf.Booking.security.service.UserDetailsImpl;
-import com.AlTaraf.Booking.service.UserService;
+import com.AlTaraf.Booking.service.user.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

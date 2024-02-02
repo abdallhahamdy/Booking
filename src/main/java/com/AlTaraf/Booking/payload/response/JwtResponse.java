@@ -1,6 +1,6 @@
 package com.AlTaraf.Booking.payload.response;
 
-import com.AlTaraf.Booking.entity.City;
+import com.AlTaraf.Booking.entity.cityAndregion.City;
 
 import java.util.List;
 

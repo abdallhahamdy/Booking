@@ -1,4 +1,4 @@
-package com.AlTaraf.Booking.entity;
+package com.AlTaraf.Booking.entity.Role;
 
 import com.AlTaraf.Booking.entity.enums.ERole;
 import jakarta.persistence.*;

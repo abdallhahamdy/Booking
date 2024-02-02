@@ -1,6 +1,8 @@
 package com.AlTaraf.Booking.dto;
 
 
+import com.AlTaraf.Booking.dto.cityDtoAndRoleDto.CityDto;
+
 import java.util.Set;
 
 

@@ -1,5 +1,7 @@
-package com.AlTaraf.Booking.entity;
+package com.AlTaraf.Booking.entity.User;
 
+import com.AlTaraf.Booking.entity.Role.Role;
+import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.common.Auditable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
