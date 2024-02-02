@@ -3,6 +3,7 @@ package com.AlTaraf.Booking.service.unit;
 import com.AlTaraf.Booking.config.utils.DateUtils;
 import com.AlTaraf.Booking.entity.unit.Unit;
 import com.AlTaraf.Booking.repository.unit.UnitRepository;
+import com.AlTaraf.Booking.repository.unit.roomAvailable.RoomAvailableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,9 +14,12 @@ import java.util.List;
 
 @Service
 public class UnitServiceImpl implements UnitService {
+
     @Autowired
     UnitRepository unitRepository;
 
+    @Autowired
+    RoomAvailableRepository roomAvailableRepository;
     // --------------------------------------------------
 
     // ========= START SAVE UNIT ===========

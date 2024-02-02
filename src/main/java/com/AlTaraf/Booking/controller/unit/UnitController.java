@@ -2,7 +2,9 @@ package com.AlTaraf.Booking.controller.unit;
 
 import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.entity.unit.Unit;
+import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.entity.unit.statusUnit.StatusUnit;
+import com.AlTaraf.Booking.service.unit.RoomAvailable.RoomAvailableService;
 import com.AlTaraf.Booking.service.unit.UnitService;
 import com.AlTaraf.Booking.service.unit.hotelClassification.HotelClassificationService;
 import com.AlTaraf.Booking.service.unit.statusUnit.StatusUnitService;
@@ -25,6 +27,9 @@ public class UnitController {
     @Autowired
     StatusUnitService statusUnitService;
 
+    @Autowired
+    RoomAvailableService roomAvailableService;
+
     // -----------------------------------------------------------------------------
 
     // ============ START CREATE UNIT =============
@@ -39,12 +44,25 @@ public class UnitController {
 
     // ========== START FAVORITE ==============
 
-    @PatchMapping("/{id}/favorite")
+    @PatchMapping("/{id}/set-favorite")
     public ResponseEntity<Unit> setFavorite(@PathVariable Long id) {
         Unit unit = unitService.getUnitById(id);
 
         if (unit != null) {
             unit.setFavorite(true); // Set favorite to true
+            unitService.saveUnit(unit);
+            return new ResponseEntity<>(unit, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PatchMapping("/{id}/delete-favorite")
+    public ResponseEntity<Unit> deleteFavorite(@PathVariable Long id) {
+        Unit unit = unitService.getUnitById(id);
+
+        if (unit != null) {
+            unit.setFavorite(false); // Set favorite to true
             unitService.saveUnit(unit);
             return new ResponseEntity<>(unit, HttpStatus.OK);
         } else {
@@ -98,6 +116,21 @@ public class UnitController {
     }
 
     // =========== END HOTEL CLASSIFICATION ===========
+
+    // -----------------------------------------------------------------------------
+
+    // =========== START ROOM AVAILABLE ===========
+    @GetMapping("/get-All-Room-Available")
+    public ResponseEntity<List<RoomAvailable>> getAllRoomAvailable() {
+        List<RoomAvailable> roomAvailables = roomAvailableService.getAllRoomAvailable();
+
+        if (!roomAvailables.isEmpty()) {
+            return new ResponseEntity<>(roomAvailables, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    // =========== END ROOM AVAILABLE ===========
 
     // -----------------------------------------------------------------------------
 
