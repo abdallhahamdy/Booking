@@ -1,13 +1,19 @@
 package com.AlTaraf.Booking.controller.unit;
 
+import com.AlTaraf.Booking.entity.unit.feature.Feature;
+import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.entity.unit.Unit;
 import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.entity.unit.statusUnit.StatusUnit;
+import com.AlTaraf.Booking.entity.unit.subFeature.SubFeature;
+import com.AlTaraf.Booking.service.foodOption.FoodOptionService;
 import com.AlTaraf.Booking.service.unit.RoomAvailable.RoomAvailableService;
 import com.AlTaraf.Booking.service.unit.UnitService;
+import com.AlTaraf.Booking.service.unit.feature.FeatureService;
 import com.AlTaraf.Booking.service.unit.hotelClassification.HotelClassificationService;
 import com.AlTaraf.Booking.service.unit.statusUnit.StatusUnitService;
+import com.AlTaraf.Booking.service.unit.subFeature.SubFeatureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -29,6 +35,15 @@ public class UnitController {
 
     @Autowired
     RoomAvailableService roomAvailableService;
+
+    @Autowired
+    FeatureService featureService;
+
+    @Autowired
+    SubFeatureService subFeatureService;
+
+    @Autowired
+    FoodOptionService foodOptionService;
 
     // -----------------------------------------------------------------------------
 
@@ -181,4 +196,50 @@ public class UnitController {
     // ======== END GET UNITS DEPEND ON STATUS UNIT =======
 
     // -----------------------------------------------------------------------------
+
+    // ======== START GET ALL FEATURE ====================
+    @GetMapping("/get-All-Feature")
+    public ResponseEntity<List<Feature>> getAllFeature() {
+        List<Feature> featureList = featureService.getAllFeature();
+
+        if (!featureList.isEmpty()) {
+            return new ResponseEntity<>(featureList, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    // ======== END GET ALL FEATURE ======================
+
+    // -----------------------------------------------------------------------------
+
+    // ======== START GET SUB FEATURE ====================
+    @GetMapping("/get-Sub-Feature")
+    public ResponseEntity<List<SubFeature>> getAllSubFeature() {
+        List<SubFeature> subFeatureList = subFeatureService.getAllSubFeature();
+
+        if (!subFeatureList.isEmpty()) {
+            return new ResponseEntity<>(subFeatureList, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    // ======== END GET SUB FEATURE ======================
+
+    // -----------------------------------------------------------------------------
+
+    // ======== START GET SUB FEATURE ====================
+    @GetMapping("/get-Food-Option")
+    public ResponseEntity<List<FoodOption>> getAllFoodOption() {
+        List<FoodOption> foodOptionList = foodOptionService.getAllFoodOption();
+
+        if (!foodOptionList.isEmpty()) {
+            return new ResponseEntity<>(foodOptionList, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    // ======== END GET SUB FEATURE ======================
+
+    // -----------------------------------------------------------------------------
+
 }

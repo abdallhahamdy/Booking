@@ -4,11 +4,17 @@ import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.cityAndregion.Region;
 import com.AlTaraf.Booking.entity.common.Auditable;
 import com.AlTaraf.Booking.entity.unit.accommodationType.AccommodationType;
+import com.AlTaraf.Booking.entity.unit.feature.Feature;
+import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.entity.unit.statusUnit.StatusUnit;
+import com.AlTaraf.Booking.entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.entity.unit.unitType.UnitType;
 import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity
@@ -22,7 +28,7 @@ public class Unit extends Auditable<String> {
     @JoinColumn(name = "UNIT_TYPE_ID", nullable = false)
     private UnitType unitType;
     @ManyToOne
-    @JoinColumn(name = "ACCOMMODATION_TYPE_ID", nullable = false)
+    @JoinColumn(name = "ACCOMMODATION_TYPE_ID")
     private AccommodationType accommodationType;
     @Column(name = "NAME_UNIT")
     private String nameUnit;
@@ -37,6 +43,28 @@ public class Unit extends Auditable<String> {
     @ManyToOne
     @JoinColumn(name = "HOTEL_CLASSIFICATION_ID")
     private HotelClassification hotelClassification;
+
+    @ManyToMany
+    @JoinTable(
+            name = "unit_basic_features",
+            joinColumns = @JoinColumn(name = "unit_id"),
+            inverseJoinColumns = @JoinColumn(name = "feature_id"))
+    private Set<Feature> basicFeatures = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "unit_sub_features",
+            joinColumns = @JoinColumn(name = "unit_id"),
+            inverseJoinColumns = @JoinColumn(name = "sub_feature_id"))
+    private Set<SubFeature> subFeatures = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "unit_food_options",
+            joinColumns = @JoinColumn(name = "unit_id"),
+            inverseJoinColumns = @JoinColumn(name = "food_option_id"))
+    private Set<FoodOption> foodOptions = new HashSet<>();
+
     @Column(name = "ADULTS_ALLOWED")
     private int adultsAllowed;
     @Column(name = "CHILDREN_ALLOWED")
@@ -52,7 +80,7 @@ public class Unit extends Auditable<String> {
         this.statusUnit.setId(1L);
     }
 
-    public Unit(Long id, UnitType unitType, AccommodationType accommodationType, String nameUnit, String description, City city, Region region, HotelClassification hotelClassification, int adultsAllowed, int childrenAllowed, Boolean favorite, StatusUnit statusUnit) {
+    public Unit(Long id, UnitType unitType, AccommodationType accommodationType, String nameUnit, String description, City city, Region region, HotelClassification hotelClassification, Set<Feature> basicFeatures, Set<SubFeature> subFeatures, Set<FoodOption> foodOptions, int adultsAllowed, int childrenAllowed, Boolean favorite, StatusUnit statusUnit) {
         this.id = id;
         this.unitType = unitType;
         this.accommodationType = accommodationType;
@@ -61,6 +89,9 @@ public class Unit extends Auditable<String> {
         this.city = city;
         this.region = region;
         this.hotelClassification = hotelClassification;
+        this.basicFeatures = basicFeatures;
+        this.subFeatures = subFeatures;
+        this.foodOptions = foodOptions;
         this.adultsAllowed = adultsAllowed;
         this.childrenAllowed = childrenAllowed;
         this.favorite = favorite;
@@ -137,6 +168,30 @@ public class Unit extends Auditable<String> {
 
     public void setAdultsAllowed(int adultsAllowed) {
         this.adultsAllowed = adultsAllowed;
+    }
+
+    public Set<Feature> getBasicFeatures() {
+        return basicFeatures;
+    }
+
+    public void setBasicFeatures(Set<Feature> basicFeatures) {
+        this.basicFeatures = basicFeatures;
+    }
+
+    public Set<SubFeature> getSubFeatures() {
+        return subFeatures;
+    }
+
+    public void setSubFeatures(Set<SubFeature> subFeatures) {
+        this.subFeatures = subFeatures;
+    }
+
+    public Set<FoodOption> getFoodOptions() {
+        return foodOptions;
+    }
+
+    public void setFoodOptions(Set<FoodOption> foodOptions) {
+        this.foodOptions = foodOptions;
     }
 
     public int getChildrenAllowed() {
