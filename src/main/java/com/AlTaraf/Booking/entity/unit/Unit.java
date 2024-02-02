@@ -2,11 +2,14 @@ package com.AlTaraf.Booking.entity.unit;
 
 import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.cityAndregion.Region;
+import com.AlTaraf.Booking.entity.common.Auditable;
 import jakarta.persistence.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "unit")
-public class Unit {
+public class Unit  extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,17 +33,20 @@ public class Unit {
     private Region region;
 
     @ManyToOne
-    @JoinColumn(name = "HOTEL_CLASSIFICATION_ID", nullable = false)
+    @JoinColumn(name = "HOTEL_CLASSIFICATION_ID")
     private HotelClassification hotelClassification;
     @Column(name = "ADULTS_ALLOWED")
     private int adultsAllowed;
     @Column(name = "CHILDREN_ALLOWED")
     private int childrenAllowed;
 
+    @Column(name = "FAVORITE")
+    private Boolean favorite;
+
     public Unit() {
     }
 
-    public Unit(Long id, UnitType unitType, AccommodationType accommodationType, String nameUnit, String description, City city, Region region, HotelClassification hotelClassification, int adultsAllowed, int childrenAllowed) {
+    public Unit(Long id, UnitType unitType, AccommodationType accommodationType, String nameUnit, String description, City city, Region region, HotelClassification hotelClassification, int adultsAllowed, int childrenAllowed, Boolean favorite) {
         this.id = id;
         this.unitType = unitType;
         this.accommodationType = accommodationType;
@@ -51,6 +57,7 @@ public class Unit {
         this.hotelClassification = hotelClassification;
         this.adultsAllowed = adultsAllowed;
         this.childrenAllowed = childrenAllowed;
+        this.favorite = favorite;
     }
 
     public Long getId() {
@@ -131,5 +138,13 @@ public class Unit {
 
     public void setChildrenAllowed(int childrenAllowed) {
         this.childrenAllowed = childrenAllowed;
+    }
+
+    public Boolean getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
     }
 }
