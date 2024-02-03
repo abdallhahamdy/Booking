@@ -10,18 +10,18 @@ public class Feature {
     private Long id;
 
     @Column(name = "FEATURE_NAME")
-    private String featureName;
+    private String name;
 
     @Column(name = "FEATURE_ARABIC_NAME")
-    private String featureArabicName;
+    private String arabicName;
 
     public Feature() {
     }
 
-    public Feature(Long id, String featureName, String featureArabicName) {
+    public Feature(Long id, String name, String arabicName) {
         this.id = id;
-        this.featureName = featureName;
-        this.featureArabicName = featureArabicName;
+        this.name = name;
+        this.arabicName = arabicName;
     }
 
     public Long getId() {
@@ -32,19 +32,19 @@ public class Feature {
         this.id = id;
     }
 
-    public String getFeatureName() {
-        return featureName;
+    public String getName() {
+        return name;
     }
 
-    public void setFeatureName(String featureName) {
-        this.featureName = featureName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getFeatureArabicName() {
-        return featureArabicName;
+    public String getArabicName() {
+        return arabicName;
     }
 
-    public void setFeatureArabicName(String featureArabicName) {
-        this.featureArabicName = featureArabicName;
+    public void setArabicName(String arabicName) {
+        this.arabicName = arabicName;
     }
 }
