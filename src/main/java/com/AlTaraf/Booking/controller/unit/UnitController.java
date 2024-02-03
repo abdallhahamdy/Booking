@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.controller.unit;
 
+import com.AlTaraf.Booking.entity.unit.accommodationType.AccommodationType;
 import com.AlTaraf.Booking.entity.unit.feature.Feature;
 import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
@@ -7,9 +8,12 @@ import com.AlTaraf.Booking.entity.unit.Unit;
 import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.entity.unit.subFeature.SubFeature;
+import com.AlTaraf.Booking.entity.unit.unitType.UnitType;
 import com.AlTaraf.Booking.service.foodOption.FoodOptionService;
+import com.AlTaraf.Booking.service.unit.AccommodationType.AccommodationTypeService;
 import com.AlTaraf.Booking.service.unit.RoomAvailable.RoomAvailableService;
 import com.AlTaraf.Booking.service.unit.UnitService;
+import com.AlTaraf.Booking.service.unit.UnitType.UnitTypeService;
 import com.AlTaraf.Booking.service.unit.feature.FeatureService;
 import com.AlTaraf.Booking.service.unit.hotelClassification.HotelClassificationService;
 import com.AlTaraf.Booking.service.unit.statusUnit.StatusUnitService;
@@ -44,6 +48,12 @@ public class UnitController {
 
     @Autowired
     FoodOptionService foodOptionService;
+
+    @Autowired
+    UnitTypeService unitTypeService;
+
+    @Autowired
+    AccommodationTypeService accommodationTypeService;
 
     // -----------------------------------------------------------------------------
 
@@ -242,4 +252,48 @@ public class UnitController {
 
     // -----------------------------------------------------------------------------
 
+    // ======== START GET ALL UNIT TYPE ====================
+    @GetMapping("/get-Unit-Type")
+    public ResponseEntity<List<UnitType>> getAllUnitType() {
+        List<UnitType> unitTypeList = unitTypeService.getAllUnitType();
+
+        if (!unitTypeList.isEmpty()) {
+            return new ResponseEntity<>(unitTypeList, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    // ======== END GET ALL UNIT TYPE ======================
+
+    // -----------------------------------------------------------------------------
+
+    // ======== START GET ALL ACCOMMODATION TYPE ====================
+    @GetMapping("/get-Accommodation-Type")
+    public ResponseEntity<List<AccommodationType>> getAccommodationType() {
+        List<AccommodationType> accommodationTypeList = accommodationTypeService.getAllAccommodationType();
+
+        if (!accommodationTypeList.isEmpty()) {
+            return new ResponseEntity<>(accommodationTypeList, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    // ======== END GET ALL ACCOMMODATION TYPE ======================
+
+    // -----------------------------------------------------------------------------
+
+    @GetMapping("/get-Units-By-Accommodation-Type")
+    public ResponseEntity<Page<Unit>> getUnitsByAccommodationType(
+            @RequestParam String accommodationTypeName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size) {
+
+        Page<Unit> units = unitService.getUnitsByAccommodationTypeName(accommodationTypeName, page, size);
+
+        if (!units.isEmpty()) {
+            return new ResponseEntity<>(units, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }
