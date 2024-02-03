@@ -10,17 +10,17 @@ public class AccommodationType {
     @Column(name = "ACCOMMODATION_TYPE_ID")
     private Long id;
     @Column(name = "ACCOMMODATION_NAME")
-    private String AccommodationName;
+    private String name;
     @Column(name = "ACCOMMODATION_ARABIC_NAME")
-    private String AccommodationArabicName;
+    private String arabicName;
 
     public AccommodationType() {
     }
 
-    public AccommodationType(Long id, String accommodationName, String accommodationArabicName) {
+    public AccommodationType(Long id, String name, String arabicName) {
         this.id = id;
-        AccommodationName = accommodationName;
-        AccommodationArabicName = accommodationArabicName;
+        this.name = name;
+        this.arabicName = arabicName;
     }
 
     public Long getId() {
@@ -31,19 +31,19 @@ public class AccommodationType {
         this.id = id;
     }
 
-    public String getAccommodationName() {
-        return AccommodationName;
+    public String getName() {
+        return name;
     }
 
-    public void setAccommodationName(String accommodationName) {
-        AccommodationName = accommodationName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getAccommodationArabicName() {
-        return AccommodationArabicName;
+    public String getArabicName() {
+        return arabicName;
     }
 
-    public void setAccommodationArabicName(String accommodationArabicName) {
-        AccommodationArabicName = accommodationArabicName;
+    public void setArabicName(String arabicName) {
+        this.arabicName = arabicName;
     }
 }

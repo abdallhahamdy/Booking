@@ -10,18 +10,18 @@ public class SubFeature {
     private Long id;
 
     @Column(name = "SUB_FEATURE_NAME")
-    private String subFeatureName;
+    private String name;
 
     @Column(name = "SUB_FEATURE_ARABIC_NAME")
-    private String subFeatureArabicName;
+    private String arabicName;
 
     public SubFeature() {
     }
 
-    public SubFeature(Long id, String subFeatureName, String subFeatureArabicName) {
+    public SubFeature(Long id, String name, String arabicName) {
         this.id = id;
-        this.subFeatureName = subFeatureName;
-        this.subFeatureArabicName = subFeatureArabicName;
+        this.name = name;
+        this.arabicName = arabicName;
     }
 
     public Long getId() {
@@ -32,19 +32,19 @@ public class SubFeature {
         this.id = id;
     }
 
-    public String getSubFeatureName() {
-        return subFeatureName;
+    public String getName() {
+        return name;
     }
 
-    public void setSubFeatureName(String subFeatureName) {
-        this.subFeatureName = subFeatureName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getSubFeatureArabicName() {
-        return subFeatureArabicName;
+    public String getArabicName() {
+        return arabicName;
     }
 
-    public void setSubFeatureArabicName(String subFeatureArabicName) {
-        this.subFeatureArabicName = subFeatureArabicName;
+    public void setArabicName(String arabicName) {
+        this.arabicName = arabicName;
     }
 }

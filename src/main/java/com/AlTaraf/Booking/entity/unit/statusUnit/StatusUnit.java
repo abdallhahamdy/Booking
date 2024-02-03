@@ -11,18 +11,18 @@ public class StatusUnit {
     private Long id;
 
     @Column(name = "STATUS_NAME")
-    private String statusName;
+    private String name;
 
     @Column(name = "STATUS_ARABIC_NAME")
-    private String statusArabicName;
+    private String arabicName;
 
     public StatusUnit() {
     }
 
-    public StatusUnit(Long id, String statusName, String statusArabicName) {
+    public StatusUnit(Long id, String name, String arabicName) {
         this.id = id;
-        this.statusName = statusName;
-        this.statusArabicName = statusArabicName;
+        this.name = name;
+        this.arabicName = arabicName;
     }
 
     public Long getId() {
@@ -33,19 +33,19 @@ public class StatusUnit {
         this.id = id;
     }
 
-    public String getStatusName() {
-        return statusName;
+    public String getName() {
+        return name;
     }
 
-    public void setStatusName(String statusName) {
-        this.statusName = statusName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getStatusArabicName() {
-        return statusArabicName;
+    public String getArabicName() {
+        return arabicName;
     }
 
-    public void setStatusArabicName(String statusArabicName) {
-        this.statusArabicName = statusArabicName;
+    public void setArabicName(String arabicName) {
+        this.arabicName = arabicName;
     }
 }
