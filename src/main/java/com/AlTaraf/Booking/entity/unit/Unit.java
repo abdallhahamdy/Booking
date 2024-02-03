@@ -7,13 +7,16 @@ import com.AlTaraf.Booking.entity.unit.accommodationType.AccommodationType;
 import com.AlTaraf.Booking.entity.unit.feature.Feature;
 import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
+import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.entity.unit.unitType.UnitType;
 import jakarta.persistence.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @EntityListeners(AuditingEntityListener.class)
@@ -24,25 +27,40 @@ public class Unit extends Auditable<String> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "UNIT_ID")
     private Long id;
+
     @ManyToOne
     @JoinColumn(name = "UNIT_TYPE_ID", nullable = false)
     private UnitType unitType;
+
     @ManyToOne
     @JoinColumn(name = "ACCOMMODATION_TYPE_ID")
     private AccommodationType accommodationType;
+
     @Column(name = "NAME_UNIT")
     private String nameUnit;
+
     @Column(name = "DESCRIPTION")
     private String description;
+
     @ManyToOne
     @JoinColumn(name = "CITY_ID" , nullable = false)
     private City city;
+
     @ManyToOne
     @JoinColumn(name = "REGION_ID", nullable = false)
     private Region region;
+
     @ManyToOne
     @JoinColumn(name = "HOTEL_CLASSIFICATION_ID")
     private HotelClassification hotelClassification;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "unit_room_available",
+            joinColumns = @JoinColumn(name = "UNIT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ROOM_AVAILABLE_ID")
+    )
+    private List<RoomAvailable> roomAvailableList = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -80,7 +98,7 @@ public class Unit extends Auditable<String> {
         this.statusUnit.setId(1L);
     }
 
-    public Unit(Long id, UnitType unitType, AccommodationType accommodationType, String nameUnit, String description, City city, Region region, HotelClassification hotelClassification, Set<Feature> basicFeatures, Set<SubFeature> subFeatures, Set<FoodOption> foodOptions, int adultsAllowed, int childrenAllowed, Boolean favorite, StatusUnit statusUnit) {
+    public Unit(Long id, UnitType unitType, AccommodationType accommodationType, String nameUnit, String description, City city, Region region, HotelClassification hotelClassification, List<RoomAvailable> roomAvailableList, Set<Feature> basicFeatures, Set<SubFeature> subFeatures, Set<FoodOption> foodOptions, int adultsAllowed, int childrenAllowed, Boolean favorite, StatusUnit statusUnit) {
         this.id = id;
         this.unitType = unitType;
         this.accommodationType = accommodationType;
@@ -89,6 +107,7 @@ public class Unit extends Auditable<String> {
         this.city = city;
         this.region = region;
         this.hotelClassification = hotelClassification;
+        this.roomAvailableList = roomAvailableList;
         this.basicFeatures = basicFeatures;
         this.subFeatures = subFeatures;
         this.foodOptions = foodOptions;
@@ -162,6 +181,14 @@ public class Unit extends Auditable<String> {
         this.hotelClassification = hotelClassification;
     }
 
+    public List<RoomAvailable> getRoomAvailableList() {
+        return roomAvailableList;
+    }
+
+    public void setRoomAvailableList(List<RoomAvailable> roomAvailableList) {
+        this.roomAvailableList = roomAvailableList;
+    }
+
     public int getAdultsAllowed() {
         return adultsAllowed;
     }
@@ -217,4 +244,6 @@ public class Unit extends Auditable<String> {
     public void setStatusUnit(StatusUnit statusUnit) {
         this.statusUnit = statusUnit;
     }
+
+
 }
