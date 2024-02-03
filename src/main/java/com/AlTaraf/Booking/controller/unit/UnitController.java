@@ -282,6 +282,7 @@ public class UnitController {
 
     // -----------------------------------------------------------------------------
 
+    // ======== START GET UNIT BY ACCOMMODATION TYPE ====================
     @GetMapping("/get-Units-By-Accommodation-Type")
     public ResponseEntity<Page<Unit>> getUnitsByAccommodationType(
             @RequestParam String accommodationTypeName,
@@ -296,4 +297,24 @@ public class UnitController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    // ======== END GET UNIT BY ACCOMMODATION TYPE ====================
+
+    // -----------------------------------------------------------------------------
+
+    // ======== START GET UNIT BY ID ====================
+    @GetMapping("/{id}")
+    public Unit getUnitById(@PathVariable Long id) {
+        return unitService.getUnitById(id);
+    }
+    // ======== GET GET UNIT BY ID ====================
+
+    // -----------------------------------------------------------------------------
+
+    // ========= START DELETE UNIT =============
+    @DeleteMapping("/{id}")
+    public void deleteUnit(@PathVariable Long id) {
+        unitService.deleteUnit(id);
+    }
+    // ========= END DELETE UNIT =============
+
 }

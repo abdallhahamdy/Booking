@@ -81,8 +81,23 @@ public class UnitServiceImpl implements UnitService {
     }
     // ========= END GET UNITS WHICH HIS STATUS IS PENDING =============
 
+    // --------------------------------------------------
+
+    // ======== START GET UNIT BY ACCOMMODATION TYPE ====================
     public Page<Unit> getUnitsByAccommodationTypeName(String accommodationTypeName, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         return unitRepository.findByAccommodationType_Name(accommodationTypeName, pageRequest);
     }
+    // ======== END GET UNIT BY ACCOMMODATION TYPE ====================
+
+    // --------------------------------------------------
+
+    // ========= START DELETE UNIT =============
+    @Override
+    public void deleteUnit(Long id) {
+         unitRepository.deleteById(id);
+    }
+    // ========= END DELETE UNIT =============
+
+    // --------------------------------------------------
 }
