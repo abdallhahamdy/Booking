@@ -1,4 +1,4 @@
-package com.AlTaraf.Booking.entity;
+package com.AlTaraf.Booking.entity.Image;
 
 import com.AlTaraf.Booking.entity.unit.Unit;
 import jakarta.persistence.*;
@@ -17,7 +17,7 @@ public class ImageData {
     private String type;
 
     @Lob
-    @Column(name = "imagedata")
+    @Column(name = "imagedata", columnDefinition = "LONGBLOB")
     private byte[] imageData;
 
     @ManyToOne

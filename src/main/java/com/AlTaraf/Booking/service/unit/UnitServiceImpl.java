@@ -1,9 +1,12 @@
 package com.AlTaraf.Booking.service.unit;
 
 import com.AlTaraf.Booking.config.utils.DateUtils;
+import com.AlTaraf.Booking.entity.Image.ImageData;
 import com.AlTaraf.Booking.entity.unit.Unit;
+import com.AlTaraf.Booking.repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.repository.unit.UnitRepository;
 import com.AlTaraf.Booking.repository.unit.roomAvailable.RoomAvailableRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,6 +23,9 @@ public class UnitServiceImpl implements UnitService {
 
     @Autowired
     RoomAvailableRepository roomAvailableRepository;
+
+    @Autowired
+    private ImageDataRepository imageDataRepository;
     // --------------------------------------------------
 
     // ========= START SAVE UNIT ===========
@@ -100,4 +106,31 @@ public class UnitServiceImpl implements UnitService {
     // ========= END DELETE UNIT =============
 
     // --------------------------------------------------
+
+    // ========= START UPDATE IMAGE DATA UNIT =============
+    @Override
+    public void updateImageDataUnit(Long unitId) {
+        // Fetch the Unit by ID
+        Unit unit = unitRepository.findById(unitId).orElse(null);
+
+        if (unit != null) {
+            // Retrieve associated ImageData entities without a unit
+            List<ImageData> imageDataList = imageDataRepository.findByUnitIsNull();
+
+            // Update the unit for each ImageData entity
+            for (ImageData imageData : imageDataList) {
+                imageData.setUnit(unit);
+                imageDataRepository.save(imageData);
+            }
+        } else {
+            // Handle the case when the Unit with the specified ID is not found
+            throw new EntityNotFoundException("Unit not found with ID: " + unitId);
+        }
+
+    }
+    // ========= END UPDATE IMAGE DATA UNIT =============
+
+    // --------------------------------------------------
+
+
 }

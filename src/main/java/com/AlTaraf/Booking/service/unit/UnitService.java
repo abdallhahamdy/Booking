@@ -30,4 +30,7 @@ public interface UnitService {
 
     // ========= DELETE UNIT =============
     void deleteUnit(Long id);
+
+    // =========  SET UNIT ID IN IMAGE  =============
+    void updateImageDataUnit(Long unitId);
 }

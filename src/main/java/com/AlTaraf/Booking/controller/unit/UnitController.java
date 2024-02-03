@@ -317,4 +317,14 @@ public class UnitController {
     }
     // ========= END DELETE UNIT =============
 
+    // -----------------------------------------------------------------------------
+
+    // ========= START UPDATE IMAGE DATA =============
+    @PostMapping("/update-imagedata")
+    public ResponseEntity<String> updateImageDataForUnit(@RequestParam("unitId") Long unitId) {
+        unitService.updateImageDataUnit(unitId);
+        return new ResponseEntity<>("ImageData entities updated for Unit with ID: " + unitId, HttpStatus.OK);
+    }
+    // ========= END UPDATE IMAGE DATA =============
+
 }
