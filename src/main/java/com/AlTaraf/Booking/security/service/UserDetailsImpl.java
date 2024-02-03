@@ -19,17 +19,30 @@ public class UserDetailsImpl implements UserDetails {
     private String phone;
     private String password;
     private City city;
+    private boolean stayLoggedIn;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String username, String email, String phone,
-                           String password, City city,
-                           Collection<? extends GrantedAuthority> authorities) {
+//    public UserDetailsImpl(Long id, String username, String email, String phone,
+//                           String password, City city,
+//                           Collection<? extends GrantedAuthority> authorities) {
+//        this.id = id;
+//        this.username = username;
+//        this.email = email;
+//        this.phone = phone;
+//        this.password = password;
+//        this.city = city;
+//        this.authorities = authorities;
+//    }
+
+
+    public UserDetailsImpl(Long id, String username, String email, String phone, String password, City city, boolean stayLoggedIn, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.phone = phone;
         this.password = password;
         this.city = city;
+        this.stayLoggedIn = stayLoggedIn;
         this.authorities = authorities;
     }
 
@@ -45,6 +58,7 @@ public class UserDetailsImpl implements UserDetails {
                 user.getPhone(),
                 user.getPassword(),
                 user.getCity(),
+                user.isStayLoggedIn(),
                 authorities);
     }
 
@@ -77,6 +91,14 @@ public class UserDetailsImpl implements UserDetails {
 
     public City getCity() {
         return city;
+    }
+
+    public boolean isStayLoggedIn() {
+        return stayLoggedIn;
+    }
+
+    public void setStayLoggedIn(boolean stayLoggedIn) {
+        this.stayLoggedIn = stayLoggedIn;
     }
 
     @Override

@@ -39,10 +39,10 @@ bezkoder:
     prod-url: http://168.119.132.18:8080
 
   app:
-    jwtCookieName: bezkoder
+    jwtCookieName: Booking
     jwtSecret: ======================BezKoder=Spring===========================
     jwtExpirationMs: 86400000
-
+    stayLoggedInExpirationMs: 31536000000
 schemes:
   - https
 

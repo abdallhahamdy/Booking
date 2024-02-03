@@ -24,16 +24,21 @@ public class JwtUtils {
     private String jwtSecret;
 
     @Value("${bezkoder.app.jwtExpirationMs}")
-    private int jwtExpirationMs;
+    private long jwtExpirationMs;
 
-    public String generateJwtToken(Authentication authentication) {
+    @Value("${bezkoder.app.stayLoggedInExpirationMs}")
+    private long stayLoggedInExpirationMs;
+
+    public String generateJwtToken(Authentication authentication, boolean stayLoggedIn) {
+
+        long expirationMs = stayLoggedIn ? stayLoggedInExpirationMs : jwtExpirationMs;
 
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
         return Jwts.builder()
                 .setSubject((userPrincipal.getPhone()))
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .setExpiration(new Date((new Date()).getTime() + expirationMs))
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
