@@ -40,6 +40,9 @@ public class User extends Auditable<String> {
     @JoinColumn(name = "city_id")  // Many users can have the same city
     private City city;
 
+    @Column
+    private boolean stayLoggedIn;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_roles",
@@ -50,13 +53,14 @@ public class User extends Auditable<String> {
     public User() {
     }
 
-    public User(Long id, String username, String email, String phone, String password, City city, Set<Role> roles) {
+    public User(Long id, String username, String email, String phone, String password, City city, boolean stayLoggedIn, Set<Role> roles) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.phone = phone;
         this.password = password;
         this.city = city;
+        this.stayLoggedIn = stayLoggedIn;
         this.roles = roles;
     }
 
@@ -106,6 +110,14 @@ public class User extends Auditable<String> {
 
     public void setCity(City city) {
         this.city = city;
+    }
+
+    public boolean isStayLoggedIn() {
+        return stayLoggedIn;
+    }
+
+    public void setStayLoggedIn(boolean stayLoggedIn) {
+        this.stayLoggedIn = stayLoggedIn;
     }
 
     public Set<Role> getRoles() {
