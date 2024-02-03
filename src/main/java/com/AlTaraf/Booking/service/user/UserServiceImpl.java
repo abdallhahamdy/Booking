@@ -59,6 +59,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean existsByEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            // Handle empty email case, e.g., return false or throw an exception
+            return false;
+        }
+
         return userRepository.existsByEmail(email);
     }
 

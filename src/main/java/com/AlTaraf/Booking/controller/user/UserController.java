@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @GetMapping("/check-availability")
-    public ResponseEntity<?> checkAvailability(@RequestParam(value = "email") String email,
+    public ResponseEntity<?> checkAvailability(@RequestParam(value = "email", required = false) String email,
                                                @RequestParam(value = "phone") String phone,
                                                @RequestParam(value = "roleNames") Set<String> roleNames) {
 
