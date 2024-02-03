@@ -10,18 +10,18 @@ public class FoodOption {
     private Long id;
 
     @Column(name = "FOOD_OPTION_NAME")
-    private String foodOptionName;
+    private String name;
 
     @Column(name = "FOOD_OPTION_ARABIC_NAME")
-    private String foodOptionArabicName;
+    private String arabicName;
 
     public FoodOption() {
     }
 
-    public FoodOption(Long id, String foodOptionName, String foodOptionArabicName) {
+    public FoodOption(Long id, String name, String arabicName) {
         this.id = id;
-        this.foodOptionName = foodOptionName;
-        this.foodOptionArabicName = foodOptionArabicName;
+        this.name = name;
+        this.arabicName = arabicName;
     }
 
     public Long getId() {
@@ -32,19 +32,19 @@ public class FoodOption {
         this.id = id;
     }
 
-    public String getFoodOptionName() {
-        return foodOptionName;
+    public String getName() {
+        return name;
     }
 
-    public void setFoodOptionName(String foodOptionName) {
-        this.foodOptionName = foodOptionName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getFoodOptionArabicName() {
-        return foodOptionArabicName;
+    public String getArabicName() {
+        return arabicName;
     }
 
-    public void setFoodOptionArabicName(String foodOptionArabicName) {
-        this.foodOptionArabicName = foodOptionArabicName;
+    public void setArabicName(String arabicName) {
+        this.arabicName = arabicName;
     }
 }
