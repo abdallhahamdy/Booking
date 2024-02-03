@@ -16,12 +16,15 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     Page<Unit> findByFavoriteTrue(Pageable pageable);
 
     // ========== REPOSITORY FOR HOTEL CLASSIFICATION NAMES ==============
-    Page<Unit> findByHotelClassification_HotelClassificationNameIn(List<String> hotelClassificationNames, Pageable pageable);
+    Page<Unit> findByHotelClassification_NameIn(List<String> hotelClassificationNames, Pageable pageable);
 
     // =========== REPOSITORY FOR CREATED DATE BETWEEN ==================
     Page<Unit> findByCreatedDateBetween(Date startOfDay, Date endOfDay, Pageable pageable);
 
     // =========== REPOSITORY FOR GET UNIT BY STATUS UNIT NAME ==================
-    Page<Unit> findByStatusUnit_StatusName(String statusName, Pageable pageable);
+    Page<Unit> findByStatusUnit_Name(String name, Pageable pageable);
+
+    Page<Unit> findByAccommodationType_Name(String accommodationTypeName, Pageable pageable);
+
 
 }

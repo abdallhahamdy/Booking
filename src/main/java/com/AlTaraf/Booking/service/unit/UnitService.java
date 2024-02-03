@@ -25,4 +25,5 @@ public interface UnitService {
     // ======== GET UNITS WHICH HIS STATUS IS PENDING =======
     Page<Unit> getAllPendingUnits(int page, int size);
 
+    Page<Unit> getUnitsByAccommodationTypeName(String accommodationTypeName, int page, int size);
 }

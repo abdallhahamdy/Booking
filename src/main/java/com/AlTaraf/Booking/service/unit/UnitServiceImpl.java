@@ -39,7 +39,7 @@ public class UnitServiceImpl implements UnitService {
     // ========= START GET UNITS BY HOTEL CLASSIFICATION NAMES ===============
     public Page<Unit> getUnitsByHotelClassificationNames(List<String> hotelClassificationNames, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return unitRepository.findByHotelClassification_HotelClassificationNameIn(hotelClassificationNames, pageRequest);
+        return unitRepository.findByHotelClassification_NameIn(hotelClassificationNames, pageRequest);
     }
     // ========= END GET UNITS BY HOTEL CLASSIFICATION NAMES ===============
 
@@ -77,7 +77,12 @@ public class UnitServiceImpl implements UnitService {
     // ========= START GET UNITS WHICH HIS STATUS IS PENDING =============
     public Page<Unit> getAllPendingUnits(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return unitRepository.findByStatusUnit_StatusName("PENDING", pageRequest);
+        return unitRepository.findByStatusUnit_Name("PENDING", pageRequest);
     }
     // ========= END GET UNITS WHICH HIS STATUS IS PENDING =============
+
+    public Page<Unit> getUnitsByAccommodationTypeName(String accommodationTypeName, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return unitRepository.findByAccommodationType_Name(accommodationTypeName, pageRequest);
+    }
 }
