@@ -11,18 +11,18 @@ public class UnitType {
     private Long id;
 
     @Column(name = "TYPE_NAME")
-    private String typeName;
+    private String name;
 
     @Column(name = "TYPE_ARABIC_NAME")
-    private String typeArabicName;
+    private String arabicName;
 
     public UnitType() {
     }
 
-    public UnitType(Long id, String typeName, String typeArabicName) {
+    public UnitType(Long id, String name, String arabicName) {
         this.id = id;
-        this.typeName = typeName;
-        this.typeArabicName = typeArabicName;
+        this.name = name;
+        this.arabicName = arabicName;
     }
 
     public Long getId() {
@@ -33,19 +33,19 @@ public class UnitType {
         this.id = id;
     }
 
-    public String getTypeName() {
-        return typeName;
+    public String getName() {
+        return name;
     }
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getTypeArabicName() {
-        return typeArabicName;
+    public String getArabicName() {
+        return arabicName;
     }
 
-    public void setTypeArabicName(String typeArabicName) {
-        this.typeArabicName = typeArabicName;
+    public void setArabicName(String arabicName) {
+        this.arabicName = arabicName;
     }
 }
