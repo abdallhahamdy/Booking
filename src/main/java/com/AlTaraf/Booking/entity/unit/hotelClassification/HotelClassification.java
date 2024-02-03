@@ -11,18 +11,18 @@ public class HotelClassification {
     private Long id;
 
     @Column(name = "HOTEL_CLASSIFICATION_NAME")
-    private String hotelClassificationName;
+    private String name;
 
     @Column(name = "HOTEL_CLASSIFICATION_ARABIC_NAME")
-    private String hotelClassificationArabicName;
+    private String arabicName;
 
     public HotelClassification() {
     }
 
-    public HotelClassification(Long id, String hotelClassificationName, String hotelClassificationArabicName) {
+    public HotelClassification(Long id, String name, String arabicName) {
         this.id = id;
-        this.hotelClassificationName = hotelClassificationName;
-        this.hotelClassificationArabicName = hotelClassificationArabicName;
+        this.name = name;
+        this.arabicName = arabicName;
     }
 
     public Long getId() {
@@ -33,19 +33,19 @@ public class HotelClassification {
         this.id = id;
     }
 
-    public String getHotelClassificationName() {
-        return hotelClassificationName;
+    public String getName() {
+        return name;
     }
 
-    public void setHotelClassificationName(String hotelClassificationName) {
-        this.hotelClassificationName = hotelClassificationName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getHotelClassificationArabicName() {
-        return hotelClassificationArabicName;
+    public String getArabicName() {
+        return arabicName;
     }
 
-    public void setHotelClassificationArabicName(String hotelClassificationArabicName) {
-        this.hotelClassificationArabicName = hotelClassificationArabicName;
+    public void setArabicName(String arabicName) {
+        this.arabicName = arabicName;
     }
 }
