@@ -13,12 +13,15 @@ public class LoginRequest {
     @NotBlank
     private String password;
 
+    private boolean stayLoggedIn;
+
     public LoginRequest() {
     }
 
-    public LoginRequest(String phone, String password) {
+    public LoginRequest(String phone, String password, boolean stayLoggedIn) {
         this.phone = phone;
         this.password = password;
+        this.stayLoggedIn = stayLoggedIn;
     }
 
     public String getPhone() {
@@ -35,5 +38,13 @@ public class LoginRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isStayLoggedIn() {
+        return stayLoggedIn;
+    }
+
+    public void setStayLoggedIn(boolean stayLoggedIn) {
+        this.stayLoggedIn = stayLoggedIn;
     }
 }

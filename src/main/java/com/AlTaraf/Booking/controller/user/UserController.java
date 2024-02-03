@@ -106,8 +106,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest,
-                                   @RequestParam(value = "stayLoggedIn", required = false) boolean stayLoggedIn) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
 
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -117,13 +116,14 @@ public class UserController {
 //            String jwt = jwtUtils.generateJwtToken(authentication);
 
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            userDetails.setStayLoggedIn(stayLoggedIn);
+            userDetails.setStayLoggedIn(loginRequest.isStayLoggedIn());
+
             List<String> roles = userDetails.getAuthorities().stream()
                     .map(item -> item.getAuthority())
                     .collect(Collectors.toList());
 
             return ResponseEntity.ok(new JwtResponse(
-                    jwtUtils.generateJwtToken(authentication, stayLoggedIn),
+                    jwtUtils.generateJwtToken(authentication, loginRequest.isStayLoggedIn()),
                     userDetails.getId(),
                     userDetails.getUsername(),
                     userDetails.getEmail(),

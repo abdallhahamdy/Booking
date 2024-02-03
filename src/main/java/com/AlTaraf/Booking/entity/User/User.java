@@ -40,6 +40,7 @@ public class User extends Auditable<String> {
     @JoinColumn(name = "city_id")  // Many users can have the same city
     private City city;
 
+    @Transient
     @Column
     private boolean stayLoggedIn;
 

@@ -33,6 +33,9 @@ public class JwtUtils {
 
         long expirationMs = stayLoggedIn ? stayLoggedInExpirationMs : jwtExpirationMs;
 
+        // stayLoggedIn is working but not
+//        System.out.println("ExpirationMs: " + expirationMs);
+
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
         return Jwts.builder()
