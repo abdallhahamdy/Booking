@@ -1,6 +1,8 @@
 package com.AlTaraf.Booking.entity.unit;
 
 import com.AlTaraf.Booking.entity.Image.ImageData;
+import com.AlTaraf.Booking.entity.User.User;
+import com.AlTaraf.Booking.entity.User.User;
 import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.cityAndregion.Region;
 import com.AlTaraf.Booking.entity.common.Auditable;
@@ -34,6 +36,10 @@ public class Unit extends Auditable<String> {
     @ManyToOne
     @JoinColumn(name = "UNIT_TYPE_ID", nullable = false)
     private UnitType unitType;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID", nullable = true)
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "ACCOMMODATION_TYPE_ID")
@@ -134,9 +140,10 @@ public class Unit extends Auditable<String> {
         this.statusUnit.setId(1L);
     }
 
-    public Unit(Long id, UnitType unitType, AccommodationType accommodationType, List<ImageData> images, String nameUnit, String description, City city, Region region, HotelClassification hotelClassification, List<RoomAvailable> roomAvailableList, Set<Feature> basicFeatures, Set<SubFeature> subFeatures, Set<FoodOption> foodOptions, int adultsAllowed, int childrenAllowed, Boolean favorite, StatusUnit statusUnit, int capacityHalls, Set<FeatureForHalls> featuresHalls, Set<AvailablePeriods> availablePeriodsHalls, int oldPriceHall, int newPriceHall, String address, Double latForMapping, Double longForMapping) {
+    public Unit(Long id, UnitType unitType, User user, AccommodationType accommodationType, List<ImageData> images, String nameUnit, String description, City city, Region region, HotelClassification hotelClassification, List<RoomAvailable> roomAvailableList, Set<Feature> basicFeatures, Set<SubFeature> subFeatures, Set<FoodOption> foodOptions, int adultsAllowed, int childrenAllowed, Boolean favorite, StatusUnit statusUnit, int capacityHalls, Set<FeatureForHalls> featuresHalls, Set<AvailablePeriods> availablePeriodsHalls, int oldPriceHall, int newPriceHall, String address, Double latForMapping, Double longForMapping) {
         this.id = id;
         this.unitType = unitType;
+        this.user = user;
         this.accommodationType = accommodationType;
         this.images = images;
         this.nameUnit = nameUnit;
@@ -176,6 +183,14 @@ public class Unit extends Auditable<String> {
 
     public void setUnitType(UnitType unitType) {
         this.unitType = unitType;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public AccommodationType getAccommodationType() {
