@@ -71,3 +71,21 @@ insert into status_unit (status_arabic_name, status_name) values ("انتظار"
 insert into status_unit (status_arabic_name, status_name) values ("المقبولة","ACCEPTED");
 insert into status_unit (status_arabic_name, status_name) values ("المرفوضة","REJECTED");
 insert into status_unit (status_arabic_name, status_name) values ("الملغاة","CANCELED");
+
+-- insert feature halls    مميزات لقاعات المناسبات
+insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("دي جي","DJ");
+insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("فقرات استعراضية","show segments");
+insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("قاعة مكيفة","air-conditioned hall");
+
+insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("خدمات الضيافة والسفرجة","hospitality and backing services");
+insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("الديكور","decoration");
+insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("سيرفز","servers");
+
+insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("شاشات عملاقة","giant screens");
+insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("مؤثرات ضوئية","lighting effects");
+insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("تبخير وتعطير","fumigation and perfuming");
+
+-- insert available_periods    الفترات المتاحة
+insert into available_periods (AVAILABLE_PERIODS_ARABIC_NAME, AVAILABLE_PERIODS_NAME) values ("من 11 صباحا الي 3 مساءا
+","From 11 am to 3 pm");
+insert into available_periods (AVAILABLE_PERIODS_ARABIC_NAME, AVAILABLE_PERIODS_NAME) values ("من 5 مساءا الي 12 صباحا","From 5 pm to 12 am");
