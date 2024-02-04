@@ -22,6 +22,7 @@ insert into unit_type (type_arabic_name, type_name) values ("قاعات مناس
 -- insert accommodation_type   نوع الاقامة
 insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("فندق","HOTEL");
 insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("شقة فندقية","HOTEL_APARTMENT");
+insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("شقة خارجية","EXTERNAL_APARTMENT");
 insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("شالية","CHALET");
 insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("منتجع","RESORT");
 insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("استراحة","LOUNGE");
