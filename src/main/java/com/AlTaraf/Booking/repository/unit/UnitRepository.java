@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.repository.unit;
 
+import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.unit.Unit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,5 +26,9 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     Page<Unit> findByNameUnitContainingIgnoreCase(String nameUnit, Pageable pageable);
 
     List<Unit> findAllByUserIdAndStatusUnitName(Long userId, String statusUnitName);
+
+    Page<Unit> findByUser_IdAndFavorite(Long userId, boolean favorite, Pageable pageable);
+
+    List<Unit> findByCity(City city);
 
 }

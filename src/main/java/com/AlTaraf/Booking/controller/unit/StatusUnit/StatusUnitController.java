@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("api/get-All-Status-Unit")
 public class StatusUnitController {
 
     @Autowired
@@ -24,22 +24,18 @@ public class StatusUnitController {
     @Autowired
     UnitService unitService;
 
-    @Autowired
-    UnitMapper unitMapper;
+    @GetMapping
+    public ResponseEntity<?> getAllStatusUnit() {
+        List<StatusUnit> statusUnitList = statusUnitService.getAllStatusUnit();
 
-    @GetMapping("/status-unit")
-    public ResponseEntity<?> getUnitsForUserAndStatus(
-            @RequestParam(name = "USER_ID") Long userId,
-            @RequestParam(name = "statusUnitName") String statusUnitName) {
-
-        List<Unit> units = unitService.getUnitsForUserAndStatus(userId, statusUnitName);
-
-        if (!units.isEmpty()) {
-            List<UnitDto> unitDtos = unitMapper.toUnitDtoList(units);
-            return new ResponseEntity<>(unitDtos, HttpStatus.OK);
+        if (!statusUnitList.isEmpty()) {
+            return new ResponseEntity<>(statusUnitList, HttpStatus.OK);
         } else {
-            ApiResponse response = new ApiResponse(204, "No Content");
+            ApiResponse response = new ApiResponse(204, "No Content for Room Not Available!");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
 }

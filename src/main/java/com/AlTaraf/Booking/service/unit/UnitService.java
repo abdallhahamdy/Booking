@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.service.unit;
 
+import com.AlTaraf.Booking.dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.entity.unit.Unit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,17 +11,14 @@ public interface UnitService {
 
     Unit saveUnit(Unit unit);
 
-    Page<Unit> getUnitsByHotelClassificationNames(List<String> hotelClassificationNames, int page, int size);
+    Page<UnitDtoFavorite> getUnitsByHotelClassificationNames(List<String> hotelClassificationNames, int page, int size);
 
-    Page<Unit> getFavoriteUnits(int page, int size);
-
+    Page<UnitDtoFavorite> getFavoriteUnitsForUser(Long userId, int page, int size);
     Unit getUnitById(Long id);
 
-    Page<Unit> getUnitsAddedLastMonth(int page, int size);
+    Page<UnitDtoFavorite> getUnitsAddedLastMonth(int page, int size);
 
-    Page<Unit> getAllPendingUnits(int page, int size);
-
-    Page<Unit> getUnitsByAccommodationTypeName(String accommodationTypeName, int page, int size);
+    Page<UnitDtoFavorite> getUnitsByAccommodationTypeName(String accommodationTypeName, int page, int size);
 
     void deleteUnit(Long id);
 
@@ -31,4 +29,6 @@ public interface UnitService {
     Page<Unit> filterUnitsByName(String nameUnit, Pageable pageable);
 
     List<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName);
+
+    List<UnitDtoFavorite> getUnitsByUserCity(Long userId);
 }

@@ -1,11 +1,15 @@
 package com.AlTaraf.Booking.service.unit;
 
-import com.AlTaraf.Booking.config.utils.DateUtils;
+import com.AlTaraf.Booking.dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.entity.Image.ImageData;
+import com.AlTaraf.Booking.entity.User.User;
+import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.unit.Unit;
+import com.AlTaraf.Booking.mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.repository.unit.UnitRepository;
 import com.AlTaraf.Booking.repository.unit.roomAvailable.RoomAvailableRepository;
+import com.AlTaraf.Booking.repository.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,8 +19,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UnitServiceImpl implements UnitService {
@@ -29,9 +35,13 @@ public class UnitServiceImpl implements UnitService {
 
     @Autowired
     private ImageDataRepository imageDataRepository;
-    // --------------------------------------------------
 
-    // ========= START SAVE UNIT ===========
+    @Autowired
+    private UnitFavoriteMapper unitFavoriteMapper;
+
+    @Autowired
+    UserRepository userRepository;
+
     public Unit saveUnit(Unit unit) {
         try {
             return unitRepository.save(unit);
@@ -41,21 +51,26 @@ public class UnitServiceImpl implements UnitService {
             throw e; // Rethrow the exception or handle it accordingly
         }
     }
-    // ========= END SAVE UNIT ===========
 
-    // --------------------------------------------------
 
-    // ========= START GET UNITS BY HOTEL CLASSIFICATION NAMES ===============
-    public Page<Unit> getUnitsByHotelClassificationNames(List<String> hotelClassificationNames, int page, int size) {
+    @Override
+    public Page<UnitDtoFavorite> getUnitsByHotelClassificationNames(List<String> hotelClassificationNames, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return unitRepository.findByHotelClassification_NameIn(hotelClassificationNames, pageRequest);
+        Page<Unit> unitsPage = unitRepository.findByHotelClassification_NameIn(hotelClassificationNames, pageRequest);
+
+        return unitsPage.map(unitFavoriteMapper::toUnitFavoriteDto);
     }
-    // ========= END GET UNITS BY HOTEL CLASSIFICATION NAMES ===============
 
-    // --------------------------------------------------
+    @Override
+    public Page<UnitDtoFavorite> getFavoriteUnitsForUser(Long userId, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Unit> favoriteUnitsPage = unitRepository.findByUser_IdAndFavorite(userId, true, pageRequest);
 
-    // ======== START CREATED DATE BETWEEN ==============
-    public Page<Unit> getUnitsAddedLastMonth(int page, int size) {
+        return favoriteUnitsPage.map(unitFavoriteMapper::toUnitFavoriteDto);
+    }
+
+    @Override
+    public Page<UnitDtoFavorite> getUnitsAddedLastMonth(int page, int size) {
         LocalDateTime startOfMonth = LocalDateTime.now().minusMonths(1).withDayOfMonth(1);
         LocalDateTime endOfMonth = LocalDateTime.now();
 
@@ -64,48 +79,29 @@ public class UnitServiceImpl implements UnitService {
 
         PageRequest pageRequest = PageRequest.of(page, size);
 
-        return unitRepository.findByCreatedDateBetween(startDate, endDate, pageRequest);
+        Page<Unit> unitsPage = unitRepository.findByCreatedDateBetween(startDate, endDate, pageRequest);
+
+        return unitsPage.map(unitFavoriteMapper::toUnitFavoriteDto);
     }
-    // ======== END CREATED DATE BETWEEN ==============
 
-    // --------------------------------------------------
-
-    // ========= START GET FAVORITE UNITS ==========
     public Page<Unit> getFavoriteUnits(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         return unitRepository.findByFavoriteTrue(pageRequest);
     }
-    // ========= START GET FAVORITE UNITS ==========
 
-    // --------------------------------------------------
-
-    // ========= START GET UNIT BY ID =============
     public Unit getUnitById(Long id) {
         return unitRepository.findById(id).orElse(null);
     }
-    // ========= END GET UNIT BY ID ================
 
-    // --------------------------------------------------
-
-    // ========= START GET UNITS WHICH HIS STATUS IS PENDING =============
-    public Page<Unit> getAllPendingUnits(int page, int size) {
+    @Override
+    public Page<UnitDtoFavorite> getUnitsByAccommodationTypeName(String accommodationTypeName, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return unitRepository.findByStatusUnit_Name("PENDING", pageRequest);
+
+        Page<Unit> unitsPage = unitRepository.findByAccommodationType_Name(accommodationTypeName, pageRequest);
+
+        return unitsPage.map(unitFavoriteMapper::toUnitFavoriteDto);
     }
-    // ========= END GET UNITS WHICH HIS STATUS IS PENDING =============
 
-    // --------------------------------------------------
-
-    // ======== START GET UNIT BY ACCOMMODATION TYPE ====================
-    public Page<Unit> getUnitsByAccommodationTypeName(String accommodationTypeName, int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        return unitRepository.findByAccommodationType_Name(accommodationTypeName, pageRequest);
-    }
-    // ======== END GET UNIT BY ACCOMMODATION TYPE ====================
-
-    // --------------------------------------------------
-
-    // ========= START DELETE UNIT =============
     @Override
     public void deleteUnit(Long id) {
          unitRepository.deleteById(id);
@@ -161,5 +157,19 @@ public class UnitServiceImpl implements UnitService {
     public List<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName) {
         // Retrieve a List of Units for the given USER_ID and StatusUnit name
         return unitRepository.findAllByUserIdAndStatusUnitName(userId, statusUnitName);
+    }
+
+    @Override
+    public List<UnitDtoFavorite> getUnitsByUserCity(Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+
+        if (user == null || user.getCity() == null) {
+            return Collections.emptyList(); // Return empty list if user or user's city is not found
+        }
+
+        City userCity = user.getCity();
+        List<Unit> units = unitRepository.findByCity(userCity);
+
+        return unitFavoriteMapper.toUnitFavoriteDtoList(units);
     }
 }
