@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.entity.unit;
 
+import com.AlTaraf.Booking.entity.Image.ImageData;
 import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.cityAndregion.Region;
 import com.AlTaraf.Booking.entity.common.Auditable;
@@ -37,6 +38,9 @@ public class Unit extends Auditable<String> {
     @ManyToOne
     @JoinColumn(name = "ACCOMMODATION_TYPE_ID")
     private AccommodationType accommodationType;
+
+    @OneToMany(mappedBy = "unit", fetch = FetchType.EAGER)
+    private List<ImageData> images;
 
     @Column(name = "NAME_UNIT")
     private String nameUnit;
@@ -117,6 +121,12 @@ public class Unit extends Auditable<String> {
 
     private int newPriceHall;
 
+    private String address;
+
+    private Double latForMapping;
+
+    private Double longForMapping;
+
     // قاعات المناسبات النهاية
 
     public Unit() {
@@ -124,10 +134,11 @@ public class Unit extends Auditable<String> {
         this.statusUnit.setId(1L);
     }
 
-    public Unit(Long id, UnitType unitType, AccommodationType accommodationType, String nameUnit, String description, City city, Region region, HotelClassification hotelClassification, List<RoomAvailable> roomAvailableList, Set<Feature> basicFeatures, Set<SubFeature> subFeatures, Set<FoodOption> foodOptions, int adultsAllowed, int childrenAllowed, Boolean favorite, StatusUnit statusUnit, int capacityHalls, Set<FeatureForHalls> featuresHalls, Set<AvailablePeriods> availablePeriodsHalls, int oldPriceHall, int newPriceHall) {
+    public Unit(Long id, UnitType unitType, AccommodationType accommodationType, List<ImageData> images, String nameUnit, String description, City city, Region region, HotelClassification hotelClassification, List<RoomAvailable> roomAvailableList, Set<Feature> basicFeatures, Set<SubFeature> subFeatures, Set<FoodOption> foodOptions, int adultsAllowed, int childrenAllowed, Boolean favorite, StatusUnit statusUnit, int capacityHalls, Set<FeatureForHalls> featuresHalls, Set<AvailablePeriods> availablePeriodsHalls, int oldPriceHall, int newPriceHall, String address, Double latForMapping, Double longForMapping) {
         this.id = id;
         this.unitType = unitType;
         this.accommodationType = accommodationType;
+        this.images = images;
         this.nameUnit = nameUnit;
         this.description = description;
         this.city = city;
@@ -146,6 +157,9 @@ public class Unit extends Auditable<String> {
         this.availablePeriodsHalls = availablePeriodsHalls;
         this.oldPriceHall = oldPriceHall;
         this.newPriceHall = newPriceHall;
+        this.address = address;
+        this.latForMapping = latForMapping;
+        this.longForMapping = longForMapping;
     }
 
     public Long getId() {
@@ -170,6 +184,14 @@ public class Unit extends Auditable<String> {
 
     public void setAccommodationType(AccommodationType accommodationType) {
         this.accommodationType = accommodationType;
+    }
+
+    public List<ImageData> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ImageData> images) {
+        this.images = images;
     }
 
     public String getNameUnit() {
@@ -314,5 +336,29 @@ public class Unit extends Auditable<String> {
 
     public void setNewPriceHall(int newPriceHall) {
         this.newPriceHall = newPriceHall;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Double getLatForMapping() {
+        return latForMapping;
+    }
+
+    public void setLatForMapping(Double latForMapping) {
+        this.latForMapping = latForMapping;
+    }
+
+    public Double getLongForMapping() {
+        return longForMapping;
+    }
+
+    public void setLongForMapping(Double longForMapping) {
+        this.longForMapping = longForMapping;
     }
 }
