@@ -17,9 +17,9 @@ public class RegionController {
     @Autowired
     private RegionService regionService;
 
-    @GetMapping("/byCity/{cityId}")
-    public ResponseEntity<List<RegionDto>> getRegionsByCityId(@PathVariable Long cityId) {
-        List<RegionDto> RegionDtos = regionService.getRegionsByCityId(cityId);
+    @GetMapping("/byCity/{Id}")
+    public ResponseEntity<List<RegionDto>> getRegionsByCityId(@PathVariable Long Id) {
+        List<RegionDto> RegionDtos = regionService.getRegionsByCityId(Id);
         return new ResponseEntity<>(RegionDtos, HttpStatus.OK);
     }
 }

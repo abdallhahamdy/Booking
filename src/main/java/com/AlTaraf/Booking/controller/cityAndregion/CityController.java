@@ -31,12 +31,12 @@ public class CityController {
         return new ResponseEntity<>(savedCity, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{cityId}/regions")
+    @PostMapping("/{Id}/regions")
     public ResponseEntity<Region> addRegionToCity(
-            @PathVariable Long cityId,
+            @PathVariable Long Id,
             @RequestBody RegionDto regionDto) {
 
-        Region addedRegion = cityService.addRegionToCity(cityId, regionDto);
+        Region addedRegion = cityService.addRegionToCity(Id, regionDto);
         return new ResponseEntity<>(addedRegion, HttpStatus.CREATED);
     }
 
@@ -52,13 +52,13 @@ public class CityController {
         }
     }
 
-    @PutMapping("/{cityId}/regions/{regionId}")
+    @PutMapping("/{Id}/regions/{regionId}")
     public ResponseEntity<Region> updateRegionInCity(
-            @PathVariable Long cityId,
+            @PathVariable Long Id,
             @PathVariable Long regionId,
             @RequestBody RegionDto RegionDto) {
 
-        Region updatedRegion = cityService.updateRegionInCity(cityId, regionId, RegionDto);
+        Region updatedRegion = cityService.updateRegionInCity(Id, regionId, RegionDto);
         return new ResponseEntity<>(updatedRegion, HttpStatus.OK);
     }
 
