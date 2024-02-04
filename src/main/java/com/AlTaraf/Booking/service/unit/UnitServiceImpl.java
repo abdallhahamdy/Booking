@@ -158,4 +158,8 @@ public class UnitServiceImpl implements UnitService {
 
     // --------------------------------------------------
 
+    public List<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName) {
+        // Retrieve a List of Units for the given USER_ID and StatusUnit name
+        return unitRepository.findAllByUserIdAndStatusUnitName(userId, statusUnitName);
+    }
 }

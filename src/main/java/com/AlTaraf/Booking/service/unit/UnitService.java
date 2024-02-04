@@ -8,36 +8,27 @@ import java.util.List;
 
 public interface UnitService {
 
-    // ========= SAVE UNIT ===========
     Unit saveUnit(Unit unit);
 
-    // ========= GET UNITS BY HOTEL CLASSIFICATION NAMES ===============
     Page<Unit> getUnitsByHotelClassificationNames(List<String> hotelClassificationNames, int page, int size);
 
-    // ========= GET FAVORITE UNITS ==========
     Page<Unit> getFavoriteUnits(int page, int size);
 
-    // ========= GET UNIT BY ID =============
     Unit getUnitById(Long id);
 
-    // ======== GET ALL UNITS ADDED TODAY =======
     Page<Unit> getUnitsAddedLastMonth(int page, int size);
 
-    // ======== GET UNITS WHICH HIS STATUS IS PENDING =======
     Page<Unit> getAllPendingUnits(int page, int size);
 
-    // ======== GET UNITS BY ACCOMMODATION TYPE NAME =======
     Page<Unit> getUnitsByAccommodationTypeName(String accommodationTypeName, int page, int size);
 
-    // ========= DELETE UNIT =============
     void deleteUnit(Long id);
 
-    // =========  SET UNIT ID IN IMAGE  =============
     void updateImageDataUnit(Long unitId);
 
-    // =========  GET ALL UNITS  =============
     Page<Unit> getAllUnits(Pageable pageable);
 
-    // ========= FILTER UNIT BY NAME =============
     Page<Unit> filterUnitsByName(String nameUnit, Pageable pageable);
+
+    List<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName);
 }
