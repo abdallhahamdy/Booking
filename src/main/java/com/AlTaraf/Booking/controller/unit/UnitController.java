@@ -1,7 +1,9 @@
 package com.AlTaraf.Booking.controller.unit;
 
+import com.AlTaraf.Booking.entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.entity.unit.accommodationType.AccommodationType;
 import com.AlTaraf.Booking.entity.unit.feature.Feature;
+import com.AlTaraf.Booking.entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.entity.unit.Unit;
@@ -11,6 +13,8 @@ import com.AlTaraf.Booking.entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.entity.unit.unitType.UnitType;
 import com.AlTaraf.Booking.service.foodOption.FoodOptionService;
 import com.AlTaraf.Booking.service.unit.AccommodationType.AccommodationTypeService;
+import com.AlTaraf.Booking.service.unit.AvailablePeriods.AvailablePeriodsService;
+import com.AlTaraf.Booking.service.unit.FeatureForHalls.FeatureForHallsService;
 import com.AlTaraf.Booking.service.unit.RoomAvailable.RoomAvailableService;
 import com.AlTaraf.Booking.service.unit.UnitService;
 import com.AlTaraf.Booking.service.unit.UnitType.UnitTypeService;
@@ -20,6 +24,7 @@ import com.AlTaraf.Booking.service.unit.statusUnit.StatusUnitService;
 import com.AlTaraf.Booking.service.unit.subFeature.SubFeatureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,6 +59,12 @@ public class UnitController {
 
     @Autowired
     AccommodationTypeService accommodationTypeService;
+
+    @Autowired
+    FeatureForHallsService featureForHallsService;
+
+    @Autowired
+    AvailablePeriodsService availablePeriodsService;
 
     // -----------------------------------------------------------------------------
 
@@ -175,12 +186,12 @@ public class UnitController {
     // -----------------------------------------------------------------------------
 
     // ======== START CREATED DATE BETWEEN ==============
-    @GetMapping("/added-today")
+    @GetMapping("/last-month")
     public ResponseEntity<Page<Unit>> getUnitsAddedToday(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "2") int size) {
 
-        Page<Unit> units = unitService.getUnitsAddedToday(page, size);
+        Page<Unit> units = unitService.getUnitsAddedLastMonth(page, size);
 
         if (!units.isEmpty()) {
             return new ResponseEntity<>(units, HttpStatus.OK);
@@ -326,5 +337,60 @@ public class UnitController {
         return new ResponseEntity<>("ImageData entities updated for Unit with ID: " + unitId, HttpStatus.OK);
     }
     // ========= END UPDATE IMAGE DATA =============
+
+    // -----------------------------------------------------------------------------
+
+    // ========= START GET ALL UNITS =============
+    @GetMapping
+    public Page<Unit> getAllUnits(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        return unitService.getAllUnits(PageRequest.of(page, size));
+    }
+    // ========= END GET ALL UNITS =============
+
+    // -----------------------------------------------------------------------------
+
+    // ========= START FILTER UNIT BY NAME =============
+    @GetMapping("/filter-unit-by-name")
+    public Page<Unit> filterUnitsByName(
+            @RequestParam String nameUnit,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        return unitService.filterUnitsByName(nameUnit, PageRequest.of(page, size));
+    }
+    // ========= END FILTER UNIT BY NAME =============
+
+    // -----------------------------------------------------------------------------
+
+    // ======== START GET ALL FEATURE For Halls ====================
+    @GetMapping("/get-All-Feature-For-Halls")
+    public ResponseEntity<List<FeatureForHalls>> getAllFeatureForHalls() {
+        List<FeatureForHalls> featureForHalls = featureForHallsService.getAllFeatureForHalls();
+
+        if (!featureForHalls.isEmpty()) {
+            return new ResponseEntity<>(featureForHalls, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    // ======== End GET ALL FEATURE For All ====================
+
+    // -----------------------------------------------------------------------------
+
+    // ======== START GET ALL AvailablePeriods ====================
+    @GetMapping("/get-AvailablePeriods")
+    public ResponseEntity<List<AvailablePeriods>> getAllAvailablePeriods() {
+        List<AvailablePeriods> availablePeriods = availablePeriodsService.getAllAvailablePeriods();
+
+        if (!availablePeriods.isEmpty()) {
+            return new ResponseEntity<>(availablePeriods, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    // ======== End GET ALL AvailablePeriods ====================
+
+    // -----------------------------------------------------------------------------
 
 }

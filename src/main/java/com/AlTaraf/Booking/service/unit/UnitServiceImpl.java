@@ -10,8 +10,11 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -52,12 +55,16 @@ public class UnitServiceImpl implements UnitService {
     // --------------------------------------------------
 
     // ======== START CREATED DATE BETWEEN ==============
-    public Page<Unit> getUnitsAddedToday(int page, int size) {
-        Date startOfDay = DateUtils.getStartOfDay(new Date());
-        Date endOfDay = DateUtils.getEndOfDay(new Date());
+    public Page<Unit> getUnitsAddedLastMonth(int page, int size) {
+        LocalDateTime startOfMonth = LocalDateTime.now().minusMonths(1).withDayOfMonth(1);
+        LocalDateTime endOfMonth = LocalDateTime.now();
+
+        Date startDate = Date.from(startOfMonth.atZone(ZoneId.systemDefault()).toInstant());
+        Date endDate = Date.from(endOfMonth.atZone(ZoneId.systemDefault()).toInstant());
+
         PageRequest pageRequest = PageRequest.of(page, size);
 
-        return unitRepository.findByCreatedDateBetween(startOfDay, endOfDay, pageRequest);
+        return unitRepository.findByCreatedDateBetween(startDate, endDate, pageRequest);
     }
     // ======== END CREATED DATE BETWEEN ==============
 
@@ -128,9 +135,27 @@ public class UnitServiceImpl implements UnitService {
         }
 
     }
+
     // ========= END UPDATE IMAGE DATA UNIT =============
 
     // --------------------------------------------------
 
+    // ========= START GET ALL UNITS =============
+    @Override
+    public Page<Unit> getAllUnits(Pageable pageable) {
+        return unitRepository.findAll(pageable);
+    }
+    // ========= END GET ALL UNITS =============
+
+    // --------------------------------------------------
+
+    // ========= START FILTER UNIT BY NAME =============
+    @Override
+    public Page<Unit> filterUnitsByName(String nameUnit, Pageable pageable) {
+        return unitRepository.findByNameUnitContainingIgnoreCase(nameUnit, pageable);
+    }
+    // ========= END FILTER UNIT BY NAME =============
+
+    // --------------------------------------------------
 
 }

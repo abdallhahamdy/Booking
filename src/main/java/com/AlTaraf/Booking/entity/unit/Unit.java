@@ -3,8 +3,10 @@ package com.AlTaraf.Booking.entity.unit;
 import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.cityAndregion.Region;
 import com.AlTaraf.Booking.entity.common.Auditable;
+import com.AlTaraf.Booking.entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.entity.unit.accommodationType.AccommodationType;
 import com.AlTaraf.Booking.entity.unit.feature.Feature;
+import com.AlTaraf.Booking.entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
@@ -62,21 +64,21 @@ public class Unit extends Auditable<String> {
     )
     private List<RoomAvailable> roomAvailableList = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "unit_basic_features",
             joinColumns = @JoinColumn(name = "unit_id"),
             inverseJoinColumns = @JoinColumn(name = "feature_id"))
     private Set<Feature> basicFeatures = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "unit_sub_features",
             joinColumns = @JoinColumn(name = "unit_id"),
             inverseJoinColumns = @JoinColumn(name = "sub_feature_id"))
     private Set<SubFeature> subFeatures = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "unit_food_options",
             joinColumns = @JoinColumn(name = "unit_id"),
@@ -93,12 +95,36 @@ public class Unit extends Auditable<String> {
     @JoinColumn(name = "STATUS_ID")
     private StatusUnit statusUnit;
 
+
+    // قاعات المناسبات البداية
+    private int capacityHalls;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "features_unit_halls",
+            joinColumns = @JoinColumn(name = "unit_id"),
+            inverseJoinColumns = @JoinColumn(name = "feature_halls_id"))
+    private Set<FeatureForHalls> featuresHalls = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "available_periods_unit_halls",
+            joinColumns = @JoinColumn(name = "unit_id"),
+            inverseJoinColumns = @JoinColumn(name = "available_periods_id"))
+    private Set<AvailablePeriods> availablePeriodsHalls = new HashSet<>();
+
+    private int oldPriceHall;
+
+    private int newPriceHall;
+
+    // قاعات المناسبات النهاية
+
     public Unit() {
         this.statusUnit = new StatusUnit();
         this.statusUnit.setId(1L);
     }
 
-    public Unit(Long id, UnitType unitType, AccommodationType accommodationType, String nameUnit, String description, City city, Region region, HotelClassification hotelClassification, List<RoomAvailable> roomAvailableList, Set<Feature> basicFeatures, Set<SubFeature> subFeatures, Set<FoodOption> foodOptions, int adultsAllowed, int childrenAllowed, Boolean favorite, StatusUnit statusUnit) {
+    public Unit(Long id, UnitType unitType, AccommodationType accommodationType, String nameUnit, String description, City city, Region region, HotelClassification hotelClassification, List<RoomAvailable> roomAvailableList, Set<Feature> basicFeatures, Set<SubFeature> subFeatures, Set<FoodOption> foodOptions, int adultsAllowed, int childrenAllowed, Boolean favorite, StatusUnit statusUnit, int capacityHalls, Set<FeatureForHalls> featuresHalls, Set<AvailablePeriods> availablePeriodsHalls, int oldPriceHall, int newPriceHall) {
         this.id = id;
         this.unitType = unitType;
         this.accommodationType = accommodationType;
@@ -115,6 +141,11 @@ public class Unit extends Auditable<String> {
         this.childrenAllowed = childrenAllowed;
         this.favorite = favorite;
         this.statusUnit = statusUnit;
+        this.capacityHalls = capacityHalls;
+        this.featuresHalls = featuresHalls;
+        this.availablePeriodsHalls = availablePeriodsHalls;
+        this.oldPriceHall = oldPriceHall;
+        this.newPriceHall = newPriceHall;
     }
 
     public Long getId() {
@@ -245,5 +276,43 @@ public class Unit extends Auditable<String> {
         this.statusUnit = statusUnit;
     }
 
+    public int getCapacityHalls() {
+        return capacityHalls;
+    }
 
+    public void setCapacityHalls(int capacityHalls) {
+        this.capacityHalls = capacityHalls;
+    }
+
+    public Set<FeatureForHalls> getFeaturesHalls() {
+        return featuresHalls;
+    }
+
+    public void setFeaturesHalls(Set<FeatureForHalls> featuresHalls) {
+        this.featuresHalls = featuresHalls;
+    }
+
+    public Set<AvailablePeriods> getAvailablePeriodsHalls() {
+        return availablePeriodsHalls;
+    }
+
+    public void setAvailablePeriodsHalls(Set<AvailablePeriods> availablePeriodsHalls) {
+        this.availablePeriodsHalls = availablePeriodsHalls;
+    }
+
+    public int getOldPriceHall() {
+        return oldPriceHall;
+    }
+
+    public void setOldPriceHall(int oldPriceHall) {
+        this.oldPriceHall = oldPriceHall;
+    }
+
+    public int getNewPriceHall() {
+        return newPriceHall;
+    }
+
+    public void setNewPriceHall(int newPriceHall) {
+        this.newPriceHall = newPriceHall;
+    }
 }

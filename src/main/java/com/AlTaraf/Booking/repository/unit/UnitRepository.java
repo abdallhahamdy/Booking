@@ -26,4 +26,7 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
     Page<Unit> findByAccommodationType_Name(String accommodationTypeName, Pageable pageable);
 
+    Page<Unit> findByNameUnitContainingIgnoreCase(String nameUnit, Pageable pageable);
+
+
 }
