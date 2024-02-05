@@ -68,12 +68,13 @@ public class UserController {
         boolean isEmailAvailable = userService.existsByEmail(email);
         boolean isPhoneAvailable = userService.existsByPhone(phone);
 
+        if (email == null || !email.isEmpty()) {
+            if (existsByEmailAndRolesOrPhoneNumberAndRoles) {
+                CheckApiResponse response = new CheckApiResponse(204, "User with the same email, phone number, and role already exists.", false);
 
-        if (existsByEmailAndRolesOrPhoneNumberAndRoles) {
-            CheckApiResponse response = new CheckApiResponse(204, "User with the same email, phone number, and role already exists.", false);
-
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(response);
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(response);
+            }
         } else if (isPhoneAvailable){
 
             CheckApiResponse response = new CheckApiResponse(204, "Phone is already taken.", false);
@@ -109,6 +110,13 @@ public class UserController {
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
 
         try {
+
+            // Check if the phone number exists in the database
+            if (!userService.existsByPhone(loginRequest.getPhone())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ApiResponse(400, "Phone number not registered"));
+            }
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getPhone(), loginRequest.getPassword()));
 
@@ -133,7 +141,7 @@ public class UserController {
         } catch (Exception e) {
             // Log the exception for debugging
             logger.error("Error during login:", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "Error in login Password is not correct"));
         }
     }
 
