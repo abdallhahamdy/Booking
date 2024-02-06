@@ -1,4 +1,4 @@
-package com.AlTaraf.Booking.dto;
+package com.AlTaraf.Booking.dto.User;
 
 
 import com.AlTaraf.Booking.dto.cityDtoAndRoleDto.CityDto;

@@ -1,7 +1,7 @@
 package com.AlTaraf.Booking.service.user;
 
 import com.AlTaraf.Booking.dto.cityDtoAndRoleDto.CityDto;
-import com.AlTaraf.Booking.dto.UserRegisterDto;
+import com.AlTaraf.Booking.dto.User.UserRegisterDto;
 import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.Role.Role;
 import com.AlTaraf.Booking.entity.User.User;
@@ -181,6 +181,12 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encoder.encode(passwordResetDto.getNewPassword()));
 
         // Save the updated user
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateUser(User user) {
+        // You might want to perform additional validation or business logic here
         userRepository.save(user);
     }
 

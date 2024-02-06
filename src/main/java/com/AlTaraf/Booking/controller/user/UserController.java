@@ -1,7 +1,9 @@
 package com.AlTaraf.Booking.controller.user;
 
-import com.AlTaraf.Booking.dto.UserRegisterDto;
+import com.AlTaraf.Booking.dto.User.UserEditDto;
+import com.AlTaraf.Booking.dto.User.UserRegisterDto;
 import com.AlTaraf.Booking.entity.User.User;
+import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.enums.ERole;
 import com.AlTaraf.Booking.payload.request.LoginRequest;
 import com.AlTaraf.Booking.payload.request.PasswordResetDto;
@@ -11,6 +13,7 @@ import com.AlTaraf.Booking.payload.response.CheckApiResponse;
 import com.AlTaraf.Booking.payload.response.JwtResponse;
 import com.AlTaraf.Booking.security.jwt.JwtUtils;
 import com.AlTaraf.Booking.security.service.UserDetailsImpl;
+import com.AlTaraf.Booking.service.cityAndRegion.CityService;
 import com.AlTaraf.Booking.service.user.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.LoggerFactory;
@@ -24,6 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import org.slf4j.Logger;
 import java.util.stream.Collectors;
@@ -40,6 +44,8 @@ public class UserController {
     @Autowired
     JwtUtils jwtUtils;
 
+    @Autowired
+    CityService cityService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -173,6 +179,52 @@ public class UserController {
 
     }
 
+    @PatchMapping("/edit/{userId}")
+    public ResponseEntity<?> editUser(@PathVariable Long userId, @Valid @RequestBody UserEditDto userEditDto) {
+        try {
+            // Retrieve the user by ID
+            User existingUser = userService.getUserById(userId);
+
+            // Update the user information conditionally based on non-null values in the UserEditDto
+            if (userEditDto.getUsername() != null) {
+                existingUser.setUsername(userEditDto.getUsername());
+            }
+
+            if (userEditDto.getEmail() != null) {
+                existingUser.setEmail(userEditDto.getEmail());
+            }
+
+            if (userEditDto.getPhone() != null) {
+                existingUser.setPhone(userEditDto.getPhone());
+            }
+
+            if (userEditDto.getPassword() != null) {
+                existingUser.setPassword(userEditDto.getPassword());
+            }
+
+            // Retrieve and set the city based on the provided cityId
+            if (userEditDto.getCityId() != null) {
+                Optional<City> optionalCity = cityService.getCityById(userEditDto.getCityId());
+
+                if (optionalCity.isPresent()) {
+                    // If the City is present, set it to the existing user
+                    existingUser.setCity(optionalCity.get());
+                } else {
+                    // Handle the case where the City is not found
+                    throw new RuntimeException("City not found for id: " + userEditDto.getCityId());
+                }
+            }
+
+            // Save the updated user
+            userService.updateUser(existingUser);
+
+            ApiResponse response = new ApiResponse(200, "User Updated Successfully!");
+
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "Error updating user."));
+        }
+    }
 //    @PutMapping("/update/{id}")
 //    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody UserRegisterDto userRegisterDto) {
 //        try {

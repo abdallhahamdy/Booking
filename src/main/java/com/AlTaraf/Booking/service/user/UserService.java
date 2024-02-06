@@ -1,6 +1,6 @@
 package com.AlTaraf.Booking.service.user;
 
-import com.AlTaraf.Booking.dto.UserRegisterDto;
+import com.AlTaraf.Booking.dto.User.UserRegisterDto;
 import com.AlTaraf.Booking.entity.User.User;
 import com.AlTaraf.Booking.entity.enums.ERole;
 import com.AlTaraf.Booking.payload.request.PasswordResetDto;
@@ -23,6 +23,7 @@ public interface UserService {
 
     void resetPasswordByPhone(String phone, PasswordResetDto passwordResetDto);
 
+    void updateUser(User user);
 //    User updateUser(Long id, UserRegisterDto userRegisterDto);
 //    UserRegisterDto getUserById(Long id);
 //    List<UserRegisterDto> getAllUsers();
