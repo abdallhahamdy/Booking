@@ -11,6 +11,6 @@ import java.util.List;
 public interface ImageDataService {
     ImageUploadResponse uploadImage(MultipartFile file) throws IOException;
 
-    List<ImageData> getImagesByUnitId(Long unitId);
+//    List<ImageData> getImagesByUnitId(Long unitId);
 
 }

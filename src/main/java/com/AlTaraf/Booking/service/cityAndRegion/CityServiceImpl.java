@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CityServiceImpl implements CityService {
@@ -33,7 +34,6 @@ public class CityServiceImpl implements CityService {
         City city = new City();
         city.setCityName(saveCityDto.getCityName());
         city.setArabicCityName(saveCityDto.getArabicCityName());
-
 //        List<RegionDto> regions = cityDto.getRegions();
 //        if (regions != null && !regions.isEmpty()) {
 //            regions.forEach(region -> {
@@ -45,6 +45,10 @@ public class CityServiceImpl implements CityService {
         return cityRepository.save(city);
     }
 
+    @Override
+    public Optional<City> getCityById(Long cityId) {
+        return cityRepository.findById(1L);
+    }
     @Transactional
     public Region addRegionToCity(Long cityId, RegionDto regionDto) {
         // Fetch the city

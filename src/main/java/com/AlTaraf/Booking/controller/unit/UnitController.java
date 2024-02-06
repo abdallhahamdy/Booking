@@ -42,14 +42,6 @@ public class UnitController {
     @Autowired
     FeatureService featureService;
 
-
-
-
-
-
-
-
-
     @Autowired
     FeatureForHallsService featureForHallsService;
 
@@ -86,22 +78,22 @@ public class UnitController {
         }
     }
 
-    @GetMapping("/get-Units-By-Hotel-Classification-Names")
-    public ResponseEntity<?> getUnitsByHotelClassificationNames(
-            @RequestParam List<String> hotelClassificationNames,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "2") int size) {
-
-        Page<UnitDtoFavorite> units = unitService.getUnitsByHotelClassificationNames(hotelClassificationNames, page, size);
-
-        if (!units.isEmpty()) {
-            return new ResponseEntity<>(units, HttpStatus.OK);
-        } else {
-            ApiResponse response = new ApiResponse(204, "No Content for Units have high classification!");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-    }
+//    @GetMapping("/get-Units-By-Hotel-Classification-Names")
+//    public ResponseEntity<?> getUnitsByHotelClassificationNames(
+//            @RequestParam List<String> hotelClassificationNames,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "2") int size) {
+//
+//        Page<UnitDtoFavorite> units = unitService.getUnitsByHotelClassificationNames(hotelClassificationNames, page, size);
+//
+//        if (!units.isEmpty()) {
+//            return new ResponseEntity<>(units, HttpStatus.OK);
+//        } else {
+//            ApiResponse response = new ApiResponse(204, "No Content for Units have high classification!");
+//            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+////            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//        }
+//    }
 
     @GetMapping("/status-unit")
     public ResponseEntity<?> getUnitsForUserAndStatus(
@@ -118,57 +110,6 @@ public class UnitController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
-
-    @GetMapping("/last-month")
-    public ResponseEntity<?> getUnitsAddedLastMonth(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "2") int size) {
-
-        Page<UnitDtoFavorite> units = unitService.getUnitsAddedLastMonth(page, size);
-
-        if (!units.isEmpty()) {
-            return new ResponseEntity<>(units, HttpStatus.OK);
-        } else {
-            ApiResponse response = new ApiResponse(204, "No Content");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping("/get-Units-By-Accommodation-Type")
-    public ResponseEntity<?> getUnitsByAccommodationType(
-            @RequestParam String accommodationTypeName,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "6") int size) {
-
-        Page<UnitDtoFavorite> units = unitService.getUnitsByAccommodationTypeName(accommodationTypeName, page, size);
-
-        if (!units.isEmpty()) {
-            return new ResponseEntity<>(units, HttpStatus.OK);
-        } else {
-            ApiResponse response = new ApiResponse(204, "No Content for Units By Accommodation Type!");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @GetMapping("/units-by-user-city")
-    public ResponseEntity<?> getUnitsByUserCity(@RequestParam Long userId) {
-        List<UnitDtoFavorite> units = unitService.getUnitsByUserCity(userId);
-
-        if (!units.isEmpty()) {
-            return new ResponseEntity<>(units, HttpStatus.OK);
-        } else {
-            ApiResponse response = new ApiResponse(204, "No Content for Units By User City!");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
-        }
-    }
-
-    @GetMapping("/{id}")
-    public Unit getUnitById(@PathVariable Long id) {
-        return unitService.getUnitById(id);
-    }
-
 
     @DeleteMapping("delete/{id}")
     public ResponseEntity<?> deleteUnit(@PathVariable Long id) {
@@ -189,11 +130,7 @@ public class UnitController {
             @RequestParam(defaultValue = "5") int size) {
         return unitService.getAllUnits(PageRequest.of(page, size));
     }
-    // ========= END GET ALL UNITS =============
 
-    // -----------------------------------------------------------------------------
-
-    // ========= START FILTER UNIT BY NAME =============
     @GetMapping("/filter-unit-by-name")
     public Page<Unit> filterUnitsByName(
             @RequestParam String nameUnit,
@@ -201,11 +138,7 @@ public class UnitController {
             @RequestParam(defaultValue = "5") int size) {
         return unitService.filterUnitsByName(nameUnit, PageRequest.of(page, size));
     }
-    // ========= END FILTER UNIT BY NAME =============
 
-    // -----------------------------------------------------------------------------
-
-    // ======== START GET ALL FEATURE For Halls ====================
     @GetMapping("/get-All-Feature-For-Halls")
     public ResponseEntity<List<FeatureForHalls>> getAllFeatureForHalls() {
         List<FeatureForHalls> featureForHalls = featureForHallsService.getAllFeatureForHalls();
@@ -216,11 +149,7 @@ public class UnitController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    // ======== End GET ALL FEATURE For All ====================
 
-    // -----------------------------------------------------------------------------
-
-    // ======== START GET ALL AvailablePeriods ====================
     @GetMapping("/get-AvailablePeriods")
     public ResponseEntity<List<AvailablePeriods>> getAllAvailablePeriods() {
         List<AvailablePeriods> availablePeriods = availablePeriodsService.getAllAvailablePeriods();
@@ -231,8 +160,6 @@ public class UnitController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    // ======== End GET ALL AvailablePeriods ====================
 
-    // -----------------------------------------------------------------------------
 
 }

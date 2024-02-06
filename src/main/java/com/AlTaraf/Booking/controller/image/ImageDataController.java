@@ -3,6 +3,7 @@ package com.AlTaraf.Booking.controller.image;
 import com.AlTaraf.Booking.entity.Image.ImageData;
 import com.AlTaraf.Booking.payload.response.ImageUploadResponse;
 import com.AlTaraf.Booking.service.image.ImageDataService;
+import com.AlTaraf.Booking.service.unit.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,9 @@ public class ImageDataController {
     @Autowired
     private ImageDataService imageDataService;
 
+    @Autowired
+    UnitService unitService;
+
     @PostMapping
     public ResponseEntity<?> uploadImages(@RequestParam("images") List<MultipartFile> files) throws IOException {
         List<ImageUploadResponse> responses = new ArrayList<>();
@@ -33,9 +37,9 @@ public class ImageDataController {
                 .body(responses);
     }
 
-    @GetMapping("/by-unit/{unitId}")
-    public ResponseEntity<List<ImageData>> getImagesByUnitId(@PathVariable Long unitId) {
-        List<ImageData> images = imageDataService.getImagesByUnitId(unitId);
-        return new ResponseEntity<>(images, HttpStatus.OK);
+    @PostMapping("/update-imagedata")
+    public ResponseEntity<String> updateImageDataForUnit(@RequestParam("unitId") Long unitId) {
+        unitService.updateImageDataUnit(unitId);
+        return new ResponseEntity<>("ImageData entities updated for Unit with ID: " + unitId, HttpStatus.OK);
     }
 }

@@ -45,6 +45,10 @@ bezkoder:
     stayLoggedInExpirationMs: 31536000000
 schemes:
   - https
+image:
+  storage:
+    location: /opt/tomcat/data
+
 
 # http://localhost:8080/swagger-ui/index.html#
 # http://168.119.132.18:8080/swagger-ui/index.html#

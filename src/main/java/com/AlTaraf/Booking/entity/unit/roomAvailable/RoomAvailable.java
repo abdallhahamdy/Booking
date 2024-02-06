@@ -2,12 +2,18 @@ package com.AlTaraf.Booking.entity.unit.roomAvailable;
 
 import com.AlTaraf.Booking.entity.unit.Unit;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "room_available")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class RoomAvailable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,45 +38,6 @@ public class RoomAvailable {
 //    private List<RoomDetails> roomDetailsList = new ArrayList<>();
 
 
-    public RoomAvailable() {
-    }
 
-    public RoomAvailable(Long id, String name, String arabicName, List<RoomDetails> roomDetailsList) {
-        this.id = id;
-        this.name = name;
-        this.arabicName = arabicName;
-        this.roomDetailsList = roomDetailsList;
-    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getArabicName() {
-        return arabicName;
-    }
-
-    public void setArabicName(String arabicName) {
-        this.arabicName = arabicName;
-    }
-
-    public List<RoomDetails> getRoomDetailsList() {
-        return roomDetailsList;
-    }
-
-    public void setRoomDetailsList(List<RoomDetails> roomDetailsList) {
-        this.roomDetailsList = roomDetailsList;
-    }
 }

@@ -30,7 +30,7 @@ public interface UnitFavoriteMapper {
     // Define a method to extract file paths from ImageData entities
     default List<String> extractFilePaths(List<ImageData> images) {
         return images.stream()
-                .map(ImageData::getFilePath)
+                .map(ImageData::getName)
                 .collect(Collectors.toList());
     }
 

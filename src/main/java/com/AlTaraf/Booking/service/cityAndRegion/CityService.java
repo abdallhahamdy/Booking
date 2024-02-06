@@ -7,6 +7,7 @@ import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.cityAndregion.Region;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CityService {
 //    CityDto getCityByName(String cityName);
@@ -17,6 +18,8 @@ public interface CityService {
     Region updateRegionInCity(Long cityId, Long regionId, RegionDto RegionDto);
 
     Region addRegionToCity(Long cityId, RegionDto regionDto);
+
+    Optional<City> getCityById(Long cityId);
 //    CityDto saveCity(CityDto cityDto);
 //    CityDto updateCity(Long id, CityDto cityDto);
 //    void deleteCity(Long id);
