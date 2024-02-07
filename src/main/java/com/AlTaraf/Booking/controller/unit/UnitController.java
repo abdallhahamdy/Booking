@@ -11,7 +11,7 @@ import com.AlTaraf.Booking.payload.request.UnitRequestDto;
 import com.AlTaraf.Booking.payload.response.ApiResponse;
 import com.AlTaraf.Booking.service.unit.AvailablePeriods.AvailablePeriodsService;
 import com.AlTaraf.Booking.service.unit.FeatureForHalls.FeatureForHallsService;
-import com.AlTaraf.Booking.service.unit.RoomAvailable.RoomAvailableService;
+//import com.AlTaraf.Booking.service.unit.RoomAvailable.RoomAvailableService;
 import com.AlTaraf.Booking.service.unit.UnitService;
 import com.AlTaraf.Booking.service.unit.feature.FeatureService;
 import com.AlTaraf.Booking.service.unit.statusUnit.StatusUnitService;
@@ -36,8 +36,8 @@ public class UnitController {
     @Autowired
     StatusUnitService statusUnitService;
 
-    @Autowired
-    RoomAvailableService roomAvailableService;
+//    @Autowired
+//    RoomAvailableService roomAvailableService;
 
     @Autowired
     FeatureService featureService;
@@ -95,6 +95,56 @@ public class UnitController {
 //        }
 //    }
 
+    @GetMapping("/last-month")
+    public ResponseEntity<?> getUnitsAddedLastMonth(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size) {
+
+        Page<UnitDtoFavorite> units = unitService.getUnitsAddedLastMonth(page, size);
+
+        if (!units.isEmpty()) {
+            return new ResponseEntity<>(units, HttpStatus.OK);
+        } else {
+            ApiResponse response = new ApiResponse(204, "No Content");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/get-Units-By-Accommodation-Type")
+    public ResponseEntity<?> getUnitsByAccommodationType(
+            @RequestParam String accommodationTypeName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size) {
+
+        Page<UnitDtoFavorite> units = unitService.getUnitsByAccommodationTypeName(accommodationTypeName, page, size);
+
+        if (!units.isEmpty()) {
+            return new ResponseEntity<>(units, HttpStatus.OK);
+        } else {
+            ApiResponse response = new ApiResponse(204, "No Content for Units By Accommodation Type!");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/units-by-user-city")
+    public ResponseEntity<?> getUnitsByUserCity(@RequestParam Long userId) {
+        List<UnitDtoFavorite> units = unitService.getUnitsByUserCity(userId);
+
+        if (!units.isEmpty()) {
+            return new ResponseEntity<>(units, HttpStatus.OK);
+        } else {
+            ApiResponse response = new ApiResponse(204, "No Content for Units By User City!");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public Unit getUnitById(@PathVariable Long id) {
+        return unitService.getUnitById(id);
+    }
+
     @GetMapping("/status-unit")
     public ResponseEntity<?> getUnitsForUserAndStatus(
             @RequestParam(name = "USER_ID") Long userId,
@@ -123,6 +173,11 @@ public class UnitController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
+
+//        @GetMapping("unit/{id}")
+//    public Unit getUnitById(@PathVariable Long id) {
+//        return unitService.getUnitById(id);
+//    }
 
     @GetMapping
     public Page<Unit> getAllUnits(

@@ -8,7 +8,7 @@ import com.AlTaraf.Booking.entity.unit.Unit;
 import com.AlTaraf.Booking.mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.repository.unit.UnitRepository;
-import com.AlTaraf.Booking.repository.unit.roomAvailable.RoomAvailableRepository;
+//import com.AlTaraf.Booking.repository.unit.roomAvailable.RoomAvailableRepository;
 import com.AlTaraf.Booking.repository.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +30,8 @@ public class UnitServiceImpl implements UnitService {
     @Autowired
     UnitRepository unitRepository;
 
-    @Autowired
-    RoomAvailableRepository roomAvailableRepository;
+//    @Autowired
+//    RoomAvailableRepository roomAvailableRepository;
 
     @Autowired
     private ImageDataRepository imageDataRepository;

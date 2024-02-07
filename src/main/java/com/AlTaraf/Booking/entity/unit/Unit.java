@@ -12,7 +12,8 @@ import com.AlTaraf.Booking.entity.unit.feature.Feature;
 import com.AlTaraf.Booking.entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
-import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
+//import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
+import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomTypeDetails;
 import com.AlTaraf.Booking.entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.entity.unit.unitType.UnitType;
@@ -38,7 +39,7 @@ import java.util.Set;
 public class Unit extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "UNIT_ID")
+    @Column(name = "unit_id")
     private Long id;
 
     @ManyToOne
@@ -77,32 +78,35 @@ public class Unit extends Auditable<String> {
 
     // الغرف المتاحة فنادق بداية
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "unit_room_available",
-            joinColumns = @JoinColumn(name = "UNIT_ID"),
-            inverseJoinColumns = @JoinColumn(name = "ROOM_AVAILABLE_ID")
-    )
-    private Set<RoomAvailable> roomAvailableSet = new HashSet<>();
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "unit_room_available",
+//            joinColumns = @JoinColumn(name = "UNIT_ID"),
+//            inverseJoinColumns = @JoinColumn(name = "ROOM_AVAILABLE_ID")
+//    )
+//    private Set<RoomAvailable> roomAvailableSet = new HashSet<>();
+
+    @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
+    private List<RoomTypeDetails> roomTypeDetails;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "unit_basic_features",
-            joinColumns = @JoinColumn(name = "UNIT_ID"),
+            joinColumns = @JoinColumn(name = "unit_id"),
             inverseJoinColumns = @JoinColumn(name = "feature_id"))
     private Set<Feature> basicFeaturesSet = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "unit_sub_features",
-            joinColumns = @JoinColumn(name = "UNIT_ID"),
+            joinColumns = @JoinColumn(name = "unit_id"),
             inverseJoinColumns = @JoinColumn(name = "sub_feature_id"))
     private Set<SubFeature> subFeaturesSet = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "unit_food_options",
-            joinColumns = @JoinColumn(name = "UNIT_ID"),
+            joinColumns = @JoinColumn(name = "unit_id"),
             inverseJoinColumns = @JoinColumn(name = "food_option_id"))
     private Set<FoodOption> foodOptionsSet = new HashSet<>();
 

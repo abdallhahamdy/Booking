@@ -1,9 +1,12 @@
 package com.AlTaraf.Booking.payload.request;
 
+import com.AlTaraf.Booking.dto.RoomTypeDetailsDTO;
+import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomTypeDetails;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -20,7 +23,9 @@ public class UnitRequestDto {
     private Long accommodationTypeId;
 
     private Long hotelClassificationId;
-    private Set<Long> roomAvailableIds;
+    private List<RoomTypeDetailsDTO> roomTypeDetails;
+
+    //    private Set<Long> roomAvailableIds;
     private Set<Long> basicFeaturesIds;
     private Set<Long> subFeaturesIds;
     private Set<Long> foodOptionsIds;

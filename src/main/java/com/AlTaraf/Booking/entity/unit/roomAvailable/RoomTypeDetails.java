@@ -1,55 +1,38 @@
 package com.AlTaraf.Booking.entity.unit.roomAvailable;
 
+import com.AlTaraf.Booking.entity.unit.Unit;
+import com.AlTaraf.Booking.entity.unit.unitType.RoomType;
 import jakarta.persistence.*;
 import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-@Embeddable
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class RoomTypeDetails {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "NUMBER_OF_ROOMS")
-    private int numberOfRooms;
+    @Enumerated(EnumType.STRING)
+    private RoomType roomType;
 
-    @Column(name = "NEW_PRICE")
-    private BigDecimal newPrice;
+    private int number;
 
-    @Column(name = "OLD_PRICE")
-    private BigDecimal oldPrice;
+    private double oldPrice;
 
-    public RoomTypeDetails() {
-    }
+    private double newPrice;
 
-    public RoomTypeDetails(int numberOfRooms, BigDecimal newPrice, BigDecimal oldPrice) {
-        this.numberOfRooms = numberOfRooms;
-        this.newPrice = newPrice;
-        this.oldPrice = oldPrice;
-    }
+    @ManyToOne
+    @JoinColumn(name = "unit_id") // Assuming "unit_id" is the foreign key column name
+    private Unit unit;
 
 
-    public int getNumberOfRooms() {
-        return numberOfRooms;
-    }
-
-    public void setNumberOfRooms(int numberOfRooms) {
-        this.numberOfRooms = numberOfRooms;
-    }
-
-    public BigDecimal getNewPrice() {
-        return newPrice;
-    }
-
-    public void setNewPrice(BigDecimal newPrice) {
-        this.newPrice = newPrice;
-    }
-
-    public BigDecimal getOldPrice() {
-        return oldPrice;
-    }
-
-    public void setOldPrice(BigDecimal oldPrice) {
-        this.oldPrice = oldPrice;
-    }
 
 
 }
