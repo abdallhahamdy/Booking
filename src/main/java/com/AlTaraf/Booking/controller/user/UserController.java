@@ -24,6 +24,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,6 +51,9 @@ public class UserController {
 
     @Autowired
     JwtUtils jwtUtils;
+
+    @Autowired
+    PasswordEncoder encoder;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -181,6 +187,7 @@ public class UserController {
 
     @PatchMapping("/edit/{userId}")
     public ResponseEntity<?> editUser(@PathVariable Long userId, @Valid @RequestBody UserEditDto userEditDto) {
+
         try {
             // Retrieve the user by ID
             User existingUser = userService.getUserById(userId);
@@ -199,7 +206,7 @@ public class UserController {
             }
 
             if (userEditDto.getPassword() != null) {
-                existingUser.setPassword(userEditDto.getPassword());
+                existingUser.setPassword(encoder.encode(userEditDto.getPassword()));
             }
 
             // Retrieve and set the city based on the provided cityId
