@@ -47,7 +47,7 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public Optional<City> getCityById(Long cityId) {
-        return cityRepository.findById(1L);
+        return cityRepository.findById(cityId);
     }
     @Transactional
     public Region addRegionToCity(Long cityId, RegionDto regionDto) {
