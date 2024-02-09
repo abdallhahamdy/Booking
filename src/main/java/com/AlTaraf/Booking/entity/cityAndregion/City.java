@@ -4,6 +4,9 @@ import com.AlTaraf.Booking.entity.User.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,6 +15,9 @@ import java.util.Set;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class City {
 
     @Id
@@ -31,59 +37,5 @@ public class City {
     @JsonIgnore
     private Set<User> users = new HashSet<>();
 
-    public City() {
-    }
 
-    public City(Long id, String cityName, String arabicCityName, List<Region> regions, Set<User> users) {
-        this.id = id;
-        this.cityName = cityName;
-        this.arabicCityName = arabicCityName;
-        this.regions = regions;
-        this.users = users;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
-
-    public String getArabicCityName() {
-        return arabicCityName;
-    }
-
-    public void setArabicCityName(String arabicCityName) {
-        this.arabicCityName = arabicCityName;
-    }
-
-    public List<Region> getRegions() {
-        return regions;
-    }
-
-    public void setRegions(List<Region> regions) {
-        this.regions = regions;
-    }
-
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    public void addRegion(Region region) {
-        regions.add(region);
-        region.setCity(this);
-    }
 }
