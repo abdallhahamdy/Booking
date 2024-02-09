@@ -5,10 +5,12 @@ import com.AlTaraf.Booking.dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.entity.unit.Unit;
+import com.AlTaraf.Booking.mapper.Unit.EventHallsMapper;
 import com.AlTaraf.Booking.mapper.Unit.UnitMapper;
 import com.AlTaraf.Booking.mapper.Unit.UnitRequestMapper;
 import com.AlTaraf.Booking.payload.request.UnitRequestDto;
 import com.AlTaraf.Booking.payload.response.ApiResponse;
+import com.AlTaraf.Booking.payload.response.EventHallsResponse;
 import com.AlTaraf.Booking.service.unit.AvailablePeriods.AvailablePeriodsService;
 import com.AlTaraf.Booking.service.unit.FeatureForHalls.FeatureForHallsService;
 //import com.AlTaraf.Booking.service.unit.RoomAvailable.RoomAvailableService;
@@ -27,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/units")
+@RequestMapping("/api/units")
 public class UnitController {
 
     @Autowired
@@ -54,6 +56,9 @@ public class UnitController {
     @Autowired
     UnitRequestMapper unitRequestMapper;
 
+    @Autowired
+    EventHallsMapper eventHallsMapper;
+
     private static final Logger logger = LoggerFactory.getLogger(UnitController.class);
 
 
@@ -76,6 +81,17 @@ public class UnitController {
             ApiResponse response = new ApiResponse(400, "Failed to create unit. Please check your input and try again.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response + " " + e);
         }
+    }
+
+    @GetMapping("Event-Halls/{unitId}")
+    public ResponseEntity<EventHallsResponse> getEventHallsById(@PathVariable Long unitId) {
+        Unit unit = unitService.getUnitById(unitId);
+        if (unit == null) {
+            return ResponseEntity.notFound().build();
+
+        }
+        EventHallsResponse eventHallsResponse = eventHallsMapper.toEventHallsResponse(unit);
+        return ResponseEntity.ok(eventHallsResponse);
     }
 
 //    @GetMapping("/get-Units-By-Hotel-Classification-Names")

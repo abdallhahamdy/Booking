@@ -1,5 +1,4 @@
-package com.AlTaraf.Booking.dto.cityDtoAndRoleDto;
-
+package com.AlTaraf.Booking.dto.Unit.FeatureForHalls;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegionDto {
+public class FeatureForHallsDto {
     private Long id;
-    private String regionName;
-    private String regionArabicName;
+    private String name;
+    private String arabicName;
 
 }

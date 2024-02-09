@@ -60,6 +60,7 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/users/Register/**").permitAll()
+                                .requestMatchers("/api/units/filter-unit-by-name").permitAll()
                                 .requestMatchers("/api/cities/**").permitAll() // Adjust roles as needed
                                 .requestMatchers("/regions/byCity/**").permitAll() // Adjust roles as needed
                                 .requestMatchers("/api/roles/**").permitAll()  // Adjust roles as needed
