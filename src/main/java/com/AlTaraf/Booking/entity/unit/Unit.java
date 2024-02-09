@@ -2,7 +2,6 @@ package com.AlTaraf.Booking.entity.unit;
 
 import com.AlTaraf.Booking.entity.Image.ImageData;
 import com.AlTaraf.Booking.entity.User.User;
-import com.AlTaraf.Booking.entity.User.User;
 import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.cityAndregion.Region;
 import com.AlTaraf.Booking.entity.common.Auditable;
@@ -12,7 +11,7 @@ import com.AlTaraf.Booking.entity.unit.feature.Feature;
 import com.AlTaraf.Booking.entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
-//import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
+import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomTypeDetails;
 import com.AlTaraf.Booking.entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.entity.unit.subFeature.SubFeature;
@@ -24,7 +23,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -78,16 +76,16 @@ public class Unit extends Auditable<String> {
 
     // الغرف المتاحة فنادق بداية
 
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(
-//            name = "unit_room_available",
-//            joinColumns = @JoinColumn(name = "UNIT_ID"),
-//            inverseJoinColumns = @JoinColumn(name = "ROOM_AVAILABLE_ID")
-//    )
-//    private Set<RoomAvailable> roomAvailableSet = new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "unit_room_available",
+            joinColumns = @JoinColumn(name = "UNIT_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ROOM_AVAILABLE_ID")
+    )
+    private Set<RoomAvailable> roomAvailableSet = new HashSet<>();
 
-    @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
-    private List<RoomTypeDetails> roomTypeDetails;
+//    @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
+//    private List<RoomTypeDetails> roomTypeDetails;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

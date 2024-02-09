@@ -8,6 +8,7 @@ import com.AlTaraf.Booking.entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
 //import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
+import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.payload.request.UnitRequestDto;
 import org.mapstruct.Mapper;
@@ -30,7 +31,7 @@ public interface UnitRequestMapper {
     @Mapping(source = "regionId", target = "region.id")
     @Mapping(source = "accommodationTypeId", target = "accommodationType", qualifiedByName = "mapAccommodationTypeIdToEntity")
     @Mapping(source = "hotelClassificationId", target = "hotelClassification", qualifiedByName = "mapHotelClassificationIdToEntity")
-//    @Mapping(source = "roomAvailableIds", target = "roomAvailableSet", qualifiedByName = "roomAvailableIdsToEntities")
+    @Mapping(source = "roomAvailableIds", target = "roomAvailableSet", qualifiedByName = "roomAvailableIdsToEntities")
     @Mapping(source = "basicFeaturesIds", target = "basicFeaturesSet", qualifiedByName = "basicFeaturesIdsToEntities")
     @Mapping(source = "subFeaturesIds", target = "subFeaturesSet", qualifiedByName = "subFeaturesIdsToEntities")
     @Mapping(source = "foodOptionsIds", target = "foodOptionsSet", qualifiedByName = "foodOptionsIdsToEntities")
@@ -67,19 +68,19 @@ public interface UnitRequestMapper {
         return hotelClassification;
     }
 
-//    @Named("roomAvailableIdsToEntities")
-//    static Set<RoomAvailable> roomAvailableIdsToEntities(Set<Long> roomAvailableIds) {
-//        if (roomAvailableIds == null) {
-//            return Collections.emptySet();
-//        }
-//        return roomAvailableIds.stream()
-//                .map(id -> {
-//                    RoomAvailable roomAvailable = new RoomAvailable();
-//                    roomAvailable.setId(id);
-//                    return roomAvailable;
-//                })
-//                .collect(Collectors.toSet());
-//    }
+    @Named("roomAvailableIdsToEntities")
+    static Set<RoomAvailable> roomAvailableIdsToEntities(Set<Long> roomAvailableIds) {
+        if (roomAvailableIds == null) {
+            return Collections.emptySet();
+        }
+        return roomAvailableIds.stream()
+                .map(id -> {
+                    RoomAvailable roomAvailable = new RoomAvailable();
+                    roomAvailable.setId(id);
+                    return roomAvailable;
+                })
+                .collect(Collectors.toSet());
+    }
 
     @Named("basicFeaturesIdsToEntities")
     static Set<Feature> basicFeaturesIdsToEntities(Set<Long> basicFeaturesIds) {
