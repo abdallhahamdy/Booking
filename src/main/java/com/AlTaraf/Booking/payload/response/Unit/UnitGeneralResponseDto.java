@@ -43,9 +43,6 @@ public class UnitGeneralResponseDto {
 
     private Set<FoodOption> foodOptions;
 
-    private int adultsAllowed;
-    private int childrenAllowed;
-
     private int capacityHalls;
 
     private Set<FeatureForHallsDto> featuresHallsDto;

@@ -35,8 +35,6 @@ public interface UnitRequestMapper {
     @Mapping(source = "basicFeaturesIds", target = "basicFeaturesSet", qualifiedByName = "basicFeaturesIdsToEntities")
     @Mapping(source = "subFeaturesIds", target = "subFeaturesSet", qualifiedByName = "subFeaturesIdsToEntities")
     @Mapping(source = "foodOptionsIds", target = "foodOptionsSet", qualifiedByName = "foodOptionsIdsToEntities")
-    @Mapping(source = "adultsAllowed", target = "adultsAllowed")
-    @Mapping(source = "childrenAllowed", target = "childrenAllowed")
     @Mapping(source = "capacityHalls", target = "capacityHalls")
     @Mapping(source = "featuresHallsIds", target = "featuresHallsSet", qualifiedByName = "featuresHallsIdsToEntities")
     @Mapping(source = "availablePeriodsHallsIds", target = "availablePeriodsHallsSet", qualifiedByName = "availablePeriodsHallsIdsToEntities")

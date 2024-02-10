@@ -1,17 +1,13 @@
 package com.AlTaraf.Booking.controller.unit.roomAvailable;
 
-import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.mapper.Unit.RoomDetails.RoomDetailsRequestMapper;
 import com.AlTaraf.Booking.mapper.Unit.RoomDetails.RoomDetailsResponseMapper;
-import com.AlTaraf.Booking.payload.request.RoomDetails.RoomDetailsRequestDto;
-import com.AlTaraf.Booking.payload.response.RoomDetails.RoomDetailsResponseDto;
 import com.AlTaraf.Booking.repository.unit.RoomDetails.RoomTypeDetailsRepository;
 import com.AlTaraf.Booking.repository.unit.UnitRepository;
 import com.AlTaraf.Booking.service.unit.RoomDetailsService.RoomDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/roomTypeDetails")
 public class RoomTypeDetailsController {
@@ -70,21 +66,5 @@ public class RoomTypeDetailsController {
 //        }
 //    }
 
-    @GetMapping("/getByUnitAndRoomAvailable")
-    public ResponseEntity<RoomDetailsResponseDto> getRoomDetailsByUnitAndRoomAvailable(
-            @RequestParam Long unitId,
-            @RequestParam Long roomAvailableId) {
-        try {
-            // Retrieve RoomDetails entity from the service layer
-            RoomDetails roomDetails = roomDetailsService.getRoomDetailsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
 
-            // Map RoomDetails entity to RoomDetailsResponseDto
-            RoomDetailsResponseDto roomDetailsResponseDto = roomDetailsResponseMapper.toDto(roomDetails);
-
-            // Return the response
-            return ResponseEntity.ok(roomDetailsResponseDto);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
 }

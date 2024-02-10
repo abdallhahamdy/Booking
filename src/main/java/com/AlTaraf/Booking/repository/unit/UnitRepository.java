@@ -2,10 +2,12 @@ package com.AlTaraf.Booking.repository.unit;
 
 import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.unit.Unit;
+import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -37,4 +39,6 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
     List<Unit> findByUnitType_Id(Long unitTypeId);
 
+    @Query("SELECT u FROM Unit u JOIN u.roomAvailableSet ra WHERE ra = :roomAvailable")
+    List<Unit> findByRoomAvailable(@Param("roomAvailable") RoomAvailable roomAvailable);
 }

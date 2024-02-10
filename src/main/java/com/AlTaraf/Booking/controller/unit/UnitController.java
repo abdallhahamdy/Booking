@@ -5,6 +5,7 @@ import com.AlTaraf.Booking.dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.entity.unit.Unit;
+import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.mapper.Unit.*;
 import com.AlTaraf.Booking.mapper.Unit.RoomDetails.RoomDetailsRequestMapper;
@@ -16,6 +17,7 @@ import com.AlTaraf.Booking.payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.payload.response.Unit.UnitResidenciesResponseDto;
 import com.AlTaraf.Booking.service.unit.AvailablePeriods.AvailablePeriodsService;
 import com.AlTaraf.Booking.service.unit.FeatureForHalls.FeatureForHallsService;
+import com.AlTaraf.Booking.service.unit.RoomAvailable.RoomAvailableService;
 import com.AlTaraf.Booking.service.unit.RoomDetailsService.RoomDetailsService;
 import com.AlTaraf.Booking.service.unit.UnitService;
 import com.AlTaraf.Booking.service.unit.feature.FeatureService;
@@ -75,6 +77,8 @@ public class UnitController {
     @Autowired
     private UnitFavoriteMapper unitFavoriteMapper;
 
+    @Autowired
+    private RoomAvailableService roomAvailableService;
     private static final Logger logger = LoggerFactory.getLogger(UnitController.class);
 
 
@@ -87,29 +91,16 @@ public class UnitController {
             // Save the unit in the database
             Unit savedUnit = unitService.saveUnit(unitToSave);
 
-            // Convert the saved Unit to a UnitGeneralResponseDto
-            UnitGeneralResponseDto responseDto = unitGeneralResponseMapper.toResponseDto(savedUnit);
-
-            // Return the UnitGeneralResponseDto in the response body
-            return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+            // Return the unitId in the response body
+            return ResponseEntity.status(HttpStatus.CREATED).body("Unit created successfully with id: " + savedUnit.getId());
         } catch (Exception e) {
             // Log the exception
             logger.error("Error occurred while processing create-unit request", e);
 
             // Return user-friendly error response
             ApiResponse response = new ApiResponse(400, "Failed to create unit. Please check your input and try again.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response + " " + e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
-    }
-    @GetMapping("Event-Halls-units/{unitId}")
-    public ResponseEntity<?> getEventHallsById(@PathVariable Long unitId) {
-        Unit unit = unitService.getUnitById(unitId);
-        if (unit == null) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content for Available Periods !"));
-        }
-
-        EventHallsResponse eventHallsResponse = eventHallsMapper.toEventHallsResponse(unit);
-        return ResponseEntity.ok(eventHallsResponse);
     }
 
 //    @GetMapping("/get-Units-By-Hotel-Classification-Names")
@@ -200,23 +191,41 @@ public class UnitController {
         }
     }
 
-    @PostMapping("/{roomAvailableId}/room-details/add")
+    @PostMapping("{unitId}/{roomAvailableId}/room-details/add")
     @Transactional // Add this annotation to enable transaction management
-    public ResponseEntity<String> addRoomDetails(@PathVariable Long unitId, @RequestBody RoomDetailsRequestDto roomDetailsRequestDto) {
+    public ResponseEntity<?> addRoomDetails(@PathVariable Long unitId, @PathVariable Long roomAvailableId, @RequestBody RoomDetailsRequestDto roomDetailsRequestDto) {
         try {
             RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsRequestDto);
-            roomDetailsService.addRoomDetails(unitId, roomDetailsRequestDto.getRoomAvailableId(), roomDetails);
+            roomDetailsService.addRoomDetails(unitId,roomAvailableId, roomDetails);
             return ResponseEntity.ok("RoomDetails added successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetails: " + e.getMessage());
         }
     }
 
-    @PatchMapping("/update-room-details")
-    public ResponseEntity<?> updateRoomDetailsForUnit(@RequestParam("unitId") Long unitId) {
-        unitService.updateImageDataUnit(unitId);
-        return new ResponseEntity<>("ImageData entities updated for Unit with ID: " + unitId, HttpStatus.OK);
+    @GetMapping("/getByUnitAndRoomAvailable")
+    public ResponseEntity<?> getRoomDetailsByUnitAndRoomAvailable(
+            @RequestParam Long unitId,
+            @RequestParam Long roomAvailableId) {
+        try {
+            // Retrieve RoomDetails entity from the service layer
+            RoomDetails roomDetails = roomDetailsService.getRoomDetailsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
+
+            // Map RoomDetails entity to RoomDetailsResponseDto
+            RoomDetailsRequestDto roomDetailsResponseDto = roomDetailsRequestMapper.toDto(roomDetails);
+
+            // Return the response
+            return ResponseEntity.ok(roomDetailsResponseDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
+
+//    @PatchMapping("/update-room-details")
+//    public ResponseEntity<?> updateRoomDetailsForUnit(@RequestParam("unitId") Long unitId) {
+//        unitService.updateImageDataUnit(unitId);
+//        return new ResponseEntity<>("ImageData entities updated for Unit with ID: " + unitId, HttpStatus.OK);
+//    }
 
     @GetMapping("/status-unit")
     public ResponseEntity<?> getUnitsForUserAndStatus(
@@ -266,6 +275,12 @@ public class UnitController {
             @RequestParam(defaultValue = "5") int size) {
         Page<Unit> unitsPage = unitService.filterUnitsByName(nameUnit, PageRequest.of(page, size));
         return unitsPage.map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit));
+    }
+
+    @GetMapping("/get-All-Room-Available")
+    public ResponseEntity<List<RoomAvailable>> getAllRoomAvailable() {
+        List<RoomAvailable> roomAvailableList = roomAvailableService.getAllRoomAvailable();
+        return ResponseEntity.ok(roomAvailableList);
     }
 
     @GetMapping("/get-All-Feature-For-Halls")

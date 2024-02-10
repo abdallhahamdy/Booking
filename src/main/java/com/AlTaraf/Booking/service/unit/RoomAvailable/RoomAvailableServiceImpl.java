@@ -1,4 +1,15 @@
-//package com.AlTaraf.Booking.service.unit.RoomAvailable;
+package com.AlTaraf.Booking.service.unit.RoomAvailable;
+
+
+import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
+import com.AlTaraf.Booking.repository.unit.RoomDetails.RoomDetailsRepository;
+import com.AlTaraf.Booking.repository.unit.roomAvailable.RoomAvailableRepository;
+import com.AlTaraf.Booking.service.unit.RoomAvailable.RoomAvailableService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
 //
 //import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
 //import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomDetails;
@@ -9,25 +20,25 @@
 //
 //import java.math.BigDecimal;
 //import java.util.List;
-//
-//@Service
-//public class RoomAvailableServiceImpl implements RoomAvailableService {
-//
-//    @Autowired
-//    private RoomDetailsRepository roomDetailsRepository;
-//
-//    @Autowired
-//    RoomAvailableRepository roomAvailableRepository;
-//
-//    @Override
-//    public List<RoomAvailable> getAllRoomAvailable() {
-//        return roomAvailableRepository.findAll();
-//    }
-//
-//    @Override
+@Service
+public class RoomAvailableServiceImpl implements RoomAvailableService {
+
+    @Autowired
+    private RoomDetailsRepository roomDetailsRepository;
+
+    @Autowired
+    RoomAvailableRepository roomAvailableRepository;
+
+    @Override
+    public List<RoomAvailable> getAllRoomAvailable() {
+        return roomAvailableRepository.findAll();
+    }
+}
+
+//   @Override
 //    public List<RoomAvailable> getRoomAvailableByIds(List<Long> roomAvailableIds) {
-//        return roomAvailableRepository.findAllById(roomAvailableIds);
-//    }
+//       return roomAvailableRepository.findAllById(roomAvailableIds);
+//   }
 //
 //    @Override
 //    public void insertRoomDetails(Long roomAvailableId, int roomNumber, BigDecimal newPrice, BigDecimal oldPrice) {

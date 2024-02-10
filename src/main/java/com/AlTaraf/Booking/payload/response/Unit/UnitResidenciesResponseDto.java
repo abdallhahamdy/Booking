@@ -36,9 +36,6 @@ public class UnitResidenciesResponseDto {
     private Set<SubFeature> subFeatures;
     private Set<FoodOption> foodOptions;
 
-    private int adultsAllowed;
-    private int childrenAllowed;
-
     private Double latForMapping;
     private Double longForMapping;
 }

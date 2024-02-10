@@ -109,12 +109,6 @@ public class Unit extends Auditable<String> {
 
     // الغرف المتاحة فنادق نهاية
 
-    @Column(name = "ADULTS_ALLOWED")
-    private int adultsAllowed;
-
-    @Column(name = "CHILDREN_ALLOWED")
-    private int childrenAllowed;
-
     @Column(name = "FAVORITE")
     private Boolean favorite;
 

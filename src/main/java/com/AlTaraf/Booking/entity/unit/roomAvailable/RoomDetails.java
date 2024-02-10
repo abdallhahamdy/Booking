@@ -32,6 +32,12 @@ public class RoomDetails {
    @Column(name = "OLD_PRICE")
    private BigDecimal oldPrice;
 
+    @Column(name = "ADULTS_ALLOWED")
+    private int adultsAllowed;
+
+    @Column(name = "CHILDREN_ALLOWED")
+    private int childrenAllowed;
+
     @ManyToOne
     @JoinColumn(name = "UNIT_ID", nullable = false)
     private Unit unit;
