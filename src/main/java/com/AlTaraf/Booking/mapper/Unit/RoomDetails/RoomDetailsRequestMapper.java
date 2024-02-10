@@ -9,7 +9,6 @@ import org.mapstruct.Mapping;
 public interface RoomDetailsRequestMapper {
     @Mapping(source = "id", target = "id")
     @Mapping(source = "roomAvailableId", target = "roomAvailable.id")
-    @Mapping(source = "unitId", target = "unit.id")
     @Mapping(source = "roomNumber", target = "roomNumber")
     @Mapping(source = "newPrice", target = "newPrice")
     @Mapping(source = "oldPrice", target = "oldPrice")
@@ -17,7 +16,6 @@ public interface RoomDetailsRequestMapper {
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "roomAvailable.id", target = "roomAvailableId")
-    @Mapping(source = "unit.id", target = "unitId")
     @Mapping(source = "roomNumber", target = "roomNumber")
     @Mapping(source = "newPrice", target = "newPrice")
     @Mapping(source = "oldPrice", target = "oldPrice")

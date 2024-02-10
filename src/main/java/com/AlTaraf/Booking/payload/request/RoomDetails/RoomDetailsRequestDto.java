@@ -16,5 +16,4 @@ public class RoomDetailsRequestDto {
     private int roomNumber;
     private BigDecimal newPrice;
     private BigDecimal oldPrice;
-    private Long unitId;
 }

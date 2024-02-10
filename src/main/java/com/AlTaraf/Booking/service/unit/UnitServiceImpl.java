@@ -48,7 +48,7 @@ public class UnitServiceImpl implements UnitService {
         } catch (Exception e) {
             // Log the exception
             e.printStackTrace();
-            throw e; // Rethrow the exception or handle it accordingly
+            throw e;
         }
     }
 
@@ -84,10 +84,10 @@ public class UnitServiceImpl implements UnitService {
         return unitsPage.map(unitFavoriteMapper::toUnitFavoriteDto);
     }
 
-    public Page<Unit> getFavoriteUnits(int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        return unitRepository.findByFavoriteTrue(pageRequest);
-    }
+//    public Page<Unit> getFavoriteUnits(int page, int size) {
+//        PageRequest pageRequest = PageRequest.of(page, size);
+//        return unitRepository.findByFavoriteTrue(pageRequest);
+//    }
 
     public Unit getUnitById(Long id) {
         return unitRepository.findById(id).orElse(null);
@@ -106,11 +106,7 @@ public class UnitServiceImpl implements UnitService {
     public void deleteUnit(Long id) {
          unitRepository.deleteById(id);
     }
-    // ========= END DELETE UNIT =============
 
-    // --------------------------------------------------
-
-    // ========= START UPDATE IMAGE DATA UNIT =============
     @Override
     public void updateImageDataUnit(Long unitId) {
         // Fetch the Unit by ID
@@ -132,27 +128,21 @@ public class UnitServiceImpl implements UnitService {
 
     }
 
-    // ========= END UPDATE IMAGE DATA UNIT =============
-
-    // --------------------------------------------------
-
-    // ========= START GET ALL UNITS =============
     @Override
-    public Page<Unit> getAllUnits(Pageable pageable) {
-        return unitRepository.findAll(pageable);
+    public Page<UnitDtoFavorite> getAllUnitDtoFavorites(Pageable pageable) {
+        Page<Unit> unitPage = unitRepository.findAll(pageable);
+        return unitPage.map(unitFavoriteMapper::toUnitFavoriteDto);
     }
-    // ========= END GET ALL UNITS =============
 
-    // --------------------------------------------------
+//    @Override
+//    public Page<Unit> getAllUnits(Pageable pageable) {
+//        return unitRepository.findAll(pageable);
+//    }
 
-    // ========= START FILTER UNIT BY NAME =============
     @Override
     public Page<Unit> filterUnitsByName(String nameUnit, Pageable pageable) {
         return unitRepository.findByNameUnitContainingIgnoreCase(nameUnit, pageable);
     }
-    // ========= END FILTER UNIT BY NAME =============
-
-    // --------------------------------------------------
 
     public List<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName) {
         // Retrieve a List of Units for the given USER_ID and StatusUnit name
@@ -160,16 +150,19 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public List<UnitDtoFavorite> getUnitsByUserCity(Long userId) {
+    public Page<UnitDtoFavorite> getUnitsByUserCity(Long userId, Pageable pageable) {
         User user = userRepository.findById(userId).orElse(null);
 
         if (user == null || user.getCity() == null) {
-            return Collections.emptyList(); // Return empty list if user or user's city is not found
+            return Page.empty(); // Return an empty page if user or user's city is not found
         }
 
         City userCity = user.getCity();
-        List<Unit> units = unitRepository.findByCity(userCity);
+        Page<Unit> unitPage = unitRepository.findByCity(userCity, pageable);
 
-        return unitFavoriteMapper.toUnitFavoriteDtoList(units);
+        return unitPage.map(unitFavoriteMapper::toUnitFavoriteDto);
     }
+
+
+
 }

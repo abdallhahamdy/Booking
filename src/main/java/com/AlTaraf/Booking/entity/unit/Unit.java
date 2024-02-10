@@ -33,7 +33,6 @@ import java.util.Set;
 @Setter
 @Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class Unit extends Auditable<String> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -150,5 +149,8 @@ public class Unit extends Auditable<String> {
 
     // قاعات المناسبات النهاية
 
-
+    public Unit() {
+        this.statusUnit = new StatusUnit();
+        this.statusUnit.setId(1L);
+    }
 }

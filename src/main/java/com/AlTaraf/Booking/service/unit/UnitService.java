@@ -24,11 +24,13 @@ public interface UnitService {
 
     void updateImageDataUnit(Long unitId);
 
-    Page<Unit> getAllUnits(Pageable pageable);
+//    Page<Unit> getAllUnits(Pageable pageable);
+
+    Page<UnitDtoFavorite> getAllUnitDtoFavorites(Pageable pageable);
 
     Page<Unit> filterUnitsByName(String nameUnit, Pageable pageable);
 
     List<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName);
 
-    List<UnitDtoFavorite> getUnitsByUserCity(Long userId);
+    Page<UnitDtoFavorite> getUnitsByUserCity(Long userId, Pageable pageable);
 }

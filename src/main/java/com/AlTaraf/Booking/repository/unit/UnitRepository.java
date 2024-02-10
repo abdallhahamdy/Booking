@@ -30,7 +30,7 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
     Page<Unit> findByUser_IdAndFavorite(Long userId, boolean favorite, Pageable pageable);
 
-    List<Unit> findByCity(City city);
+    Page<Unit> findByCity(City city, Pageable pageable);
 
     @Query("SELECT u FROM Unit u WHERE LOWER(u.nameUnit) LIKE LOWER(concat('%', :nameUnit, '%'))")
     Page<Unit> findByNameUnitContainingIgnoreCase(String nameUnit, Pageable pageable);

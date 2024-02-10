@@ -58,17 +58,17 @@ public class RoomTypeDetailsController {
 //        }
 //    }
 
-    @PostMapping("/add")
-    public ResponseEntity<String> addRoomDetails(@RequestParam Long unitId, @RequestParam Long roomAvailableId, @RequestBody RoomDetailsRequestDto roomDetailsDto) {
-        try {
-            RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsDto);
-
-            roomDetailsService.addRoomDetails(unitId, roomAvailableId, roomDetails);
-            return ResponseEntity.ok("RoomDetails added successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetails: " + e.getMessage());
-        }
-    }
+//    @PostMapping("/add")
+//    public ResponseEntity<String> addRoomDetails(@RequestParam Long unitId, @RequestParam Long roomAvailableId, @RequestBody RoomDetailsRequestDto roomDetailsDto) {
+//        try {
+//            RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsDto);
+//
+//            roomDetailsService.addRoomDetails(unitId, roomAvailableId, roomDetails);
+//            return ResponseEntity.ok("RoomDetails added successfully");
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetails: " + e.getMessage());
+//        }
+//    }
 
     @GetMapping("/getByUnitAndRoomAvailable")
     public ResponseEntity<RoomDetailsResponseDto> getRoomDetailsByUnitAndRoomAvailable(
@@ -87,6 +87,4 @@ public class RoomTypeDetailsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
-
 }

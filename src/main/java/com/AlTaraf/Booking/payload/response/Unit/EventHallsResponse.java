@@ -1,22 +1,20 @@
-package com.AlTaraf.Booking.payload.response;
+package com.AlTaraf.Booking.payload.response.Unit;
 
 import com.AlTaraf.Booking.dto.Unit.FeatureForHalls.FeatureForHallsDto;
 import com.AlTaraf.Booking.dto.Unit.availablePeriodsHalls.AvailablePeriodsDto;
 import com.AlTaraf.Booking.dto.cityDtoAndRoleDto.CityDto;
 import com.AlTaraf.Booking.dto.cityDtoAndRoleDto.RegionDto;
-import com.AlTaraf.Booking.entity.unit.AvailablePeriods.AvailablePeriods;
-import com.AlTaraf.Booking.entity.unit.featureForHalls.FeatureForHalls;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Set;
-
+// Event Halls
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventHallsResponse {
-    private Long id;
+    private Long unitId;
     private String nameUnit;
     private int capacityHalls;
     private CityDto cityDto;
