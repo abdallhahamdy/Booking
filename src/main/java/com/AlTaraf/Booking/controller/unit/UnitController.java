@@ -317,5 +317,16 @@ public class UnitController {
         }
     }
 
+    @GetMapping("Event-Halls-units/{unitId}")
+    public ResponseEntity<?> getEventHallsById(@PathVariable Long unitId) {
+        Unit unit = unitService.getUnitById(unitId);
+        if (unit == null) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content for Available Periods !"));
+        }
+
+        EventHallsResponse eventHallsResponse = eventHallsMapper.toEventHallsResponse(unit);
+        return ResponseEntity.ok(eventHallsResponse);
+    }
+
 
 }

@@ -165,13 +165,9 @@ public class UnitServiceImpl implements UnitService {
         return unitRepository.findByUnitType_Id(unitTypeId);
     }
 
-//    @Override
-//    public void updateRoomDetailsForUnit(Long unitId) {
-//        // Fetch the Unit by ID
-//        Unit unit = unitRepository.findById(unitId).orElse(null);
-//
-//
-//    }
+    public List<Unit> getUnitsByUserId(Long userId) {
+        return unitRepository.findByUserId(userId);
+    }
 
 
 }

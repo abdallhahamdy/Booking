@@ -38,4 +38,6 @@ public interface UnitService {
 
 //    void updateRoomDetailsForUnit(Long unitId);
 
+    List<Unit> getUnitsByUserId(Long userId);
+
 }

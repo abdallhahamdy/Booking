@@ -39,6 +39,10 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
     List<Unit> findByUnitType_Id(Long unitTypeId);
 
+    List<Unit> findByUserId(Long userId);
+
     @Query("SELECT u FROM Unit u JOIN u.roomAvailableSet ra WHERE ra = :roomAvailable")
     List<Unit> findByRoomAvailable(@Param("roomAvailable") RoomAvailable roomAvailable);
+
+
 }
