@@ -90,3 +90,8 @@ insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("تبخي�
 insert into available_periods (AVAILABLE_PERIODS_ARABIC_NAME, AVAILABLE_PERIODS_NAME) values ("من 11 صباحا الي 3 مساءا
 ","From 11 am to 3 pm");
 insert into available_periods (AVAILABLE_PERIODS_ARABIC_NAME, AVAILABLE_PERIODS_NAME) values ("من 5 مساءا الي 12 صباحا","From 5 pm to 12 am");
+
+-- insert package_ads           اضافة باقة اعلانات
+insert into package_ads (ads_arabic_name, ads_name, number_ads, price) values ("الفضية", "Silver", 5, 100);
+insert into package_ads (ads_arabic_name, ads_name, number_ads, price) values ("الذهبية", "Gold", 10, 150);
+insert into package_ads (ads_arabic_name, ads_name, number_ads, price) values ("الماسية", "Diamond", 15, 200);
