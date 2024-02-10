@@ -30,9 +30,6 @@ public class UnitServiceImpl implements UnitService {
     @Autowired
     UnitRepository unitRepository;
 
-//    @Autowired
-//    RoomAvailableRepository roomAvailableRepository;
-
     @Autowired
     private ImageDataRepository imageDataRepository;
 
@@ -163,6 +160,18 @@ public class UnitServiceImpl implements UnitService {
         return unitPage.map(unitFavoriteMapper::toUnitFavoriteDto);
     }
 
+    @Override
+    public List<Unit> getUnitsByUnitTypeId(Long unitTypeId) {
+        return unitRepository.findByUnitType_Id(unitTypeId);
+    }
+
+//    @Override
+//    public void updateRoomDetailsForUnit(Long unitId) {
+//        // Fetch the Unit by ID
+//        Unit unit = unitRepository.findById(unitId).orElse(null);
+//
+//
+//    }
 
 
 }

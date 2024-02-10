@@ -33,4 +33,9 @@ public interface UnitService {
     List<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName);
 
     Page<UnitDtoFavorite> getUnitsByUserCity(Long userId, Pageable pageable);
+
+    List<Unit> getUnitsByUnitTypeId(Long unitTypeId);
+
+//    void updateRoomDetailsForUnit(Long unitId);
+
 }

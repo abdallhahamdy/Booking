@@ -35,4 +35,6 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     @Query("SELECT u FROM Unit u WHERE LOWER(u.nameUnit) LIKE LOWER(concat('%', :nameUnit, '%'))")
     Page<Unit> findByNameUnitContainingIgnoreCase(String nameUnit, Pageable pageable);
 
+    List<Unit> findByUnitType_Id(Long unitTypeId);
+
 }
