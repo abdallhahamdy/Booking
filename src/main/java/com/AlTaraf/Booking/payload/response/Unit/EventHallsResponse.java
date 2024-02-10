@@ -16,6 +16,7 @@ import java.util.Set;
 public class EventHallsResponse {
     private Long unitId;
     private String nameUnit;
+    private String description;
     private int capacityHalls;
     private CityDto cityDto;
     private RegionDto regionDto;

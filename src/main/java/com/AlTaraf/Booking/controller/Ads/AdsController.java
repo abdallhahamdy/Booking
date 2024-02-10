@@ -1,10 +1,12 @@
 package com.AlTaraf.Booking.controller.Ads;
 
 import com.AlTaraf.Booking.dto.AdsDto;
+import com.AlTaraf.Booking.dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.entity.Ads.Ads;
 import com.AlTaraf.Booking.entity.Ads.PackageAds;
 import com.AlTaraf.Booking.entity.unit.Unit;
 import com.AlTaraf.Booking.mapper.AdsMapper;
+import com.AlTaraf.Booking.mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.mapper.Unit.UnitGeneralResponseMapper;
 import com.AlTaraf.Booking.payload.response.ApiResponse;
 import com.AlTaraf.Booking.payload.response.Unit.UnitGeneralResponseDto;
@@ -27,6 +29,9 @@ public class AdsController {
 
     @Autowired
     private UnitGeneralResponseMapper unitGeneralResponseMapper;
+
+    @Autowired
+    private UnitFavoriteMapper unitFavoriteMapper;
 
     @Autowired
     private UnitService unitService;
@@ -52,8 +57,9 @@ public class AdsController {
         if (units.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No units found for user ID: " + userId));
         } else {
-            List<UnitGeneralResponseDto> unitGeneralResponseDtos = units.stream()
-                    .map(unitGeneralResponseMapper::toResponseDto)
+            // Create an instance of UnitFavoriteMapper and use it to call the method
+            List<UnitDtoFavorite> unitGeneralResponseDtos = units.stream()
+                    .map(unitFavoriteMapper::toUnitFavoriteDto)
                     .collect(Collectors.toList());
             return ResponseEntity.ok(unitGeneralResponseDtos);
         }

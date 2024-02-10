@@ -20,6 +20,7 @@ public interface EventHallsMapper {
     @Mapping(source = "id", target = "unitId")
     @Mapping(source = "capacityHalls", target = "capacityHalls")
     @Mapping(source = "nameUnit", target = "nameUnit")
+    @Mapping(source = "description", target = "description")
     @Mapping(source = "city", target = "cityDto")
     @Mapping(source = "region", target = "regionDto")
     @Mapping(source = "featuresHallsSet", target = "featuresHallsDto", qualifiedByName = "mapEntityToFeaturesHallsDto")
