@@ -12,6 +12,7 @@ import com.AlTaraf.Booking.entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
+import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomTypeDetails;
 import com.AlTaraf.Booking.entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.entity.unit.subFeature.SubFeature;
@@ -142,6 +143,9 @@ public class Unit extends Auditable<String> {
     private Double longForMapping;
 
     // قاعات المناسبات النهاية
+
+    @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
+    private List<RoomDetails> roomDetails;
 
     public Unit() {
         this.statusUnit = new StatusUnit();
