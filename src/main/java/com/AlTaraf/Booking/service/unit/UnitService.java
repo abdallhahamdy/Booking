@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UnitService {
 
@@ -39,5 +40,12 @@ public interface UnitService {
 //    void updateRoomDetailsForUnit(Long unitId);
 
     List<Unit> getUnitsByUserId(Long userId);
+
+    List<Unit> findUnitsByCriteria(Long cityId, Long regionId, Long availablePeriodId, int newPriceHall);
+
+    List<Unit> findUnitsByFilters(Long cityId, Long regionId, Long availablePeriodsId, int newPriceHall,
+                                  Long unitTypeId, Long accommodationTypeId, Long hotelClassificationId,
+                                  Set<Long> basicFeaturesIds, Set<Long> subFeaturesIds, Set<Long> foodOptionsIds,
+                                  int adultsAllowed, int childrenAllowed);
 
 }

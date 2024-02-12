@@ -1,4 +1,4 @@
-package com.AlTaraf.Booking.entity.unit.hotelClassification;
+package com.AlTaraf.Booking.entity.unit.availableArea;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,19 +6,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "hotel_classification")
+@Table(name = "available_area")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HotelClassification {
+public class AvailableArea {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "HOTEL_CLASSIFICATION_ID")
+    @Column(name = "AVAILABLE_AREA_ID")
     private Long id;
 
-    @Column(name = "HOTEL_CLASSIFICATION_NAME")
+    @Column(name = "AVAILABLE_AREA_NAME")
     private String name;
 
-    @Column(name = "HOTEL_CLASSIFICATION_ARABIC_NAME")
+    @Column(name = "AVAILABLE_AREA_NAME_ARABIC")
     private String arabicName;
 }

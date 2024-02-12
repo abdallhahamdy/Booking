@@ -31,14 +31,14 @@ public class CityController {
         return new ResponseEntity<>(savedCity, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{Id}/regions")
-    public ResponseEntity<Region> addRegionToCity(
-            @PathVariable Long Id,
-            @RequestBody RegionDto regionDto) {
-
-        Region addedRegion = cityService.addRegionToCity(Id, regionDto);
-        return new ResponseEntity<>(addedRegion, HttpStatus.CREATED);
-    }
+//    @PostMapping("/{Id}/regions")
+//    public ResponseEntity<Region> addRegionToCity(
+//            @PathVariable Long Id,
+//            @RequestBody RegionDto regionDto) {
+//
+//        Region addedRegion = cityService.addRegionToCity(Id, regionDto);
+//        return new ResponseEntity<>(addedRegion, HttpStatus.CREATED);
+//    }
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllCities() {

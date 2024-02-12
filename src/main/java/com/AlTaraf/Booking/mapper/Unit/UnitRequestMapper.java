@@ -3,11 +3,11 @@ package com.AlTaraf.Booking.mapper.Unit;
 import com.AlTaraf.Booking.entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.entity.unit.Unit;
 import com.AlTaraf.Booking.entity.unit.accommodationType.AccommodationType;
+import com.AlTaraf.Booking.entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.entity.unit.feature.Feature;
 import com.AlTaraf.Booking.entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
-//import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.payload.request.UnitRequestDto;
@@ -32,6 +32,7 @@ public interface UnitRequestMapper {
     @Mapping(source = "accommodationTypeId", target = "accommodationType", qualifiedByName = "mapAccommodationTypeIdToEntity")
     @Mapping(source = "hotelClassificationId", target = "hotelClassification", qualifiedByName = "mapHotelClassificationIdToEntity")
     @Mapping(source = "roomAvailableIds", target = "roomAvailableSet", qualifiedByName = "roomAvailableIdsToEntities")
+    @Mapping(source = "availableAreaIds", target = "availableAreaSet", qualifiedByName = "availableAreaIdsToEntities")
     @Mapping(source = "basicFeaturesIds", target = "basicFeaturesSet", qualifiedByName = "basicFeaturesIdsToEntities")
     @Mapping(source = "subFeaturesIds", target = "subFeaturesSet", qualifiedByName = "subFeaturesIdsToEntities")
     @Mapping(source = "foodOptionsIds", target = "foodOptionsSet", qualifiedByName = "foodOptionsIdsToEntities")
@@ -76,6 +77,20 @@ public interface UnitRequestMapper {
                     RoomAvailable roomAvailable = new RoomAvailable();
                     roomAvailable.setId(id);
                     return roomAvailable;
+                })
+                .collect(Collectors.toSet());
+    }
+
+    @Named("availableAreaIdsToEntities")
+    static Set<AvailableArea> availableAreaIdsToEntities(Set<Long> availableAreaIds) {
+        if (availableAreaIds == null) {
+            return Collections.emptySet();
+        }
+        return availableAreaIds.stream()
+                .map(id -> {
+                    AvailableArea availableArea = new AvailableArea();
+                    availableArea.setId(id);
+                    return availableArea;
                 })
                 .collect(Collectors.toSet());
     }

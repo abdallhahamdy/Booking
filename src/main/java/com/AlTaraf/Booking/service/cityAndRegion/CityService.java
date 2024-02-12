@@ -17,7 +17,7 @@ public interface CityService {
 
     Region updateRegionInCity(Long cityId, Long regionId, RegionDto RegionDto);
 
-    Region addRegionToCity(Long cityId, RegionDto regionDto);
+//    Region addRegionToCity(Long cityId, RegionDto regionDto);
 
     Optional<City> getCityById(Long cityId);
 //    CityDto saveCity(CityDto cityDto);

@@ -49,25 +49,25 @@ public class CityServiceImpl implements CityService {
     public Optional<City> getCityById(Long cityId) {
         return cityRepository.findById(cityId);
     }
-    @Transactional
-    public Region addRegionToCity(Long cityId, RegionDto regionDto) {
-        // Fetch the city
-        City city = cityRepository.findById(cityId)
-                .orElseThrow(() -> new EntityNotFoundException("City not found with id: " + cityId));
-
-        // Use the mapper to convert RegionDto to Region
-        Region newRegion = RegionMapper.INSTANCE.dtoToEntity(regionDto);
-
-        // Associate the region with the city
-        newRegion.setCity(city);
-        city.getRegions().add(newRegion);
-
-        // Save the updated city (which includes the new region)
-        cityRepository.save(city);
-
-        // Return the added region
-        return newRegion;
-    }
+//    @Transactional
+//    public Region addRegionToCity(Long cityId, RegionDto regionDto) {
+//        // Fetch the city
+//        City city = cityRepository.findById(cityId)
+//                .orElseThrow(() -> new EntityNotFoundException("City not found with id: " + cityId));
+//
+//        // Use the mapper to convert RegionDto to Region
+//        Region newRegion = RegionMapper.INSTANCE.dtoToEntity(regionDto);
+//
+//        // Associate the region with the city
+//        newRegion.setCity(city);
+//        city.getRegions().add(newRegion);
+//
+//        // Save the updated city (which includes the new region)
+//        cityRepository.save(city);
+//
+//        // Return the added region
+//        return newRegion;
+//    }
 
     @Transactional
     public Region updateRegionInCity(Long cityId, Long regionId, RegionDto RegionDto) {

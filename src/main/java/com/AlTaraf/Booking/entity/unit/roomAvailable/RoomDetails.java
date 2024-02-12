@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.entity.unit.roomAvailable;
 
 import com.AlTaraf.Booking.entity.unit.Unit;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,7 +40,8 @@ public class RoomDetails {
     private int childrenAllowed;
 
     @ManyToOne
-    @JoinColumn(name = "UNIT_ID", nullable = false)
+    @JoinColumn(name = "unit_id", nullable = false)
+    @JsonBackReference
     private Unit unit;
 
 }

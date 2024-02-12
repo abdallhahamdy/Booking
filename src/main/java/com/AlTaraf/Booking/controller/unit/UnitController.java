@@ -33,6 +33,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/units")
@@ -94,8 +95,8 @@ public class UnitController {
             // Return the unitId in the response body
             return ResponseEntity.status(HttpStatus.CREATED).body("Unit created successfully with id: " + savedUnit.getId());
         } catch (Exception e) {
-            // Log the exception
-            logger.error("Error occurred while processing create-unit request", e);
+//            // Log the exception
+//            logger.error("Error occurred while processing create-unit request", e);
 
             // Return user-friendly error response
             ApiResponse response = new ApiResponse(400, "Failed to create unit. Please check your input and try again.");
@@ -326,6 +327,46 @@ public class UnitController {
 
         EventHallsResponse eventHallsResponse = eventHallsMapper.toEventHallsResponse(unit);
         return ResponseEntity.ok(eventHallsResponse);
+    }
+
+
+    @GetMapping("/filter-event-halls")
+    public ResponseEntity<?> searchUnits(
+            @RequestParam(required = false) Long cityId,
+            @RequestParam(required = false) Long regionId,
+            @RequestParam(required = false) Long availablePeriodId,
+            @RequestParam(required = false) Integer newPriceHall
+    ) {
+        try {
+            List<Unit> units = unitService.findUnitsByCriteria(cityId, regionId, availablePeriodId, newPriceHall);
+            List<EventHallsResponse> unitResponses = eventHallsMapper.toEventHallsList(units);
+            return ResponseEntity.ok(unitResponses);
+        } catch (Exception e) {
+            logger.error("Error occurred while processing create-unit request", e);
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(204, "No Content for Event Halls!"));
+        }
+    }
+
+    @GetMapping("/units/filter")
+    public List<Unit> filterUnits(
+            @RequestParam(required = false) Long cityId,
+            @RequestParam(required = false) Long regionId,
+            @RequestParam(required = false) Long availablePeriodsId,
+            @RequestParam(required = false, defaultValue = "0") int newPriceHall,
+            @RequestParam(required = false) Long unitTypeId,
+            @RequestParam(required = false) Long accommodationTypeId,
+            @RequestParam(required = false) Long hotelClassificationId,
+            @RequestParam(required = false) Set<Long> basicFeaturesIds,
+            @RequestParam(required = false) Set<Long> subFeaturesIds,
+            @RequestParam(required = false) Set<Long> foodOptionsIds,
+            @RequestParam(required = false, defaultValue = "0") int adultsAllowed,
+            @RequestParam(required = false, defaultValue = "0") int childrenAllowed) {
+
+        return unitService.findUnitsByFilters(cityId, regionId, availablePeriodsId, newPriceHall,
+                unitTypeId, accommodationTypeId, hotelClassificationId,
+                basicFeaturesIds, subFeaturesIds, foodOptionsIds, adultsAllowed, childrenAllowed
+                );
     }
 
 

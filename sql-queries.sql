@@ -95,3 +95,8 @@ insert into available_periods (AVAILABLE_PERIODS_ARABIC_NAME, AVAILABLE_PERIODS_
 insert into package_ads (ads_arabic_name, ads_name, number_ads, price) values ("الفضية", "Silver", 5, 100);
 insert into package_ads (ads_arabic_name, ads_name, number_ads, price) values ("الذهبية", "Gold", 10, 150);
 insert into package_ads (ads_arabic_name, ads_name, number_ads, price) values ("الماسية", "Diamond", 15, 200);
+
+-- insert available_area        الغرف المتاحة للشقق والشقق الخارجية والمنتجعات
+insert into available_area (available_area_name_arabic, available_area_name) values ("استوديو","studio");
+insert into available_area (available_area_name_arabic, available_area_name) values ("غرفتين","two rooms");
+insert into available_area (available_area_name_arabic, available_area_name) values ("ثلاث غرف","three rooms");

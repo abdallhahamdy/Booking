@@ -5,6 +5,7 @@ import com.AlTaraf.Booking.entity.unit.Unit;
 import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -40,6 +41,8 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     List<Unit> findByUnitType_Id(Long unitTypeId);
 
     List<Unit> findByUserId(Long userId);
+
+    List<Unit> findAll(Specification<Unit> spec);
 
     @Query("SELECT u FROM Unit u JOIN u.roomAvailableSet ra WHERE ra = :roomAvailable")
     List<Unit> findByRoomAvailable(@Param("roomAvailable") RoomAvailable roomAvailable);

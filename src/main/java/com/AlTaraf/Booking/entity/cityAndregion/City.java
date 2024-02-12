@@ -30,12 +30,12 @@ public class City {
     @Column(name = "arabic_name")
     private String arabicCityName;
 
-    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
-    private List<Region> regions = new ArrayList<>();
-
-    @OneToMany(mappedBy = "city")  // Refers to the 'city' property in the User entity
-    @JsonIgnore
-    private Set<User> users = new HashSet<>();
+//    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL)
+//    private List<Region> regions = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "city")  // Refers to the 'city' property in the User entity
+//    @JsonIgnore
+//    private Set<User> users = new HashSet<>();
 
 
 }

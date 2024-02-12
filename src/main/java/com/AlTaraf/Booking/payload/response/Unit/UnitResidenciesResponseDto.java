@@ -4,6 +4,7 @@ import com.AlTaraf.Booking.dto.cityDtoAndRoleDto.CityDto;
 import com.AlTaraf.Booking.dto.cityDtoAndRoleDto.RegionDto;
 import com.AlTaraf.Booking.entity.Image.ImageData;
 import com.AlTaraf.Booking.entity.unit.accommodationType.AccommodationType;
+import com.AlTaraf.Booking.entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.entity.unit.feature.Feature;
 import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
@@ -35,6 +36,7 @@ public class UnitResidenciesResponseDto {
     private Set<Feature> features;
     private Set<SubFeature> subFeatures;
     private Set<FoodOption> foodOptions;
+    private Set<AvailableArea> availableAreas;
 
     private Double latForMapping;
     private Double longForMapping;

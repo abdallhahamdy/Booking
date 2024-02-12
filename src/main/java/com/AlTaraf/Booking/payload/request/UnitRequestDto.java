@@ -23,9 +23,10 @@ public class UnitRequestDto {
     private Long accommodationTypeId;
 
     private Long hotelClassificationId;
-//    private List<RoomTypeDetailsDTO> roomTypeDetails;
 
-        private Set<Long> roomAvailableIds;
+    private Set<Long> roomAvailableIds;
+    private Set<Long> availableAreaIds;
+
     private Set<Long> basicFeaturesIds;
     private Set<Long> subFeaturesIds;
     private Set<Long> foodOptionsIds;

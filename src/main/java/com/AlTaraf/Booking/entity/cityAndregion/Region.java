@@ -3,9 +3,15 @@ package com.AlTaraf.Booking.entity.cityAndregion;
 import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Region")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Region {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,46 +28,5 @@ public class Region {
     @JsonIgnoreProperties("regions")
     private City city;
 
-    public Region() {
-    }
-
-    public Region(Long id, String regionName, String regionArabicName, City city) {
-        this.id = id;
-        this.regionName = regionName;
-        this.regionArabicName = regionArabicName;
-        this.city = city;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getRegionName() {
-        return regionName;
-    }
-
-    public void setRegionName(String regionName) {
-        this.regionName = regionName;
-    }
-
-    public String getRegionArabicName() {
-        return regionArabicName;
-    }
-
-    public void setRegionArabicName(String regionArabicName) {
-        this.regionArabicName = regionArabicName;
-    }
-
-    public City getCity() {
-        return city;
-    }
-
-    public void setCity(City city) {
-        this.city = city;
-    }
 
 }

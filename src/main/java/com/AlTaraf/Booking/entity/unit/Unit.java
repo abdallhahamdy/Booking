@@ -7,6 +7,7 @@ import com.AlTaraf.Booking.entity.cityAndregion.Region;
 import com.AlTaraf.Booking.entity.common.Auditable;
 import com.AlTaraf.Booking.entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.entity.unit.accommodationType.AccommodationType;
+import com.AlTaraf.Booking.entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.entity.unit.feature.Feature;
 import com.AlTaraf.Booking.entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
@@ -17,6 +18,7 @@ import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomTypeDetails;
 import com.AlTaraf.Booking.entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.entity.unit.unitType.UnitType;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,6 +26,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -75,7 +78,6 @@ public class Unit extends Auditable<String> {
     private HotelClassification hotelClassification;
 
     // الغرف المتاحة فنادق بداية
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "unit_room_available",
@@ -83,9 +85,16 @@ public class Unit extends Auditable<String> {
             inverseJoinColumns = @JoinColumn(name = "ROOM_AVAILABLE_ID")
     )
     private Set<RoomAvailable> roomAvailableSet = new HashSet<>();
+    // الغرف المتاحة فنادق نهاية
 
-//    @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
-//    private List<RoomTypeDetails> roomTypeDetails;
+    // الغرف المتاحة لي الشقق الفندقية و الشقق الخارجية و المنتجعات بداية
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "unit_available_area",
+            joinColumns = @JoinColumn(name = "unit_id"),
+            inverseJoinColumns = @JoinColumn(name = "AVAILABLE_AREA_ID"))
+    private Set<AvailableArea> availableAreaSet = new HashSet<>();
+    // الغرف المتاحة لي الشقق الفندقية و الشقق الخارجية و المنتجعات نهاية
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -145,6 +154,7 @@ public class Unit extends Auditable<String> {
     // قاعات المناسبات النهاية
 
     @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<RoomDetails> roomDetails;
 
     public Unit() {

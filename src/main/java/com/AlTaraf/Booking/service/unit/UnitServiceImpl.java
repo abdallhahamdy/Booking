@@ -10,11 +10,13 @@ import com.AlTaraf.Booking.repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.repository.unit.UnitRepository;
 //import com.AlTaraf.Booking.repository.unit.roomAvailable.RoomAvailableRepository;
 import com.AlTaraf.Booking.repository.user.UserRepository;
+import com.AlTaraf.Booking.specifications.UnitSpecifications;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +24,7 @@ import java.time.ZoneId;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -170,4 +173,86 @@ public class UnitServiceImpl implements UnitService {
     }
 
 
+    public List<Unit> findUnitsByCriteria(Long cityId, Long regionId, Long availablePeriodId, int newPriceHall) {
+        Specification<Unit> spec = Specification.where(null);
+
+        if (cityId != null) {
+            spec = spec.and(UnitSpecifications.byCity(cityId));
+        }
+
+        if (regionId != null) {
+            spec = spec.and(UnitSpecifications.byRegion(regionId));
+        }
+
+        if (availablePeriodId != null) {
+            spec = spec.and(UnitSpecifications.byAvailablePeriod(availablePeriodId));
+        }
+
+        if (newPriceHall != 0) {
+            spec = spec.and(UnitSpecifications.byNewPriceHall(newPriceHall));
+        }
+
+        return unitRepository.findAll(spec);
+    }
+
+
+    @Override
+    public List<Unit> findUnitsByFilters(Long cityId, Long regionId, Long availablePeriodsId, int newPriceHall,
+                                         Long unitTypeId, Long accommodationTypeId, Long hotelClassificationId,
+                                         Set<Long> basicFeaturesIds, Set<Long> subFeaturesIds, Set<Long> foodOptionsIds,
+                                         int adultsAllowed, int childrenAllowed) {
+        Specification<Unit> spec = Specification.where(null);
+
+        if (cityId != null) {
+            spec = spec.and(UnitSpecifications.byCityId(cityId));
+        }
+
+        if (regionId != null) {
+            spec = spec.and(UnitSpecifications.byRegionId(regionId));
+        }
+
+        if (basicFeaturesIds != null && !basicFeaturesIds.isEmpty()) {
+            spec = spec.and(UnitSpecifications.byBasicFeaturesIds(basicFeaturesIds));
+        }
+
+        if (availablePeriodsId != null) {
+            spec = spec.and(UnitSpecifications.byAvailablePeriodsId(availablePeriodsId));
+        }
+
+        if (newPriceHall != 0) {
+            spec = spec.and(UnitSpecifications.byNewPriceHall2(newPriceHall));
+        }
+
+        if (unitTypeId != null) {
+            spec = spec.and(UnitSpecifications.byUnitTypeId(unitTypeId));
+        }
+
+        if (accommodationTypeId != null) {
+            spec = spec.and(UnitSpecifications.byAccommodationTypeId(accommodationTypeId));
+        }
+
+        if (hotelClassificationId != null) {
+            spec = spec.and(UnitSpecifications.byHotelClassificationId(hotelClassificationId));
+        }
+
+        if (basicFeaturesIds != null && !basicFeaturesIds.isEmpty()) {
+            spec = spec.and(UnitSpecifications.byBasicFeaturesIds(basicFeaturesIds));
+        }
+
+        if (subFeaturesIds != null && !subFeaturesIds.isEmpty()) {
+            spec = spec.and(UnitSpecifications.bySubFeaturesIds(subFeaturesIds));
+        }
+
+        if (foodOptionsIds != null && !foodOptionsIds.isEmpty()) {
+            spec = spec.and(UnitSpecifications.byFoodOptionsIds(foodOptionsIds));
+        }
+
+        if (adultsAllowed != 0) {
+            spec = spec.and(UnitSpecifications.byAdultsAllowed(adultsAllowed));
+        }
+        if (childrenAllowed != 0) {
+            spec = spec.and(UnitSpecifications.byChildrenAllowed(childrenAllowed));
+        }
+        return unitRepository.findAll(spec);
+    }
 }
