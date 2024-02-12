@@ -9,7 +9,6 @@ import com.AlTaraf.Booking.mapper.AdsMapper;
 import com.AlTaraf.Booking.mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.mapper.Unit.UnitGeneralResponseMapper;
 import com.AlTaraf.Booking.payload.response.ApiResponse;
-import com.AlTaraf.Booking.payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.service.packageAds.AdsService;
 import com.AlTaraf.Booking.service.unit.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
