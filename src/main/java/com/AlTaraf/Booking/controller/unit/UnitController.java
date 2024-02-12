@@ -349,7 +349,7 @@ public class UnitController {
     }
 
     @GetMapping("/units/filter")
-    public List<Unit> filterUnits(
+    public ResponseEntity<?> filterUnits(
             @RequestParam(required = false) Long cityId,
             @RequestParam(required = false) Long regionId,
             @RequestParam(required = false) Long availablePeriodsId,
@@ -363,10 +363,20 @@ public class UnitController {
             @RequestParam(required = false, defaultValue = "0") int adultsAllowed,
             @RequestParam(required = false, defaultValue = "0") int childrenAllowed) {
 
-        return unitService.findUnitsByFilters(cityId, regionId, availablePeriodsId, newPriceHall,
-                unitTypeId, accommodationTypeId, hotelClassificationId,
-                basicFeaturesIds, subFeaturesIds, foodOptionsIds, adultsAllowed, childrenAllowed
-                );
+        try {
+            List<Unit> units = unitService.findUnitsByFilters(cityId, regionId, availablePeriodsId, newPriceHall,
+                    unitTypeId, accommodationTypeId, hotelClassificationId,
+                    basicFeaturesIds, subFeaturesIds, foodOptionsIds, adultsAllowed, childrenAllowed);
+
+            List<UnitDtoFavorite>  unitFavoriteDtoList = unitFavoriteMapper.toUnitFavoriteDtoList(units);
+            return ResponseEntity.ok(unitFavoriteDtoList);
+
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // You can throw a custom exception or return an error response here if needed
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(204, "No Content for Event Halls!"));
+        }
     }
 
 
