@@ -26,6 +26,8 @@ public class ImageData {
 
     private String type;
 
+    private String imagePath;
+
     @Lob
     @Column(name = "imagedata", columnDefinition = "LONGBLOB")
     private byte[] imageData;

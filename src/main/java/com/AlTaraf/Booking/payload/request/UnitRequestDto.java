@@ -1,12 +1,9 @@
 package com.AlTaraf.Booking.payload.request;
 
-import com.AlTaraf.Booking.dto.RoomTypeDetailsDTO;
-import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomTypeDetails;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 import java.util.Set;
 
 @Data
