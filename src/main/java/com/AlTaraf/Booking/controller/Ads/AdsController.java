@@ -76,10 +76,11 @@ public class AdsController {
         }
     }
 
-    @GetMapping("/status/{statusUnitId}")
-    public ResponseEntity<List<adsForSliderResponseDto>> getAdsByStatusUnitId(@PathVariable Long statusUnitId) {
-        List<adsForSliderResponseDto> adsForSliderList = adsService.getAdsByStatusUnitId(statusUnitId);
-        return ResponseEntity.ok(adsForSliderList);
+
+    @GetMapping("/Accepted/Status")
+    public ResponseEntity<List<adsForSliderResponseDto>> getAdsByAcceptedStatus() {
+        List<adsForSliderResponseDto> ads = adsService.getAdsByAcceptedStatus();
+        return ResponseEntity.ok(ads);
     }
 
 }
