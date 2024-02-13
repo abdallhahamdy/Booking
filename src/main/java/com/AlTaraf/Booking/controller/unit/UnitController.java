@@ -272,9 +272,17 @@ public class UnitController {
     @GetMapping("/filter-unit-by-name")
     public Page<UnitDtoFavorite> filterUnitsByName(
             @RequestParam String nameUnit,
+            @RequestParam(required = false) Long unitTypeId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
-        Page<Unit> unitsPage = unitService.filterUnitsByName(nameUnit, PageRequest.of(page, size));
+        Page<Unit> unitsPage;
+        if (unitTypeId != null) {
+            // If unitTypeId is provided, filter by unit type ID
+            unitsPage = unitService.filterUnitsByNameAndTypeId(nameUnit, unitTypeId, PageRequest.of(page, size));
+        } else {
+            // If unitTypeId is not provided, only filter by nameUnit
+            unitsPage = unitService.filterUnitsByName(nameUnit, PageRequest.of(page, size));
+        }
         return unitsPage.map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit));
     }
 

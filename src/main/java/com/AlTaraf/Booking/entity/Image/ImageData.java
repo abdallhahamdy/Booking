@@ -3,6 +3,7 @@ package com.AlTaraf.Booking.entity.Image;
 import com.AlTaraf.Booking.entity.Ads.Ads;
 import com.AlTaraf.Booking.entity.User.User;
 import com.AlTaraf.Booking.entity.unit.Unit;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,18 +35,20 @@ public class ImageData {
 
     @ManyToOne
     @JoinColumn(name = "unit_id")
+    @JsonBackReference
     private Unit unit;
 
     @Transient
     private MultipartFile file;
 
     @ManyToOne
-    @JoinColumn(name = "ADS_ID")
-    private Ads ads;
-
-    @ManyToOne
     @JoinColumn(name = "USER_ID")
+    @JsonBackReference
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "ADS_ID")
+    @JsonBackReference
+    private Ads ads;
 
 }

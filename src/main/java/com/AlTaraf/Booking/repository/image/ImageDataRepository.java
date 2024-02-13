@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface ImageDataRepository extends JpaRepository<ImageData, Long> {
     List<ImageData> findByUnitIsNull();
+//    List<ImageData> findByUnitIsNull();
 
     List<ImageData> findByUnitId(Long unitId);
 }

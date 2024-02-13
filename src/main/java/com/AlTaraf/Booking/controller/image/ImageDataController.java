@@ -37,9 +37,15 @@ public class ImageDataController {
                 .body(responses);
     }
 
-    @PostMapping("/update-imagedata")
+    @PostMapping("/update-imagedata-for-unit")
     public ResponseEntity<String> updateImageDataForUnit(@RequestParam("unitId") Long unitId) {
         unitService.updateImageDataUnit(unitId);
         return new ResponseEntity<>("ImageData entities updated for Unit with ID: " + unitId, HttpStatus.OK);
     }
+
+//    @PostMapping("/update-imagedata-for-ads")
+//    public ResponseEntity<String> updateImageDataForAds(@RequestParam("adsId") Long adsId) {
+//        unitService.updateImageDataUnit(unitId);
+//        return new ResponseEntity<>("ImageData entities updated for Unit with ID: " + unitId, HttpStatus.OK);
+//    }
 }

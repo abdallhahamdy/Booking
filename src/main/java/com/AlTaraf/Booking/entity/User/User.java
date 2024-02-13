@@ -1,8 +1,10 @@
 package com.AlTaraf.Booking.entity.User;
 
+import com.AlTaraf.Booking.entity.Image.ImageData;
 import com.AlTaraf.Booking.entity.Role.Role;
 import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.common.Auditable;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
@@ -13,6 +15,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -60,5 +63,7 @@ public class User extends Auditable<String> {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<ImageData> images;
 }

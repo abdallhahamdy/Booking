@@ -1,11 +1,13 @@
 package com.AlTaraf.Booking.service.unit;
 
 import com.AlTaraf.Booking.dto.Unit.UnitDtoFavorite;
+import com.AlTaraf.Booking.entity.Ads.Ads;
 import com.AlTaraf.Booking.entity.Image.ImageData;
 import com.AlTaraf.Booking.entity.User.User;
 import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.unit.Unit;
 import com.AlTaraf.Booking.mapper.Unit.UnitFavoriteMapper;
+import com.AlTaraf.Booking.repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.repository.unit.UnitRepository;
 //import com.AlTaraf.Booking.repository.unit.roomAvailable.RoomAvailableRepository;
@@ -32,6 +34,9 @@ public class UnitServiceImpl implements UnitService {
 
     @Autowired
     UnitRepository unitRepository;
+
+    @Autowired
+    AdsRepository adsRepository;
 
     @Autowired
     private ImageDataRepository imageDataRepository;
@@ -127,6 +132,27 @@ public class UnitServiceImpl implements UnitService {
         }
 
     }
+
+//    @Override
+//    public void updateImageDataAds(Long adsId) {
+//        // Fetch the Unit by ID
+//        Ads ads = adsRepository.findById(adsId).orElse(null);
+//
+//        if (ads != null) {
+//            // Retrieve associated ImageData entities without a unit
+//            List<ImageData> imageDataList = imageDataRepository.findByUnitIsNull();
+//
+//            // Update the unit for each ImageData entity
+//            for (ImageData imageData : imageDataList) {
+//                imageData.setUnit(unit);
+//                imageDataRepository.save(imageData);
+//            }
+//        } else {
+//            // Handle the case when the Unit with the specified ID is not found
+//            throw new EntityNotFoundException("Unit not found with ID: " + unitId);
+//        }
+//
+//    }
 
     @Override
     public Page<UnitDtoFavorite> getAllUnitDtoFavorites(Pageable pageable) {
@@ -254,5 +280,10 @@ public class UnitServiceImpl implements UnitService {
             spec = spec.and(UnitSpecifications.byChildrenAllowed(childrenAllowed));
         }
         return unitRepository.findAll(spec);
+    }
+
+    @Override
+    public Page<Unit> filterUnitsByNameAndTypeId(String nameUnit, Long unitTypeId, Pageable pageable) {
+        return unitRepository.findByNameUnitAndUnitType(nameUnit, unitTypeId, pageable);
     }
 }

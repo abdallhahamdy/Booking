@@ -25,6 +25,8 @@ public interface UnitService {
 
     void updateImageDataUnit(Long unitId);
 
+//    void updateImageDataAds(Long adsId);
+
 //    Page<Unit> getAllUnits(Pageable pageable);
 
     Page<UnitDtoFavorite> getAllUnitDtoFavorites(Pageable pageable);
@@ -47,5 +49,7 @@ public interface UnitService {
                                   Long unitTypeId, Long accommodationTypeId, Long hotelClassificationId,
                                   Set<Long> basicFeaturesIds, Set<Long> subFeaturesIds, Set<Long> foodOptionsIds,
                                   int adultsAllowed, int childrenAllowed);
+
+    Page<Unit> filterUnitsByNameAndTypeId(String nameUnit, Long unitTypeId, Pageable pageable);
 
 }

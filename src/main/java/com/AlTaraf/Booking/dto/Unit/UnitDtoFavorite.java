@@ -12,12 +12,14 @@ import java.util.List;
 public class UnitDtoFavorite {
 
     private Long unitId;
-    private List<String> images; // List of image file paths
+    private List<String> imagePaths; // List of image file paths
     private String nameUnit;
     private String cityName;
     private String regionName;
     private String arabicCityName;
     private String regionArabicName;
+    private Double latForMapping;
+    private Double longForMapping;
     private Boolean favorite;
 
 

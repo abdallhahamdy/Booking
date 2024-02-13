@@ -1,15 +1,16 @@
 package com.AlTaraf.Booking.controller.Ads;
 
-import com.AlTaraf.Booking.dto.AdsDto;
 import com.AlTaraf.Booking.dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.entity.Ads.Ads;
 import com.AlTaraf.Booking.entity.Ads.PackageAds;
 import com.AlTaraf.Booking.entity.unit.Unit;
-import com.AlTaraf.Booking.mapper.AdsMapper;
+import com.AlTaraf.Booking.mapper.Ads.AdsMapper;
 import com.AlTaraf.Booking.mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.mapper.Unit.UnitGeneralResponseMapper;
+import com.AlTaraf.Booking.payload.request.Ads.AdsRequestDto;
+import com.AlTaraf.Booking.payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.payload.response.ApiResponse;
-import com.AlTaraf.Booking.service.packageAds.AdsService;
+import com.AlTaraf.Booking.service.Ads.AdsService;
 import com.AlTaraf.Booking.service.unit.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -65,7 +66,7 @@ public class AdsController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createAds(@RequestBody AdsDto adsDto) {
+    public ResponseEntity<?> createAds(@RequestBody AdsRequestDto adsDto) {
         try {
             Ads ads = adsMapper.toEntity(adsDto);
             adsService.createAds(ads);
@@ -74,4 +75,11 @@ public class AdsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create ads: " + e.getMessage());
         }
     }
+
+    @GetMapping("/status/{statusUnitId}")
+    public ResponseEntity<List<adsForSliderResponseDto>> getAdsByStatusUnitId(@PathVariable Long statusUnitId) {
+        List<adsForSliderResponseDto> adsForSliderList = adsService.getAdsByStatusUnitId(statusUnitId);
+        return ResponseEntity.ok(adsForSliderList);
+    }
+
 }

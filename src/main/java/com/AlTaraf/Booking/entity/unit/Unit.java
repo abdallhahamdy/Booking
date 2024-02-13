@@ -52,9 +52,6 @@ public class Unit extends Auditable<String> {
     @JoinColumn(name = "ACCOMMODATION_TYPE_ID", nullable = true)
     private AccommodationType accommodationType;
 
-    @OneToMany(mappedBy = "unit", fetch = FetchType.EAGER)
-    private List<ImageData> images;
-
     @Column(name = "NAME_UNIT")
     private String nameUnit;
 
@@ -153,6 +150,10 @@ public class Unit extends Auditable<String> {
     @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<RoomDetails> roomDetails;
+
+    @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<ImageData> images;
 
     public Unit() {
         this.statusUnit = new StatusUnit();
