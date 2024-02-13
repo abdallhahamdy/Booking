@@ -26,7 +26,11 @@ public class RoomAvailable {
     @Column(name = "ROOM_AVAILABLE_NAME_ARABIC")
     private String arabicName;
 
-//    @OneToMany(mappedBy = "roomAvailable", cascade = CascadeType.ALL, orphanRemoval = true)
+    public RoomAvailable(Long id) {
+        this.id = id;
+    }
+
+    //    @OneToMany(mappedBy = "roomAvailable", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<RoomDetails> roomDetailsList = new ArrayList<>();
 
 

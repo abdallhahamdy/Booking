@@ -22,5 +22,7 @@ public class AvailablePeriods {
     @Column(name = "AVAILABLE_PERIODS_ARABIC_NAME")
     private String arabicName;
 
-
+    public AvailablePeriods(Long id) {
+        this.id = id;
+    }
 }

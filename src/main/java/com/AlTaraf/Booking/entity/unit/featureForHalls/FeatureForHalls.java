@@ -22,5 +22,7 @@ public class FeatureForHalls {
     @Column(name = "FEATURE_ARABIC_NAME")
     private String arabicName;
 
-
+    public FeatureForHalls(Long id) {
+        this.id = id;
+    }
 }

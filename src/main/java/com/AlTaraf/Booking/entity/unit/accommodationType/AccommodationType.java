@@ -19,4 +19,8 @@ public class AccommodationType {
     private String name;
     @Column(name = "ACCOMMODATION_ARABIC_NAME")
     private String arabicName;
+
+    public AccommodationType(Long id) {
+        this.id = id;
+    }
 }

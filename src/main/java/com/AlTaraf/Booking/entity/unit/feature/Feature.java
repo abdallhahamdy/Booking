@@ -20,4 +20,8 @@ public class Feature {
 
     @Column(name = "FEATURE_ARABIC_NAME")
     private String arabicName;
+
+    public Feature(Long id) {
+        this.id = id;
+    }
 }

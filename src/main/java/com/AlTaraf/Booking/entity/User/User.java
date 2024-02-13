@@ -66,4 +66,8 @@ public class User extends Auditable<String> {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<ImageData> images;
+
+    public User(Long id) {
+        this.id = id;
+    }
 }

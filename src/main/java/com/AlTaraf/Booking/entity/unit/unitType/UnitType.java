@@ -22,5 +22,7 @@ public class UnitType {
     @Column(name = "TYPE_ARABIC_NAME")
     private String arabicName;
 
-
+    public UnitType(Long id) {
+        this.id = id;
+    }
 }

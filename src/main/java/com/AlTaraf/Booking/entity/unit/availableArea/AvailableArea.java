@@ -21,4 +21,8 @@ public class AvailableArea {
 
     @Column(name = "AVAILABLE_AREA_NAME_ARABIC")
     private String arabicName;
+
+    public AvailableArea(Long id) {
+        this.id = id;
+    }
 }

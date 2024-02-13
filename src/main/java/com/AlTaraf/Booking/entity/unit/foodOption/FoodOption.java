@@ -20,4 +20,8 @@ public class FoodOption {
 
     @Column(name = "FOOD_OPTION_ARABIC_NAME")
     private String arabicName;
+
+    public FoodOption(Long id) {
+        this.id = id;
+    }
 }

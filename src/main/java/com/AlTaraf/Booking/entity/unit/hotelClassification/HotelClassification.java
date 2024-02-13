@@ -21,4 +21,8 @@ public class HotelClassification {
 
     @Column(name = "HOTEL_CLASSIFICATION_ARABIC_NAME")
     private String arabicName;
+
+    public HotelClassification(Long id) {
+        this.id = id;
+    }
 }

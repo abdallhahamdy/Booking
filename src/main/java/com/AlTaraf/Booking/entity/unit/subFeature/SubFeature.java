@@ -20,4 +20,8 @@ public class SubFeature {
 
     @Column(name = "SUB_FEATURE_ARABIC_NAME")
     private String arabicName;
+
+    public SubFeature(Long id) {
+        this.id = id;
+    }
 }

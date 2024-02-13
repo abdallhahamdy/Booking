@@ -29,4 +29,7 @@ public class Region {
     private City city;
 
 
+    public Region(Long id) {
+        this.id = id;
+    }
 }
