@@ -160,6 +160,11 @@ public class UnitServiceImpl implements UnitService {
         return unitPage.map(unitFavoriteMapper::toUnitFavoriteDto);
     }
 
+    @Override
+    public List<Unit> getAllUnitForMapping() {
+        return unitRepository.findAll();
+    }
+
 //    @Override
 //    public Page<Unit> getAllUnits(Pageable pageable) {
 //        return unitRepository.findAll(pageable);
@@ -170,6 +175,13 @@ public class UnitServiceImpl implements UnitService {
         return unitRepository.findByNameUnitContainingIgnoreCase(nameUnit, pageable);
     }
 
+    @Override
+    public List<Unit> filterUnitsByNameForMap(String nameUnit) {
+        return unitRepository.findByNameUnitContainingIgnoreCaseForMap(nameUnit);
+    }
+
+
+    @Override
     public List<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName) {
         // Retrieve a List of Units for the given USER_ID and StatusUnit name
         return unitRepository.findAllByUserIdAndStatusUnitName(userId, statusUnitName);
@@ -283,7 +295,7 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public Page<Unit> filterUnitsByNameAndTypeId(String nameUnit, Long unitTypeId, Pageable pageable) {
-        return unitRepository.findByNameUnitAndUnitType(nameUnit, unitTypeId, pageable);
+    public List<Unit> filterUnitsByNameAndTypeId(String nameUnit, Long unitTypeId) {
+        return unitRepository.findByNameUnitAndUnitType(nameUnit, unitTypeId);
     }
 }

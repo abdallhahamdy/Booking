@@ -32,8 +32,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/units")
@@ -269,21 +271,27 @@ public class UnitController {
         return unitService.getAllUnitDtoFavorites(PageRequest.of(page, size));
     }
 
-    @GetMapping("/filter-unit-by-name")
-    public Page<UnitDtoFavorite> filterUnitsByName(
-            @RequestParam String nameUnit,
-            @RequestParam(required = false) Long unitTypeId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        Page<Unit> unitsPage;
-        if (unitTypeId != null) {
-            // If unitTypeId is provided, filter by unit type ID
-            unitsPage = unitService.filterUnitsByNameAndTypeId(nameUnit, unitTypeId, PageRequest.of(page, size));
-        } else {
-            // If unitTypeId is not provided, only filter by nameUnit
-            unitsPage = unitService.filterUnitsByName(nameUnit, PageRequest.of(page, size));
+    @GetMapping("/Filter-Units-For-Mapping")
+    public List<UnitDtoFavorite> filterUnitsForMapping(
+            @RequestParam(required = false) String nameUnit,
+            @RequestParam(required = false) Long unitTypeId) {
+        List<Unit> units = new ArrayList<>();
+
+        if (nameUnit == null && unitTypeId != null) {
+            units = unitService.getUnitsByUnitTypeId(unitTypeId);
         }
-        return unitsPage.map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit));
+        else if (nameUnit != null && unitTypeId == null) {
+            units = unitService.filterUnitsByNameForMap(nameUnit);
+        }
+        else if (nameUnit != null && unitTypeId != null) {
+            units = unitService.filterUnitsByNameAndTypeId(nameUnit, unitTypeId);
+        }
+        else if (nameUnit == null && unitTypeId == null) {
+            units = unitService.getAllUnitForMapping();
+        }
+        return units.stream()
+                .map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/get-All-Room-Available")

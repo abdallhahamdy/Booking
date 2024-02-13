@@ -38,6 +38,9 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     @Query("SELECT u FROM Unit u WHERE LOWER(u.nameUnit) LIKE LOWER(concat('%', :nameUnit, '%'))")
     Page<Unit> findByNameUnitContainingIgnoreCase(String nameUnit, Pageable pageable);
 
+    @Query("SELECT u FROM Unit u WHERE LOWER(u.nameUnit) LIKE LOWER(concat('%', :nameUnit, '%'))")
+    List<Unit> findByNameUnitContainingIgnoreCaseForMap(String nameUnit );
+
     List<Unit> findByUnitType_Id(Long unitTypeId);
 
     List<Unit> findByUserId(Long userId);
@@ -48,5 +51,5 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     List<Unit> findByRoomAvailable(@Param("roomAvailable") RoomAvailable roomAvailable);
 
     @Query("SELECT u FROM Unit u WHERE u.nameUnit = :nameUnit AND u.unitType.id = :unitTypeId")
-    Page<Unit> findByNameUnitAndUnitType(@Param("nameUnit") String nameUnit, @Param("unitTypeId") Long unitTypeId, Pageable pageable);
+    List<Unit> findByNameUnitAndUnitType(@Param("nameUnit") String nameUnit, @Param("unitTypeId") Long unitTypeId );
 }

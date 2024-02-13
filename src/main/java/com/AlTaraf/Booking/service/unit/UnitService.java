@@ -30,8 +30,7 @@ public interface UnitService {
 //    Page<Unit> getAllUnits(Pageable pageable);
 
     Page<UnitDtoFavorite> getAllUnitDtoFavorites(Pageable pageable);
-
-    Page<Unit> filterUnitsByName(String nameUnit, Pageable pageable);
+    List<Unit> getAllUnitForMapping();
 
     List<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName);
 
@@ -50,6 +49,10 @@ public interface UnitService {
                                   Set<Long> basicFeaturesIds, Set<Long> subFeaturesIds, Set<Long> foodOptionsIds,
                                   int adultsAllowed, int childrenAllowed);
 
-    Page<Unit> filterUnitsByNameAndTypeId(String nameUnit, Long unitTypeId, Pageable pageable);
+    Page<Unit> filterUnitsByName(String nameUnit, Pageable pageable);
+
+    List<Unit> filterUnitsByNameForMap(String nameUnit);
+
+    List<Unit> filterUnitsByNameAndTypeId(String nameUnit, Long unitTypeId);
 
 }
