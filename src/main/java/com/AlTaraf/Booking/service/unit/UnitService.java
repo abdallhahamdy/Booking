@@ -30,13 +30,15 @@ public interface UnitService {
 //    Page<Unit> getAllUnits(Pageable pageable);
 
     Page<UnitDtoFavorite> getAllUnitDtoFavorites(Pageable pageable);
-    List<Unit> getAllUnitForMapping();
+    List<Unit> getAllUnitForMap();
+    Page<Unit> getAllUnit(Pageable pageable);
 
     List<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName);
 
     Page<UnitDtoFavorite> getUnitsByUserCity(Long userId, Pageable pageable);
 
-    List<Unit> getUnitsByUnitTypeId(Long unitTypeId);
+    Page<Unit> getUnitsByUnitTypeId(Long unitTypeId, Pageable pageable);
+    List<Unit> getUnitTypeIdForMap(Long unitTypeId);
 
 //    void updateRoomDetailsForUnit(Long unitId);
 
@@ -51,8 +53,11 @@ public interface UnitService {
 
     Page<Unit> filterUnitsByName(String nameUnit, Pageable pageable);
 
+
+    Page<Unit> filterUnitsByNameAndTypeId(String nameUnit, Long unitTypeId, Pageable pageable);
+
     List<Unit> filterUnitsByNameForMap(String nameUnit);
 
-    List<Unit> filterUnitsByNameAndTypeId(String nameUnit, Long unitTypeId);
+    List<Unit> filterUnitsByNameAndTypeIdForMap(String nameUnit, Long unitTypeId);
 
 }

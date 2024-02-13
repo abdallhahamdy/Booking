@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface UnitRequestMapper {
-    @Mapping(source = "id", target = "id")
+//    @Mapping(source = "id", target = "id")
     @Mapping(source = "unitTypeId", target = "unitType.id")
     @Mapping(source = "userId", target = "user.id")
     @Mapping(source = "nameUnit", target = "nameUnit")

@@ -161,7 +161,12 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public List<Unit> getAllUnitForMapping() {
+    public Page<Unit> getAllUnit(Pageable pageable) {
+        return unitRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Unit> getAllUnitForMap() {
         return unitRepository.findAll();
     }
 
@@ -202,9 +207,15 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public List<Unit> getUnitsByUnitTypeId(Long unitTypeId) {
-        return unitRepository.findByUnitType_Id(unitTypeId);
+    public Page<Unit> getUnitsByUnitTypeId(Long unitTypeId, Pageable pageable) {
+        return unitRepository.findByUnitType_Id(unitTypeId, pageable);
     }
+
+    @Override
+    public List<Unit> getUnitTypeIdForMap(Long unitTypeId) {
+        return unitRepository.findByUnitType_IdForMap(unitTypeId);
+    }
+
 
     public List<Unit> getUnitsByUserId(Long userId) {
         return unitRepository.findByUserId(userId);
@@ -295,7 +306,12 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public List<Unit> filterUnitsByNameAndTypeId(String nameUnit, Long unitTypeId) {
-        return unitRepository.findByNameUnitAndUnitType(nameUnit, unitTypeId);
+    public List<Unit> filterUnitsByNameAndTypeIdForMap(String nameUnit, Long unitTypeId) {
+        return unitRepository.findByNameUnitAndUnitTypeForMap(nameUnit, unitTypeId);
+    }
+
+    @Override
+    public Page<Unit> filterUnitsByNameAndTypeId(String nameUnit, Long unitTypeId, Pageable pageable) {
+        return unitRepository.findByNameUnitAndUnitType(nameUnit, unitTypeId, pageable);
     }
 }

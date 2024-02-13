@@ -10,7 +10,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UnitRequestDto {
-    private Long id;
+//    private Long id;
     private Long unitTypeId;
     private Long userId;
     private String nameUnit;
