@@ -337,25 +337,6 @@ public class UnitController {
         return ResponseEntity.ok(eventHallsResponse);
     }
 
-
-    @GetMapping("/filter-event-halls")
-    public ResponseEntity<?> searchUnits(
-            @RequestParam(required = false) Long cityId,
-            @RequestParam(required = false) Long regionId,
-            @RequestParam(required = false) Long availablePeriodId,
-            @RequestParam(required = false) Integer newPriceHall
-    ) {
-        try {
-            List<Unit> units = unitService.findUnitsByCriteria(cityId, regionId, availablePeriodId, newPriceHall);
-            List<EventHallsResponse> unitResponses = eventHallsMapper.toEventHallsList(units);
-            return ResponseEntity.ok(unitResponses);
-        } catch (Exception e) {
-            logger.error("Error occurred while processing create-unit request", e);
-
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(204, "No Content for Event Halls!"));
-        }
-    }
-
     @GetMapping("/units/filter")
     public ResponseEntity<?> filterUnits(
             @RequestParam(required = false) Long cityId,
