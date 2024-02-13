@@ -2,11 +2,21 @@ package com.AlTaraf.Booking.controller.unit;
 
 import com.AlTaraf.Booking.dto.Unit.UnitDto;
 import com.AlTaraf.Booking.dto.Unit.UnitDtoFavorite;
+import com.AlTaraf.Booking.entity.User.User;
+import com.AlTaraf.Booking.entity.cityAndregion.City;
+import com.AlTaraf.Booking.entity.cityAndregion.Region;
 import com.AlTaraf.Booking.entity.unit.AvailablePeriods.AvailablePeriods;
+import com.AlTaraf.Booking.entity.unit.accommodationType.AccommodationType;
+import com.AlTaraf.Booking.entity.unit.availableArea.AvailableArea;
+import com.AlTaraf.Booking.entity.unit.feature.Feature;
 import com.AlTaraf.Booking.entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.entity.unit.Unit;
+import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
+import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomDetails;
+import com.AlTaraf.Booking.entity.unit.subFeature.SubFeature;
+import com.AlTaraf.Booking.entity.unit.unitType.UnitType;
 import com.AlTaraf.Booking.mapper.Unit.*;
 import com.AlTaraf.Booking.mapper.Unit.RoomDetails.RoomDetailsRequestMapper;
 import com.AlTaraf.Booking.payload.request.RoomDetails.RoomDetailsRequestDto;
@@ -106,6 +116,111 @@ public class UnitController {
         }
     }
 
+    @PatchMapping("/update-unit/{unitId}")
+    public ResponseEntity<?> updateUnit(@PathVariable Long unitId, @RequestBody UnitRequestDto unitRequestDto) {
+        try {
+            // Find the unit to update
+            Unit unitToUpdate = unitService.getUnitById(unitId);
+            if (unitToUpdate == null) {
+                // Return a 404 Not Found response if the unit does not exist
+                return ResponseEntity.notFound().build();
+            }
+
+            // Update the unit fields
+//            if (unitRequestDto.getId() != null) {
+//                unitToUpdate.setId(unitRequestDto.getId());
+//            }
+            if (unitRequestDto.getUnitTypeId() != null) {
+                unitToUpdate.setUnitType(new UnitType(unitRequestDto.getUnitTypeId()));
+            }
+            if (unitRequestDto.getUserId() != null) {
+                unitToUpdate.setUser(new User(unitRequestDto.getUserId()));
+            }
+            if (unitRequestDto.getNameUnit() != null) {
+                unitToUpdate.setNameUnit(unitRequestDto.getNameUnit());
+            }
+            if (unitRequestDto.getDescription() != null) {
+                unitToUpdate.setDescription(unitRequestDto.getDescription());
+            }
+            if (unitRequestDto.getCityId() != null) {
+                unitToUpdate.setCity(new City(unitRequestDto.getCityId()));
+            }
+            if (unitRequestDto.getRegionId() != null) {
+                unitToUpdate.setRegion(new Region(unitRequestDto.getRegionId()));
+            }
+            if (unitRequestDto.getAccommodationTypeId() != null) {
+                unitToUpdate.setAccommodationType(new AccommodationType(unitRequestDto.getAccommodationTypeId()));
+            }
+            if (unitRequestDto.getHotelClassificationId() != null) {
+                unitToUpdate.setHotelClassification(new HotelClassification(unitRequestDto.getHotelClassificationId()));
+            }
+            if (unitRequestDto.getRoomAvailableIds() != null) {
+                unitToUpdate.setRoomAvailableSet(unitRequestDto.getRoomAvailableIds().stream()
+                        .map(id -> new RoomAvailable(id))
+                        .collect(Collectors.toSet()));
+            }
+            if (unitRequestDto.getAvailableAreaIds() != null) {
+                unitToUpdate.setAvailableAreaSet(unitRequestDto.getAvailableAreaIds().stream()
+                        .map(id -> new AvailableArea(id))
+                        .collect(Collectors.toSet()));
+            }
+            if (unitRequestDto.getBasicFeaturesIds() != null) {
+                unitToUpdate.setBasicFeaturesSet(unitRequestDto.getBasicFeaturesIds().stream()
+                        .map(id -> new Feature(id))
+                        .collect(Collectors.toSet()));
+            }
+            if (unitRequestDto.getSubFeaturesIds() != null) {
+                unitToUpdate.setSubFeaturesSet(unitRequestDto.getSubFeaturesIds().stream()
+                        .map(id -> new SubFeature(id))
+                        .collect(Collectors.toSet()));
+            }
+            if (unitRequestDto.getFoodOptionsIds() != null) {
+                unitToUpdate.setFoodOptionsSet(unitRequestDto.getFoodOptionsIds().stream()
+                        .map(id -> new FoodOption(id))
+                        .collect(Collectors.toSet()));
+            }
+            if (unitRequestDto.getCapacityHalls() != 0) {
+                unitToUpdate.setCapacityHalls(unitRequestDto.getCapacityHalls());
+            }
+            if (unitRequestDto.getFeaturesHallsIds() != null) {
+                unitToUpdate.setFeaturesHallsSet(unitRequestDto.getFeaturesHallsIds().stream()
+                        .map(id -> new FeatureForHalls(id))
+                        .collect(Collectors.toSet()));
+            }
+            if (unitRequestDto.getAvailablePeriodsHallsIds() != null) {
+                unitToUpdate.setAvailablePeriodsHallsSet(unitRequestDto.getAvailablePeriodsHallsIds().stream()
+                        .map(id -> new AvailablePeriods(id))
+                        .collect(Collectors.toSet()));
+            }
+            if (unitRequestDto.getOldPriceHall() != 0) {
+                unitToUpdate.setOldPriceHall(unitRequestDto.getOldPriceHall());
+            }
+            if (unitRequestDto.getNewPriceHall() != 0) {
+                unitToUpdate.setNewPriceHall(unitRequestDto.getNewPriceHall());
+            }
+            if (unitRequestDto.getLatForMapping() != null) {
+                unitToUpdate.setLatForMapping(unitRequestDto.getLatForMapping());
+            }
+            if (unitRequestDto.getLongForMapping() != null) {
+                unitToUpdate.setLongForMapping(unitRequestDto.getLongForMapping());
+            }
+            // Update other fields similarly...
+
+            // Save the updated unit in the database
+            Unit updatedUnit = unitService.saveUnit(unitToUpdate);
+
+            // Return a success response with the updated unitId in the body
+            return ResponseEntity.ok("Unit updated successfully with id: " + updatedUnit.getId());
+        } catch (Exception e) {
+            // Log the exception
+            // logger.error("Error occurred while processing update-unit request", e);
+
+            // Return user-friendly error response
+            ApiResponse response = new ApiResponse(400, "Failed to update unit. Please check your input and try again.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
+
 //    @GetMapping("/get-Units-By-Hotel-Classification-Names")
 //    public ResponseEntity<?> getUnitsByHotelClassificationNames(
 //            @RequestParam List<String> hotelClassificationNames,
@@ -135,7 +250,6 @@ public class UnitController {
         } else {
             ApiResponse response = new ApiResponse(204, "No Content");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -152,7 +266,6 @@ public class UnitController {
         } else {
             ApiResponse response = new ApiResponse(204, "No Content for Units By Accommodation Type!");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -224,12 +337,6 @@ public class UnitController {
         }
     }
 
-//    @PatchMapping("/update-room-details")
-//    public ResponseEntity<?> updateRoomDetailsForUnit(@RequestParam("unitId") Long unitId) {
-//        unitService.updateImageDataUnit(unitId);
-//        return new ResponseEntity<>("ImageData entities updated for Unit with ID: " + unitId, HttpStatus.OK);
-//    }
-
     @GetMapping("/status-unit")
     public ResponseEntity<?> getUnitsForUserAndStatus(
             @RequestParam(name = "USER_ID") Long userId,
@@ -264,30 +371,46 @@ public class UnitController {
 //        return unitService.getUnitById(id);
 //    }
 
-    @GetMapping
-    public Page<UnitDtoFavorite> getAllUnits(
+    @GetMapping("/get-Units")
+    public Page<UnitDtoFavorite> getUnits(
+            @RequestParam(required = false) String nameUnit,
+            @RequestParam(required = false) Long unitTypeId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
-        return unitService.getAllUnitDtoFavorites(PageRequest.of(page, size));
+        Page<Unit> unitsPage = Page.empty();
+
+        if (nameUnit == null && unitTypeId != null) {
+            unitsPage = unitService.getUnitsByUnitTypeId(unitTypeId, PageRequest.of(page, size));
+        }
+        else if (nameUnit != null && unitTypeId == null) {
+            unitsPage = unitService.filterUnitsByName(nameUnit, PageRequest.of(page, size));
+        }
+        else if (nameUnit != null && unitTypeId != null) {
+            unitsPage = unitService.filterUnitsByNameAndTypeId(nameUnit, unitTypeId, PageRequest.of(page, size));
+        }
+        else if (nameUnit == null && unitTypeId == null) {
+            unitsPage = unitService.getAllUnit(PageRequest.of(page, size));
+        }
+        return unitsPage.map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit));
     }
 
-    @GetMapping("/Filter-Units-For-Mapping")
-    public List<UnitDtoFavorite> filterUnitsForMapping(
+    @GetMapping("/Filter-Units-For-Map")
+    public List<UnitDtoFavorite> filterUnitsForMap(
             @RequestParam(required = false) String nameUnit,
             @RequestParam(required = false) Long unitTypeId) {
         List<Unit> units = new ArrayList<>();
 
         if (nameUnit == null && unitTypeId != null) {
-            units = unitService.getUnitsByUnitTypeId(unitTypeId);
+            units = unitService.getUnitTypeIdForMap(unitTypeId);
         }
         else if (nameUnit != null && unitTypeId == null) {
             units = unitService.filterUnitsByNameForMap(nameUnit);
         }
         else if (nameUnit != null && unitTypeId != null) {
-            units = unitService.filterUnitsByNameAndTypeId(nameUnit, unitTypeId);
+            units = unitService.filterUnitsByNameAndTypeIdForMap(nameUnit, unitTypeId);
         }
         else if (nameUnit == null && unitTypeId == null) {
-            units = unitService.getAllUnitForMapping();
+            units = unitService.getAllUnitForMap();
         }
         return units.stream()
                 .map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit))
@@ -319,18 +442,6 @@ public class UnitController {
             return new ResponseEntity<>(availablePeriods, HttpStatus.OK);
         } else {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content for Available Periods !"));
-        }
-    }
-
-    @GetMapping("/byUnitType/{unitTypeId}")
-    public ResponseEntity<?> getUnitsByUnitType(@PathVariable Long unitTypeId) {
-        List<Unit> units = unitService.getUnitsByUnitTypeId(unitTypeId);
-
-        if (units.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content for Available Periods !"));
-        } else {
-            List<UnitDtoFavorite> unitDtoFavorites = unitFavoriteMapper.toUnitFavoriteDtoList(units);
-            return ResponseEntity.ok(unitDtoFavorites);
         }
     }
 
