@@ -464,17 +464,18 @@ public class UnitController {
             @RequestParam(required = false, defaultValue = "0") int newPriceHall,
             @RequestParam(required = false) Long unitTypeId,
             @RequestParam(required = false) Long accommodationTypeId,
-            @RequestParam(required = false) Long hotelClassificationId,
+            @RequestParam(required = false) Set<Long>  hotelClassificationIds,
             @RequestParam(required = false) Set<Long> basicFeaturesIds,
             @RequestParam(required = false) Set<Long> subFeaturesIds,
             @RequestParam(required = false) Set<Long> foodOptionsIds,
+            @RequestParam(required = false, defaultValue = "0") int capacityHalls,
             @RequestParam(required = false, defaultValue = "0") int adultsAllowed,
             @RequestParam(required = false, defaultValue = "0") int childrenAllowed) {
 
         try {
             List<Unit> units = unitService.findUnitsByFilters(cityId, regionId, availablePeriodsId, newPriceHall,
-                    unitTypeId, accommodationTypeId, hotelClassificationId,
-                    basicFeaturesIds, subFeaturesIds, foodOptionsIds, adultsAllowed, childrenAllowed);
+                    unitTypeId, accommodationTypeId, hotelClassificationIds,
+                    basicFeaturesIds, subFeaturesIds, foodOptionsIds, capacityHalls, adultsAllowed, childrenAllowed);
 
             List<UnitDtoFavorite>  unitFavoriteDtoList = unitFavoriteMapper.toUnitFavoriteDtoList(units);
             return ResponseEntity.ok(unitFavoriteDtoList);

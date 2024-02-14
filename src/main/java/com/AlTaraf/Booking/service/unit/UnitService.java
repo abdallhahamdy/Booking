@@ -44,12 +44,10 @@ public interface UnitService {
 
     List<Unit> getUnitsByUserId(Long userId);
 
-    List<Unit> findUnitsByCriteria(Long cityId, Long regionId, Long availablePeriodId, int newPriceHall);
-
     List<Unit> findUnitsByFilters(Long cityId, Long regionId, Long availablePeriodsId, int newPriceHall,
-                                  Long unitTypeId, Long accommodationTypeId, Long hotelClassificationId,
+                                  Long unitTypeId, Long accommodationTypeId, Set<Long> hotelClassificationIds,
                                   Set<Long> basicFeaturesIds, Set<Long> subFeaturesIds, Set<Long> foodOptionsIds,
-                                  int adultsAllowed, int childrenAllowed);
+                                  int capacityHalls, int adultsAllowed, int childrenAllowed);
 
     Page<Unit> filterUnitsByName(String nameUnit, Pageable pageable);
 

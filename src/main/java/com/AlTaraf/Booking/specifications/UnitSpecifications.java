@@ -2,7 +2,6 @@ package com.AlTaraf.Booking.specifications;
 
 import com.AlTaraf.Booking.entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.entity.unit.Unit;
-import com.AlTaraf.Booking.entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.entity.unit.feature.Feature;
 import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.entity.unit.subFeature.SubFeature;
@@ -33,11 +32,15 @@ public class UnitSpecifications {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("region").get("id"), regionId);
     }
 
-    public static Specification<Unit> byHotelClassificationId(Long hotelClassificationId) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("hotelClassification").get("id"), hotelClassificationId);
-    }
+//    public static Specification<Unit> byHotelClassificationId(Long hotelClassificationId) {
+//        return (root, query, criteriaBuilder) ->
+//                criteriaBuilder.equal(root.get("hotelClassification").get("id"), hotelClassificationId);
+//    }
 
+    public static Specification<Unit> byHotelClassificationIds(Set<Long> hotelClassificationIds) {
+        return (root, query, criteriaBuilder) ->
+                root.get("hotelClassification").get("id").in(hotelClassificationIds);
+    }
     public static Specification<Unit> byBasicFeaturesIds(Set<Long> basicFeaturesIds) {
         return (root, query, criteriaBuilder) -> {
             Join<Unit, Feature> featuresJoin = root.join("basicFeaturesSet", JoinType.INNER);
@@ -65,6 +68,11 @@ public class UnitSpecifications {
 
     public static Specification<Unit> byNewPriceHall(int newPriceHall) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("newPriceHall"), newPriceHall);
+    }
+
+    public static Specification<Unit> byCapacityHalls(int capacityHalls) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("capacityHalls"), capacityHalls);
     }
 
     public static Specification<Unit> byAdultsAllowed(int adultsAllowed) {
