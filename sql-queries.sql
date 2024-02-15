@@ -1,6 +1,6 @@
 -- INSERT ROLES  الادوار
-insert into roles (role) values ("ROLE_GUEST");
-insert into roles (role) values ("ROLE_LESSOR");
+insert into roles (arabic_name, role) values ("عميل", "ROLE_GUEST");
+insert into roles (arabic_name, role) values ("تاجر", "ROLE_LESSOR");
 
 -- insert cities    المدن
 insert into city (arabic_name, city) values ("طرابلس","Tripoli");
