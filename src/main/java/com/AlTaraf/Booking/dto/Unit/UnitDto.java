@@ -12,6 +12,7 @@ import java.util.List;
 public class UnitDto {
 
     private Long unitId;
+    private Long unitTypeId;
     private List<String> images; // List of image file paths
     private String nameUnit;
     private String cityName;

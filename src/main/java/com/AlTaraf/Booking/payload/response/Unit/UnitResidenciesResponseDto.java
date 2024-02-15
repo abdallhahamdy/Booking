@@ -23,6 +23,7 @@ import java.util.Set;
 public class UnitResidenciesResponseDto {
 
     private Long unitId;
+    private Long unitTypeId;
     private String nameUnit;
     private String description;
 

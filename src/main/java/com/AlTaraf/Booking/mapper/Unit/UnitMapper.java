@@ -16,6 +16,7 @@ public interface UnitMapper {
 
     @Mappings({
             @Mapping(source = "unit.id", target = "unitId"),
+            @Mapping(source = "unitType.id", target = "unitTypeId"),
             @Mapping(target = "images", expression = "java(extractFilePaths(unit.getImages()))"),
             @Mapping(source = "unit.nameUnit", target = "nameUnit"),
             @Mapping(source = "unit.city.cityName", target = "cityName"),

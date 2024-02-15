@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface UnitGeneralResponseMapper {
     @Mapping(source = "id", target = "unitId")
+    @Mapping(source = "unitType", target = "unitType")
     @Mapping(source = "nameUnit", target = "nameUnit")
     @Mapping(source = "description", target = "description")
     @Mapping(source = "city", target = "cityDto")

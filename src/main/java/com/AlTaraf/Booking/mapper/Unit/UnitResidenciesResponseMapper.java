@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UnitResidenciesResponseMapper {
     @Mapping(source = "id", target = "unitId")
+    @Mapping(source = "unitType.id", target = "unitTypeId")
     @Mapping(source = "nameUnit", target = "nameUnit")
     @Mapping(source = "description", target = "description")
     @Mapping(source = "city", target = "cityDto")

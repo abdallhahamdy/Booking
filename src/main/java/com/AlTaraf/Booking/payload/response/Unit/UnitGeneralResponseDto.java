@@ -12,6 +12,7 @@ import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.entity.unit.subFeature.SubFeature;
+import com.AlTaraf.Booking.entity.unit.unitType.UnitType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class UnitGeneralResponseDto {
     private Long unitId;
+    private UnitType unitType;
     private String nameUnit;
     private String description;
     private CityDto cityDto;
