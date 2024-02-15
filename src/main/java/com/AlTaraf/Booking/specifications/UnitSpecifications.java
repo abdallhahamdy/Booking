@@ -77,35 +77,4 @@ public class UnitSpecifications {
                 criteriaBuilder.equal(root.join("roomDetails").get("childrenAllowed"), childrenAllowed);
     }
 
-    /////////////////////////////////////////////////////////
-
-    public static Specification<Unit> byCityId(Long cityId) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("city").get("id"), cityId);
-    }
-
-    public static Specification<Unit> byRegionId(Long regionId) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("region").get("id"), regionId);
-    }
-
-    public static Specification<Unit> byAvailablePeriodsId(Long availablePeriodsId) {
-        return (root, query, criteriaBuilder) -> {
-            Join<Unit, AvailablePeriods> periodsJoin = root.join("availablePeriodsHallsSet", JoinType.INNER);
-            return criteriaBuilder.equal(periodsJoin.get("id"), availablePeriodsId);
-        };
-    }
-
-    public static Specification<Unit> byNewPriceHall2(int newPriceHall) {
-        return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(root.get("newPriceHall"), newPriceHall);
-    }
-
-    public static Specification<Unit> byCityIdAndRegionIdAndAvailablePeriodsIdAndNewPriceHall(
-            Long cityId, Long regionId, Long availablePeriodsId, int newPriceHall) {
-        return Specification.where(byCityId(cityId))
-                .and(byRegionId(regionId))
-                .and(byAvailablePeriodsId(availablePeriodsId))
-                .and(byNewPriceHall2(newPriceHall));
-    }
 }

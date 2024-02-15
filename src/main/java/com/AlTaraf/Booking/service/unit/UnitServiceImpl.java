@@ -253,11 +253,11 @@ public class UnitServiceImpl implements UnitService {
         Specification<Unit> spec = Specification.where(null);
 
         if (cityId != null) {
-            spec = spec.and(UnitSpecifications.byCityId(cityId));
+            spec = spec.and(UnitSpecifications.byCity(cityId));
         }
 
         if (regionId != null) {
-            spec = spec.and(UnitSpecifications.byRegionId(regionId));
+            spec = spec.and(UnitSpecifications.byRegion(regionId));
         }
 
         if (basicFeaturesIds != null && !basicFeaturesIds.isEmpty()) {
@@ -265,11 +265,11 @@ public class UnitServiceImpl implements UnitService {
         }
 
         if (availablePeriodsId != null) {
-            spec = spec.and(UnitSpecifications.byAvailablePeriodsId(availablePeriodsId));
+            spec = spec.and(UnitSpecifications.byAvailablePeriod(availablePeriodsId));
         }
 
         if (newPriceHall != 0) {
-            spec = spec.and(UnitSpecifications.byNewPriceHall2(newPriceHall));
+            spec = spec.and(UnitSpecifications.byNewPriceHall(newPriceHall));
         }
 
         if (unitTypeId != null) {
