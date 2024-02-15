@@ -37,9 +37,9 @@ public class UnitSpecifications {
 //                criteriaBuilder.equal(root.get("hotelClassification").get("id"), hotelClassificationId);
 //    }
 
-    public static Specification<Unit> byHotelClassificationIds(Set<Long> hotelClassificationIds) {
+    public static Specification<Unit> byHotelClassificationIds(Set<Long> hotelClassificationId) {
         return (root, query, criteriaBuilder) ->
-                root.get("hotelClassification").get("id").in(hotelClassificationIds);
+                root.get("hotelClassification").get("id").in(hotelClassificationId);
     }
     public static Specification<Unit> byBasicFeaturesIds(Set<Long> basicFeaturesIds) {
         return (root, query, criteriaBuilder) -> {

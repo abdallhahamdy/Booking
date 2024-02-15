@@ -72,19 +72,22 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     public Page<UnitDtoFavorite> getUnitsAddedLastMonth(int page, int size) {
-        LocalDateTime startOfMonth = LocalDateTime.now().minusMonths(1).withDayOfMonth(1);
-        LocalDateTime endOfMonth = LocalDateTime.now();
+        LocalDateTime startOfLastMonth = LocalDateTime.now().minusDays(30);
+        LocalDateTime endOfLastMonth = LocalDateTime.now();
 
-        Date startDate = Date.from(startOfMonth.atZone(ZoneId.systemDefault()).toInstant());
-        Date endDate = Date.from(endOfMonth.atZone(ZoneId.systemDefault()).toInstant());
+        Date startDate = Date.from(startOfLastMonth.atZone(ZoneId.systemDefault()).toInstant());
+        Date endDate = Date.from(endOfLastMonth.atZone(ZoneId.systemDefault()).toInstant());
 
         PageRequest pageRequest = PageRequest.of(page, size);
 
         Page<Unit> unitsPage = unitRepository.findByCreatedDateBetween(startDate, endDate, pageRequest);
 
+        if (unitsPage.isEmpty()) {
+            return Page.empty();
+        }
+
         return unitsPage.map(unitFavoriteMapper::toUnitFavoriteDto);
     }
-
 //    public Page<Unit> getFavoriteUnits(int page, int size) {
 //        PageRequest pageRequest = PageRequest.of(page, size);
 //        return unitRepository.findByFavoriteTrue(pageRequest);
