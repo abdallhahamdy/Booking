@@ -15,4 +15,5 @@ public class RoleDto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private ERole roleName;
+    private String arabicName;
 }

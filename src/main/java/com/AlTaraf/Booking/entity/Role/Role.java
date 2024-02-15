@@ -2,9 +2,15 @@ package com.AlTaraf.Booking.entity.Role;
 
 import com.AlTaraf.Booking.entity.enums.ERole;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="roles")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Role {
 
     @Id
@@ -15,27 +21,5 @@ public class Role {
     @Column(length = 20, name = "role", nullable = false)
     private ERole name;
 
-    public Role() {
-    }
-
-    public Role(Long id, ERole name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public ERole getName() {
-        return name;
-    }
-
-    public void setName(ERole name) {
-        this.name = name;
-    }
+    private String arabicName;
 }

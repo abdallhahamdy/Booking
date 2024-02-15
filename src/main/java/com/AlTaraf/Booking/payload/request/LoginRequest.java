@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigInteger;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -13,11 +13,8 @@ import java.math.BigInteger;
 public class LoginRequest {
     @NotBlank
     private String phone;
-
     @NotBlank
     private String password;
-
     private boolean stayLoggedIn;
-
-
+    private Set<String> roles;
 }
