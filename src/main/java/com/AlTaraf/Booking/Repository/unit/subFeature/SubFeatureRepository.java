@@ -1,6 +1,6 @@
 package com.AlTaraf.Booking.Repository.unit.subFeature;
 
-import com.AlTaraf.Booking.entity.unit.subFeature.SubFeature;
+import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

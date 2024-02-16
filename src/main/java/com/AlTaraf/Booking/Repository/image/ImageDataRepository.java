@@ -1,6 +1,6 @@
 package com.AlTaraf.Booking.Repository.image;
 
-import com.AlTaraf.Booking.entity.Image.ImageData;
+import com.AlTaraf.Booking.Entity.Image.ImageData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
