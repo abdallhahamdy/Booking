@@ -1,7 +1,7 @@
 package com.AlTaraf.Booking.service.unit.FeatureForHalls;
 
 import com.AlTaraf.Booking.entity.unit.featureForHalls.FeatureForHalls;
-import com.AlTaraf.Booking.repository.unit.FeatureForHalls.FeatureForHallsRepository;
+import com.AlTaraf.Booking.Repository.unit.FeatureForHalls.FeatureForHallsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -2,9 +2,8 @@ package com.AlTaraf.Booking.service.unit.RoomAvailable;
 
 
 import com.AlTaraf.Booking.entity.unit.roomAvailable.RoomAvailable;
-import com.AlTaraf.Booking.repository.unit.RoomDetails.RoomDetailsRepository;
-import com.AlTaraf.Booking.repository.unit.roomAvailable.RoomAvailableRepository;
-import com.AlTaraf.Booking.service.unit.RoomAvailable.RoomAvailableService;
+import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
+import com.AlTaraf.Booking.Repository.unit.roomAvailable.RoomAvailableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

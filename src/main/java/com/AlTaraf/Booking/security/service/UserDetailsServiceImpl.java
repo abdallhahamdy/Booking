@@ -1,7 +1,7 @@
 package com.AlTaraf.Booking.security.service;
 
 import com.AlTaraf.Booking.entity.User.User;
-import com.AlTaraf.Booking.repository.user.UserRepository;
+import com.AlTaraf.Booking.Repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

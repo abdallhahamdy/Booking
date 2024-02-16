@@ -4,7 +4,7 @@ package com.AlTaraf.Booking.service.role;
 import com.AlTaraf.Booking.entity.Role.Role;
 import com.AlTaraf.Booking.entity.enums.ERole;
 import com.AlTaraf.Booking.mapper.RoleMapper;
-import com.AlTaraf.Booking.repository.role.RoleRepository;
+import com.AlTaraf.Booking.Repository.role.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

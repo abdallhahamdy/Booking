@@ -3,22 +3,16 @@ package com.AlTaraf.Booking.service.image;
 import com.AlTaraf.Booking.config.ImageConfig;
 import com.AlTaraf.Booking.entity.Image.ImageData;
 import com.AlTaraf.Booking.payload.response.ImageUploadResponse;
-import com.AlTaraf.Booking.repository.image.ImageDataRepository;
+import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.UUID;
 
 @Service
 public class ImageDataServiceImpl implements ImageDataService{
