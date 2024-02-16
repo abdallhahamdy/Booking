@@ -100,3 +100,9 @@ insert into package_ads (ads_arabic_name, ads_name, number_ads, price) values ("
 insert into available_area (available_area_name_arabic, available_area_name) values ("استوديو","studio");
 insert into available_area (available_area_name_arabic, available_area_name) values ("غرفتين","two rooms");
 insert into available_area (available_area_name_arabic, available_area_name) values ("ثلاث غرف","three rooms");
+
+
+insert into evaluation (evaluation_arabic_name, evaluation_name) values ("+ممتاز: 9", "Excellent: 9+");
+insert into evaluation (evaluation_arabic_name, evaluation_name) values ("+جيد جدا: 8", "Very Good: 8+");
+insert into evaluation (evaluation_arabic_name, evaluation_name) values ("+جيد: 7", "Good: 7+");
+insert into evaluation (evaluation_arabic_name, evaluation_name) values ("+مرضي: 6", "Acceptable: 6+");
