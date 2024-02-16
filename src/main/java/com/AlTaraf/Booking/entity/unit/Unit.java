@@ -158,5 +158,7 @@ public class Unit extends Auditable<String> {
     public Unit() {
         this.statusUnit = new StatusUnit();
         this.statusUnit.setId(1L);
+        this.favorite = false;
+//        this.setFavorite(false);
     }
 }
