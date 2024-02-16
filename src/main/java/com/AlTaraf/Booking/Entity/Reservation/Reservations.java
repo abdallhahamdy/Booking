@@ -1,4 +1,6 @@
-package com.AlTaraf.Booking.Entity;
+package com.AlTaraf.Booking.Entity.Reservation;
+
+
 
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.common.Auditable;

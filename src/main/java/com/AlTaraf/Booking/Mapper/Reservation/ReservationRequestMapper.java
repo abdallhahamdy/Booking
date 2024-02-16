@@ -1,6 +1,6 @@
 package com.AlTaraf.Booking.Mapper.Reservation;
 
-import com.AlTaraf.Booking.Entity.Reservations;
+import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.feature.Feature;

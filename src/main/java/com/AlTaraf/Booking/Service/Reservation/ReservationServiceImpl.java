@@ -1,7 +1,7 @@
 package com.AlTaraf.Booking.Service.Reservation;
 
+import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
-import com.AlTaraf.Booking.Entity.Reservations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

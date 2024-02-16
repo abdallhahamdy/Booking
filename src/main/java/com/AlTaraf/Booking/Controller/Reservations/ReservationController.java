@@ -1,6 +1,6 @@
 package com.AlTaraf.Booking.Controller.Reservations;
 
-import com.AlTaraf.Booking.Entity.Reservations;
+import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationRequestMapper;
 import com.AlTaraf.Booking.Payload.request.Reservation.ReservationRequestDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
