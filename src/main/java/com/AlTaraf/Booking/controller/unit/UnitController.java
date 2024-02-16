@@ -48,7 +48,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/units")
+@RequestMapping("/Api/Units")
 public class UnitController {
 
     @Autowired
@@ -95,7 +95,7 @@ public class UnitController {
     private static final Logger logger = LoggerFactory.getLogger(UnitController.class);
 
 
-    @PostMapping("/create-unit")
+    @PostMapping("/Create-Unit")
     public ResponseEntity<?> createUnit(@RequestBody UnitRequestDto unitRequestDto) {
         try {
             // Convert UnitRequestDto to Unit
@@ -116,7 +116,7 @@ public class UnitController {
         }
     }
 
-    @PatchMapping("/update-unit/{unitId}")
+    @PatchMapping("/Update-Unit/{unitId}")
     public ResponseEntity<?> updateUnit(@PathVariable Long unitId, @RequestBody UnitRequestDto unitRequestDto) {
         try {
             // Find the unit to update
@@ -238,7 +238,7 @@ public class UnitController {
 //        }
 //    }
 
-    @GetMapping("/last-month")
+    @GetMapping("/By-Last-Month")
     public ResponseEntity<?> getUnitsAddedLastMonth(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "2") int size) {
@@ -253,7 +253,7 @@ public class UnitController {
         }
     }
 
-    @GetMapping("/get-Units-By-Accommodation-Type")
+    @GetMapping("/Get-Units-By-Accommodation-Type")
     public ResponseEntity<?> getUnitsByAccommodationType(
             @RequestParam String accommodationTypeName,
             @RequestParam(defaultValue = "0") int page,
@@ -269,7 +269,7 @@ public class UnitController {
         }
     }
 
-    @GetMapping("/units-by-user-city")
+    @GetMapping("/By-User-City")
     public ResponseEntity<?> getUnitsByUserCity(
             @RequestParam Long userId,
             @RequestParam(defaultValue = "0") int page,
@@ -285,7 +285,7 @@ public class UnitController {
         }
     }
 
-    @GetMapping("general-units/{id}")
+    @GetMapping("By-Id-General/{id}")
     public ResponseEntity<?> getUnitById(@PathVariable Long id) {
         Unit unit = unitService.getUnitById(id);
         if (unit != null) {
@@ -296,7 +296,7 @@ public class UnitController {
         }
     }
 
-    @GetMapping("Residencies-units/{id}")
+    @GetMapping("By-Id-For-Residencies/{id}")
     public ResponseEntity<?> getResidenciesUnitById(@PathVariable Long id) {
         Unit unit = unitService.getUnitById(id);
         if (unit != null) {
@@ -307,7 +307,7 @@ public class UnitController {
         }
     }
 
-    @PostMapping("{unitId}/{roomAvailableId}/room-details/add")
+    @PostMapping("{unitId}/{roomAvailableId}/Room-Details/Add")
     @Transactional // Add this annotation to enable transaction management
     public ResponseEntity<?> addRoomDetails(@PathVariable Long unitId, @PathVariable Long roomAvailableId, @RequestBody RoomDetailsRequestDto roomDetailsRequestDto) {
         try {
@@ -319,7 +319,7 @@ public class UnitController {
         }
     }
 
-    @GetMapping("/getByUnitAndRoomAvailable")
+    @GetMapping("/Get-By-Unit-And-Room-Available")
     public ResponseEntity<?> getRoomDetailsByUnitAndRoomAvailable(
             @RequestParam Long unitId,
             @RequestParam Long roomAvailableId) {
@@ -337,7 +337,7 @@ public class UnitController {
         }
     }
 
-    @GetMapping("/status-unit")
+    @GetMapping("/Status-Unit")
     public ResponseEntity<?> getUnitsForUserAndStatus(
             @RequestParam(name = "USER_ID") Long userId,
             @RequestParam(name = "statusUnitName") String statusUnitName) {
@@ -353,7 +353,7 @@ public class UnitController {
         }
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("Delete/{id}")
     public ResponseEntity<?> deleteUnit(@PathVariable Long id) {
 
         try {
@@ -371,7 +371,7 @@ public class UnitController {
 //        return unitService.getUnitById(id);
 //    }
 
-    @GetMapping("/get-Units")
+    @GetMapping("/Get-Units")
     public Page<UnitDtoFavorite> getUnits(
             @RequestParam(required = false) String nameUnit,
             @RequestParam(required = false) Long unitTypeId,
@@ -417,13 +417,13 @@ public class UnitController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/get-All-Room-Available")
+    @GetMapping("/Get-All-Room-Available")
     public ResponseEntity<List<RoomAvailable>> getAllRoomAvailable() {
         List<RoomAvailable> roomAvailableList = roomAvailableService.getAllRoomAvailable();
         return ResponseEntity.ok(roomAvailableList);
     }
 
-    @GetMapping("/get-All-Feature-For-Halls")
+    @GetMapping("/Get-All-Feature-For-Halls")
     public ResponseEntity<?> getAllFeatureForHalls() {
         List<FeatureForHalls> featureForHalls = featureForHallsService.getAllFeatureForHalls();
 
@@ -434,7 +434,7 @@ public class UnitController {
         }
     }
 
-    @GetMapping("/get-AvailablePeriods")
+    @GetMapping("/Get-Available-Periods")
     public ResponseEntity<?> getAllAvailablePeriods() {
         List<AvailablePeriods> availablePeriods = availablePeriodsService.getAllAvailablePeriods();
 
@@ -445,7 +445,7 @@ public class UnitController {
         }
     }
 
-    @GetMapping("Event-Halls-units/{unitId}")
+    @GetMapping("Event-Halls-Units/{unitId}")
     public ResponseEntity<?> getEventHallsById(@PathVariable Long unitId) {
         Unit unit = unitService.getUnitById(unitId);
         if (unit == null) {
@@ -456,7 +456,7 @@ public class UnitController {
         return ResponseEntity.ok(eventHallsResponse);
     }
 
-    @GetMapping("/units/filter")
+    @GetMapping("/Filtering")
     public ResponseEntity<?> filterUnits(
             @RequestParam(required = false) Long cityId,
             @RequestParam(required = false) Long regionId,
@@ -464,17 +464,18 @@ public class UnitController {
             @RequestParam(required = false, defaultValue = "0") int newPriceHall,
             @RequestParam(required = false) Long unitTypeId,
             @RequestParam(required = false) Long accommodationTypeId,
-            @RequestParam(required = false) Long hotelClassificationId,
+            @RequestParam(required = false) Set<Long>  hotelClassificationIds,
             @RequestParam(required = false) Set<Long> basicFeaturesIds,
             @RequestParam(required = false) Set<Long> subFeaturesIds,
             @RequestParam(required = false) Set<Long> foodOptionsIds,
+            @RequestParam(required = false, defaultValue = "0") int capacityHalls,
             @RequestParam(required = false, defaultValue = "0") int adultsAllowed,
             @RequestParam(required = false, defaultValue = "0") int childrenAllowed) {
 
         try {
             List<Unit> units = unitService.findUnitsByFilters(cityId, regionId, availablePeriodsId, newPriceHall,
-                    unitTypeId, accommodationTypeId, hotelClassificationId,
-                    basicFeaturesIds, subFeaturesIds, foodOptionsIds, adultsAllowed, childrenAllowed);
+                    unitTypeId, accommodationTypeId, hotelClassificationIds,
+                    basicFeaturesIds, subFeaturesIds, foodOptionsIds, capacityHalls, adultsAllowed, childrenAllowed);
 
             List<UnitDtoFavorite>  unitFavoriteDtoList = unitFavoriteMapper.toUnitFavoriteDtoList(units);
             return ResponseEntity.ok(unitFavoriteDtoList);
