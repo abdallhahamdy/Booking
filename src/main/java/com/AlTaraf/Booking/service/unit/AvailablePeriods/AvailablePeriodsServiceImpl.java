@@ -1,7 +1,7 @@
 package com.AlTaraf.Booking.service.unit.AvailablePeriods;
 
 import com.AlTaraf.Booking.entity.unit.AvailablePeriods.AvailablePeriods;
-import com.AlTaraf.Booking.repository.AvailablePeriods.AvailablePeriodsRepository;
+import com.AlTaraf.Booking.Repository.AvailablePeriods.AvailablePeriodsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,17 +1,16 @@
 package com.AlTaraf.Booking.service.unit;
 
 import com.AlTaraf.Booking.dto.Unit.UnitDtoFavorite;
-import com.AlTaraf.Booking.entity.Ads.Ads;
 import com.AlTaraf.Booking.entity.Image.ImageData;
 import com.AlTaraf.Booking.entity.User.User;
 import com.AlTaraf.Booking.entity.cityAndregion.City;
 import com.AlTaraf.Booking.entity.unit.Unit;
 import com.AlTaraf.Booking.mapper.Unit.UnitFavoriteMapper;
-import com.AlTaraf.Booking.repository.Ads.AdsRepository;
-import com.AlTaraf.Booking.repository.image.ImageDataRepository;
-import com.AlTaraf.Booking.repository.unit.UnitRepository;
+import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
+import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
+import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 //import com.AlTaraf.Booking.repository.unit.roomAvailable.RoomAvailableRepository;
-import com.AlTaraf.Booking.repository.user.UserRepository;
+import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.specifications.UnitSpecifications;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +22,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class UnitServiceImpl implements UnitService {

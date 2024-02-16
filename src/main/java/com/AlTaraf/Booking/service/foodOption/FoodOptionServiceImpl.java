@@ -1,7 +1,7 @@
 package com.AlTaraf.Booking.service.foodOption;
 
 import com.AlTaraf.Booking.entity.unit.foodOption.FoodOption;
-import com.AlTaraf.Booking.repository.unit.foodOption.FoodOptionRepository;
+import com.AlTaraf.Booking.Repository.unit.foodOption.FoodOptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

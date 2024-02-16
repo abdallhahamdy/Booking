@@ -3,7 +3,7 @@ package com.AlTaraf.Booking.service.cityAndRegion;
 import com.AlTaraf.Booking.dto.cityDtoAndRoleDto.RegionDto;
 import com.AlTaraf.Booking.entity.cityAndregion.Region;
 import com.AlTaraf.Booking.mapper.RegionMapper;
-import com.AlTaraf.Booking.repository.cityAndregion.RegionRepository;
+import com.AlTaraf.Booking.Repository.cityAndregion.RegionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

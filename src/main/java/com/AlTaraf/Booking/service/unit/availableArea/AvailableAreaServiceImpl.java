@@ -1,7 +1,7 @@
 package com.AlTaraf.Booking.service.unit.availableArea;
 
 import com.AlTaraf.Booking.entity.unit.availableArea.AvailableArea;
-import com.AlTaraf.Booking.repository.unit.availableArea.AvailableAreaRepository;
+import com.AlTaraf.Booking.Repository.unit.availableArea.AvailableAreaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
