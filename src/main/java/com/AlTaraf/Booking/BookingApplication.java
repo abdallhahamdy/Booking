@@ -1,10 +1,9 @@
 package com.AlTaraf.Booking;
 
-import com.AlTaraf.Booking.config.AuditorAwareImpl;
+import com.AlTaraf.Booking.Config.AuditorAwareImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 

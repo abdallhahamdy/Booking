@@ -1,6 +1,6 @@
 package com.AlTaraf.Booking.Repository.technicalSupport;
 
-import com.AlTaraf.Booking.entity.TechnicalSupport.TechnicalSupport;
+import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupport;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

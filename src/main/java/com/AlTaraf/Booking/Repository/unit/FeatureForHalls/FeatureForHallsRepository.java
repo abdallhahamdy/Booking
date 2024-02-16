@@ -1,6 +1,6 @@
 package com.AlTaraf.Booking.Repository.unit.FeatureForHalls;
 
-import com.AlTaraf.Booking.entity.unit.featureForHalls.FeatureForHalls;
+import com.AlTaraf.Booking.Entity.unit.featureForHalls.FeatureForHalls;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
