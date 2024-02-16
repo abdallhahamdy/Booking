@@ -185,6 +185,9 @@ public class UserController {
 
     @PatchMapping("/edit/{userId}")
     public ResponseEntity<?> editUser(@PathVariable Long userId, @Valid @RequestBody UserEditDto userEditDto) {
+        boolean isPhoneAvailable = userService.existsByPhone(userEditDto.getPhone());
+        boolean isEmailAvailable = userService.existsByEmail(userEditDto.getEmail());
+
 
         try {
             // Retrieve the user by ID
@@ -196,12 +199,28 @@ public class UserController {
             }
 
             if (userEditDto.getEmail() != null) {
-                existingUser.setEmail(userEditDto.getEmail());
+                if (isEmailAvailable){
+                    CheckApiResponse response = new CheckApiResponse(204, "Email is already taken.", false);
+
+                    return ResponseEntity.status(HttpStatus.CONFLICT)
+                            .body(response);
+                } else {
+                    existingUser.setEmail(userEditDto.getEmail());
+                }
             }
 
-            if (userEditDto.getPhone() != null) {
-                existingUser.setPhone(userEditDto.getPhone());
+            if (userEditDto.getPhone() != null ) {
+                if (isPhoneAvailable){
+                    CheckApiResponse response = new CheckApiResponse(204, "Phone is already taken.", false);
+                    return ResponseEntity.status(HttpStatus.CONFLICT)
+                            .body(response);
+                } else {
+//                    existingUser.setPhone(userEditDto.getPhone());
+                    existingUser.setPhone(userEditDto.getPhone());
+
+                }
             }
+
 
             if (userEditDto.getPassword() != null) {
                 existingUser.setPassword(encoder.encode(userEditDto.getPassword()));

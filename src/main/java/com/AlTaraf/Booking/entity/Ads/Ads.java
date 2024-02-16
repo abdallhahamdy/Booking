@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.entity.Ads;
 
 import com.AlTaraf.Booking.entity.Image.ImageData;
+import com.AlTaraf.Booking.entity.User.User;
 import com.AlTaraf.Booking.entity.unit.Unit;
 import com.AlTaraf.Booking.entity.unit.statusUnit.StatusUnit;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -25,7 +26,6 @@ public class Ads {
     @JsonManagedReference
     private List<ImageData> images;
 
-
     @OneToOne
     @JoinColumn(name = "UNIT_ID")
     private Unit unit;
@@ -33,6 +33,10 @@ public class Ads {
     @ManyToOne
     @JoinColumn(name = "PACKAGE_ADS_ID")
     private PackageAds packageAds;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
 //    private Boolean showInSlider;
 
