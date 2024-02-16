@@ -1,7 +1,6 @@
 package com.AlTaraf.Booking.service.unit;
 
 import com.AlTaraf.Booking.dto.Unit.UnitDtoFavorite;
-import com.AlTaraf.Booking.entity.Ads.Ads;
 import com.AlTaraf.Booking.entity.Image.ImageData;
 import com.AlTaraf.Booking.entity.User.User;
 import com.AlTaraf.Booking.entity.cityAndregion.City;
@@ -10,7 +9,6 @@ import com.AlTaraf.Booking.mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.repository.unit.UnitRepository;
-//import com.AlTaraf.Booking.repository.unit.roomAvailable.RoomAvailableRepository;
 import com.AlTaraf.Booking.repository.user.UserRepository;
 import com.AlTaraf.Booking.specifications.UnitSpecifications;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,11 +21,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class UnitServiceImpl implements UnitService {
@@ -76,19 +72,22 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     public Page<UnitDtoFavorite> getUnitsAddedLastMonth(int page, int size) {
-        LocalDateTime startOfMonth = LocalDateTime.now().minusMonths(1).withDayOfMonth(1);
-        LocalDateTime endOfMonth = LocalDateTime.now();
+        LocalDateTime startOfLastMonth = LocalDateTime.now().minusDays(30);
+        LocalDateTime endOfLastMonth = LocalDateTime.now();
 
-        Date startDate = Date.from(startOfMonth.atZone(ZoneId.systemDefault()).toInstant());
-        Date endDate = Date.from(endOfMonth.atZone(ZoneId.systemDefault()).toInstant());
+        Date startDate = Date.from(startOfLastMonth.atZone(ZoneId.systemDefault()).toInstant());
+        Date endDate = Date.from(endOfLastMonth.atZone(ZoneId.systemDefault()).toInstant());
 
         PageRequest pageRequest = PageRequest.of(page, size);
 
         Page<Unit> unitsPage = unitRepository.findByCreatedDateBetween(startDate, endDate, pageRequest);
 
+        if (unitsPage.isEmpty()) {
+            return Page.empty();
+        }
+
         return unitsPage.map(unitFavoriteMapper::toUnitFavoriteDto);
     }
-
 //    public Page<Unit> getFavoriteUnits(int page, int size) {
 //        PageRequest pageRequest = PageRequest.of(page, size);
 //        return unitRepository.findByFavoriteTrue(pageRequest);
@@ -247,9 +246,9 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     public List<Unit> findUnitsByFilters(Long cityId, Long regionId, Long availablePeriodsId, int newPriceHall,
-                                         Long unitTypeId, Long accommodationTypeId, Long hotelClassificationId,
+                                         Long unitTypeId, Long accommodationTypeId, Set<Long> hotelClassificationIds,
                                          Set<Long> basicFeaturesIds, Set<Long> subFeaturesIds, Set<Long> foodOptionsIds,
-                                         int adultsAllowed, int childrenAllowed) {
+                                         int capacityHalls, int adultsAllowed, int childrenAllowed) {
         Specification<Unit> spec = Specification.where(null);
 
         if (cityId != null) {
@@ -280,8 +279,9 @@ public class UnitServiceImpl implements UnitService {
             spec = spec.and(UnitSpecifications.byAccommodationTypeId(accommodationTypeId));
         }
 
-        if (hotelClassificationId != null) {
-            spec = spec.and(UnitSpecifications.byHotelClassificationId(hotelClassificationId));
+        if (hotelClassificationIds != null) {
+//            spec = spec.and(UnitSpecifications.byHotelClassificationId(hotelClassificationId));
+            spec = spec.and(UnitSpecifications.byHotelClassificationIds(hotelClassificationIds));
         }
 
         if (basicFeaturesIds != null && !basicFeaturesIds.isEmpty()) {
@@ -294,6 +294,10 @@ public class UnitServiceImpl implements UnitService {
 
         if (foodOptionsIds != null && !foodOptionsIds.isEmpty()) {
             spec = spec.and(UnitSpecifications.byFoodOptionsIds(foodOptionsIds));
+        }
+
+        if (capacityHalls != 0) {
+            spec = spec.and(UnitSpecifications.byCapacityHalls(capacityHalls));
         }
 
         if (adultsAllowed != 0) {
