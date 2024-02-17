@@ -65,9 +65,9 @@ public class UnitSpecifications {
         return (root, query, criteriaBuilder) -> criteriaBuilder.isMember(availablePeriodId, root.get("availablePeriodsHallsSet").get("id"));
     }
 
-    public static Specification<Unit> byNewPriceHall(int newPriceHall) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("newPriceHall"), newPriceHall);
-    }
+//    public static Specification<Unit> byNewPriceHall(int newPriceHall) {
+//        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get("newPriceHall"), newPriceHall);
+//    }
 
     public static Specification<Unit> byCapacityHalls(int capacityHalls) {
         return (root, query, criteriaBuilder) ->

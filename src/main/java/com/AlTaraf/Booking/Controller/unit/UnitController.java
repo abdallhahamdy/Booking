@@ -507,21 +507,23 @@ public class UnitController {
             @RequestParam(required = false) Long cityId,
             @RequestParam(required = false) Long regionId,
             @RequestParam(required = false) Long availablePeriodsId,
-            @RequestParam(required = false, defaultValue = "0") int newPriceHall,
             @RequestParam(required = false) Long unitTypeId,
             @RequestParam(required = false) Long accommodationTypeId,
-            @RequestParam(required = false) Set<Long>  hotelClassificationIds,
+            @RequestParam(required = false) Set<Long> hotelClassificationIds,
             @RequestParam(required = false) Set<Long> basicFeaturesIds,
             @RequestParam(required = false) Set<Long> subFeaturesIds,
             @RequestParam(required = false) Set<Long> foodOptionsIds,
             @RequestParam(required = false, defaultValue = "0") int capacityHalls,
             @RequestParam(required = false, defaultValue = "0") int adultsAllowed,
-            @RequestParam(required = false, defaultValue = "0") int childrenAllowed) {
+            @RequestParam(required = false, defaultValue = "0") int childrenAllowed,
+            @RequestParam(required = false, defaultValue = "0") int priceMin,
+            @RequestParam(required = false, defaultValue = "0") int priceMax) {
 
         try {
-            List<Unit> units = unitService.findUnitsByFilters(cityId, regionId, availablePeriodsId, newPriceHall,
+            List<Unit> units = unitService.findUnitsByFilters(cityId, regionId, availablePeriodsId,
                     unitTypeId, accommodationTypeId, hotelClassificationIds,
-                    basicFeaturesIds, subFeaturesIds, foodOptionsIds, capacityHalls, adultsAllowed, childrenAllowed);
+                    basicFeaturesIds, subFeaturesIds, foodOptionsIds, capacityHalls, adultsAllowed, childrenAllowed,
+                    priceMin, priceMax);
 
             List<UnitDtoFavorite>  unitFavoriteDtoList = unitFavoriteMapper.toUnitFavoriteDtoList(units);
             return ResponseEntity.ok(unitFavoriteDtoList);

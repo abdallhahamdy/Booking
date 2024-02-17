@@ -222,8 +222,7 @@ public class UnitServiceImpl implements UnitService {
         return unitRepository.findByUserId(userId);
     }
 
-
-    public List<Unit> findUnitsByCriteria(Long cityId, Long regionId, Long availablePeriodId, int newPriceHall) {
+    public List<Unit> findUnitsByCriteria(Long cityId, Long regionId, Long availablePeriodId) {
         Specification<Unit> spec = Specification.where(null);
 
         if (cityId != null) {
@@ -238,19 +237,19 @@ public class UnitServiceImpl implements UnitService {
             spec = spec.and(UnitSpecifications.byAvailablePeriod(availablePeriodId));
         }
 
-        if (newPriceHall != 0) {
-            spec = spec.and(UnitSpecifications.byNewPriceHall(newPriceHall));
-        }
+//        if (newPriceHall != 0) {
+//            spec = spec.and(UnitSpecifications.byNewPriceHall(newPriceHall));
+//        }
 
         return unitRepository.findAll(spec);
     }
 
 
     @Override
-    public List<Unit> findUnitsByFilters(Long cityId, Long regionId, Long availablePeriodsId, int newPriceHall,
+    public List<Unit> findUnitsByFilters(Long cityId, Long regionId, Long availablePeriodsId,
                                          Long unitTypeId, Long accommodationTypeId, Set<Long> hotelClassificationIds,
                                          Set<Long> basicFeaturesIds, Set<Long> subFeaturesIds, Set<Long> foodOptionsIds,
-                                         int capacityHalls, int adultsAllowed, int childrenAllowed) {
+                                         int capacityHalls, int adultsAllowed, int childrenAllowed, int priceMin, int priceMax) {
         Specification<Unit> spec = Specification.where(null);
 
         if (cityId != null) {
@@ -269,9 +268,9 @@ public class UnitServiceImpl implements UnitService {
             spec = spec.and(UnitSpecifications.byAvailablePeriod(availablePeriodsId));
         }
 
-        if (newPriceHall != 0) {
-            spec = spec.and(UnitSpecifications.byNewPriceHall(newPriceHall));
-        }
+//        if (newPriceHall != 0) {
+//            spec = spec.and(UnitSpecifications.byNewPriceHall(newPriceHall));
+//        }
 
         if (unitTypeId != null) {
             spec = spec.and(UnitSpecifications.byUnitTypeId(unitTypeId));
@@ -307,6 +306,16 @@ public class UnitServiceImpl implements UnitService {
         }
         if (childrenAllowed != 0) {
             spec = spec.and(UnitSpecifications.byChildrenAllowed(childrenAllowed));
+        }
+
+        if (priceMin > 0) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.greaterThanOrEqualTo(root.get("price"), priceMin));
+        }
+
+        if (priceMax > 0) {
+            spec = spec.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.lessThanOrEqualTo(root.get("price"), priceMax));
         }
         return unitRepository.findAll(spec);
     }
