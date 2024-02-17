@@ -5,5 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoomDetailsRepository extends JpaRepository<RoomDetails, Long> {
     RoomDetails findByUnitIdAndRoomAvailableId(Long unitId, Long roomAvailableId);
-
 }

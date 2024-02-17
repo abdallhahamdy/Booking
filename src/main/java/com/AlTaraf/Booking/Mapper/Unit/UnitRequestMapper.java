@@ -41,6 +41,7 @@ public interface UnitRequestMapper {
     @Mapping(source = "availablePeriodsHallsIds", target = "availablePeriodsHallsSet", qualifiedByName = "availablePeriodsHallsIdsToEntities")
     @Mapping(source = "oldPriceHall", target = "oldPriceHall")
     @Mapping(source = "newPriceHall", target = "newPriceHall")
+    @Mapping(source = "price", target = "price")
     @Mapping(source = "latForMapping", target = "latForMapping")
     @Mapping(source = "longForMapping", target = "longForMapping")
     Unit toUnit(UnitRequestDto unitRequestDto);

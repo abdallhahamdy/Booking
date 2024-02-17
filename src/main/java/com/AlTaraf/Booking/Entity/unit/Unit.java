@@ -31,8 +31,8 @@ import java.util.Set;
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "unit")
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 public class Unit extends Auditable<String> {
     @Id
@@ -137,9 +137,11 @@ public class Unit extends Auditable<String> {
             inverseJoinColumns = @JoinColumn(name = "available_periods_id"))
     private Set<AvailablePeriods> availablePeriodsHallsSet = new HashSet<>();
 
-    private int oldPriceHall;
+    private Integer oldPriceHall;
 
-    private int newPriceHall;
+    private Integer newPriceHall;
+
+    private Integer price;
 
     private Double latForMapping;
 
@@ -160,5 +162,37 @@ public class Unit extends Auditable<String> {
         this.statusUnit.setId(1L);
         this.favorite = false;
 //        this.setFavorite(false);
+    }
+
+
+    public void setOldPriceHall(int oldPriceHall) {
+        this.oldPriceHall = oldPriceHall;
+    }
+
+    public void setNewPriceHall(int newPriceHall) {
+        if (newPriceHall >= oldPriceHall) {
+            throw new IllegalArgumentException("New price must be less than old price.");
+        }
+        this.newPriceHall = newPriceHall;
+    }
+
+    public void setPrice(int price) {
+        if (unitType != null && unitType.getId() == 2) {
+            if (newPriceHall == null) {
+                price = oldPriceHall;
+            } else {
+                price = newPriceHall;
+            }
+        }
+    }
+
+    public void calculatePrice() {
+        if (unitType != null && unitType.getId() == 2) {
+            if (newPriceHall == null) {
+                price = oldPriceHall;
+            } else {
+                price = newPriceHall;
+            }
+        }
     }
 }

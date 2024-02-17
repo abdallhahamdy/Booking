@@ -31,10 +31,10 @@ public class UnitRequestDto {
     private int capacityHalls;
     private Set<Long> featuresHallsIds;
     private Set<Long> availablePeriodsHallsIds;
-    private int oldPriceHall;
-    private int newPriceHall;
+    private Integer oldPriceHall;
+    private Integer newPriceHall;
 
     private Double latForMapping;
     private Double longForMapping;
-
+    private Integer price;
 }

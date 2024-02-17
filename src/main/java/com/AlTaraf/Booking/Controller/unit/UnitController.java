@@ -101,16 +101,27 @@ public class UnitController {
             // Convert UnitRequestDto to Unit
             Unit unitToSave = unitRequestMapper.toUnit(unitRequestDto);
 
+            // Check if newPriceHall is less than oldPriceHall
+            if (unitToSave.getNewPriceHall() != null && unitToSave.getNewPriceHall() >= unitToSave.getOldPriceHall()) {
+                throw new IllegalArgumentException("New price must be less than old price.");
+            }
+
+            // Calculate the price based on the unitType
+            unitToSave.calculatePrice();
+
             // Save the unit in the database
             Unit savedUnit = unitService.saveUnit(unitToSave);
 
             // Return the unitId in the response body
             return ResponseEntity.status(HttpStatus.CREATED).body("Unit created successfully with id: " + savedUnit.getId());
-        } catch (Exception e) {
-//            // Log the exception
-//            logger.error("Error occurred while processing create-unit request", e);
-
+        } catch (IllegalArgumentException e) {
             // Return user-friendly error response
+            ApiResponse response = new ApiResponse(400, e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // Return generic error response
             ApiResponse response = new ApiResponse(400, "Failed to create unit. Please check your input and try again.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
