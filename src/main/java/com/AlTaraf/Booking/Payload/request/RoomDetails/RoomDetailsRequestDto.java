@@ -16,6 +16,5 @@ public class RoomDetailsRequestDto {
     private BigDecimal newPrice;
     private BigDecimal oldPrice;
     private int adultsAllowed;
-
     private int childrenAllowed;
 }
