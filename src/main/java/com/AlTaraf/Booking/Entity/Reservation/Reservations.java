@@ -105,6 +105,12 @@ public class Reservations extends Auditable<String> {
             inverseJoinColumns = @JoinColumn(name = "ROOM_DETAILS_ID"))
     private Set<RoomDetails> roomDetailsSet = new HashSet<>();
 
+    @Column(name = "ADULTS_ALLOWED")
+    private int adultsAllowed;
+
+    @Column(name = "CHILDREN_ALLOWED")
+    private int childrenAllowed;
+
     public Reservations() {
         this.statusUnit = new StatusUnit();
         this.statusUnit.setId(1L);

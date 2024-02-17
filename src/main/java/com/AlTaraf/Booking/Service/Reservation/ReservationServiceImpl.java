@@ -21,5 +21,10 @@ public class ReservationServiceImpl implements ReservationService {
             throw e;
         }
     }
+
+    @Override
+    public Reservations getReservationById(Long id) {
+        return reservationRepository.findById(id).orElse(null);
+    }
 }
 

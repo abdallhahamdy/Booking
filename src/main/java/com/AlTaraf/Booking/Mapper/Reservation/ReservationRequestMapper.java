@@ -30,6 +30,8 @@ public interface ReservationRequestMapper {
     @Mapping(source = "foodOptionsIds", target = "foodOptionsSet", qualifiedByName = "foodOptionsIdsToEntities")
     @Mapping(source = "capacityHalls", target = "capacityHalls")
     @Mapping(source = "availablePeriodsHallsIds", target = "availablePeriodsHallsSet", qualifiedByName = "availablePeriodsHallsIdsToEntities")
+    @Mapping(source = "adultsAllowed", target = "adultsAllowed")
+    @Mapping(source = "childrenAllowed", target = "childrenAllowed")
     Reservations toReservation(ReservationRequestDto reservationRequestDto);
 
     List<Reservations> toReservationsList(List<ReservationRequestDto> reservationRequestDtoList);
