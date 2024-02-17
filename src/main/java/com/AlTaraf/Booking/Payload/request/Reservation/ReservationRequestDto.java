@@ -21,4 +21,7 @@ public class ReservationRequestDto {
     private Set<Long> foodOptionsIds;
     private int capacityHalls;
     private Set<Long> availablePeriodsHallsIds;
+    private int adultsAllowed;
+    private int childrenAllowed;
+
 }
