@@ -137,11 +137,11 @@ public class Unit extends Auditable<String> {
             inverseJoinColumns = @JoinColumn(name = "available_periods_id"))
     private Set<AvailablePeriods> availablePeriodsHallsSet = new HashSet<>();
 
-    private Integer oldPriceHall;
+    private int oldPriceHall;
 
-    private Integer newPriceHall;
+    private int newPriceHall;
 
-    private Integer price;
+    private int price;
 
     private Double latForMapping;
 
@@ -164,11 +164,6 @@ public class Unit extends Auditable<String> {
 //        this.setFavorite(false);
     }
 
-
-    public void setOldPriceHall(int oldPriceHall) {
-        this.oldPriceHall = oldPriceHall;
-    }
-
     public void setNewPriceHall(int newPriceHall) {
         if (newPriceHall >= oldPriceHall) {
             throw new IllegalArgumentException("New price must be less than old price.");
@@ -178,7 +173,7 @@ public class Unit extends Auditable<String> {
 
     public void setPrice(int price) {
         if (unitType != null && unitType.getId() == 2) {
-            if (newPriceHall == null) {
+            if (newPriceHall == 0) {
                 price = oldPriceHall;
             } else {
                 price = newPriceHall;
@@ -188,7 +183,7 @@ public class Unit extends Auditable<String> {
 
     public void calculatePrice() {
         if (unitType != null && unitType.getId() == 2) {
-            if (newPriceHall == null) {
+            if (newPriceHall == 0) {
                 price = oldPriceHall;
             } else {
                 price = newPriceHall;

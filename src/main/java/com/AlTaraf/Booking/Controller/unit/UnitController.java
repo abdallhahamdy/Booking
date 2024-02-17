@@ -107,7 +107,7 @@ public class UnitController {
             Unit unitToSave = unitRequestMapper.toUnit(unitRequestDto);
 
             // Check if newPriceHall is less than oldPriceHall
-            if (unitToSave.getNewPriceHall() != null && unitToSave.getNewPriceHall() >= unitToSave.getOldPriceHall()) {
+            if (unitToSave.getNewPriceHall() != 0 && unitToSave.getNewPriceHall() >= unitToSave.getOldPriceHall()) {
                 throw new IllegalArgumentException("New price must be less than old price.");
             }
 
@@ -323,6 +323,17 @@ public class UnitController {
         }
     }
 
+    @GetMapping("Event-Halls-Units/{unitId}")
+    public ResponseEntity<?> getEventHallsById(@PathVariable Long unitId) {
+        Unit unit = unitService.getUnitById(unitId);
+        if (unit == null) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content for Available Periods !"));
+        }
+
+        EventHallsResponse eventHallsResponse = eventHallsMapper.toEventHallsResponse(unit);
+        return ResponseEntity.ok(eventHallsResponse);
+    }
+
     @PostMapping("{unitId}/{roomAvailableId}/Room-Details/Add")
     @Transactional // Add this annotation to enable transaction management
     public ResponseEntity<?> addRoomDetails(@PathVariable Long unitId, @PathVariable Long roomAvailableId, @RequestBody RoomDetailsRequestDto roomDetailsRequestDto) {
@@ -489,17 +500,6 @@ public class UnitController {
         } else {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content for Available Periods !"));
         }
-    }
-
-    @GetMapping("Event-Halls-Units/{unitId}")
-    public ResponseEntity<?> getEventHallsById(@PathVariable Long unitId) {
-        Unit unit = unitService.getUnitById(unitId);
-        if (unit == null) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content for Available Periods !"));
-        }
-
-        EventHallsResponse eventHallsResponse = eventHallsMapper.toEventHallsResponse(unit);
-        return ResponseEntity.ok(eventHallsResponse);
     }
 
     @GetMapping("/Filtering")

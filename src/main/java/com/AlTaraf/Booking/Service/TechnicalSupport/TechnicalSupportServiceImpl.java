@@ -23,5 +23,15 @@ public class TechnicalSupportServiceImpl implements TechnicalSupportService {
         return technicalSupportRepository.findAll(pageable);
     }
 
+    @Override
+    public void deleteTechnicalSupportById(Long id) {
+        technicalSupportRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAllTechnicalSupport() {
+        technicalSupportRepository.deleteAll();
+    }
+
 
 }

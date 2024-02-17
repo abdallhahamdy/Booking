@@ -9,4 +9,7 @@ public interface TechnicalSupportService {
     void saveTechnicalSupport(TechnicalSupport technicalSupport);
 
     Page<TechnicalSupport> getAllTechnicalSupport(Pageable pageable);
+
+    void deleteTechnicalSupportById(Long id);
+    void deleteAllTechnicalSupport();
 }
