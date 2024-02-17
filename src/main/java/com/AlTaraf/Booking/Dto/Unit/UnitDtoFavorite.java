@@ -22,6 +22,6 @@ public class UnitDtoFavorite {
     private Double latForMapping;
     private Double longForMapping;
     private Boolean favorite;
-
+    private int price;
 
 }

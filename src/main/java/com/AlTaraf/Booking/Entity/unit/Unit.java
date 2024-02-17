@@ -17,6 +17,7 @@ import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
+import com.AlTaraf.Booking.Service.unit.RoomDetails.RoomDetailsService;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -171,14 +172,21 @@ public class Unit extends Auditable<String> {
         this.newPriceHall = newPriceHall;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Long unitId, RoomDetailsService roomDetailsService, int price) {
+
         if (unitType != null && unitType.getId() == 2) {
             if (newPriceHall == 0) {
                 price = oldPriceHall;
+                System.out.println("Price: " + price);
             } else {
                 price = newPriceHall;
+                System.out.println("Price: " + price);
             }
+        } else {
+            this.price = price;
         }
+
+
     }
 
     public void calculatePrice() {

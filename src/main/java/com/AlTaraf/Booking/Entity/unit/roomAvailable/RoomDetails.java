@@ -28,10 +28,10 @@ public class RoomDetails {
     private int roomNumber;
 
    @Column(name = "NEW_PRICE")
-   private BigDecimal newPrice;
+   private int newPrice;
 
    @Column(name = "OLD_PRICE")
-   private BigDecimal oldPrice;
+   private int oldPrice;
 
     @Column(name = "ADULTS_ALLOWED")
     private int adultsAllowed;

@@ -34,8 +34,9 @@ public interface UnitGeneralResponseMapper {
     @Mapping(source = "capacityHalls", target = "capacityHalls")
     @Mapping(source = "featuresHallsSet", target = "featuresHallsDto", qualifiedByName = "mapEntityToFeaturesHallsDto")
     @Mapping(source = "availablePeriodsHallsSet", target = "availablePeriodsHallsDto", qualifiedByName = "mapEntityToAvailablePeriodsHallsDto")
-    @Mapping(source = "oldPriceHall", target = "oldPriceHall")
-    @Mapping(source = "newPriceHall", target = "newPriceHall")
+//    @Mapping(source = "oldPriceHall", target = "oldPriceHall")
+//    @Mapping(source = "newPriceHall", target = "newPriceHall")
+    @Mapping(source = "price", target = "price", defaultValue = "0")
     UnitGeneralResponseDto toResponseDto(Unit unit);
 
     @Named("mapEntityToFeaturesHallsDto")

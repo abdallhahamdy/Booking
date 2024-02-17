@@ -20,6 +20,6 @@ public class UnitDto {
 
     private String arabicCityName;
     private String regionArabicName;
-
+    private int price;
 
 }

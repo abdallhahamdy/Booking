@@ -21,7 +21,8 @@ public interface UnitMapper {
             @Mapping(source = "unit.city.cityName", target = "cityName"),
             @Mapping(source = "unit.region.regionName", target = "regionName"),
             @Mapping(source = "unit.city.arabicCityName", target = "arabicCityName"),
-            @Mapping(source = "unit.region.regionArabicName", target = "regionArabicName")
+            @Mapping(source = "unit.region.regionArabicName", target = "regionArabicName"),
+            @Mapping(source = "price", target = "price", defaultValue = "0")
     })
     UnitDto toUnitDto(Unit unit);
 

@@ -26,4 +26,6 @@ public class EventHallsResponse {
     private int newPriceHall;
     private Double latForMapping;
     private Double longForMapping;
+
+    private int price;
 }

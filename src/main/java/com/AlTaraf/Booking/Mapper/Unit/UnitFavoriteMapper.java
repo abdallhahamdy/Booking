@@ -24,7 +24,8 @@ public interface UnitFavoriteMapper {
             @Mapping(source = "unit.region.regionArabicName", target = "regionArabicName"),
             @Mapping(source = "unit.favorite", target = "favorite"),
             @Mapping(source = "latForMapping", target = "latForMapping"),
-            @Mapping(source = "longForMapping", target = "longForMapping")
+            @Mapping(source = "longForMapping", target = "longForMapping"),
+            @Mapping(source = "price", target = "price", defaultValue = "0")
     })
      UnitDtoFavorite toUnitFavoriteDto(Unit unit);
 

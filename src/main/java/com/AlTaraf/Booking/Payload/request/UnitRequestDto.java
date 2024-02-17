@@ -36,5 +36,5 @@ public class UnitRequestDto {
 
     private Double latForMapping;
     private Double longForMapping;
-    private Integer price;
+//    private Integer price;
 }

@@ -53,9 +53,11 @@ public class UnitGeneralResponseDto {
     private Set<FeatureForHallsDto> featuresHallsDto;
     private Set<AvailablePeriodsDto> availablePeriodsHallsDto;
 
-    private int oldPriceHall;
-    private int newPriceHall;
+//    private int oldPriceHall;
+//    private int newPriceHall;
 
     private Double latForMapping;
     private Double longForMapping;
+
+    private int price;
 }

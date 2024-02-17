@@ -3,13 +3,9 @@ package com.AlTaraf.Booking.Service.unit.RoomDetailsForAvailableArea;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
-import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
-import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
-import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.unit.availableArea.AvailableAreaRepository;
-import com.AlTaraf.Booking.Repository.unit.roomAvailable.RoomAvailableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +31,17 @@ public class RoomDetailsForAvailableAreaServiceImpl implements RoomDetailsForAva
 
         roomDetailsForAvailableArea.setUnit(unit);
         roomDetailsForAvailableArea.setAvailableArea(availableArea);
+
+        if (unit.getPrice() == 0 ) {
+
+            if (roomDetailsForAvailableArea.getNewPrice() < roomDetailsForAvailableArea.getOldPrice()) {
+                unit.setPrice(roomDetailsForAvailableArea.getNewPrice());
+                System.out.println("roomDetailsForAvailableArea real Price: " + unit.getPrice());
+            } else {
+                unit.setPrice(roomDetailsForAvailableArea.getOldPrice());
+                System.out.println("roomDetailsForAvailableArea real Old Price: " + unit.getPrice());
+            }
+        }
 
         roomDetailsForAvailableAreaRepository.save(roomDetailsForAvailableArea);
     }

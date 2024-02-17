@@ -25,10 +25,12 @@ public interface EventHallsMapper {
     @Mapping(source = "region", target = "regionDto")
     @Mapping(source = "featuresHallsSet", target = "featuresHallsDto", qualifiedByName = "mapEntityToFeaturesHallsDto")
     @Mapping(source = "availablePeriodsHallsSet", target = "availablePeriodsHallsDto", qualifiedByName = "mapEntityToAvailablePeriodsHallsDto")
-    @Mapping(source = "oldPriceHall", target = "oldPriceHall")
-    @Mapping(source = "newPriceHall", target = "newPriceHall")
+//    @Mapping(source = "oldPriceHall", target = "oldPriceHall")
+//    @Mapping(source = "newPriceHall", target = "newPriceHall")
     @Mapping(source = "latForMapping", target = "latForMapping")
     @Mapping(source = "longForMapping", target = "longForMapping")
+    @Mapping(source = "price", target = "price", defaultValue = "0")
+
     EventHallsResponse toEventHallsResponse(Unit unit);
 
     @Named("mapEntityToFeaturesHallsDto")
