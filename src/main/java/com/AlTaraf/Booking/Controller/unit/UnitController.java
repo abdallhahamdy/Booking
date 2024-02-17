@@ -8,6 +8,7 @@ import com.AlTaraf.Booking.Entity.cityAndregion.Region;
 import com.AlTaraf.Booking.Entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.Entity.unit.accommodationType.AccommodationType;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
+import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
 import com.AlTaraf.Booking.Entity.unit.feature.Feature;
 import com.AlTaraf.Booking.Entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.Entity.unit.Unit;
@@ -28,7 +29,8 @@ import com.AlTaraf.Booking.Payload.response.Unit.UnitResidenciesResponseDto;
 import com.AlTaraf.Booking.Service.unit.AvailablePeriods.AvailablePeriodsService;
 import com.AlTaraf.Booking.Service.unit.FeatureForHalls.FeatureForHallsService;
 import com.AlTaraf.Booking.Service.unit.RoomAvailable.RoomAvailableService;
-import com.AlTaraf.Booking.Service.unit.RoomDetailsService.RoomDetailsService;
+import com.AlTaraf.Booking.Service.unit.RoomDetails.RoomDetailsService;
+import com.AlTaraf.Booking.Service.unit.RoomDetailsForAvailableArea.RoomDetailsForAvailableAreaService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.unit.feature.FeatureService;
 import com.AlTaraf.Booking.Service.unit.statusUnit.StatusUnitService;
@@ -83,6 +85,9 @@ public class UnitController {
 
     @Autowired
     private RoomDetailsService roomDetailsService;
+
+    @Autowired
+    private RoomDetailsForAvailableAreaService roomDetailsForAvailableAreaService;
 
     @Autowired
     private UnitGeneralResponseMapper unitGeneralResponseMapper;
@@ -330,6 +335,18 @@ public class UnitController {
         }
     }
 
+    @PostMapping("{unitId}/{availableAreaId}/Room-Details-For-Available-Area/Add")
+    @Transactional // Add this annotation to enable transaction management
+    public ResponseEntity<?> addRoomDetailsForAvailableArea(@PathVariable Long unitId, @PathVariable Long availableAreaId, @RequestBody RoomDetailsRequestDto roomDetailsRequestDto) {
+        try {
+            RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsRequestMapper.toEntityAvailableArea(roomDetailsRequestDto);
+            roomDetailsForAvailableAreaService.addRoomDetails(unitId,availableAreaId, roomDetailsForAvailableArea);
+            return ResponseEntity.ok("RoomDetails added successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetails: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/Get-By-Unit-And-Room-Available")
     public ResponseEntity<?> getRoomDetailsByUnitAndRoomAvailable(
             @RequestParam Long unitId,
@@ -340,6 +357,24 @@ public class UnitController {
 
             // Map RoomDetails entity to RoomDetailsResponseDto
             RoomDetailsRequestDto roomDetailsResponseDto = roomDetailsRequestMapper.toDto(roomDetails);
+
+            // Return the response
+            return ResponseEntity.ok(roomDetailsResponseDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/Get-By-Unit-And-Available-Area")
+    public ResponseEntity<?> getRoomDetailsByUnitAndAvailableArea(
+            @RequestParam Long unitId,
+            @RequestParam Long availableAreaId) {
+        try {
+            // Retrieve RoomDetails entity from the service layer
+            RoomDetailsForAvailableArea availableArea = roomDetailsForAvailableAreaService.getRoomDetailsByUnitIdAndAvailableAreaId(unitId, availableAreaId);
+
+            // Map RoomDetails entity to RoomDetailsResponseDto
+            RoomDetailsRequestDto roomDetailsResponseDto = roomDetailsRequestMapper.toDtoForAvailableArea(availableArea);
 
             // Return the response
             return ResponseEntity.ok(roomDetailsResponseDto);

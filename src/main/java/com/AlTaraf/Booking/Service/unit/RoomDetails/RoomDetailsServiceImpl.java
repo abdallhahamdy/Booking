@@ -1,4 +1,4 @@
-package com.AlTaraf.Booking.Service.unit.RoomDetailsService;
+package com.AlTaraf.Booking.Service.unit.RoomDetails;
 
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
