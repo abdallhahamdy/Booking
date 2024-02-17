@@ -18,5 +18,13 @@ public interface TechnicalSupportMapper {
     @Mapping(target = "name", source = "name")
     TechnicalSupport toEntity(TechnicalSupportDTO technicalSupportDTO);
 
+
+    @Mapping(target = "userId", source = "user.id")
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "email", source = "email")
+    @Mapping(target = "message", source = "message")
+    @Mapping(target = "name", source = "name")
+    TechnicalSupportDTO toDto(TechnicalSupport technicalSupport);
+
     TechnicalSupportDTO toDTO(TechnicalSupport technicalSupport);
 }

@@ -35,4 +35,8 @@ public class TechnicalSupportController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "The Message doesn't Sent "));
         }
     }
+
+
+
+
 }
