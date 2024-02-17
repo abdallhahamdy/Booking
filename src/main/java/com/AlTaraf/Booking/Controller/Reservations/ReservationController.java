@@ -1,9 +1,11 @@
 package com.AlTaraf.Booking.Controller.Reservations;
 
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
+import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationGetByIdMapper;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationRequestMapper;
 import com.AlTaraf.Booking.Payload.request.Reservation.ReservationRequestDto;
+import com.AlTaraf.Booking.Payload.request.UnitRequestDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Payload.response.Reservation.ReservationResponseGetId;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
@@ -35,7 +37,7 @@ public class ReservationController {
             Reservations saveReservation = reservationService.saveReservation(reservationsToSave);
 
             // Return the unitId in the response body
-            return ResponseEntity.status(HttpStatus.CREATED).body("Reservation Process is successfully " );
+            return ResponseEntity.status(HttpStatus.CREATED).body("Reservation Process is successfully with id: " + saveReservation.getId() );
         } catch (Exception e) {
 //            // Log the exception
 //            logger.error("Error occurred while processing create-unit request", e);
