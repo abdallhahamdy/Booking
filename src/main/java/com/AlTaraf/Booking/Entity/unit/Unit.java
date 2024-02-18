@@ -25,6 +25,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,6 +37,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 public class Unit extends Auditable<String> {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "unit_id")
@@ -158,10 +160,18 @@ public class Unit extends Auditable<String> {
     @JsonManagedReference
     private List<ImageData> images;
 
+    @Column(name = "DATE_OF_ARRIVAL")
+    private LocalDate dateOfArrival;
+
+    @Column(name = "DATE_OF_DEPARTURE")
+    private LocalDate departureDate;
+
     public Unit() {
         this.statusUnit = new StatusUnit();
         this.statusUnit.setId(1L);
         this.favorite = false;
+        this.dateOfArrival = LocalDate.now(); // Set dateOfArrival to the current date
+        this.departureDate = LocalDate.now().plusDays(30); // Set departureDate to 30 days after dateOfArrival
 //        this.setFavorite(false);
     }
 
