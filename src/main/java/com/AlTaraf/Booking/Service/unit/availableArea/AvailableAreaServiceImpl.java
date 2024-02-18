@@ -17,4 +17,9 @@ public class AvailableAreaServiceImpl implements AvailableAreaService {
     public List<AvailableArea> getAllAvailableArea() {
         return availableAreaRepository.findAll();
     }
+
+    @Override
+    public AvailableArea save(AvailableArea availableArea) {
+        return availableAreaRepository.save(availableArea);
+    }
 }

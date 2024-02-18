@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Mapper.Reservation;
 
+
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
@@ -19,12 +20,13 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface ReservationRequestMapper {
+
     @Mapping(source = "clientName", target = "clientName")
     @Mapping(source = "clientPhone", target = "clientPhone")
     @Mapping(source = "unitId", target = "unit.id")
     @Mapping(source = "userId", target = "user.id")
-    @Mapping(source = "roomAvailableIds", target = "roomAvailableSet", qualifiedByName = "roomAvailableIdsToEntities")
-    @Mapping(source = "availableAreaIds", target = "availableAreaSet", qualifiedByName = "availableAreaIdsToEntities")
+    @Mapping(source = "roomAvailableId", target = "roomAvailable", qualifiedByName = "mapToRoomAvailable")
+    @Mapping(source = "availableAreaId", target = "availableArea", qualifiedByName = "mapToAvailableArea")
     @Mapping(source = "basicFeaturesIds", target = "basicFeaturesSet", qualifiedByName = "basicFeaturesIdsToEntities")
     @Mapping(source = "subFeaturesIds", target = "subFeaturesSet", qualifiedByName = "subFeaturesIdsToEntities")
     @Mapping(source = "foodOptionsIds", target = "foodOptionsSet", qualifiedByName = "foodOptionsIdsToEntities")
@@ -35,34 +37,6 @@ public interface ReservationRequestMapper {
     Reservations toReservation(ReservationRequestDto reservationRequestDto);
 
     List<Reservations> toReservationsList(List<ReservationRequestDto> reservationRequestDtoList);
-
-    @Named("roomAvailableIdsToEntities")
-    static Set<RoomAvailable> roomAvailableIdsToEntities(Set<Long> roomAvailableIds) {
-        if (roomAvailableIds == null) {
-            return Collections.emptySet();
-        }
-        return roomAvailableIds.stream()
-                .map(id -> {
-                    RoomAvailable roomAvailable = new RoomAvailable();
-                    roomAvailable.setId(id);
-                    return roomAvailable;
-                })
-                .collect(Collectors.toSet());
-    }
-
-    @Named("availableAreaIdsToEntities")
-    static Set<AvailableArea> availableAreaIdsToEntities(Set<Long> availableAreaIds) {
-        if (availableAreaIds == null) {
-            return Collections.emptySet();
-        }
-        return availableAreaIds.stream()
-                .map(id -> {
-                    AvailableArea availableArea = new AvailableArea();
-                    availableArea.setId(id);
-                    return availableArea;
-                })
-                .collect(Collectors.toSet());
-    }
 
     @Named("basicFeaturesIdsToEntities")
     static Set<Feature> basicFeaturesIdsToEntities(Set<Long> basicFeaturesIds) {
@@ -118,5 +92,25 @@ public interface ReservationRequestMapper {
                     return availablePeriods;
                 })
                 .collect(Collectors.toSet());
+    }
+
+    @Named("mapToRoomAvailable")
+    static RoomAvailable mapToRoomAvailable(Long roomAvailableId) {
+        if (roomAvailableId == null) {
+            return null;
+        }
+        RoomAvailable roomAvailable = new RoomAvailable();
+        roomAvailable.setId(roomAvailableId);
+        return roomAvailable;
+    }
+
+    @Named("mapToAvailableArea")
+    static AvailableArea mapToAvailableArea(Long availableAreaId) {
+        if (availableAreaId == null) {
+            return null;
+        }
+        AvailableArea availableArea = new AvailableArea();
+        availableArea.setId(availableAreaId);
+        return availableArea;
     }
 }

@@ -20,8 +20,8 @@ public interface ReservationGetByIdMapper {
     @Mapping(source = "id", target = "reservationId")
     @Mapping(source = "clientName", target = "clientName")
     @Mapping(source = "clientPhone", target = "clientPhone")
-    @Mapping(source = "roomAvailableSet", target = "roomAvailables")
-    @Mapping(source = "availableAreaSet", target = "availableAreas")
+    @Mapping(source = "roomAvailable", target = "roomAvailable")
+    @Mapping(source = "availableArea", target = "availableArea")
     @Mapping(source = "basicFeaturesSet", target = "basicFeatures")
     @Mapping(source = "subFeaturesSet", target = "subFeatures")
     @Mapping(source = "foodOptionsSet", target = "foodOptions")
@@ -29,6 +29,7 @@ public interface ReservationGetByIdMapper {
     @Mapping(source = "availablePeriodsHallsSet", target = "availablePeriodsHalls")
     @Mapping(source = "adultsAllowed", target = "adultsAllowed")
     @Mapping(source = "childrenAllowed", target = "childrenAllowed")
+    @Mapping(source = "price", target = "price")
     ReservationResponseGetId toResponseDto(Reservations reservations);
 
 

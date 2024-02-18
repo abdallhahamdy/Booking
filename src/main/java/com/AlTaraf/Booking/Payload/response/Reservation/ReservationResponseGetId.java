@@ -20,8 +20,8 @@ public class ReservationResponseGetId {
     private Long reservationId;
     private String clientName;
     private String clientPhone;
-    private Set<RoomAvailable> roomAvailables;
-    private Set<AvailableArea> availableAreas;
+    private RoomAvailable roomAvailable;
+    private AvailableArea availableArea;
     private Set<Feature> basicFeatures;
     private Set<SubFeature> subFeatures;
     private Set<FoodOption> foodOptions;
@@ -29,4 +29,5 @@ public class ReservationResponseGetId {
     private Set<AvailablePeriods> availablePeriodsHalls;
     private int adultsAllowed;
     private int childrenAllowed;
+    private int price;
 }

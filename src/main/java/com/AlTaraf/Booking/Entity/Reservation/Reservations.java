@@ -10,7 +10,6 @@ import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.feature.Feature;
 import com.AlTaraf.Booking.Entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
-import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import jakarta.persistence.*;
@@ -49,20 +48,28 @@ public class Reservations extends Auditable<String> {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "reservation_room_available",
-            joinColumns = @JoinColumn(name = "RESERVATION_ID"),
-            inverseJoinColumns = @JoinColumn(name = "ROOM_AVAILABLE_ID")
-    )
-    private Set<RoomAvailable> roomAvailableSet = new HashSet<>();
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "reservation_room_available",
+//            joinColumns = @JoinColumn(name = "RESERVATION_ID"),
+//            inverseJoinColumns = @JoinColumn(name = "ROOM_AVAILABLE_ID")
+//    )
+//    private Set<RoomAvailable> roomAvailableSet = new HashSet<>();
+//
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "reservation_available_area",
+//            joinColumns = @JoinColumn(name = "RESERVATION_ID"),
+//            inverseJoinColumns = @JoinColumn(name = "AVAILABLE_AREA_ID"))
+//    private Set<AvailableArea> availableAreaSet = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "reservation_available_area",
-            joinColumns = @JoinColumn(name = "RESERVATION_ID"),
-            inverseJoinColumns = @JoinColumn(name = "AVAILABLE_AREA_ID"))
-    private Set<AvailableArea> availableAreaSet = new HashSet<>();
+    @ManyToOne()
+    @JoinColumn(name = "ROOM_AVAILABLE_ID")
+    private RoomAvailable roomAvailable;
+
+    @ManyToOne()
+    @JoinColumn(name = "AVAILABLE_AREA_ID")
+    private AvailableArea availableArea;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -98,12 +105,12 @@ public class Reservations extends Auditable<String> {
             inverseJoinColumns = @JoinColumn(name = "available_periods_id"))
     private Set<AvailablePeriods> availablePeriodsHallsSet = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "reservation_Room_Details",
-            joinColumns = @JoinColumn(name = "RESERVATION_ID"),
-            inverseJoinColumns = @JoinColumn(name = "ROOM_DETAILS_ID"))
-    private Set<RoomDetails> roomDetailsSet = new HashSet<>();
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "reservation_Room_Details",
+//            joinColumns = @JoinColumn(name = "RESERVATION_ID"),
+//            inverseJoinColumns = @JoinColumn(name = "ROOM_DETAILS_ID"))
+//    private Set<RoomDetails> roomDetailsSet = new HashSet<>();
 
     @Column(name = "ADULTS_ALLOWED")
     private int adultsAllowed;
@@ -111,8 +118,11 @@ public class Reservations extends Auditable<String> {
     @Column(name = "CHILDREN_ALLOWED")
     private int childrenAllowed;
 
+    private int price;
+
     public Reservations() {
         this.statusUnit = new StatusUnit();
         this.statusUnit.setId(1L);
     }
+
 }

@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface AvailableAreaService {
     List<AvailableArea> getAllAvailableArea();
+    AvailableArea save(AvailableArea availableArea);
 }
