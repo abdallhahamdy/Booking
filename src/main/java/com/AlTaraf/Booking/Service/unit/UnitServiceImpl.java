@@ -329,4 +329,24 @@ public class UnitServiceImpl implements UnitService {
     public Page<Unit> filterUnitsByNameAndTypeId(String nameUnit, Long unitTypeId, Pageable pageable) {
         return unitRepository.findByNameUnitAndUnitType(nameUnit, unitTypeId, pageable);
     }
+
+    @Override
+    public Page<Unit> filterUnitsByRoomAvailableName(String roomAvailableName, Pageable pageable) {
+        return unitRepository.findByRoomAvailableName(roomAvailableName, pageable);
+    }
+
+    @Override
+    public Page<Unit> findByNameUnitAndRoomAvailableNameContainingIgnoreCase(String nameUnit, String roomAvailableName, Pageable pageable) {
+        return unitRepository.findByNameUnitAndRoomAvailableNameContainingIgnoreCase(nameUnit, roomAvailableName, pageable);
+    }
+
+    @Override
+    public Page<Unit> filterUnitsByAvailableAreaName(String availableAreaName, Pageable pageable) {
+        return unitRepository.findByAvailableAreaName(availableAreaName, pageable);
+    }
+
+    @Override
+    public Page<Unit> findByNameUnitAndAvailableAreaNameContainingIgnoreCase(String nameUnit, String availableAreaName, Pageable pageable) {
+        return unitRepository.findByNameUnitAndAvailableAreaNameContainingIgnoreCase(nameUnit, availableAreaName, pageable);
+    }
 }

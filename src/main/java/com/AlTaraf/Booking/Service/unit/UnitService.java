@@ -58,4 +58,10 @@ public interface UnitService {
 
     List<Unit> filterUnitsByNameAndTypeIdForMap(String nameUnit, Long unitTypeId);
 
+    Page<Unit> filterUnitsByRoomAvailableName(String roomAvailableName, Pageable pageable);
+    Page<Unit> findByNameUnitAndRoomAvailableNameContainingIgnoreCase(String nameUnit, String roomAvailableName, Pageable pageable);
+
+    Page<Unit> filterUnitsByAvailableAreaName(String availableAreaName, Pageable pageable);
+
+    Page<Unit> findByNameUnitAndAvailableAreaNameContainingIgnoreCase(String nameUnit, String availableAreaName, Pageable pageable);
 }

@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -431,22 +432,39 @@ public class UnitController {
     @GetMapping("/Get-Units")
     public Page<UnitDtoFavorite> getUnits(
             @RequestParam(required = false) String nameUnit,
+            @RequestParam(required = false) String roomAvailableName,
+            @RequestParam(required = false) String availableAreaName,
             @RequestParam(required = false) Long unitTypeId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "asc") String sortDirection) {
+
+        Sort sort = sortDirection.equalsIgnoreCase("desc") ? Sort.by("price").descending() : Sort.by("price").ascending();
         Page<Unit> unitsPage = Page.empty();
 
         if (nameUnit == null && unitTypeId != null) {
-            unitsPage = unitService.getUnitsByUnitTypeId(unitTypeId, PageRequest.of(page, size));
+            unitsPage = unitService.getUnitsByUnitTypeId(unitTypeId, PageRequest.of(page, size, sort));
         }
         else if (nameUnit != null && unitTypeId == null) {
-            unitsPage = unitService.filterUnitsByName(nameUnit, PageRequest.of(page, size));
+            unitsPage = unitService.filterUnitsByName(nameUnit, PageRequest.of(page, size, sort));
         }
         else if (nameUnit != null && unitTypeId != null) {
-            unitsPage = unitService.filterUnitsByNameAndTypeId(nameUnit, unitTypeId, PageRequest.of(page, size));
+            unitsPage = unitService.filterUnitsByNameAndTypeId(nameUnit, unitTypeId, PageRequest.of(page, size, sort));
         }
-        else if (nameUnit == null && unitTypeId == null) {
-            unitsPage = unitService.getAllUnit(PageRequest.of(page, size));
+        else if (nameUnit == null && unitTypeId == null && roomAvailableName != null) {
+            unitsPage = unitService.filterUnitsByRoomAvailableName(roomAvailableName, PageRequest.of(page, size, sort));
+        }
+        else if (nameUnit != null && unitTypeId == null && roomAvailableName != null) {
+            unitsPage = unitService.findByNameUnitAndRoomAvailableNameContainingIgnoreCase(nameUnit, roomAvailableName, PageRequest.of(page, size, sort));
+        }
+        else if (nameUnit == null && unitTypeId == null && roomAvailableName == null && availableAreaName != null) {
+            unitsPage = unitService.filterUnitsByAvailableAreaName(availableAreaName, PageRequest.of(page, size, sort));
+        }
+        else if (nameUnit != null && unitTypeId == null && roomAvailableName != null && availableAreaName != null) {
+            unitsPage = unitService.findByNameUnitAndAvailableAreaNameContainingIgnoreCase(nameUnit, availableAreaName, PageRequest.of(page, size, sort));
+        }
+        else if (nameUnit == null && unitTypeId == null && roomAvailableName == null && availableAreaName == null) {
+            unitsPage = unitService.getAllUnit(PageRequest.of(page, size, sort));
         }
         return unitsPage.map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit));
     }
