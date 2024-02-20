@@ -9,5 +9,13 @@ import java.util.List;
 public interface AdsService {
     List<adsForSliderResponseDto> getAdsByStatusUnitId(Long statusUnitId);
     List<PackageAds> getAllPackageAds();
-    void createAds(Ads ads);
+    Ads createAds(Ads ads);
+
+    List<Ads> getAdsForUserAndStatus(Long userId, String statusUnitName);
+
+    void deleteAds(Long id);
+
+    List<adsForSliderResponseDto> getAdsByAcceptedStatus();
+
+    void updateStatusForAds(Long adsId, Long statusUnitId);
 }

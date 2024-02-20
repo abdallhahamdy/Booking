@@ -395,7 +395,7 @@ public class UnitController {
         }
     }
 
-    @GetMapping("/Status-Unit")
+    @GetMapping("/Status-Unit/Unit")
     public ResponseEntity<?> getUnitsForUserAndStatus(
             @RequestParam(name = "USER_ID") Long userId,
             @RequestParam(name = "statusUnitName") String statusUnitName) {
@@ -411,7 +411,7 @@ public class UnitController {
         }
     }
 
-    @DeleteMapping("Delete/{id}")
+    @DeleteMapping("Delete/Unit/{id}")
     public ResponseEntity<?> deleteUnit(@PathVariable Long id) {
 
         try {

@@ -1,6 +1,8 @@
 package com.AlTaraf.Booking.Controller.Reservations;
 
+import com.AlTaraf.Booking.Dto.Unit.UnitDto;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
+import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationGetByIdMapper;
@@ -16,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -99,4 +103,20 @@ public class ReservationController {
         ReservationResponseGetId response = reservationGetByIdMapper.toResponseDto(reservation);
         return ResponseEntity.ok(response);
     }
+
+//    @GetMapping("/Status-Unit")
+//    public ResponseEntity<?> getReservationsForUserAndStatus(
+//            @RequestParam(name = "USER_ID") Long userId,
+//            @RequestParam(name = "statusUnitName") String statusUnitName) {
+//
+//        List<Reservations> reservations = reservationService.getReservationsForUserAndStatus(userId, statusUnitName);
+//
+//        if (!reservations.isEmpty()) {
+//            List<ReservationResponseGetId> reservationRequestDtoList = ReservationRequestMapper.(reservations);
+//            return new ResponseEntity<>(unitDtos, HttpStatus.OK);
+//        } else {
+//            ApiResponse response = new ApiResponse(204, "No Content");
+//            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+//        }
+//    }
 }

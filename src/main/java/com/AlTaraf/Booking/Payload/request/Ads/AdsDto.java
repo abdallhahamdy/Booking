@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdsRequestDto {
+public class AdsDto {
     private Long id;
     private Long unitId;
+    private Long userId;
     private Long packageAdsId;
-    private Long statusId;
+//    private Long statusId;
 }

@@ -36,7 +36,7 @@ public interface ReservationRequestMapper {
     @Mapping(source = "childrenAllowed", target = "childrenAllowed")
     Reservations toReservation(ReservationRequestDto reservationRequestDto);
 
-    List<Reservations> toReservationsList(List<ReservationRequestDto> reservationRequestDtoList);
+    List<ReservationRequestDto> toReservationsList(List<Reservations> reservationsList);
 
     @Named("basicFeaturesIdsToEntities")
     static Set<Feature> basicFeaturesIdsToEntities(Set<Long> basicFeaturesIds) {

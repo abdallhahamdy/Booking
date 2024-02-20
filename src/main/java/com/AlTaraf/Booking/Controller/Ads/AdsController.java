@@ -5,9 +5,10 @@ import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Mapper.Ads.AdsMapper;
+import com.AlTaraf.Booking.Mapper.Ads.AdsStatusMapper;
 import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.Mapper.Unit.UnitGeneralResponseMapper;
-import com.AlTaraf.Booking.Payload.request.Ads.AdsRequestDto;
+import com.AlTaraf.Booking.Payload.request.Ads.AdsDto;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,6 +40,9 @@ public class AdsController {
 
     @Autowired
     private AdsMapper adsMapper;
+
+    @Autowired
+    private AdsStatusMapper adsStatusMapper;
 
     @GetMapping("/Package-Ads")
     public ResponseEntity<List<PackageAds>> getAllPackageAds() {
@@ -66,7 +71,7 @@ public class AdsController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createAds(@RequestBody AdsRequestDto adsDto) {
+    public ResponseEntity<?> createAds(@RequestBody AdsDto adsDto) {
         try {
             Ads ads = adsMapper.toEntity(adsDto);
             adsService.createAds(ads);
@@ -76,11 +81,39 @@ public class AdsController {
         }
     }
 
+    @GetMapping("/Status-Unit/Ads")
+    public ResponseEntity<?> getAdsByUserAndStatus(
+            @RequestParam(name = "USER_ID") Long userId,
+            @RequestParam(name = "statusUnitName") String statusUnitName) {
 
-//    @GetMapping("/Accepted/Status")
-//    public ResponseEntity<List<adsForSliderResponseDto>> getAdsByAcceptedStatus() {
-//        List<adsForSliderResponseDto> ads = adsService.getAdsByAcceptedStatus();
-//        return ResponseEntity.ok(ads);
-//    }
+        List<Ads> ads = adsService.getAdsForUserAndStatus(userId, statusUnitName);
+
+        if (!ads.isEmpty()) {
+            List<AdsDto> adsDtoList = adsStatusMapper.toAdsDtoList(ads);
+            return new ResponseEntity<>(adsDtoList, HttpStatus.OK);
+        } else {
+            ApiResponse response = new ApiResponse(204, "No Content");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+        }
+    }
+
+    @DeleteMapping("Delete/Ads/{id}")
+    public ResponseEntity<?> deleteAds(@PathVariable Long id) {
+
+        try {
+            adsService.deleteAds(id);
+            ApiResponse response = new ApiResponse(200, "Ads deleted successfully!");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            ApiResponse response = new ApiResponse(404, "Not Found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
+    @GetMapping("/Accepted/Status")
+    public ResponseEntity<List<adsForSliderResponseDto>> getAdsByAcceptedStatus() {
+        List<adsForSliderResponseDto> ads = adsService.getAdsByAcceptedStatus();
+        return ResponseEntity.ok(ads);
+    }
 
 }

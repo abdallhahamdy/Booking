@@ -5,6 +5,8 @@ import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ReservationServiceImpl implements ReservationService {
 
@@ -25,6 +27,11 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public Reservations getReservationById(Long id) {
         return reservationRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Reservations> getReservationsForUserAndStatus(Long userId, String statusUnitName) {
+        return reservationRepository.findAllReservationsByUserIdAndStatusUnitName(userId, statusUnitName);
     }
 }
 

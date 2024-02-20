@@ -13,6 +13,7 @@ import com.AlTaraf.Booking.Mapper.Unit.UnitResidenciesResponseMapper;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitResidenciesResponseDto;
+import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.TechnicalSupport.TechnicalSupportService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.user.UserService;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +55,8 @@ public class AdminController {
     @Autowired
     private UnitGeneralResponseMapper unitGeneralResponseMapper;
 
+    @Autowired
+    private AdsService adsService;
 
     @GetMapping("/Technical-Support-Get-All")
     public Page<TechnicalSupportDTO> getAllTechnicalSupport(@RequestParam(defaultValue = "0") int page,
@@ -80,7 +84,7 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}/Technical-Support")
     public ResponseEntity<?> deleteTechnicalSupportById(@PathVariable Long id) {
         try {
             technicalSupportService.deleteTechnicalSupportById(id);
@@ -91,7 +95,7 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/deleteAll")
+    @DeleteMapping("/deleteAll/Technical-Support")
     public ResponseEntity<?> deleteAllTechnicalSupport() {
         try {
             technicalSupportService.deleteAllTechnicalSupport();
@@ -144,6 +148,33 @@ public class AdminController {
             return ResponseEntity.ok(responseDto);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, "Not Found!"));
+        }
+    }
+
+//    @GetMapping("/Get-Units")
+//    public Page<UnitDtoFavorite> getUnits(
+//            @RequestParam(required = false) String nameUnit,
+//            @RequestParam(required = false) String roomAvailableName,
+//            @RequestParam(required = false) String availableAreaName,
+//            @RequestParam(required = false) Long unitTypeId,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "5") int size,
+//            @RequestParam(defaultValue = "asc") String sortDirection) {
+//        Sort sort = sortDirection.equalsIgnoreCase("desc") ? Sort.by("price").descending() : Sort.by("price").ascending();
+//        Page<Unit> unitsPage = Page.empty();
+//        if (nameUnit == null && unitTypeId == null && roomAvailableName == null && availableAreaName == null) {
+//            unitsPage = unitService.getAllUnit(PageRequest.of(page, size, sort));
+//        }
+//        return unitsPage.map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit));
+//    }
+
+    @PutMapping("Change/Status/Ads/{adsId}/{statusUnitId}")
+    public ResponseEntity<?> updateStatusForAds(@PathVariable Long adsId, @PathVariable Long statusUnitId) {
+        try {
+            adsService.updateStatusForAds(adsId, statusUnitId);
+            return ResponseEntity.ok("Status updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status: " + e.getMessage());
         }
     }
 }
