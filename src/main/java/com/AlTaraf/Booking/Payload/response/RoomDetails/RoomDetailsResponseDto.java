@@ -10,7 +10,15 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoomDetailsResponseDto {
+    private Long roomId;
+    private Long roomTypeId;
+    private String name;
+    private String arabicName;
     private int roomNumber;
     private BigDecimal newPrice;
     private BigDecimal oldPrice;
+    private Long unitId;
+    private int adultsAllowed;
+    private int childrenAllowed;
+    private boolean reserve;
 }

@@ -2,11 +2,13 @@ package com.AlTaraf.Booking.Service.Ads;
 
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
+import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Mapper.Ads.SliderMapper;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
+import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class AdsServiceImpl implements AdsService {
 
     @Autowired
     StatusRepository statusRepository;
+
+    @Autowired
+    UnitRepository unitRepository;
 
     @Override
     public List<adsForSliderResponseDto> getAdsByStatusUnitId(Long statusUnitId) {
@@ -78,4 +83,7 @@ public class AdsServiceImpl implements AdsService {
         ads.setStatusUnit(statusUnit);
         adsRepository.save(ads);
     }
-}
+
+
+    }
+

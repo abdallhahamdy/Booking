@@ -5,10 +5,12 @@ import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.unit.Unit;
+import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
+import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Specifications.UnitSpecifications;
 import jakarta.persistence.EntityNotFoundException;
@@ -43,7 +45,8 @@ public class UnitServiceImpl implements UnitService {
     @Autowired
     UserRepository userRepository;
 
-
+    @Autowired
+    StatusRepository statusRepository;
 
     public Unit saveUnit(Unit unit) {
         try {
@@ -110,7 +113,7 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     public void deleteUnit(Long id) {
-         unitRepository.deleteById(id);
+        unitRepository.deleteById(id);
     }
 
     @Override
@@ -348,5 +351,17 @@ public class UnitServiceImpl implements UnitService {
     @Override
     public Page<Unit> findByNameUnitAndAvailableAreaNameContainingIgnoreCase(String nameUnit, String availableAreaName, Pageable pageable) {
         return unitRepository.findByNameUnitAndAvailableAreaNameContainingIgnoreCase(nameUnit, availableAreaName, pageable);
+    }
+
+    @Override
+    public void updateStatusForUser(Long unitId, Long statusUnitId) {
+        Unit unit = unitRepository.findById(unitId)
+                .orElseThrow(() -> new EntityNotFoundException("Unit not found with id: " + unitId));
+
+        StatusUnit statusUnit = statusRepository.findById(statusUnitId)
+                .orElseThrow(() -> new EntityNotFoundException("StatusUnit not found with id: " + statusUnitId));
+
+        unit.setStatusUnit(statusUnit);
+        unitRepository.save(unit);
     }
 }

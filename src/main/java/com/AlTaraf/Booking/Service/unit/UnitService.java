@@ -64,4 +64,7 @@ public interface UnitService {
     Page<Unit> filterUnitsByAvailableAreaName(String availableAreaName, Pageable pageable);
 
     Page<Unit> findByNameUnitAndAvailableAreaNameContainingIgnoreCase(String nameUnit, String availableAreaName, Pageable pageable);
+
+    void updateStatusForUser(Long userId, Long statusUnitId);
+
 }

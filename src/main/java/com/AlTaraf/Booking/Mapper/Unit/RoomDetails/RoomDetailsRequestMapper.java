@@ -26,21 +26,5 @@ public interface RoomDetailsRequestMapper {
     @Mapping(source = "childrenAllowed", target = "childrenAllowed")
     RoomDetailsForAvailableArea toEntityAvailableArea(RoomDetailsRequestDto roomDetailsRequestDto);
 
-    @Mapping(source = "id", target = "id")
-//    @Mapping(source = "roomAvailable.id", target = "roomAvailableId")
-    @Mapping(source = "roomNumber", target = "roomNumber")
-    @Mapping(source = "newPrice", target = "newPrice")
-    @Mapping(source = "oldPrice", target = "oldPrice")
-    @Mapping(source = "adultsAllowed", target = "adultsAllowed")
-    @Mapping(source = "childrenAllowed", target = "childrenAllowed")
-    RoomDetailsRequestDto toDto(RoomDetails roomDetails);
 
-    @Mapping(source = "id", target = "id")
-//    @Mapping(source = "roomAvailable.id", target = "roomAvailableId")
-    @Mapping(source = "roomNumber", target = "roomNumber")
-    @Mapping(source = "newPrice", target = "newPrice")
-    @Mapping(source = "oldPrice", target = "oldPrice")
-    @Mapping(source = "adultsAllowed", target = "adultsAllowed")
-    @Mapping(source = "childrenAllowed", target = "childrenAllowed")
-    RoomDetailsRequestDto toDtoForAvailableArea(RoomDetailsForAvailableArea roomDetailsForAvailableArea);
 }

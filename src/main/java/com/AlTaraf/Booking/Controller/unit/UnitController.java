@@ -20,9 +20,11 @@ import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
 import com.AlTaraf.Booking.Mapper.Unit.*;
 import com.AlTaraf.Booking.Mapper.Unit.RoomDetails.RoomDetailsRequestMapper;
+import com.AlTaraf.Booking.Mapper.Unit.RoomDetails.RoomDetailsResponseMapper;
 import com.AlTaraf.Booking.Payload.request.RoomDetails.RoomDetailsRequestDto;
 import com.AlTaraf.Booking.Payload.request.UnitRequestDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
+import com.AlTaraf.Booking.Payload.response.RoomDetails.RoomDetailsResponseDto;
 import com.AlTaraf.Booking.Payload.response.Unit.EventHallsResponse;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitResidenciesResponseDto;
@@ -83,6 +85,9 @@ public class UnitController {
 
     @Autowired
     private RoomDetailsRequestMapper roomDetailsRequestMapper;
+
+    @Autowired
+    private RoomDetailsResponseMapper roomDetailsResponseMapper;
 
     @Autowired
     private RoomDetailsService roomDetailsService;
@@ -368,7 +373,7 @@ public class UnitController {
             RoomDetails roomDetails = roomDetailsService.getRoomDetailsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
 
             // Map RoomDetails entity to RoomDetailsResponseDto
-            RoomDetailsRequestDto roomDetailsResponseDto = roomDetailsRequestMapper.toDto(roomDetails);
+            RoomDetailsResponseDto roomDetailsResponseDto = roomDetailsResponseMapper.toDto(roomDetails);
 
             // Return the response
             return ResponseEntity.ok(roomDetailsResponseDto);
@@ -386,7 +391,7 @@ public class UnitController {
             RoomDetailsForAvailableArea availableArea = roomDetailsForAvailableAreaService.getRoomDetailsByUnitIdAndAvailableAreaId(unitId, availableAreaId);
 
             // Map RoomDetails entity to RoomDetailsResponseDto
-            RoomDetailsRequestDto roomDetailsResponseDto = roomDetailsRequestMapper.toDtoForAvailableArea(availableArea);
+            RoomDetailsResponseDto roomDetailsResponseDto = roomDetailsResponseMapper.toDtoForAvailableArea(availableArea);
 
             // Return the response
             return ResponseEntity.ok(roomDetailsResponseDto);

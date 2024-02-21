@@ -45,4 +45,7 @@ public class RoomDetailsForAvailableArea {
     @JsonBackReference
     private Unit unit;
 
+    @Column(name = "RESERVE")
+    private boolean reserve;
+
 }

@@ -177,4 +177,14 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status: " + e.getMessage());
         }
     }
+
+    @PutMapping("Change/Status/Units/{unitId}/{statusUnitId}")
+    public ResponseEntity<?> updateStatusForUnits(@PathVariable Long unitId, @PathVariable Long statusUnitId) {
+        try {
+            unitService.updateStatusForUser(unitId, statusUnitId);
+            return ResponseEntity.ok("Status updated successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status: " + e.getMessage());
+        }
+    }
 }
