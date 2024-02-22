@@ -28,7 +28,6 @@ public interface RoomDetailsResponseMapper {
     @Mapping(source = "adultsAllowed", target = "adultsAllowed")
     @Mapping(source = "childrenAllowed", target = "childrenAllowed")
     @Mapping(source = "unit.id", target = "unitId")
-    @Mapping(source = "reserve", target = "reserve")
     RoomDetailsResponseDto toDto(RoomDetails roomDetails);
 
     @Mapping(source = "id", target = "roomId")
@@ -41,7 +40,6 @@ public interface RoomDetailsResponseMapper {
     @Mapping(source = "adultsAllowed", target = "adultsAllowed")
     @Mapping(source = "childrenAllowed", target = "childrenAllowed")
     @Mapping(source = "unit.id", target = "unitId")
-    @Mapping(source = "reserve", target = "reserve")
     RoomDetailsResponseDto toDtoForAvailableArea(RoomDetailsForAvailableArea roomDetailsForAvailableArea);
 
 
