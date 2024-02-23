@@ -26,6 +26,7 @@ public class ReservationRequestDto {
     private Set<Long> availablePeriodsHallsIds;
     private int adultsAllowed;
     private int childrenAllowed;
+    private Long evaluationId;
 
 //    @GetMapping("/Get-By-Unit-And-Room-Available")
 //    public ResponseEntity<?> getRoomDetailsByUnitAndRoomAvailable(

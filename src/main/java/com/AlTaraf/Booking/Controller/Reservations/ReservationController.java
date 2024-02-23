@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.Controller.Reservations;
 
 import com.AlTaraf.Booking.Dto.Unit.UnitDto;
+import com.AlTaraf.Booking.Entity.Evaluation.Evaluation;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
@@ -10,9 +11,11 @@ import com.AlTaraf.Booking.Mapper.Reservation.ReservationRequestMapper;
 import com.AlTaraf.Booking.Payload.request.Reservation.ReservationRequestDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Payload.response.Reservation.ReservationResponseGetId;
+import com.AlTaraf.Booking.Repository.Evaluation.EvaluationRepository;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.unit.RoomDetails.RoomDetailsService;
 import com.AlTaraf.Booking.Service.unit.RoomDetailsForAvailableArea.RoomDetailsForAvailableAreaService;
+import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.unit.availableArea.AvailableAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,6 +45,12 @@ public class ReservationController {
 
     @Autowired
     private AvailableAreaService availableAreaService;
+
+    @Autowired
+    private EvaluationRepository evaluationRepository;
+
+    @Autowired
+    private UnitService unitService;
 
     @PostMapping("/Create-Reservation")
     public ResponseEntity<?> createReservation(@RequestBody ReservationRequestDto reservationRequestDto) {
@@ -119,4 +128,57 @@ public class ReservationController {
 //            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
 //        }
 //    }
+
+//    public ResponseEntity<?> setEvaluationId(@PathVariable Long reservationId, @RequestParam Long evaluationId) {
+//        Reservations existingReservation = reservationService.getReservationById(reservationId);
+//        if (existingReservation == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//
+//
+//        Evaluation evaluation = existingReservation.getEvaluation();
+//        if (evaluation == null) {
+////            existingReservation.getUnit().setEvaluation(evaluation);
+//            evaluation.setId(evaluationId);
+//
+//        }
+//
+//        reservationService.saveReservation(existingReservation);
+//
+//        return ResponseEntity.ok().build();
+//    }
+
+
+@PatchMapping("/{reservationId}/set-evaluation")
+public ResponseEntity<?> setEvaluation(@PathVariable Long reservationId, @RequestParam Long evaluationId) {
+
+    Reservations existingReservation = reservationService.getReservationById(reservationId);
+    Unit unit = reservationService.findUnitByReservationId(reservationId);
+
+    if (existingReservation == null) {
+        return ResponseEntity.notFound().build();
+    }
+
+    Evaluation evaluation = evaluationRepository.findById(evaluationId).orElse(null);
+    if (evaluation == null) {
+        return ResponseEntity.badRequest().body("No Evaluation Founded");
+    }
+
+    // Set the Evaluation for the Reservation
+    existingReservation.setEvaluation(evaluation);
+
+    unitService.updateEvaluationsForUnits(unit.getId());
+
+    try {
+        // Save the updated Reservation
+        reservationService.saveReservation(existingReservation);
+        return ResponseEntity.ok().body("Evaluation set successfully.");
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to set evaluation.");
+    }
+
+}
+
+
 }

@@ -41,4 +41,5 @@ public class UnitResidenciesResponseDto {
 
     private Double latForMapping;
     private Double longForMapping;
+    private Long evaluationId;
 }

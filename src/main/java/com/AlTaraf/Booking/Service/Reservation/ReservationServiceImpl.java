@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.Service.Reservation;
 
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
+import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,16 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<Reservations> getReservationsForUserAndStatus(Long userId, String statusUnitName) {
         return reservationRepository.findAllReservationsByUserIdAndStatusUnitName(userId, statusUnitName);
+    }
+
+    @Override
+    public List<Reservations> findReservationByUnitId(Long unitId) {
+        return reservationRepository.findByUnitId(unitId);
+    }
+
+    @Override
+    public Unit findUnitByReservationId(Long reservationId){
+        return reservationRepository.findUnitByReservationId(reservationId);
     }
 }
 

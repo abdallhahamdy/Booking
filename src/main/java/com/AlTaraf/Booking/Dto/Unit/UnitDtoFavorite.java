@@ -10,7 +10,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UnitDtoFavorite {
-
     private Long unitId;
     private Long unitTypeId;
     private List<String> imagePaths; // List of image file paths
@@ -23,5 +22,5 @@ public class UnitDtoFavorite {
     private Double longForMapping;
     private Boolean favorite;
     private int price;
-
+    private Long evaluationId;
 }

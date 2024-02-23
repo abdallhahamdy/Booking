@@ -23,5 +23,6 @@ public interface UnitResidenciesResponseMapper {
     @Mapping(source = "availableAreaSet", target = "availableAreas")
     @Mapping(source = "latForMapping", target = "latForMapping")
     @Mapping(source = "longForMapping", target = "longForMapping")
+    @Mapping(source = "evaluation.id", target = "evaluationId")
     UnitResidenciesResponseDto toResponseDto(Unit unit);
 }

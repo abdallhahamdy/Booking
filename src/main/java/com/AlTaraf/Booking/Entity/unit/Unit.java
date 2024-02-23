@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Entity.unit;
 
+import com.AlTaraf.Booking.Entity.Evaluation.Evaluation;
 import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
@@ -48,11 +49,11 @@ public class Unit extends Auditable<String> {
     private UnitType unitType;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID", nullable = true)
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "ACCOMMODATION_TYPE_ID", nullable = true)
+    @JoinColumn(name = "ACCOMMODATION_TYPE_ID")
     private AccommodationType accommodationType;
 
     @Column(name = "NAME_UNIT")
@@ -165,6 +166,10 @@ public class Unit extends Auditable<String> {
 
     @Column(name = "DATE_OF_DEPARTURE")
     private LocalDate departureDate;
+
+    @ManyToOne
+    @JoinColumn(name = "EVALUATION_ID")
+    private Evaluation evaluation;
 
     public Unit() {
         this.statusUnit = new StatusUnit();

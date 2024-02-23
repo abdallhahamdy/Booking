@@ -1,13 +1,17 @@
 package com.AlTaraf.Booking.Service.unit;
 
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
+import com.AlTaraf.Booking.Entity.Evaluation.Evaluation;
 import com.AlTaraf.Booking.Entity.Image.ImageData;
+import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
+import com.AlTaraf.Booking.Repository.Evaluation.EvaluationRepository;
+import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
@@ -47,6 +51,12 @@ public class UnitServiceImpl implements UnitService {
 
     @Autowired
     StatusRepository statusRepository;
+
+    @Autowired
+    EvaluationRepository evaluationRepository;
+
+    @Autowired
+    ReservationRepository reservationsRepository;
 
     public Unit saveUnit(Unit unit) {
         try {
@@ -252,7 +262,7 @@ public class UnitServiceImpl implements UnitService {
     public List<Unit> findUnitsByFilters(Long cityId, Long regionId, Long availablePeriodsId,
                                          Long unitTypeId, Long accommodationTypeId, Set<Long> hotelClassificationIds,
                                          Set<Long> basicFeaturesIds, Set<Long> subFeaturesIds, Set<Long> foodOptionsIds,
-                                         int capacityHalls, int adultsAllowed, int childrenAllowed, int priceMin, int priceMax) {
+                                         Set<Long> evaluationIds, int capacityHalls, int adultsAllowed, int childrenAllowed, int priceMin, int priceMax) {
         Specification<Unit> spec = Specification.where(null);
 
         if (cityId != null) {
@@ -286,6 +296,11 @@ public class UnitServiceImpl implements UnitService {
         if (hotelClassificationIds != null) {
 //            spec = spec.and(UnitSpecifications.byHotelClassificationId(hotelClassificationId));
             spec = spec.and(UnitSpecifications.byHotelClassificationIds(hotelClassificationIds));
+        }
+
+        if (evaluationIds != null) {
+//            spec = spec.and(UnitSpecifications.byHotelClassificationId(hotelClassificationId));
+            spec = spec.and(UnitSpecifications.byEvaluationIds(evaluationIds));
         }
 
         if (basicFeaturesIds != null && !basicFeaturesIds.isEmpty()) {
@@ -363,5 +378,62 @@ public class UnitServiceImpl implements UnitService {
 
         unit.setStatusUnit(statusUnit);
         unitRepository.save(unit);
+    }
+
+    @Override
+    public void calculateAndSetAverageEvaluation(Long unitId) {
+        List<Reservations> reservations = reservationsRepository.findByUnitId(unitId);
+        double totalScore = 0.0;
+        int count = 0;
+        for (Reservations reservation : reservations) {
+            if (reservation.getEvaluation() != null) {
+                totalScore += reservation.getEvaluation().getScore(); // Assuming getScore() returns the evaluation score
+                count++;
+                System.out.println("I'm in for loop");
+            }
+        }
+        if (count > 0) {
+            double averageScore = totalScore / count;
+
+            Long evaluationId;
+            if (averageScore >= 9) {
+                evaluationId = 1L; // Excellent: 9+
+            } else if (averageScore >= 8) {
+                evaluationId = 2L; // Very Good: 8+
+            } else if (averageScore >= 7) {
+                evaluationId = 3L; // Good: 7+
+            } else if (averageScore >= 6) {
+                evaluationId = 4L; // Acceptable: 6+
+            } else {
+                evaluationId = null; // Handle the case when averageScore is out of range
+            }
+
+            System.out.println("averageScore: " + averageScore);
+            // Get the unit
+            Unit unit = unitRepository.findById(unitId)
+                    .orElseThrow(() -> new RuntimeException("Unit not found"));
+
+            Evaluation evaluation = evaluationRepository.findById(evaluationId)
+                    .orElseThrow(() -> new RuntimeException("evaluation not found"));
+
+            System.out.println("Evaluation: " + evaluation.getId());
+
+            unit.setEvaluation(evaluation);
+            // Update the existing Evaluation entity associated with the Unit
+//            Evaluation evaluation = unit.getEvaluation();
+//            if (evaluation == null) {
+//                evaluation = new Evaluation();
+//                unit.setEvaluation(evaluation);
+//            }
+//            evaluation.setId(evaluationId);
+
+            // Save the unit
+            unitRepository.save(unit);
+        }
+    }
+
+    public void updateEvaluationsForUnits(Long unitId) {
+            calculateAndSetAverageEvaluation(unitId);
+
     }
 }

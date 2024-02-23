@@ -19,4 +19,6 @@ public class Evaluation {
     private String name;
     @Column(name = "EVALUATION_ARABIC_NAME")
     private String arabicName;
+    @Column(name = "SCORE")
+    private int score;
 }

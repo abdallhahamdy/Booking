@@ -2,6 +2,7 @@ package com.AlTaraf.Booking.Entity.Reservation;
 
 
 
+import com.AlTaraf.Booking.Entity.Evaluation.Evaluation;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.common.Auditable;
 import com.AlTaraf.Booking.Entity.unit.AvailablePeriods.AvailablePeriods;
@@ -47,6 +48,11 @@ public class Reservations extends Auditable<String> {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "EVALUATION_ID")
+    private Evaluation evaluation;
+
 
 //    @ManyToMany(fetch = FetchType.LAZY)
 //    @JoinTable(

@@ -58,6 +58,8 @@ public class UnitGeneralResponseDto {
 
     private Double latForMapping;
     private Double longForMapping;
-
+    private int oldPriceHall;
+    private int newPriceHall;
     private int price;
+    private Long evaluationId;
 }

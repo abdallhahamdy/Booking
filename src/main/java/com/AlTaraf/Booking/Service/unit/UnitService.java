@@ -47,6 +47,7 @@ public interface UnitService {
     List<Unit> findUnitsByFilters(Long cityId, Long regionId, Long availablePeriodsId,
                                   Long unitTypeId, Long accommodationTypeId, Set<Long> hotelClassificationIds,
                                   Set<Long> basicFeaturesIds, Set<Long> subFeaturesIds, Set<Long> foodOptionsIds,
+                                  Set<Long> evaluationId,
                                   int capacityHalls, int adultsAllowed, int childrenAllowed, int priceMin, int priceMax);
 
     Page<Unit> filterUnitsByName(String nameUnit, Pageable pageable);
@@ -67,4 +68,7 @@ public interface UnitService {
 
     void updateStatusForUser(Long userId, Long statusUnitId);
 
+    void calculateAndSetAverageEvaluation(Long unitId);
+
+    void updateEvaluationsForUnits(Long unitId);
 }

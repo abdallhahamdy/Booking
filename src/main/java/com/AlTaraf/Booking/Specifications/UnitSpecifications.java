@@ -40,6 +40,12 @@ public class UnitSpecifications {
         return (root, query, criteriaBuilder) ->
                 root.get("hotelClassification").get("id").in(hotelClassificationId);
     }
+
+    public static Specification<Unit> byEvaluationIds(Set<Long> evaluationId) {
+        return (root, query, criteriaBuilder) ->
+                root.get("evaluation").get("id").in(evaluationId);
+    }
+
     public static Specification<Unit> byBasicFeaturesIds(Set<Long> basicFeaturesIds) {
         return (root, query, criteriaBuilder) -> {
             Join<Unit, Feature> featuresJoin = root.join("basicFeaturesSet", JoinType.INNER);
