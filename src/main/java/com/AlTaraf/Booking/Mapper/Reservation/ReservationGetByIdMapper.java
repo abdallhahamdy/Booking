@@ -30,6 +30,8 @@ public interface ReservationGetByIdMapper {
     @Mapping(source = "adultsAllowed", target = "adultsAllowed")
     @Mapping(source = "childrenAllowed", target = "childrenAllowed")
     @Mapping(source = "price", target = "price")
+    @Mapping(source = "dateOfArrival", target = "dateOfArrival")
+    @Mapping(source = "departureDate", target = "departureDate")
     ReservationResponseGetId toResponseDto(Reservations reservations);
 
 

@@ -2,6 +2,7 @@ package com.AlTaraf.Booking.Repository.Reservation;
 
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.unit.Unit;
+import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +20,7 @@ public interface ReservationRepository extends JpaRepository<Reservations, Long>
 
     @Query("SELECT r.unit FROM Reservations r WHERE r.id = :reservationId")
     Unit findUnitByReservationId(@Param("reservationId") Long reservationId);
+
+    @Query("SELECT r.availableArea FROM Reservations r WHERE r.id = :reservationId")
+    AvailableArea findAvailableAreaIdByReservationId(@Param("reservationId") Long reservationId);
 }

@@ -5,6 +5,7 @@ import com.AlTaraf.Booking.Dto.TechnicalSupport.TechnicalSupportDTO;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupport;
 import com.AlTaraf.Booking.Entity.unit.Unit;
+import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Mapper.TechnicalSupport.TechnicalSupportMapper;
 import com.AlTaraf.Booking.Mapper.Unit.EventHallsMapper;
 import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
@@ -14,6 +15,7 @@ import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitResidenciesResponseDto;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
+import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.TechnicalSupport.TechnicalSupportService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.user.UserService;
@@ -57,6 +59,9 @@ public class AdminController {
 
     @Autowired
     private AdsService adsService;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @GetMapping("/Technical-Support-Get-All")
     public Page<TechnicalSupportDTO> getAllTechnicalSupport(@RequestParam(defaultValue = "0") int page,
@@ -187,4 +192,6 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status: " + e.getMessage());
         }
     }
+
+
 }

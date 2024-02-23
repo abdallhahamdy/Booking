@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Data
@@ -30,4 +31,6 @@ public class ReservationResponseGetId {
     private int adultsAllowed;
     private int childrenAllowed;
     private int price;
+    private LocalDate dateOfArrival;
+    private LocalDate departureDate;
 }

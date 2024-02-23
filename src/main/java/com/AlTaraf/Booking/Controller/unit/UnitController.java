@@ -28,6 +28,7 @@ import com.AlTaraf.Booking.Payload.response.RoomDetails.RoomDetailsResponseDto;
 import com.AlTaraf.Booking.Payload.response.Unit.EventHallsResponse;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitResidenciesResponseDto;
+import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.unit.AvailablePeriods.AvailablePeriodsService;
 import com.AlTaraf.Booking.Service.unit.FeatureForHalls.FeatureForHallsService;
 import com.AlTaraf.Booking.Service.unit.RoomAvailable.RoomAvailableService;
@@ -103,6 +104,10 @@ public class UnitController {
 
     @Autowired
     private RoomAvailableService roomAvailableService;
+
+    @Autowired
+    private ReservationService reservationService;
+
     private static final Logger logger = LoggerFactory.getLogger(UnitController.class);
 
 
@@ -560,5 +565,17 @@ public class UnitController {
         }
     }
 
+    @PutMapping("Change/Status/Units/{reservationId}/{statusUnitId}")
+    public ResponseEntity<?> updateStatusForReservations(@PathVariable Long reservationId, @PathVariable Long statusUnitId) {
+        try {
 
+//            AvailableArea availableArea = reservationService.getAvailableAreaByReservations(reservationId);
+//            System.out.println("Available Area: " + availableArea.getId());
+
+            reservationService.updateStatusForReservation(reservationId, statusUnitId);
+            return ResponseEntity.ok(new ApiResponse(200,"Status changed successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status: " + e.getMessage());
+        }
+    }
 }

@@ -35,6 +35,8 @@ public interface ReservationRequestMapper {
     @Mapping(source = "adultsAllowed", target = "adultsAllowed")
     @Mapping(source = "childrenAllowed", target = "childrenAllowed")
     @Mapping(source = "evaluationId", target = "evaluation.id")
+    @Mapping(source = "dateOfArrival", target = "dateOfArrival")
+    @Mapping(source = "departureDate", target = "departureDate")
     Reservations toReservation(ReservationRequestDto reservationRequestDto);
 
     List<ReservationRequestDto> toReservationsList(List<Reservations> reservationsList);

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Data
@@ -28,6 +29,8 @@ public class ReservationRequestDto {
     private int childrenAllowed;
     private Long evaluationId;
 
+    private LocalDate dateOfArrival;
+    private LocalDate departureDate;
 //    @GetMapping("/Get-By-Unit-And-Room-Available")
 //    public ResponseEntity<?> getRoomDetailsByUnitAndRoomAvailable(
 //            @RequestParam Long unitId,

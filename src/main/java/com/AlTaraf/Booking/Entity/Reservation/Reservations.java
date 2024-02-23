@@ -19,6 +19,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -125,6 +126,12 @@ public class Reservations extends Auditable<String> {
     private int childrenAllowed;
 
     private int price;
+
+    @Column(name = "DATE_OF_ARRIVAL")
+    private LocalDate dateOfArrival;
+
+    @Column(name = "DATE_OF_DEPARTURE")
+    private LocalDate departureDate;
 
     public Reservations() {
         this.statusUnit = new StatusUnit();
