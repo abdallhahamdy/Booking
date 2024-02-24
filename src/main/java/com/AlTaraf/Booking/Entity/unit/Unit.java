@@ -145,6 +145,14 @@ public class Unit extends Auditable<String> {
 
     private int newPriceHall;
 
+    private int ChaletNewPrice;
+
+    private int ChaletOldPrice;
+
+    private int resortOldPrice;
+
+    private int resortNewPrice;
+
     private int price;
 
     private Double latForMapping;
@@ -187,21 +195,29 @@ public class Unit extends Auditable<String> {
         this.newPriceHall = newPriceHall;
     }
 
-    public void setPrice(Long unitId, RoomDetailsService roomDetailsService, int price) {
+    public void setPrice( int price ) {
 
         if (unitType != null && unitType.getId() == 2) {
             if (newPriceHall == 0) {
                 price = oldPriceHall;
-                System.out.println("Price: " + price);
             } else {
                 price = newPriceHall;
-                System.out.println("Price: " + price);
+            }
+        } else if ( unitType.getId() == 1 &&  accommodationType.getId() == 4 ) {
+            if (ChaletNewPrice == 0 ) {
+                price = ChaletOldPrice;
+            } else {
+                price = ChaletNewPrice;
+            }
+        } else if ( unitType.getId() == 1 && accommodationType.getId() == 5) {
+            if (resortNewPrice == 0 ) {
+                price = resortOldPrice;
+            } else {
+                price = resortNewPrice;
             }
         } else {
             this.price = price;
         }
-
-
     }
 
     public void calculatePrice() {

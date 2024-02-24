@@ -133,8 +133,8 @@ public class ReservationController {
         }
     }
 
-@PatchMapping("/{reservationId}/set-evaluation")
-public ResponseEntity<?> setEvaluation(@PathVariable Long reservationId, @RequestParam Long evaluationId) {
+    @PatchMapping("/{reservationId}/set-evaluation")
+    public ResponseEntity<?> setEvaluation(@PathVariable Long reservationId, @RequestParam Long evaluationId) {
 
     Reservations existingReservation = reservationService.getReservationById(reservationId);
     Unit unit = reservationService.findUnitByReservationId(reservationId);

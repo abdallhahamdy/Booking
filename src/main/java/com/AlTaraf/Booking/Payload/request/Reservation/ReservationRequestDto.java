@@ -31,40 +31,6 @@ public class ReservationRequestDto {
 
     private LocalDate dateOfArrival;
     private LocalDate departureDate;
-//    @GetMapping("/Get-By-Unit-And-Room-Available")
-//    public ResponseEntity<?> getRoomDetailsByUnitAndRoomAvailable(
-//            @RequestParam Long unitId,
-//            @RequestParam Long roomAvailableId) {
-//        try {
-//            // Retrieve RoomDetails entity from the service layer
-//            RoomDetails roomDetails = roomDetailsService.getRoomDetailsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
-//
-//            // Map RoomDetails entity to RoomDetailsResponseDto
-//            RoomDetailsRequestDto roomDetailsResponseDto = roomDetailsRequestMapper.toDto(roomDetails);
-//
-//            // Return the response
-//            return ResponseEntity.ok(roomDetailsResponseDto);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//        }
-//    }
-//
-//    @GetMapping("/Get-By-Unit-And-Available-Area")
-//    public ResponseEntity<?> getRoomDetailsByUnitAndAvailableArea(
-//            @RequestParam Long unitId,
-//            @RequestParam Long availableAreaId) {
-//        try {
-//            // Retrieve RoomDetails entity from the service layer
-//            RoomDetailsForAvailableArea availableArea = roomDetailsForAvailableAreaService.getRoomDetailsByUnitIdAndAvailableAreaId(unitId, availableAreaId);
-//
-//            // Map RoomDetails entity to RoomDetailsResponseDto
-//            RoomDetailsRequestDto roomDetailsResponseDto = roomDetailsRequestMapper.toDtoForAvailableArea(availableArea);
-//
-//            // Return the response
-//            return ResponseEntity.ok(roomDetailsResponseDto);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-//        }
-//    }
+
 
 }

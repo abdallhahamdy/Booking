@@ -35,4 +35,7 @@ public class ReserveDate {
     @ManyToOne
     private Unit unit;
 
+    @Column(name = "RESERVE")
+    private boolean reserve;
+
 }

@@ -1,11 +1,15 @@
 package com.AlTaraf.Booking.Service.Reservation;
 
+import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
+import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
+import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
+import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,6 +29,12 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Autowired
     RoomDetailsForAvailableAreaRepository roomDetailsForAvailableAreaRepository;
+
+    @Autowired
+    ReserveDateRepository reserveDateRepository;
+
+    @Autowired
+    ReserveDateHallsRepository reserveDateHallsRepository;
 
     @Override
     public Reservations saveReservation(Reservations reservations) {
@@ -63,12 +73,36 @@ public class ReservationServiceImpl implements ReservationService {
         Reservations reservations = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new EntityNotFoundException("Reservation not found with id: " + reservationId));
 
+        Unit unit = findUnitByReservationId(reservationId);
+
+        if ( unit.getUnitType().getId() == 2 ) {
+            System.out.println("unit.getUnitType().getId() == 2 ");
+            List<ReserveDateHalls> reserveDateHalls = reserveDateHallsRepository.findByUnitId(unit.getId());
+            System.out.println("unit is : " + unit.getId());
+
+            System.out.println("I'm here Sir");
+
+            for ( ReserveDateHalls reserve: reserveDateHalls ) {
+                System.out.println("reserve: " + reserve.isReserve());
+                reserve.setReserve(true);
+//                reserveDateHallsRepository.save(reserve);
+                System.out.println("reserve: " + reserve.isReserve());
+            }
+
+        }
+
         if (statusUnitId.equals(2L) && getAvailableAreaByReservations(reservationId) != null) {
+            System.out.println("statusUnitId.equals(2L) && getAvailableAreaByReservations(reservationId) != null");
             System.out.println("In condition Reservation status");
 
-            Unit unit = findUnitByReservationId(reservationId);
             AvailableArea availableArea = getAvailableAreaByReservations(reservationId);
             RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsForAvailableAreaRepository.findByUnitIdAndAvailableAreaId(unit.getId(), availableArea.getId());
+
+            List<ReserveDate> reserveDate = reserveDateRepository.findByRoomDetailsForAvailableAreaIdAndUnitIdAndReserveTrue(roomDetailsForAvailableArea.getId(), unit.getId());
+
+            for (ReserveDate date : reserveDate ) {
+                date.setReserve(true);
+            }
 
             int numberRoom = roomDetailsForAvailableArea.getRoomNumber();
             System.out.println("Before number Room: " + numberRoom);
