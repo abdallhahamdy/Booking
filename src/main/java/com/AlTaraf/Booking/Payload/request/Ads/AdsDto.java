@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class AdsDto {
     private Long id;
     private Long unitId;
+    private Long unitTypeId;
     private Long userId;
     private Long packageAdsId;
 //    private Long statusId;
