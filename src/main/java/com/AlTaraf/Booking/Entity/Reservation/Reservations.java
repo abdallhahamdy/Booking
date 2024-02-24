@@ -50,8 +50,8 @@ public class Reservations extends Auditable<String> {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "EVALUATION_ID")
+    @ManyToOne( cascade = CascadeType.ALL)
+    @JoinColumn(name = "EVALUATION_ID", nullable = true)
     private Evaluation evaluation;
 
 
