@@ -92,5 +92,14 @@ public class ReservationServiceImpl implements ReservationService {
         return reservationRepository.findAvailableAreaIdByReservationId(reservationId);
     }
 
+    @Override
+    public List<Reservations> getReservationForUserAndStatus(Long userId, String statusUnitName) {
+        return reservationRepository.findByUserIdAndStatusUnitName(userId, statusUnitName);
+    }
+
+    @Override
+    public void deleteUnit(Long id) {
+        reservationRepository.deleteById(id);
+    }
 }
 

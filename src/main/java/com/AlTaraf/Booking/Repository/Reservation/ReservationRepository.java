@@ -23,4 +23,8 @@ public interface ReservationRepository extends JpaRepository<Reservations, Long>
 
     @Query("SELECT r.availableArea FROM Reservations r WHERE r.id = :reservationId")
     AvailableArea findAvailableAreaIdByReservationId(@Param("reservationId") Long reservationId);
+
+    @Query("SELECT r FROM Reservations r JOIN r.user u JOIN r.statusUnit s WHERE u.id = :userId AND s.name = :statusUnitName")
+    List<Reservations> findByUserIdAndStatusUnitName(@Param("userId") Long userId, @Param("statusUnitName") String statusUnitName);
+
 }

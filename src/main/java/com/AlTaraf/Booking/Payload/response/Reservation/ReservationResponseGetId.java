@@ -19,6 +19,9 @@ import java.util.Set;
 @NoArgsConstructor
 public class ReservationResponseGetId {
     private Long reservationId;
+    private Long unitId;
+    private String unitName;
+    private Long userId;
     private String clientName;
     private String clientPhone;
     private RoomAvailable roomAvailable;
@@ -30,6 +33,7 @@ public class ReservationResponseGetId {
     private Set<AvailablePeriods> availablePeriodsHalls;
     private int adultsAllowed;
     private int childrenAllowed;
+    private Long evaluationId;
     private int price;
     private LocalDate dateOfArrival;
     private LocalDate departureDate;

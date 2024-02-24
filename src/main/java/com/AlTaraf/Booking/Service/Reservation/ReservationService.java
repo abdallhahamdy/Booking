@@ -22,4 +22,8 @@ public interface ReservationService {
     void updateStatusForReservation(Long reservationId, Long statusUnitId);
 
     AvailableArea getAvailableAreaByReservations(Long reservationId);
+
+    List<Reservations> getReservationForUserAndStatus(Long userId, String statusUnitName);
+
+    void deleteUnit(Long id);
 }

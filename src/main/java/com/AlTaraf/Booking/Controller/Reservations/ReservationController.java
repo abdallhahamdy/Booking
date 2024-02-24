@@ -8,9 +8,11 @@ import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationGetByIdMapper;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationRequestMapper;
+import com.AlTaraf.Booking.Mapper.Reservation.ReservationStatusMapper;
 import com.AlTaraf.Booking.Payload.request.Reservation.ReservationRequestDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Payload.response.Reservation.ReservationResponseGetId;
+import com.AlTaraf.Booking.Payload.response.Reservation.ReservationStatus;
 import com.AlTaraf.Booking.Repository.Evaluation.EvaluationRepository;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.unit.RoomDetails.RoomDetailsService;
@@ -51,6 +53,9 @@ public class ReservationController {
 
     @Autowired
     private UnitService unitService;
+
+    @Autowired
+    private ReservationStatusMapper reservationStatusMapper;
 
     @PostMapping("/Create-Reservation")
     public ResponseEntity<?> createReservation(@RequestBody ReservationRequestDto reservationRequestDto) {
@@ -109,25 +114,25 @@ public class ReservationController {
         if (reservation == null) {
             return ResponseEntity.notFound().build();
         }
-        ReservationResponseGetId response = reservationGetByIdMapper.toResponseDto(reservation);
+        ReservationResponseGetId response = reservationGetByIdMapper.toReservationDto(reservation);
         return ResponseEntity.ok(response);
     }
 
-//    @GetMapping("/Status-Unit")
-//    public ResponseEntity<?> getReservationsForUserAndStatus(
-//            @RequestParam(name = "USER_ID") Long userId,
-//            @RequestParam(name = "statusUnitName") String statusUnitName) {
-//
-//        List<Reservations> reservations = reservationService.getReservationsForUserAndStatus(userId, statusUnitName);
-//
-//        if (!reservations.isEmpty()) {
-//            List<ReservationResponseGetId> reservationRequestDtoList = ReservationRequestMapper.(reservations);
-//            return new ResponseEntity<>(unitDtos, HttpStatus.OK);
-//        } else {
-//            ApiResponse response = new ApiResponse(204, "No Content");
-//            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
-//        }
-//    }
+    @GetMapping("/Status-Reservation")
+    public ResponseEntity<?> getReservationsForUserAndStatus(
+            @RequestParam(name = "USER_ID") Long userId,
+            @RequestParam(name = "statusUnitName") String statusUnitName) {
+
+        List<Reservations> reservations = reservationService.getReservationForUserAndStatus(userId, statusUnitName);
+
+        if (!reservations.isEmpty()) {
+            List<ReservationStatus> reservationRequestDtoList = reservationStatusMapper.toReservationStatusDtoList(reservations);
+            return new ResponseEntity<>(reservationRequestDtoList, HttpStatus.OK);
+        } else {
+            ApiResponse response = new ApiResponse(204, "No Content");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+        }
+    }
 
 //    public ResponseEntity<?> setEvaluationId(@PathVariable Long reservationId, @RequestParam Long evaluationId) {
 //        Reservations existingReservation = reservationService.getReservationById(reservationId);
@@ -179,6 +184,21 @@ public ResponseEntity<?> setEvaluation(@PathVariable Long reservationId, @Reques
     }
 
 }
+
+    @DeleteMapping("Delete/Reservation/{id}")
+    public ResponseEntity<?> deleteReservation(@PathVariable Long id) {
+
+        try {
+            reservationService.deleteUnit(id);
+            ApiResponse response = new ApiResponse(200, "Reservation deleted successfully!");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            ApiResponse response = new ApiResponse(404, "Not Found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
+
+
 
 
 }
