@@ -1,6 +1,5 @@
 package com.AlTaraf.Booking.Controller.Reservations;
 
-import com.AlTaraf.Booking.Dto.Unit.UnitDto;
 import com.AlTaraf.Booking.Entity.Evaluation.Evaluation;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.unit.Unit;
@@ -134,27 +133,6 @@ public class ReservationController {
         }
     }
 
-//    public ResponseEntity<?> setEvaluationId(@PathVariable Long reservationId, @RequestParam Long evaluationId) {
-//        Reservations existingReservation = reservationService.getReservationById(reservationId);
-//        if (existingReservation == null) {
-//            return ResponseEntity.notFound().build();
-//        }
-//
-//
-//
-//        Evaluation evaluation = existingReservation.getEvaluation();
-//        if (evaluation == null) {
-////            existingReservation.getUnit().setEvaluation(evaluation);
-//            evaluation.setId(evaluationId);
-//
-//        }
-//
-//        reservationService.saveReservation(existingReservation);
-//
-//        return ResponseEntity.ok().build();
-//    }
-
-
 @PatchMapping("/{reservationId}/set-evaluation")
 public ResponseEntity<?> setEvaluation(@PathVariable Long reservationId, @RequestParam Long evaluationId) {
 
@@ -197,8 +175,5 @@ public ResponseEntity<?> setEvaluation(@PathVariable Long reservationId, @Reques
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
-
-
-
 
 }

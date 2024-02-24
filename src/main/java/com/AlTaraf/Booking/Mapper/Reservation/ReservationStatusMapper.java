@@ -2,7 +2,6 @@ package com.AlTaraf.Booking.Mapper.Reservation;
 
 
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
-import com.AlTaraf.Booking.Payload.response.Reservation.ReservationResponseGetId;
 import com.AlTaraf.Booking.Payload.response.Reservation.ReservationStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
