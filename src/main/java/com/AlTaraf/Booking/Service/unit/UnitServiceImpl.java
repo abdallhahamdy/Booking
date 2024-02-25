@@ -78,6 +78,14 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
+    public Page<UnitDtoFavorite> getUnitsByEvaluationNames(List<String> evaluationNames, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Unit> unitsPage = unitRepository.findByEvaluation_NameIn(evaluationNames, pageRequest);
+
+        return unitsPage.map(unitFavoriteMapper::toUnitFavoriteDto);
+    }
+
+    @Override
     public Page<UnitDtoFavorite> getFavoriteUnitsForUser(Long userId, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<Unit> favoriteUnitsPage = unitRepository.findByUser_IdAndFavorite(userId, true, pageRequest);

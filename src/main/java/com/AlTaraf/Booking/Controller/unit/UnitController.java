@@ -265,6 +265,23 @@ public class UnitController {
 //        }
 //    }
 
+    @GetMapping("/get-evaluation-Names")
+    public ResponseEntity<?> getUnitsByEvaluationNames(
+            @RequestParam List<String> evaluationNames,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size) {
+
+        Page<UnitDtoFavorite> units = unitService.getUnitsByEvaluationNames(evaluationNames, page, size);
+
+        if (!units.isEmpty()) {
+            return new ResponseEntity<>(units, HttpStatus.OK);
+        } else {
+            ApiResponse response = new ApiResponse(204, "No Content for Units have high evaluation!");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
     @GetMapping("/By-Last-Month")
     public ResponseEntity<?> getUnitsAddedLastMonth(
             @RequestParam(defaultValue = "0") int page,
@@ -420,6 +437,9 @@ public class UnitController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
+
+
+
 
     @DeleteMapping("Delete/Unit/{id}")
     public ResponseEntity<?> deleteUnit(@PathVariable Long id) {

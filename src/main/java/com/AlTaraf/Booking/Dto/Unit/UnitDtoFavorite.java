@@ -22,5 +22,6 @@ public class UnitDtoFavorite {
     private Double longForMapping;
     private Boolean favorite;
     private int price;
-    private Long evaluationId;
+    private String evaluationName;
+    private String evaluationArabicName;
 }

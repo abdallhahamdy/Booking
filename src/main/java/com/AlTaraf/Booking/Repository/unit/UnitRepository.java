@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Repository.unit;
 
+import com.AlTaraf.Booking.Entity.Evaluation.Evaluation;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
@@ -20,6 +21,9 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     Page<Unit> findByFavoriteTrue(Pageable pageable);
 
     Page<Unit> findByHotelClassification_NameIn(List<String> hotelClassificationNames, Pageable pageable);
+
+    @Query("SELECT u FROM Unit u WHERE u.evaluation.name IN :names")
+    Page<Unit> findByEvaluation_NameIn(@Param("names") List<String> names, Pageable pageable);
 
     Page<Unit> findByCreatedDateBetween(Date startOfDay, Date endOfDay, Pageable pageable);
 

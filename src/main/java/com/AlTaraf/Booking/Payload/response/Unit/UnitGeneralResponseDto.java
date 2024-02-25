@@ -61,5 +61,6 @@ public class UnitGeneralResponseDto {
     private int oldPriceHall;
     private int newPriceHall;
     private int price;
-    private Long evaluationId;
+    private String evaluationName;
+    private String evaluationArabicName;
 }

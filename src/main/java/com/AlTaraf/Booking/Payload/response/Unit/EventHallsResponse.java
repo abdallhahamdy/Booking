@@ -27,5 +27,6 @@ public class EventHallsResponse {
     private Double latForMapping;
     private Double longForMapping;
     private int price;
-    private Long evaluationId;
+    private String evaluationName;
+    private String evaluationArabicName;
 }
