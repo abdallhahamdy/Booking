@@ -25,6 +25,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByPhone(String phone);
 
+//    @Query("SELECT u FROM User u WHERE u.phone = :phone")
+//    User findByPhone(@Param("phone") String phone);
 
     @Query("SELECT COUNT(u.id) > 0 FROM User u " +
             "JOIN u.roles r " +

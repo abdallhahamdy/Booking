@@ -5,6 +5,17 @@ spring:
     password: VSInnl48944
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: YOUR_GOOGLE_CLIENT_ID
+            clientSecret: YOUR_GOOGLE_CLIENT_SECRET
+            scope:
+              - email
+              - profile
+
   servlet:
     multipart:
       max-file-size: 10MB

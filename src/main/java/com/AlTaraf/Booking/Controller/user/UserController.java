@@ -23,10 +23,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -133,7 +135,34 @@ public class UserController {
 //            String jwt = jwtUtils.generateJwtToken(authentication);
 
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
             userDetails.setStayLoggedIn(loginRequest.isStayLoggedIn());
+
+            // Get the user from the database
+            Optional<User> optionalUser = userService.findByPhone(loginRequest.getPhone());
+            if (!optionalUser.isPresent()) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(new ApiResponse(500, "Error in login. User not found"));
+            }
+            User user = optionalUser.get();
+
+            System.out.println("user.getRole" + user.getRoles());
+
+            // Check if the user's roles match the roles in the request
+            Set<String> requestRoles = loginRequest.getRoles();
+
+            System.out.println("requestRoles: " + requestRoles);
+
+            Set<String> userRoles = user.getRoles().stream()
+                    .map(role -> role.getName().name())
+                    .collect(Collectors.toSet());
+
+            System.out.println("userRoles: " + userRoles);
+
+            if (Collections.disjoint(userRoles, requestRoles)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ApiResponse(400, "Your role is not correct"));
+            }
 
             List<String> roles = userDetails.getAuthorities().stream()
                     .map(item -> item.getAuthority())

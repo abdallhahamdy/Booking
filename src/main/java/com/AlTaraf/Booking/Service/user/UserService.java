@@ -5,6 +5,7 @@ import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
 
+import java.util.Optional;
 import java.util.Set;
 
 public interface UserService {
@@ -28,6 +29,8 @@ public interface UserService {
 //    UserRegisterDto getUserById(Long id);
 //    List<UserRegisterDto> getAllUsers();
 //    void deleteUser(Long id);
+
+    Optional<User> findByPhone(String phone);
 
 }
 

@@ -27,7 +27,7 @@ public class ReservationRequestDto {
     private Set<Long> availablePeriodsHallsIds;
     private int adultsAllowed;
     private int childrenAllowed;
-    private Long evaluationId;
+//    private Long evaluationId;
 
     private LocalDate dateOfArrival;
     private LocalDate departureDate;

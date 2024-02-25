@@ -245,4 +245,7 @@ public class UserServiceImpl implements UserService {
 
     // Example method to generate OTP (replace with your implementation)
 
+    public Optional<User> findByPhone(String phone) {
+        return userRepository.findByPhone(phone);
+    }
 }

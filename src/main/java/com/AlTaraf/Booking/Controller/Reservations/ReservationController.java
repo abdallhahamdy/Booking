@@ -39,6 +39,9 @@ public class ReservationController {
     ReservationGetByIdMapper reservationGetByIdMapper;
 
     @Autowired
+    UnitService unitService;
+
+    @Autowired
     private RoomDetailsService roomDetailsService;
 
     @Autowired
@@ -51,9 +54,6 @@ public class ReservationController {
     private EvaluationRepository evaluationRepository;
 
     @Autowired
-    private UnitService unitService;
-
-    @Autowired
     private ReservationStatusMapper reservationStatusMapper;
 
     @PostMapping("/Create-Reservation")
@@ -64,14 +64,13 @@ public class ReservationController {
 
             if (reservationRequestDto.getRoomAvailableId() != null) {
                 RoomDetails roomDetails = roomDetailsService.getRoomDetailsByUnitIdAndRoomAvailableId(reservationRequestDto.getUnitId(), reservationRequestDto.getRoomAvailableId());
+                System.out.println(roomDetails.getId() + "price: " + roomDetails.getNewPrice());
                 if (roomDetails != null) {
                     // Update the price based on room details
                     if (roomDetails.getNewPrice() < roomDetails.getOldPrice()) {
                         reservationsToSave.setPrice(roomDetails.getNewPrice());
-                        System.out.println("getRoomAvailable roomDetails.getNewPrice(): " + roomDetails.getNewPrice());
                     } else {
                         reservationsToSave.setPrice(roomDetails.getOldPrice());
-                        System.out.println("roomDetailsForAvailableArea.getOldPrice()): " + roomDetails.getOldPrice());
                     }
                 }
             }
@@ -79,16 +78,24 @@ public class ReservationController {
 
             else if (reservationRequestDto.getAvailableAreaId() != null) {
                 RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsForAvailableAreaService.getRoomDetailsByUnitIdAndAvailableAreaId(reservationsToSave.getUnit().getId(), reservationsToSave.getAvailableArea().getId());
-                if (roomDetailsForAvailableArea != null) {
+                if (roomDetailsForAvailableArea.getId() != null) {
                     // Update the price based on available area details
+                    System.out.println(roomDetailsForAvailableArea.getNewPrice());
+                    System.out.println(roomDetailsForAvailableArea.getOldPrice());
                     if (roomDetailsForAvailableArea.getNewPrice() < roomDetailsForAvailableArea.getOldPrice()) {
                         reservationsToSave.setPrice(roomDetailsForAvailableArea.getNewPrice());
-                        System.out.println("getAvailableArea roomDetailsForAvailableArea.getNewPrice(): " + roomDetailsForAvailableArea.getNewPrice());
                     } else {
                         reservationsToSave.setPrice(roomDetailsForAvailableArea.getOldPrice());
-                        System.out.println("roomDetailsForAvailableArea.getOldPrice()): " + roomDetailsForAvailableArea.getOldPrice());
                     }
                 }
+            }
+
+            else if (reservationRequestDto.getAvailableAreaId() == null && reservationRequestDto.getRoomAvailableId() == null) {
+
+                Unit unit = unitService.getUnitById(reservationRequestDto.getUnitId());
+
+                reservationsToSave.setPrice(unit.getPrice());
+
             }
                 // Save the unit in the database
                 Reservations saveReservation = reservationService.saveReservation(reservationsToSave);
