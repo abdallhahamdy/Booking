@@ -14,6 +14,9 @@ import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAr
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -75,25 +78,16 @@ public class ReservationServiceImpl implements ReservationService {
 
         Unit unit = findUnitByReservationId(reservationId);
 
-        if ( unit.getUnitType().getId() == 2 ) {
-            System.out.println("unit.getUnitType().getId() == 2 ");
+        if ( unit.getUnitType().getId() == 2 && statusUnitId.equals(2L) ) {
             List<ReserveDateHalls> reserveDateHalls = reserveDateHallsRepository.findByUnitId(unit.getId());
-            System.out.println("unit is : " + unit.getId());
-
-            System.out.println("I'm here Sir");
 
             for ( ReserveDateHalls reserve: reserveDateHalls ) {
-                System.out.println("reserve: " + reserve.isReserve());
                 reserve.setReserve(true);
-//                reserveDateHallsRepository.save(reserve);
-                System.out.println("reserve: " + reserve.isReserve());
             }
 
         }
 
-        if (statusUnitId.equals(2L) && getAvailableAreaByReservations(reservationId) != null) {
-            System.out.println("statusUnitId.equals(2L) && getAvailableAreaByReservations(reservationId) != null");
-            System.out.println("In condition Reservation status");
+        if ( statusUnitId.equals(2L) && getAvailableAreaByReservations(reservationId) != null ) {
 
             AvailableArea availableArea = getAvailableAreaByReservations(reservationId);
             RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsForAvailableAreaRepository.findByUnitIdAndAvailableAreaId(unit.getId(), availableArea.getId());
@@ -105,14 +99,10 @@ public class ReservationServiceImpl implements ReservationService {
             }
 
             int numberRoom = roomDetailsForAvailableArea.getRoomNumber();
-            System.out.println("Before number Room: " + numberRoom);
             numberRoom--;
             roomDetailsForAvailableArea.setRoomNumber(numberRoom);
-            System.out.println("After number Room: " + numberRoom);
 
         }
-
-        System.out.println("After condition status Reservations.");
 
         StatusUnit statusUnit = statusRepository.findById(statusUnitId)
                 .orElseThrow(() -> new EntityNotFoundException("StatusUnit not found with id: " + statusUnitId));
@@ -127,8 +117,14 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public List<Reservations> getReservationForUserAndStatus(Long userId, String statusUnitName) {
-        return reservationRepository.findByUserIdAndStatusUnitName(userId, statusUnitName);
+    public Page<Reservations> getReservationForUserAndStatus(Long userId, String statusUnitName, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return reservationRepository.findByUserIdAndStatusUnitName(userId, statusUnitName, pageRequest  );
+    }
+
+    @Override
+    public void changeStatusUnitId(Long reservationId, Long newStatusUnitId) {
+
     }
 
     @Override

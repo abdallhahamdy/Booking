@@ -4,6 +4,8 @@ import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
@@ -23,7 +25,9 @@ public interface ReservationService {
 
     AvailableArea getAvailableAreaByReservations(Long reservationId);
 
-    List<Reservations> getReservationForUserAndStatus(Long userId, String statusUnitName);
+    Page<Reservations> getReservationForUserAndStatus(Long userId, String statusUnitName, int page, int size);
+
+    void changeStatusUnitId(Long reservationId, Long newStatusUnitId);
 
     void deleteUnit(Long id);
 }

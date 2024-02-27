@@ -19,6 +19,9 @@ import com.AlTaraf.Booking.Service.unit.RoomDetailsForAvailableArea.RoomDetailsF
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.unit.availableArea.AvailableAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -127,12 +130,14 @@ public class ReservationController {
     @GetMapping("/Status-Reservation")
     public ResponseEntity<?> getReservationsForUserAndStatus(
             @RequestParam(name = "USER_ID") Long userId,
-            @RequestParam(name = "statusUnitName") String statusUnitName) {
+            @RequestParam(name = "statusUnitName") String statusUnitName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "2") int size) {
 
-        List<Reservations> reservations = reservationService.getReservationForUserAndStatus(userId, statusUnitName);
+        Page<Reservations> reservations = reservationService.getReservationForUserAndStatus(userId, statusUnitName, page, size);
 
         if (!reservations.isEmpty()) {
-            List<ReservationStatus> reservationRequestDtoList = reservationStatusMapper.toReservationStatusDtoList(reservations);
+            List<ReservationStatus> reservationRequestDtoList = reservationStatusMapper.toReservationStatusDtoList(reservations.getContent());
             return new ResponseEntity<>(reservationRequestDtoList, HttpStatus.OK);
         } else {
             ApiResponse response = new ApiResponse(204, "No Content");
@@ -174,7 +179,8 @@ public class ReservationController {
     public ResponseEntity<?> deleteReservation(@PathVariable Long id) {
 
         try {
-            reservationService.deleteUnit(id);
+            reservationService.updateStatusForReservation(id, 4L);
+//            reservationService.deleteUnit(id);
             ApiResponse response = new ApiResponse(200, "Reservation deleted successfully!");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
