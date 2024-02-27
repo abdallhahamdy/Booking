@@ -219,12 +219,31 @@ public class UnitController {
                         .map(id -> new AvailablePeriods(id))
                         .collect(Collectors.toSet()));
             }
+
             if (unitRequestDto.getOldPriceHall() != 0) {
                 unitToUpdate.setOldPriceHall(unitRequestDto.getOldPriceHall());
             }
             if (unitRequestDto.getNewPriceHall() != 0) {
                 unitToUpdate.setNewPriceHall(unitRequestDto.getNewPriceHall());
             }
+
+
+
+            if (unitRequestDto.getChaletOldPrice() != 0) {
+                unitToUpdate.setChaletOldPrice(unitRequestDto.getChaletOldPrice());
+            }
+            if (unitRequestDto.getChaletNewPrice() != 0) {
+                unitToUpdate.setChaletNewPrice(unitRequestDto.getChaletNewPrice());
+            }
+
+            if (unitRequestDto.getResortOldPrice() != 0) {
+                unitToUpdate.setResortOldPrice(unitRequestDto.getResortOldPrice());
+            }
+            if (unitRequestDto.getResortNewPrice() != 0) {
+                unitToUpdate.setResortNewPrice(unitRequestDto.getResortNewPrice());
+            }
+
+
             if (unitRequestDto.getLatForMapping() != null) {
                 unitToUpdate.setLatForMapping(unitRequestDto.getLatForMapping());
             }

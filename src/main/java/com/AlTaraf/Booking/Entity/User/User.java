@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Entity.User;
 
+import com.AlTaraf.Booking.Entity.Favorite.UserFavoriteUnit;
 import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
@@ -66,6 +67,10 @@ public class User extends Auditable<String> {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<ImageData> images;
+
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<UserFavoriteUnit> favoriteUnits;
 
     public User(Long id) {
         this.id = id;

@@ -36,5 +36,12 @@ public class UnitRequestDto {
 
     private Double latForMapping;
     private Double longForMapping;
+
+    private Integer ChaletNewPrice;
+    private Integer ChaletOldPrice;
+
+    private Integer resortOldPrice;
+    private Integer resortNewPrice;
+
 //    private Integer price;
 }

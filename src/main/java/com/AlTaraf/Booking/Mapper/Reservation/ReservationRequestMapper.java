@@ -3,7 +3,6 @@ package com.AlTaraf.Booking.Mapper.Reservation;
 
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.unit.AvailablePeriods.AvailablePeriods;
-import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.feature.Feature;
 import com.AlTaraf.Booking.Entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
@@ -25,9 +24,7 @@ public interface ReservationRequestMapper {
     @Mapping(source = "clientPhone", target = "clientPhone")
     @Mapping(source = "unitId", target = "unit.id")
     @Mapping(source = "userId", target = "user.id")
-//    @Mapping(source = "roomAvailableId", target = "roomAvailable.id", qualifiedByName = "mapToRoomAvailable")
     @Mapping(source = "roomAvailableId", target = "roomAvailable.id")
-//    @Mapping(source = "availableAreaId", target = "availableArea.id", qualifiedByName = "mapToAvailableArea")
     @Mapping(source = "availableAreaId", target = "availableArea.id")
     @Mapping(source = "basicFeaturesIds", target = "basicFeaturesSet", qualifiedByName = "basicFeaturesIdsToEntities")
     @Mapping(source = "subFeaturesIds", target = "subFeaturesSet", qualifiedByName = "subFeaturesIdsToEntities")
@@ -109,13 +106,13 @@ public interface ReservationRequestMapper {
         return roomAvailable;
     }
 
-    @Named("mapToAvailableArea")
-    static AvailableArea mapToAvailableArea(Long availableAreaId) {
-        if (availableAreaId == null) {
-            return null;
-        }
-        AvailableArea availableArea = new AvailableArea();
-        availableArea.setId(availableAreaId);
-        return availableArea;
-    }
+//    @Named("mapToAvailableArea")
+//    static AvailableArea mapToAvailableArea(Long availableAreaId, AvailableAreaRepository availableAreaRepository) {
+//        if (availableAreaId == null) {
+//            return null;
+//        }
+//        return availableAreaRepository.findById(availableAreaId)
+//                .orElseThrow(() -> new IllegalArgumentException("Invalid AvailableArea ID: " + availableAreaId));
+//    }
+
 }

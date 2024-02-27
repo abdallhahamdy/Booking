@@ -13,4 +13,6 @@ public class adsForSliderResponseDto {
     private String imagePath;
     private UnitDtoFavorite unitDtoFavorite;
 
+    private Long unitId;
+
 }

@@ -15,7 +15,8 @@ public interface SliderMapper {
     @Mappings({
             @Mapping(source = "ads.id", target = "adsId"),
             @Mapping(target = "imagePath", expression = "java(extractImagePath(ads.getImages()))"),
-            @Mapping(source = "ads.unit", target = "unitDtoFavorite"),
+//            @Mapping(source = "ads.unit", target = "unitDtoFavorite"),
+            @Mapping(source = "ads.unit.id", target = "unitId"),
             // You need to provide a way to get UnitDtoFavorite from Ads or set it manually
     })
     adsForSliderResponseDto toSliderDto(Ads ads);
