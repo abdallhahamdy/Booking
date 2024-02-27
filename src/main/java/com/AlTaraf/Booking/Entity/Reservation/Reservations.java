@@ -70,11 +70,11 @@ public class Reservations extends Auditable<String> {
 //            inverseJoinColumns = @JoinColumn(name = "AVAILABLE_AREA_ID"))
 //    private Set<AvailableArea> availableAreaSet = new HashSet<>();
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "ROOM_AVAILABLE_ID")
     private RoomAvailable roomAvailable;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "AVAILABLE_AREA_ID")
     private AvailableArea availableArea;
 
