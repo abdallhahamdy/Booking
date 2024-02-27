@@ -18,6 +18,8 @@ import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
+import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
+import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.unit.RoomDetails.RoomDetailsService;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -25,10 +27,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @EntityListeners(AuditingEntityListener.class)
@@ -179,6 +184,15 @@ public class Unit extends Auditable<String> {
     @JoinColumn(name = "EVALUATION_ID")
     private Evaluation evaluation;
 
+    @Transient
+    private UserFavoriteUnitRepository userFavoriteUnitRepository;
+
+    @Transient
+    private UserRepository userRepository;
+
+    @Transient
+    private SecurityContext securityContext;
+
     public Unit() {
         this.statusUnit = new StatusUnit();
         this.statusUnit.setId(1L);
@@ -228,5 +242,19 @@ public class Unit extends Auditable<String> {
                 price = newPriceHall;
             }
         }
+    }
+
+    private boolean checkFavorite() {
+        if (securityContext != null && securityContext.getAuthentication() != null) {
+            Object principal = securityContext.getAuthentication().getPrincipal();
+            if (principal instanceof UserDetails) {
+                Optional<User> currentUserOptional = userRepository.findByUsername(((UserDetails) principal).getUsername());
+                if (currentUserOptional.isPresent()) {
+                    User currentUser = currentUserOptional.get();
+                    return userFavoriteUnitRepository.existsByUserAndUnit(currentUser, this);
+                }
+            }
+        }
+        return false;
     }
 }

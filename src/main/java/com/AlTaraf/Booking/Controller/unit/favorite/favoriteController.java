@@ -11,7 +11,6 @@ import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.UserFavoriteUnit.UserFavoriteUnitService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import jakarta.persistence.EntityNotFoundException;
-import org.apache.catalina.manager.util.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
