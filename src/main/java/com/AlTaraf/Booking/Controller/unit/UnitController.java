@@ -186,11 +186,11 @@ public class UnitController {
                         .map(id -> new RoomAvailable(id))
                         .collect(Collectors.toSet()));
             }
-            if (unitRequestDto.getAvailableAreaIds() != null) {
-                unitToUpdate.setAvailableAreaSet(unitRequestDto.getAvailableAreaIds().stream()
-                        .map(id -> new AvailableArea(id))
-                        .collect(Collectors.toSet()));
-            }
+//            if (unitRequestDto.getAvailableAreaIds() != null) {
+//                unitToUpdate.setAvailableAreaSet(unitRequestDto.getAvailableAreaIds().stream()
+//                        .map(id -> new AvailableArea(id))
+//                        .collect(Collectors.toSet()));
+//            }
             if (unitRequestDto.getBasicFeaturesIds() != null) {
                 unitToUpdate.setBasicFeaturesSet(unitRequestDto.getBasicFeaturesIds().stream()
                         .map(id -> new Feature(id))
@@ -244,12 +244,12 @@ public class UnitController {
             }
 
 
-            if (unitRequestDto.getLatForMapping() != null) {
-                unitToUpdate.setLatForMapping(unitRequestDto.getLatForMapping());
-            }
-            if (unitRequestDto.getLongForMapping() != null) {
-                unitToUpdate.setLongForMapping(unitRequestDto.getLongForMapping());
-            }
+//            if (unitRequestDto.getLatForMapping() != null) {
+//                unitToUpdate.setLatForMapping(unitRequestDto.getLatForMapping());
+//            }
+//            if (unitRequestDto.getLongForMapping() != null) {
+//                unitToUpdate.setLongForMapping(unitRequestDto.getLongForMapping());
+//            }
             // Update other fields similarly...
 
             // Save the updated unit in the database
