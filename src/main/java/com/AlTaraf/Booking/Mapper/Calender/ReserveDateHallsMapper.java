@@ -19,10 +19,14 @@ public interface ReserveDateHallsMapper {
 
     @Mapping(source = "dateInfoList", target = "dateInfoList")
     @Mapping(source = "unit.id", target = "unitId")
+    @Mapping(source = "unit.accommodationType.id", target = "accommodationTypeId")
+    @Mapping(source = "unit.unitType.id", target = "unitTypeId")
     ReserveDateHallsDto toDto(ReserveDateHalls reserveDateHalls);
 
     @Mapping(source = "dateInfoList", target = "dateInfoList")
     @Mapping(source = "unitId", target = "unit.id")
+    @Mapping(source = "accommodationTypeId", target = "unit.accommodationType.id")
+    @Mapping(source = "unitTypeId", target = "unit.unitType.id")
     ReserveDateHalls toEntity(ReserveDateHallsDto reserveDateHallsDto);
 
     @Mapping(source = "dateInfoList", target = "dateInfoList")
