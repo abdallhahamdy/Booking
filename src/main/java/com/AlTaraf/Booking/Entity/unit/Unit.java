@@ -199,6 +199,10 @@ public class Unit extends Auditable<String> {
     @Column(name = "CHILDREN_ALLOWED")
     private Integer childrenAllowed;
 
+    @Column
+    private Integer totalEvaluation; // Total number of evaluations
+
+
     public Unit() {
         this.statusUnit = new StatusUnit();
         this.statusUnit.setId(1L);
