@@ -193,6 +193,12 @@ public class Unit extends Auditable<String> {
     @Transient
     private SecurityContext securityContext;
 
+    @Column(name = "ADULTS_ALLOWED")
+    private int adultsAllowed;
+
+    @Column(name = "CHILDREN_ALLOWED")
+    private int childrenAllowed;
+
     public Unit() {
         this.statusUnit = new StatusUnit();
         this.statusUnit.setId(1L);

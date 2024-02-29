@@ -2,6 +2,7 @@ package com.AlTaraf.Booking.Mapper;
 
 
 
+import com.AlTaraf.Booking.Dto.User.UserDto;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
 import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.User.User;
@@ -51,6 +52,16 @@ public interface UserMapper {
     @Mapping(source = "username", target = "name")
     @Mapping(source = "email", target = "email")
     List<UserRegisterDto> userListToUserRegisterDtoList(List<User> userList);
+
+
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "username", target = "username")
+    @Mapping(source = "email", target = "email")
+    @Mapping(source = "phone", target = "phone")
+    @Mapping(source = "city.id", target = "cityId")
+    @Mapping(source = "createdDate", target = "createdDate")
+    @Mapping(source = "lastModifiedDate", target = "lastModifiedDate")
+    UserDto userToUserDto(User user);
 
     @Named("roleToRoleDtoList")
     static Set<String> roleToRoleDtoList(Set<Role> roles) {

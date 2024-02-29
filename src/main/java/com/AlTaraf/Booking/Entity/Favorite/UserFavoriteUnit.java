@@ -19,7 +19,7 @@ public class UserFavoriteUnit {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;

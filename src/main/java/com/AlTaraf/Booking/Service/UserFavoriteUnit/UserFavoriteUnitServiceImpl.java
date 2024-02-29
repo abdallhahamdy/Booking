@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,11 +47,13 @@ public class UserFavoriteUnitServiceImpl implements UserFavoriteUnitService {
         return new PageImpl<>(unitDtoFavorites, pageable, userFavoriteUnitsPage.getTotalElements());
     }
 
-    public void deleteUserFavoriteUnit(Long userFavoriteUnitId) {
-        UserFavoriteUnit userFavoriteUnit = userFavoriteUnitRepository.findById(userFavoriteUnitId)
-                .orElseThrow(() -> new EntityNotFoundException("UserFavoriteUnit not found with id: " + userFavoriteUnitId));
+    public void deleteUserFavoriteUnit(Long userId, Long unitId) {
+        Optional<UserFavoriteUnit> userFavoriteUnitOptional = userFavoriteUnitRepository.findByUserAndUnit(userId, unitId);
+        UserFavoriteUnit userFavoriteUnit = userFavoriteUnitOptional.orElseThrow(() -> new EntityNotFoundException("UserFavoriteUnit not found for user: " + userId + " and unit: " + unitId));
+
         userFavoriteUnitRepository.delete(userFavoriteUnit);
     }
+
 
     public boolean existsByUserAndUnit(User user, Unit unit) {
         return userFavoriteUnitRepository.existsByUserAndUnit(user, unit);

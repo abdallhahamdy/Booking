@@ -16,7 +16,7 @@ public interface UserFavoriteUnitService {
 
     Page<UnitDtoFavorite> getUserFavoriteUnitsByUserId(Long userId, Pageable pageable);
 
-    void deleteUserFavoriteUnit(Long userFavoriteUnitId);
+    void deleteUserFavoriteUnit(Long userId, Long unitId);
 
     boolean existsByUserAndUnit(User user, Unit unit);
 }

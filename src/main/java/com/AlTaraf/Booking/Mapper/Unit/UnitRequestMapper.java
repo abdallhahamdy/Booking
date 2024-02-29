@@ -47,6 +47,8 @@ public interface UnitRequestMapper {
     @Mapping(source = "chaletNewPrice", target = "chaletNewPrice")
     @Mapping(source = "resortOldPrice", target = "resortOldPrice")
     @Mapping(source = "resortNewPrice", target = "resortNewPrice")
+    @Mapping(source = "adultsAllowed", target = "adultsAllowed")
+    @Mapping(source = "childrenAllowed", target = "childrenAllowed")
     Unit toUnit(UnitRequestDto unitRequestDto);
 
     List<Unit> toUnitList(List<UnitRequestDto> unitRequestDtos);

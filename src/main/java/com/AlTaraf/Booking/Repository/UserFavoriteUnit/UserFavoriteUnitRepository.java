@@ -6,10 +6,12 @@ import com.AlTaraf.Booking.Entity.unit.Unit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserFavoriteUnitRepository extends JpaRepository<UserFavoriteUnit, Long> {
     List<UserFavoriteUnit> findByUser(User user);
@@ -20,4 +22,10 @@ public interface UserFavoriteUnitRepository extends JpaRepository<UserFavoriteUn
     @Query("SELECT COUNT(u) > 0 FROM UserFavoriteUnit u WHERE u.user = :user AND u.unit = :unit")
     boolean existsByUserAndUnit(@Param("user") User user, @Param("unit") Unit unit);
 
+    @Modifying
+    @Query("DELETE FROM UserFavoriteUnit uf WHERE uf.user = :user AND uf.unit = :unit")
+    void deleteByUserAndUnit(@Param("user") User user, @Param("unit") Unit unit);
+
+    @Query("SELECT uf FROM UserFavoriteUnit uf WHERE uf.user.id = :userId AND uf.unit.id = :unitId")
+    Optional<UserFavoriteUnit> findByUserAndUnit(@Param("userId") Long userId, @Param("unitId") Long unitId);
 }

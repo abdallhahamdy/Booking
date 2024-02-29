@@ -116,16 +116,17 @@ public class favoriteController {
 //        }
 //    }
 
-    @DeleteMapping("/{userFavoriteUnitId}")
-    public ResponseEntity<?> deleteUserFavoriteUnit(@PathVariable Long userFavoriteUnitId) {
+    @DeleteMapping("/{userId}/{unitId}")
+    public ResponseEntity<?> deleteUserFavoriteUnit(@PathVariable Long userId, @PathVariable Long unitId) {
         try {
-            userFavoriteUnitService.deleteUserFavoriteUnit(userFavoriteUnitId);
+            userFavoriteUnitService.deleteUserFavoriteUnit(userId, unitId);
             return ResponseEntity.ok().body(new ApiResponse(200, "UserFavoriteUnit deleted successfully."));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(204, "UserFavoriteUnit not found."));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, "UserFavoriteUnit not found."));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "An error occurred while deleting UserFavoriteUnit."));
         }
     }
+
 
 }

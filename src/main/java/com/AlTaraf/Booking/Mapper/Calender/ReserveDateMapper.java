@@ -19,6 +19,8 @@ public interface ReserveDateMapper {
     @Mapping(source = "dateList", target = "dates", qualifiedByName = "toDateList")
     @Mapping(source = "roomDetailsForAvailableAreaId", target = "roomDetailsForAvailableArea.id")
     @Mapping(source = "unitId", target = "unit.id")
+    @Mapping(source = "accommodationTypeId", target = "unit.accommodationType.id")
+    @Mapping(source = "unitTypeId", target = "unit.unitType.id")
     ReserveDate reserveDateRequestToReserveDate(ReserveDateDto reserveDateRequest);
 
     @Mapping(source = "dates", target = "dateList", qualifiedByName = "toDateList")

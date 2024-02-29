@@ -1,10 +1,12 @@
 package com.AlTaraf.Booking.Controller.user;
 
+import com.AlTaraf.Booking.Dto.User.UserDto;
 import com.AlTaraf.Booking.Dto.User.UserEditDto;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.enums.ERole;
+import com.AlTaraf.Booking.Mapper.UserMapper;
 import com.AlTaraf.Booking.Payload.request.LoginRequest;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
@@ -52,6 +54,12 @@ public class UserController {
 
     @Autowired
     PasswordEncoder encoder;
+
+    @Autowired
+    UserMapper userMapper;
+
+//    @Autowired
+//    userMapper userMapper2;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -203,12 +211,14 @@ public class UserController {
         User user = userService.getUserById(id);
 
         if (user != null) {
-            return ResponseEntity.ok(user);
+            UserDto userDto = userMapper.INSTANCE.userToUserDto(user);
+            return ResponseEntity.ok(userDto);
         } else {
             ApiResponse response = new ApiResponse(404, "Not Found!");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
+
 
     @PatchMapping("/edit/{userId}")
     public ResponseEntity<?> editUser(@PathVariable Long userId, @Valid @RequestBody UserEditDto userEditDto) {
