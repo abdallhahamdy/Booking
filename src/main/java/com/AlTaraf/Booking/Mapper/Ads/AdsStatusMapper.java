@@ -12,7 +12,10 @@ public interface AdsStatusMapper {
 //    @Mapping(source = "id", target = "id")
     @Mapping(source = "unit.id", target = "unitId")
     @Mapping(source = "unit.unitType.id", target = "unitTypeId")
-    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "images", target = "images")
+    @Mapping(source = "unit.nameUnit", target = "unitName")
+    @Mapping(source = "unit.city", target = "cityDto")
+    @Mapping(source = "unit.region", target = "regionDto")
     @Mapping(source = "packageAds.id", target = "packageAdsId")
     AdsDto toDto(Ads ads);
 
