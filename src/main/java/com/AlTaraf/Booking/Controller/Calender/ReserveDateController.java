@@ -3,6 +3,7 @@ package com.AlTaraf.Booking.Controller.Calender;
 import com.AlTaraf.Booking.Dto.calender.ReserveDateHallsDto;
 import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
 import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
+import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
 import com.AlTaraf.Booking.Mapper.Calender.ReserveDateHallsMapper;
 import com.AlTaraf.Booking.Mapper.Calender.ReserveDateMapper;
 import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateDto;
@@ -11,12 +12,14 @@ import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
+import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -51,7 +54,21 @@ public class ReserveDateController {
     @PostMapping
     public ResponseEntity<?> createReserveDate(@RequestBody ReserveDateDto reserveDateRequest) {
         try {
+            // Fetch or create the roomDetailsForAvailableArea entity
+            RoomDetailsForAvailableArea roomDetails = null;
+            if (reserveDateRequest.getRoomDetailsForAvailableAreaId() != null) {
+                Optional<RoomDetailsForAvailableArea> roomDetailsOptional = roomDetailsForAvailableAreaRepository.findById(reserveDateRequest.getRoomDetailsForAvailableAreaId());
+                roomDetails = roomDetailsOptional.orElse(null);
+            }
+            // Alternatively, you can create a new RoomDetailsForAvailableArea entity if needed
+
+            // Map the ReserveDateDto to a ReserveDate entity
             ReserveDate reserveDate = ReserveDateMapper.INSTANCE.reserveDateRequestToReserveDate(reserveDateRequest);
+
+            // Set the roomDetailsForAvailableArea in the ReserveDate entity
+            reserveDate.setRoomDetailsForAvailableArea(roomDetails);
+
+            // Save the ReserveDate entity
             ReserveDate savedReserveDate = reserveDateRepository.save(reserveDate);
             return ResponseEntity.ok("Reserve date created successfully");
         } catch (Exception e) {

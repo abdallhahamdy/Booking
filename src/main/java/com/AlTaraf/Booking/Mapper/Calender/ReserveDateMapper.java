@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.Mapper.Calender;
 
 import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
+import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
 import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -35,4 +36,8 @@ public interface ReserveDateMapper {
                 .collect(Collectors.toList());
     }
 
+
+    default RoomDetailsForAvailableArea mapRoomDetailsForAvailableArea(Long roomDetailsForAvailableAreaId) {
+        return roomDetailsForAvailableAreaId != null ? new RoomDetailsForAvailableArea(roomDetailsForAvailableAreaId) : null;
+    }
 }

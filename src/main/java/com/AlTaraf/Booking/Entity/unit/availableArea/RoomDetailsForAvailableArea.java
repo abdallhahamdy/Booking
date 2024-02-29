@@ -45,4 +45,7 @@ public class RoomDetailsForAvailableArea {
     @JsonBackReference
     private Unit unit;
 
+    public RoomDetailsForAvailableArea(Long roomDetailsForAvailableAreaId) {
+        this.id = roomDetailsForAvailableAreaId;
+    }
 }
