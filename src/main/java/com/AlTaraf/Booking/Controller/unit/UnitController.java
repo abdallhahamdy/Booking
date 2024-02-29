@@ -284,20 +284,18 @@ public class UnitController {
 //        }
 //    }
 
-    @GetMapping("/get-evaluation-Names")
+    @GetMapping("/get-units-by-evaluation")
     public ResponseEntity<?> getUnitsByEvaluationNames(
-            @RequestParam List<String> evaluationNames,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "2") int size) {
 
-        Page<UnitDtoFavorite> units = unitService.getUnitsByEvaluationNames(evaluationNames, page, size);
+        Page<UnitDtoFavorite> units = unitService.getUnitByEvaluationInOrderByEvaluationScoreDesc(page, size);
 
         if (!units.isEmpty()) {
             return new ResponseEntity<>(units, HttpStatus.OK);
         } else {
             ApiResponse response = new ApiResponse(204, "No Content for Units have high evaluation!");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 

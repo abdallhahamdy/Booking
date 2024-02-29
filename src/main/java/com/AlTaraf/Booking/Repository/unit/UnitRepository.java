@@ -22,8 +22,8 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
     Page<Unit> findByHotelClassification_NameIn(List<String> hotelClassificationNames, Pageable pageable);
 
-    @Query("SELECT u FROM Unit u WHERE u.evaluation.name IN :names")
-    Page<Unit> findByEvaluation_NameIn(@Param("names") List<String> names, Pageable pageable);
+    @Query("SELECT u FROM Unit u JOIN u.evaluation e ORDER BY e.score DESC")
+    Page<Unit> findByEvaluationInOrderByEvaluationScoreDesc(Pageable pageable);
 
     Page<Unit> findByCreatedDateBetween(Date startOfDay, Date endOfDay, Pageable pageable);
 

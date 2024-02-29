@@ -146,19 +146,19 @@ public class Unit extends Auditable<String> {
             inverseJoinColumns = @JoinColumn(name = "available_periods_id"))
     private Set<AvailablePeriods> availablePeriodsHallsSet = new HashSet<>();
 
-    private int oldPriceHall;
+    private Integer oldPriceHall;
 
-    private int newPriceHall;
+    private Integer newPriceHall;
 
-    private int ChaletNewPrice;
+    private Integer ChaletNewPrice;
 
-    private int ChaletOldPrice;
+    private Integer ChaletOldPrice;
 
-    private int resortOldPrice;
+    private Integer resortOldPrice;
 
-    private int resortNewPrice;
+    private Integer resortNewPrice;
 
-    private int price;
+    private Integer price;
 
     private Double latForMapping;
 
@@ -194,10 +194,10 @@ public class Unit extends Auditable<String> {
     private SecurityContext securityContext;
 
     @Column(name = "ADULTS_ALLOWED")
-    private int adultsAllowed;
+    private Integer adultsAllowed;
 
     @Column(name = "CHILDREN_ALLOWED")
-    private int childrenAllowed;
+    private Integer childrenAllowed;
 
     public Unit() {
         this.statusUnit = new StatusUnit();
@@ -215,7 +215,7 @@ public class Unit extends Auditable<String> {
         this.newPriceHall = newPriceHall;
     }
 
-    public void setPrice( int price ) {
+    public void setPrice( Integer price ) {
 
         if (unitType != null && unitType.getId() == 2) {
             if (newPriceHall == 0) {

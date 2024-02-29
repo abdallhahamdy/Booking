@@ -30,6 +30,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UnitServiceImpl implements UnitService {
@@ -78,11 +79,12 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public Page<UnitDtoFavorite> getUnitsByEvaluationNames(List<String> evaluationNames, int page, int size) {
+    public Page<UnitDtoFavorite> getUnitByEvaluationInOrderByEvaluationScoreDesc(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<Unit> unitsPage = unitRepository.findByEvaluation_NameIn(evaluationNames, pageRequest);
 
-        return unitsPage.map(unitFavoriteMapper::toUnitFavoriteDto);
+        Page<Unit> units = unitRepository.findByEvaluationInOrderByEvaluationScoreDesc(pageRequest);
+
+        return units.map(unitFavoriteMapper::toUnitFavoriteDto);
     }
 
     @Override

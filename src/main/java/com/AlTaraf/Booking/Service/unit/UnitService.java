@@ -14,8 +14,7 @@ public interface UnitService {
 
     Page<UnitDtoFavorite> getUnitsByHotelClassificationNames(List<String> hotelClassificationNames, int page, int size);
 
-    Page<UnitDtoFavorite> getUnitsByEvaluationNames(List<String> evaluationNames, int page, int size);
-
+    Page<UnitDtoFavorite> getUnitByEvaluationInOrderByEvaluationScoreDesc(int page, int size);
     Page<UnitDtoFavorite> getFavoriteUnitsForUser(Long userId, int page, int size);
     Unit getUnitById(Long id);
 
