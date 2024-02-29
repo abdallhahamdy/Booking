@@ -455,9 +455,6 @@ public class UnitController {
         }
     }
 
-
-
-
     @DeleteMapping("Delete/Unit/{id}")
     public ResponseEntity<?> deleteUnit(@PathVariable Long id) {
 
