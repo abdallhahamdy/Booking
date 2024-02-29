@@ -51,7 +51,7 @@ public class Reservations extends Auditable<String> {
     private User user;
 
     @ManyToOne()
-    @JoinColumn(name = "EVALUATION_ID", nullable = true)
+    @JoinColumn(name = "EVALUATION_ID")
     private Evaluation evaluation;
 
 
