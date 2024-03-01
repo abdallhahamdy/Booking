@@ -146,17 +146,17 @@ public class Unit extends Auditable<String> {
             inverseJoinColumns = @JoinColumn(name = "available_periods_id"))
     private Set<AvailablePeriods> availablePeriodsHallsSet = new HashSet<>();
 
-    private Integer oldPriceHall;
+    private Integer oldPriceHall = 0;
 
-    private Integer newPriceHall;
+    private Integer newPriceHall = 0;
 
-    private Integer ChaletNewPrice;
+    private Integer ChaletNewPrice = 0;
 
-    private Integer ChaletOldPrice;
+    private Integer ChaletOldPrice = 0;
 
-    private Integer resortOldPrice;
+    private Integer resortOldPrice = 0;
 
-    private Integer resortNewPrice;
+    private Integer resortNewPrice = 0;
 
     private Integer price = 0;
 
@@ -194,10 +194,10 @@ public class Unit extends Auditable<String> {
     private SecurityContext securityContext;
 
     @Column(name = "ADULTS_ALLOWED")
-    private Integer adultsAllowed;
+    private Integer adultsAllowed = 0;
 
     @Column(name = "CHILDREN_ALLOWED")
-    private Integer childrenAllowed;
+    private Integer childrenAllowed =0 ;
 
     @Column(name = "TOTAL_EVALUATION")
     private Integer totalEvaluation = 0; // Total number of evaluations

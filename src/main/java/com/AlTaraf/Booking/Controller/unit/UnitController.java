@@ -134,6 +134,42 @@ public class UnitController {
                 throw new IllegalArgumentException("New price must be less than old price.");
             }
 
+
+
+            if (unitToSave.getResortNewPrice() == null) {
+                unitToSave.setResortNewPrice(0); // Or set it to some default value
+            }
+
+            if (unitToSave.getResortOldPrice() == null) {
+                unitToSave.setResortOldPrice(0); // Set oldPriceHall to 0 if it's null
+            }
+
+            // Check if newPriceHall is less than oldPriceHall
+            if (unitToSave.getResortNewPrice() != null &&
+                    unitToSave.getResortNewPrice() != 0 &&
+                    unitToSave.getResortOldPrice() != null &&
+                    unitToSave.getResortOldPrice() >= unitToSave.getResortOldPrice()) {
+                throw new IllegalArgumentException("New price must be less than old price.");
+            }
+
+
+
+            if (unitToSave.getChaletNewPrice() == null) {
+                unitToSave.setChaletNewPrice(0); // Or set it to some default value
+            }
+
+            if (unitToSave.getChaletOldPrice() == null) {
+                unitToSave.setChaletOldPrice(0); // Set oldPriceHall to 0 if it's null
+            }
+
+            // Check if newPriceHall is less than oldPriceHall
+            if (unitToSave.getChaletNewPrice() != null &&
+                    unitToSave.getChaletNewPrice() != 0 &&
+                    unitToSave.getChaletOldPrice() != null &&
+                    unitToSave.getChaletOldPrice() >= unitToSave.getChaletOldPrice()) {
+                throw new IllegalArgumentException("New price must be less than old price.");
+            }
+
             // Calculate the price based on the unitType
             unitToSave.calculatePrice();
 
