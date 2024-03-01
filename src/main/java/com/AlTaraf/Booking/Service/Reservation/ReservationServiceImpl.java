@@ -92,15 +92,19 @@ public class ReservationServiceImpl implements ReservationService {
             AvailableArea availableArea = getAvailableAreaByReservations(reservationId);
             RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsForAvailableAreaRepository.findByUnitIdAndAvailableAreaId(unit.getId(), availableArea.getId());
 
-            List<ReserveDate> reserveDate = reserveDateRepository.findByRoomDetailsForAvailableAreaIdAndUnitIdAndReserveTrue(roomDetailsForAvailableArea.getId(), unit.getId());
+//            List<ReserveDate> reserveDate = reserveDateRepository.findByRoomDetailsForAvailableAreaIdAndUnitId(roomDetailsForAvailableArea.getId(), unit.getId());
 
-            for (ReserveDate date : reserveDate ) {
-                date.setReserve(true);
-            }
+//            for (ReserveDate date : reserveDate ) {
+//                System.out.println("set True");
+//                date.setReserve(true);
+//            }
+
 
             int numberRoom = roomDetailsForAvailableArea.getRoomNumber();
-            numberRoom--;
-            roomDetailsForAvailableArea.setRoomNumber(numberRoom);
+            if (numberRoom > 0) {
+                numberRoom--;
+                roomDetailsForAvailableArea.setRoomNumber(numberRoom);
+            }
 
         }
 

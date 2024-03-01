@@ -82,7 +82,7 @@ public class CalenderController {
             boolean roomNumberZeroExists = roomDetailsForAvailableAreaRepository.existsByRoomNumberZero();
 
             if (roomNumberZeroExists) {
-                List<ReserveDate> reserveDates = reserveDateRepository.findByRoomDetailsForAvailableAreaIdAndUnitIdAndReserveTrue(roomDetailsForAvailableAreaId, unitId);
+                List<ReserveDate> reserveDates = reserveDateRepository.findByRoomDetailsForAvailableAreaIdAndUnitId(roomDetailsForAvailableAreaId, unitId);
                 List<ReserveDateDto> reserveDateRequests = reserveDates.stream()
                         .map(ReserveDateMapper.INSTANCE::reserveDateToReserveDateRequest)
                         .collect(Collectors.toList());

@@ -35,7 +35,7 @@ public class ReserveDate {
     @ManyToOne
     private Unit unit;
 
-    @Column(name = "RESERVE")
-    private Boolean reserve;
+//    @Column(name = "RESERVE")
+//    private Boolean reserve;
 
 }
