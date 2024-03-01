@@ -212,12 +212,13 @@ public class Unit extends Auditable<String> {
 //        this.setFavorite(false);
     }
 
-    public void setNewPriceHall(int newPriceHall) {
-        if (oldPriceHall != null && newPriceHall >= oldPriceHall) {
-            throw new IllegalArgumentException("New price must be less than old price.");
-        }
-        this.newPriceHall = newPriceHall;
-    }
+//    public void setNewPriceHall(int newPriceHall) {
+//        if (oldPriceHall != null && newPriceHall >= oldPriceHall) {
+//            throw new IllegalArgumentException("New price must be less than old price.");
+//        }
+//        this.newPriceHall = newPriceHall;
+//    }
+
     public void setPrice(Integer price) {
         if (unitType != null && unitType.getId() == 2) {
             if (getNewPriceHall() == null || getNewPriceHall().intValue() == 0) {

@@ -127,12 +127,12 @@ public class UnitController {
             }
 
             // Check if newPriceHall is less than oldPriceHall
-            if (unitToSave.getNewPriceHall() != null &&
-                    unitToSave.getNewPriceHall() != 0 &&
-                    unitToSave.getOldPriceHall() != null &&
-                    unitToSave.getNewPriceHall() >= unitToSave.getOldPriceHall()) {
-                throw new IllegalArgumentException("New price must be less than old price.");
-            }
+//            if (unitToSave.getNewPriceHall() != null &&
+//                    unitToSave.getNewPriceHall() != 0 &&
+//                    unitToSave.getOldPriceHall() != null &&
+//                    unitToSave.getNewPriceHall() >= unitToSave.getOldPriceHall()) {
+//                throw new IllegalArgumentException("New price must be less than old price.");
+//            }
 
 
 
@@ -145,12 +145,12 @@ public class UnitController {
             }
 
             // Check if newPriceHall is less than oldPriceHall
-            if (unitToSave.getResortNewPrice() != null &&
-                    unitToSave.getResortNewPrice() != 0 &&
-                    unitToSave.getResortOldPrice() != null &&
-                    unitToSave.getResortOldPrice() >= unitToSave.getResortOldPrice()) {
-                throw new IllegalArgumentException("New price must be less than old price.");
-            }
+//            if (unitToSave.getResortNewPrice() != null &&
+//                    unitToSave.getResortNewPrice() != 0 &&
+//                    unitToSave.getResortOldPrice() != null &&
+//                    unitToSave.getResortOldPrice() >= unitToSave.getResortOldPrice()) {
+//                throw new IllegalArgumentException("New price must be less than old price.");
+//            }
 
 
 
@@ -163,12 +163,12 @@ public class UnitController {
             }
 
             // Check if newPriceHall is less than oldPriceHall
-            if (unitToSave.getChaletNewPrice() != null &&
-                    unitToSave.getChaletNewPrice() != 0 &&
-                    unitToSave.getChaletOldPrice() != null &&
-                    unitToSave.getChaletOldPrice() >= unitToSave.getChaletOldPrice()) {
-                throw new IllegalArgumentException("New price must be less than old price.");
-            }
+//            if (unitToSave.getChaletNewPrice() != null &&
+//                    unitToSave.getChaletNewPrice() != 0 &&
+//                    unitToSave.getChaletOldPrice() != null &&
+//                    unitToSave.getChaletOldPrice() >= unitToSave.getChaletOldPrice()) {
+//                throw new IllegalArgumentException("New price must be less than old price.");
+//            }
 
             // Calculate the price based on the unitType
             unitToSave.calculatePrice();
