@@ -117,8 +117,20 @@ public class UnitController {
             // Convert UnitRequestDto to Unit
             Unit unitToSave = unitRequestMapper.toUnit(unitRequestDto);
 
+            // Set default value for newPriceHall if it's null
+            if (unitToSave.getNewPriceHall() == null) {
+                unitToSave.setNewPriceHall(0); // Or set it to some default value
+            }
+
+            if (unitToSave.getOldPriceHall() == null) {
+                unitToSave.setOldPriceHall(0); // Set oldPriceHall to 0 if it's null
+            }
+
             // Check if newPriceHall is less than oldPriceHall
-            if (unitToSave.getNewPriceHall() != 0 && unitToSave.getNewPriceHall() >= unitToSave.getOldPriceHall()) {
+            if (unitToSave.getNewPriceHall() != null &&
+                    unitToSave.getNewPriceHall() != 0 &&
+                    unitToSave.getOldPriceHall() != null &&
+                    unitToSave.getNewPriceHall() >= unitToSave.getOldPriceHall()) {
                 throw new IllegalArgumentException("New price must be less than old price.");
             }
 
@@ -142,7 +154,6 @@ public class UnitController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
-
     @PatchMapping("/Update-Unit/{unitId}")
     public ResponseEntity<?> updateUnit(@PathVariable Long unitId, @RequestBody UnitRequestDto unitRequestDto) {
         try {

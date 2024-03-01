@@ -213,43 +213,57 @@ public class Unit extends Auditable<String> {
     }
 
     public void setNewPriceHall(int newPriceHall) {
-        if (newPriceHall >= oldPriceHall) {
+        if (oldPriceHall != null && newPriceHall >= oldPriceHall) {
             throw new IllegalArgumentException("New price must be less than old price.");
         }
         this.newPriceHall = newPriceHall;
     }
-
-    public void setPrice( Integer price ) {
-
+    public void setPrice(Integer price) {
         if (unitType != null && unitType.getId() == 2) {
-            if (newPriceHall == 0) {
-                price = oldPriceHall;
+            if (getNewPriceHall() == null || getNewPriceHall().intValue() == 0) {
+                price = getOldPriceHall();
             } else {
-                price = newPriceHall;
+                price = getNewPriceHall();
             }
-        } else if ( unitType.getId() == 1 &&  accommodationType.getId() == 4 ) {
-            if (ChaletNewPrice == 0 ) {
-                price = ChaletOldPrice;
-            } else {
-                price = ChaletNewPrice;
+        } else if (unitType != null && unitType.getId() == 1 && accommodationType != null) {
+            if (accommodationType.getId() == 4) {
+                if (getChaletNewPrice() == null || getChaletNewPrice().intValue() == 0) {
+                    price = getChaletOldPrice();
+                } else {
+                    price = getChaletNewPrice();
+                }
+            } else if (accommodationType.getId() == 5) {
+                if (getResortNewPrice() == null || getResortNewPrice().intValue() == 0) {
+                    price = getResortOldPrice();
+                } else {
+                    price = getResortNewPrice();
+                }
             }
-        } else if ( unitType.getId() == 1 && accommodationType.getId() == 5) {
-            if (resortNewPrice == 0 ) {
-                price = resortOldPrice;
-            } else {
-                price = resortNewPrice;
-            }
-        } else {
-            this.price = price;
         }
+        this.price = price;
     }
+
 
     public void calculatePrice() {
         if (unitType != null && unitType.getId() == 2) {
-            if (newPriceHall == 0) {
-                price = oldPriceHall;
+            if (getNewPriceHall() == null || getNewPriceHall() == 0) {
+                price = getOldPriceHall() != null ? getOldPriceHall() : 0; // Set a default value if oldPriceHall is null
             } else {
-                price = newPriceHall;
+                price = getNewPriceHall();
+            }
+        } else if (unitType != null && unitType.getId() == 1 && accommodationType != null) {
+            if (accommodationType.getId() == 4) {
+                if (getChaletNewPrice() == null || getChaletNewPrice() == 0) {
+                    price = getChaletOldPrice() != null ? getChaletOldPrice() : 0; // Set a default value if chaletOldPrice is null
+                } else {
+                    price = getChaletNewPrice();
+                }
+            } else if (accommodationType.getId() == 5) {
+                if (getResortNewPrice() == null || getResortNewPrice() == 0) {
+                    price = getResortOldPrice() != null ? getResortOldPrice() : 0; // Set a default value if resortOldPrice is null
+                } else {
+                    price = getResortNewPrice();
+                }
             }
         }
     }
