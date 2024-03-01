@@ -7,12 +7,10 @@ import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea
 import com.AlTaraf.Booking.Mapper.Calender.ReserveDateHallsMapper;
 import com.AlTaraf.Booking.Mapper.Calender.ReserveDateMapper;
 import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateDto;
-import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateForHallsDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
-import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +22,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/calender")
-public class ReserveDateController {
+public class CalenderController {
     @Autowired
     private ReserveDateRepository reserveDateRepository;
 
@@ -80,8 +78,12 @@ public class ReserveDateController {
     public ResponseEntity<?> getReserveDatesByRoomDetailsForAvailableAreaIdAndUnitId(@PathVariable Long roomDetailsForAvailableAreaId, @PathVariable Long unitId) {
 
         try {
+
             boolean roomNumberZeroExists = roomDetailsForAvailableAreaRepository.existsByRoomNumberZero();
+            System.out.println("room Number Zero Exists: " + roomNumberZeroExists);
+
             if (roomNumberZeroExists) {
+                System.out.println("roomNumberZeroExists = true condition");
                 List<ReserveDate> reserveDates = reserveDateRepository.findByRoomDetailsForAvailableAreaIdAndUnitIdAndReserveTrue(roomDetailsForAvailableAreaId, unitId);
                 List<ReserveDateDto> reserveDateRequests = reserveDates.stream()
                         .map(ReserveDateMapper.INSTANCE::reserveDateToReserveDateRequest)
@@ -96,10 +98,39 @@ public class ReserveDateController {
         }
     }
 
+    @GetMapping("/For-Add-Unit/{roomDetailsForAvailableAreaId}/{unitId}")
+    public ResponseEntity<?> getReserveDatesByRoomDetailsForAvailableAreaIdAndUnitIdForUnit(@PathVariable Long roomDetailsForAvailableAreaId, @PathVariable Long unitId) {
+
+        try {
+
+        List<ReserveDate> reserveDates = reserveDateRepository.findByRoomDetailsForAvailableAreaIdAndUnitId(roomDetailsForAvailableAreaId, unitId);
+        List<ReserveDateDto> reserveDateRequests = reserveDates.stream()
+                .map(ReserveDateMapper.INSTANCE::reserveDateToReserveDateRequest)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(reserveDateRequests);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get reserve dates: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/get-reserve-date-halls/{unitId}")
     public ResponseEntity<?> getReserveDateHallsByUnitId(@PathVariable Long unitId) {
         try {
             List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitIdAndReserveIsTrue(unitId);
+            List<ReserveDateHallsDto> reserveDateHallsDtoList = reserveDateHallsList.stream()
+                    .map(ReserveDateHallsMapper.INSTANCE::toDto)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(reserveDateHallsDtoList);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No reserve Date "));
+        }
+    }
+
+    @GetMapping("/For-Add-Unit/get-reserve-date-halls/{unitId}")
+    public ResponseEntity<?> getReserveDateHallsByUnitIdForUnit(@PathVariable Long unitId) {
+        try {
+            List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitIdAndReserve(unitId);
             List<ReserveDateHallsDto> reserveDateHallsDtoList = reserveDateHallsList.stream()
                     .map(ReserveDateHallsMapper.INSTANCE::toDto)
                     .collect(Collectors.toList());

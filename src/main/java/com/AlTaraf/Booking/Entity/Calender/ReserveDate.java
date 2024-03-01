@@ -36,6 +36,6 @@ public class ReserveDate {
     private Unit unit;
 
     @Column(name = "RESERVE")
-    private boolean reserve;
+    private Boolean reserve;
 
 }

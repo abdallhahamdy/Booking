@@ -154,6 +154,7 @@ public class UnitController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
+
     @PatchMapping("/Update-Unit/{unitId}")
     public ResponseEntity<?> updateUnit(@PathVariable Long unitId, @RequestBody UnitRequestDto unitRequestDto) {
         try {
@@ -182,34 +183,35 @@ public class UnitController {
 
             if (unitRequestDto.getDescription() != null) {
                 unitToUpdate.setDescription(unitRequestDto.getDescription());
+                System.out.println("After Update Description: " + unitRequestDto.getDescription());
             }
-//            if (unitRequestDto.getCityId() != null) {
-//                unitToUpdate.setCity(new City(unitRequestDto.getCityId()));
-//            }
-//            if (unitRequestDto.getRegionId() != null) {
-//                unitToUpdate.setRegion(new Region(unitRequestDto.getRegionId()));
-//            }
-//            if (unitRequestDto.getAccommodationTypeId() != null) {
-//                unitToUpdate.setAccommodationType(new AccommodationType(unitRequestDto.getAccommodationTypeId()));
-//            }
-//            if (unitRequestDto.getHotelClassificationId() != null) {
-//                unitToUpdate.setHotelClassification(new HotelClassification(unitRequestDto.getHotelClassificationId()));
-//            }
-//            if (unitRequestDto.getRoomAvailableIds() != null) {
-//                unitToUpdate.setRoomAvailableSet(unitRequestDto.getRoomAvailableIds().stream()
-//                        .map(id -> new RoomAvailable(id))
-//                        .collect(Collectors.toSet()));
-//            }
-////            if (unitRequestDto.getAvailableAreaIds() != null) {
-////                unitToUpdate.setAvailableAreaSet(unitRequestDto.getAvailableAreaIds().stream()
-////                        .map(id -> new AvailableArea(id))
-////                        .collect(Collectors.toSet()));
-////            }
-//            if (unitRequestDto.getBasicFeaturesIds() != null) {
-//                unitToUpdate.setBasicFeaturesSet(unitRequestDto.getBasicFeaturesIds().stream()
-//                        .map(id -> new Feature(id))
-//                        .collect(Collectors.toSet()));
-//            }
+            if (unitRequestDto.getCityId() != null) {
+                unitToUpdate.setCity(new City(unitRequestDto.getCityId()));
+            }
+            if (unitRequestDto.getRegionId() != null) {
+                unitToUpdate.setRegion(new Region(unitRequestDto.getRegionId()));
+            }
+            if (unitRequestDto.getAccommodationTypeId() != null) {
+                unitToUpdate.setAccommodationType(new AccommodationType(unitRequestDto.getAccommodationTypeId()));
+            }
+            if (unitRequestDto.getHotelClassificationId() != null) {
+                unitToUpdate.setHotelClassification(new HotelClassification(unitRequestDto.getHotelClassificationId()));
+            }
+            if (unitRequestDto.getRoomAvailableIds() != null) {
+                unitToUpdate.setRoomAvailableSet(unitRequestDto.getRoomAvailableIds().stream()
+                        .map(id -> new RoomAvailable(id))
+                        .collect(Collectors.toSet()));
+            }
+            if (unitRequestDto.getAvailableAreaIds() != null) {
+                unitToUpdate.setAvailableAreaSet(unitRequestDto.getAvailableAreaIds().stream()
+                        .map(id -> new AvailableArea(id))
+                        .collect(Collectors.toSet()));
+            }
+            if (unitRequestDto.getBasicFeaturesIds() != null) {
+                unitToUpdate.setBasicFeaturesSet(unitRequestDto.getBasicFeaturesIds().stream()
+                        .map(id -> new Feature(id))
+                        .collect(Collectors.toSet()));
+            }
 //            if (unitRequestDto.getSubFeaturesIds() != null) {
 //                unitToUpdate.setSubFeaturesSet(unitRequestDto.getSubFeaturesIds().stream()
 //                        .map(id -> new SubFeature(id))

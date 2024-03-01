@@ -29,5 +29,5 @@ public class ReserveDateHalls {
     private Unit unit;;
 
     @Column(name = "RESERVE")
-    private boolean reserve;
+    private Boolean reserve;
 }
