@@ -158,7 +158,7 @@ public class Unit extends Auditable<String> {
 
     private Integer resortNewPrice;
 
-    private Integer price;
+    private Integer price = 0;
 
     private Double latForMapping;
 
