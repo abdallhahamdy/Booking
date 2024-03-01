@@ -199,8 +199,8 @@ public class Unit extends Auditable<String> {
     @Column(name = "CHILDREN_ALLOWED")
     private Integer childrenAllowed;
 
-    @Column
-    private Integer totalEvaluation; // Total number of evaluations
+    @Column(name = "TOTAL_EVALUATION")
+    private Integer totalEvaluation = 0; // Total number of evaluations
 
 
     public Unit() {
@@ -267,4 +267,12 @@ public class Unit extends Auditable<String> {
         }
         return false;
     }
+
+    public void incrementTotalEvaluation() {
+        if (this.totalEvaluation == null) {
+            this.totalEvaluation = 0; // Initialize to 0 if null
+        }
+        this.totalEvaluation++;
+    }
+
 }

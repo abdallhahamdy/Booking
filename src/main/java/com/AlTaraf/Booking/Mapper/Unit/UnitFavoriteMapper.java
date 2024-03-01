@@ -27,7 +27,8 @@ public interface UnitFavoriteMapper {
             @Mapping(source = "longForMapping", target = "longForMapping"),
             @Mapping(source = "price", target = "price", defaultValue = "0"),
             @Mapping(source = "evaluation.name", target = "evaluationName"),
-            @Mapping(source = "evaluation.arabicName", target = "evaluationArabicName")
+            @Mapping(source = "evaluation.arabicName", target = "evaluationArabicName"),
+            @Mapping(source = "totalEvaluation", target = "totalEvaluation")
     })
      UnitDtoFavorite toUnitFavoriteDto(Unit unit);
 

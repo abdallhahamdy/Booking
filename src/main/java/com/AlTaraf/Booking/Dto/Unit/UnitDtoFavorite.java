@@ -28,6 +28,5 @@ public class UnitDtoFavorite {
     private int price;
     private String evaluationName;
     private String evaluationArabicName;
-
-
+    private Integer totalEvaluation;
 }
