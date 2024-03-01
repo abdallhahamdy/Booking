@@ -164,84 +164,87 @@ public class UnitController {
                 unitToUpdate.setUser(new User(unitRequestDto.getUserId()));
             }
             if (unitRequestDto.getNameUnit() != null) {
+                System.out.println("Named Unit: " + unitRequestDto.getNameUnit());
                 unitToUpdate.setNameUnit(unitRequestDto.getNameUnit());
+                System.out.println("After Named Unit: " + unitRequestDto.getNameUnit());
             }
+
             if (unitRequestDto.getDescription() != null) {
                 unitToUpdate.setDescription(unitRequestDto.getDescription());
             }
-            if (unitRequestDto.getCityId() != null) {
-                unitToUpdate.setCity(new City(unitRequestDto.getCityId()));
-            }
-            if (unitRequestDto.getRegionId() != null) {
-                unitToUpdate.setRegion(new Region(unitRequestDto.getRegionId()));
-            }
-            if (unitRequestDto.getAccommodationTypeId() != null) {
-                unitToUpdate.setAccommodationType(new AccommodationType(unitRequestDto.getAccommodationTypeId()));
-            }
-            if (unitRequestDto.getHotelClassificationId() != null) {
-                unitToUpdate.setHotelClassification(new HotelClassification(unitRequestDto.getHotelClassificationId()));
-            }
-            if (unitRequestDto.getRoomAvailableIds() != null) {
-                unitToUpdate.setRoomAvailableSet(unitRequestDto.getRoomAvailableIds().stream()
-                        .map(id -> new RoomAvailable(id))
-                        .collect(Collectors.toSet()));
-            }
-//            if (unitRequestDto.getAvailableAreaIds() != null) {
-//                unitToUpdate.setAvailableAreaSet(unitRequestDto.getAvailableAreaIds().stream()
-//                        .map(id -> new AvailableArea(id))
+//            if (unitRequestDto.getCityId() != null) {
+//                unitToUpdate.setCity(new City(unitRequestDto.getCityId()));
+//            }
+//            if (unitRequestDto.getRegionId() != null) {
+//                unitToUpdate.setRegion(new Region(unitRequestDto.getRegionId()));
+//            }
+//            if (unitRequestDto.getAccommodationTypeId() != null) {
+//                unitToUpdate.setAccommodationType(new AccommodationType(unitRequestDto.getAccommodationTypeId()));
+//            }
+//            if (unitRequestDto.getHotelClassificationId() != null) {
+//                unitToUpdate.setHotelClassification(new HotelClassification(unitRequestDto.getHotelClassificationId()));
+//            }
+//            if (unitRequestDto.getRoomAvailableIds() != null) {
+//                unitToUpdate.setRoomAvailableSet(unitRequestDto.getRoomAvailableIds().stream()
+//                        .map(id -> new RoomAvailable(id))
 //                        .collect(Collectors.toSet()));
 //            }
-            if (unitRequestDto.getBasicFeaturesIds() != null) {
-                unitToUpdate.setBasicFeaturesSet(unitRequestDto.getBasicFeaturesIds().stream()
-                        .map(id -> new Feature(id))
-                        .collect(Collectors.toSet()));
-            }
-            if (unitRequestDto.getSubFeaturesIds() != null) {
-                unitToUpdate.setSubFeaturesSet(unitRequestDto.getSubFeaturesIds().stream()
-                        .map(id -> new SubFeature(id))
-                        .collect(Collectors.toSet()));
-            }
-            if (unitRequestDto.getFoodOptionsIds() != null) {
-                unitToUpdate.setFoodOptionsSet(unitRequestDto.getFoodOptionsIds().stream()
-                        .map(id -> new FoodOption(id))
-                        .collect(Collectors.toSet()));
-            }
-            if (unitRequestDto.getCapacityHalls() != 0) {
-                unitToUpdate.setCapacityHalls(unitRequestDto.getCapacityHalls());
-            }
-            if (unitRequestDto.getFeaturesHallsIds() != null) {
-                unitToUpdate.setFeaturesHallsSet(unitRequestDto.getFeaturesHallsIds().stream()
-                        .map(id -> new FeatureForHalls(id))
-                        .collect(Collectors.toSet()));
-            }
-            if (unitRequestDto.getAvailablePeriodsHallsIds() != null) {
-                unitToUpdate.setAvailablePeriodsHallsSet(unitRequestDto.getAvailablePeriodsHallsIds().stream()
-                        .map(id -> new AvailablePeriods(id))
-                        .collect(Collectors.toSet()));
-            }
-
-            if (unitRequestDto.getOldPriceHall() != 0) {
-                unitToUpdate.setOldPriceHall(unitRequestDto.getOldPriceHall());
-            }
-            if (unitRequestDto.getNewPriceHall() != 0) {
-                unitToUpdate.setNewPriceHall(unitRequestDto.getNewPriceHall());
-            }
-
-
-
-            if (unitRequestDto.getChaletOldPrice() != 0) {
-                unitToUpdate.setChaletOldPrice(unitRequestDto.getChaletOldPrice());
-            }
-            if (unitRequestDto.getChaletNewPrice() != 0) {
-                unitToUpdate.setChaletNewPrice(unitRequestDto.getChaletNewPrice());
-            }
-
-            if (unitRequestDto.getResortOldPrice() != 0) {
-                unitToUpdate.setResortOldPrice(unitRequestDto.getResortOldPrice());
-            }
-            if (unitRequestDto.getResortNewPrice() != 0) {
-                unitToUpdate.setResortNewPrice(unitRequestDto.getResortNewPrice());
-            }
+////            if (unitRequestDto.getAvailableAreaIds() != null) {
+////                unitToUpdate.setAvailableAreaSet(unitRequestDto.getAvailableAreaIds().stream()
+////                        .map(id -> new AvailableArea(id))
+////                        .collect(Collectors.toSet()));
+////            }
+//            if (unitRequestDto.getBasicFeaturesIds() != null) {
+//                unitToUpdate.setBasicFeaturesSet(unitRequestDto.getBasicFeaturesIds().stream()
+//                        .map(id -> new Feature(id))
+//                        .collect(Collectors.toSet()));
+//            }
+//            if (unitRequestDto.getSubFeaturesIds() != null) {
+//                unitToUpdate.setSubFeaturesSet(unitRequestDto.getSubFeaturesIds().stream()
+//                        .map(id -> new SubFeature(id))
+//                        .collect(Collectors.toSet()));
+//            }
+//            if (unitRequestDto.getFoodOptionsIds() != null) {
+//                unitToUpdate.setFoodOptionsSet(unitRequestDto.getFoodOptionsIds().stream()
+//                        .map(id -> new FoodOption(id))
+//                        .collect(Collectors.toSet()));
+//            }
+//            if (unitRequestDto.getCapacityHalls() != 0) {
+//                unitToUpdate.setCapacityHalls(unitRequestDto.getCapacityHalls());
+//            }
+//            if (unitRequestDto.getFeaturesHallsIds() != null) {
+//                unitToUpdate.setFeaturesHallsSet(unitRequestDto.getFeaturesHallsIds().stream()
+//                        .map(id -> new FeatureForHalls(id))
+//                        .collect(Collectors.toSet()));
+//            }
+//            if (unitRequestDto.getAvailablePeriodsHallsIds() != null) {
+//                unitToUpdate.setAvailablePeriodsHallsSet(unitRequestDto.getAvailablePeriodsHallsIds().stream()
+//                        .map(id -> new AvailablePeriods(id))
+//                        .collect(Collectors.toSet()));
+//            }
+//
+//            if (unitRequestDto.getOldPriceHall() != 0) {
+//                unitToUpdate.setOldPriceHall(unitRequestDto.getOldPriceHall());
+//            }
+//            if (unitRequestDto.getNewPriceHall() != 0) {
+//                unitToUpdate.setNewPriceHall(unitRequestDto.getNewPriceHall());
+//            }
+//
+//
+//
+//            if (unitRequestDto.getChaletOldPrice() != 0) {
+//                unitToUpdate.setChaletOldPrice(unitRequestDto.getChaletOldPrice());
+//            }
+//            if (unitRequestDto.getChaletNewPrice() != 0) {
+//                unitToUpdate.setChaletNewPrice(unitRequestDto.getChaletNewPrice());
+//            }
+//
+//            if (unitRequestDto.getResortOldPrice() != 0) {
+//                unitToUpdate.setResortOldPrice(unitRequestDto.getResortOldPrice());
+//            }
+//            if (unitRequestDto.getResortNewPrice() != 0) {
+//                unitToUpdate.setResortNewPrice(unitRequestDto.getResortNewPrice());
+//            }
 
 
 //            if (unitRequestDto.getLatForMapping() != null) {
