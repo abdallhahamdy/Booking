@@ -162,6 +162,7 @@ public class ReservationController {
 
     // Set the Evaluation for the Reservation
     existingReservation.setEvaluation(evaluation);
+    existingReservation.setIsEvaluating(true);
 
     unitService.updateEvaluationsForUnits(unit.getId());
 

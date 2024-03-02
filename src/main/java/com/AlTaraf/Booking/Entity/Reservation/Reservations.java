@@ -133,6 +133,9 @@ public class Reservations extends Auditable<String> {
     @Column(name = "DATE_OF_DEPARTURE")
     private LocalDate departureDate;
 
+    @Column(name = "IS_EVALUATING")
+    private Boolean isEvaluating;
+
     public Reservations() {
         this.statusUnit = new StatusUnit();
         this.statusUnit.setId(1L);

@@ -439,6 +439,7 @@ public class UnitServiceImpl implements UnitService {
 //            evaluation.setId(evaluationId);
 
             unit.incrementTotalEvaluation();
+
             // Save the unit
             unitRepository.save(unit);
         }

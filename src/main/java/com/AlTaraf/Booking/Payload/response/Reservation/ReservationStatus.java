@@ -16,4 +16,5 @@ public class ReservationStatus {
     private CityDto cityDto;
     private RegionDto regionDto;
     private int price;
+    private Boolean isEvaluating;
 }
