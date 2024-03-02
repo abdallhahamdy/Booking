@@ -45,6 +45,7 @@ public class UnitRequestDto {
 
     private Integer adultsAllowed;
     private Integer childrenAllowed;
-
+    private Integer loungeOldPrice;
+    private Integer loungeNewPrice;
 //    private Integer price;
 }

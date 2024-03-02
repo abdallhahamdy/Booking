@@ -169,6 +169,14 @@ public class UnitController {
                 unitToSave.setChaletOldPrice(0); // Set oldPriceHall to 0 if it's null
             }
 
+            if (unitToSave.getLoungeNewPrice() == null) {
+                unitToSave.setLoungeNewPrice(0); // Or set it to some default value
+            }
+
+            if (unitToSave.getLoungeOldPrice() == null) {
+                unitToSave.setLoungeOldPrice(0); // Set oldPriceHall to 0 if it's null
+            }
+
             // Check if newPriceHall is less than oldPriceHall
 //            if (unitToSave.getChaletNewPrice() != null &&
 //                    unitToSave.getChaletNewPrice() != 0 &&
@@ -319,6 +327,8 @@ public class UnitController {
         } catch (Exception e) {
             // Log the exception
             // logger.error("Error occurred while processing update-unit request", e);
+
+            System.out.println("Exception for Update Unit: " + e);
 
             // Return user-friendly error response
             ApiResponse response = new ApiResponse(400, "Failed to update unit. Please check your input and try again.");
@@ -505,6 +515,7 @@ public class UnitController {
             ApiResponse response = new ApiResponse(200, "Unit deleted successfully!");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
+            System.out.println("Error Message Delete Unit: " + e);
         ApiResponse response = new ApiResponse(404, "Not Found!");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }

@@ -20,11 +20,11 @@ import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.unit.availableArea.AvailableAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -58,6 +58,9 @@ public class ReservationController {
 
     @Autowired
     private ReservationStatusMapper reservationStatusMapper;
+
+    private static final Logger logger = LoggerFactory.getLogger(ReservationController.class);
+
 
     @PostMapping("/Create-Reservation")
     public ResponseEntity<?> createReservation(@RequestBody ReservationRequestDto reservationRequestDto) {
@@ -109,8 +112,9 @@ public class ReservationController {
             return ResponseEntity.status(HttpStatus.CREATED).body("Reservation Process is successfully with id: " + saveReservation.getId() );
         } catch (Exception e) {
 //            // Log the exception
-//            logger.error("Error occurred while processing create-unit request", e);
+            logger.error("Error occurred while processing create-reservation request", e);
 
+            System.out.println("Error Message: " + e);
             // Return user-friendly error response
             ApiResponse response = new ApiResponse(400, "Failed to create Reservation. Please check your input and try again.");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
@@ -181,7 +185,7 @@ public class ReservationController {
 
         try {
             reservationService.updateStatusForReservation(id, 4L);
-//            reservationService.deleteUnit(id);
+            reservationService.deleteUnit(id);
             ApiResponse response = new ApiResponse(200, "Reservation deleted successfully!");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {

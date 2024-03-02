@@ -158,6 +158,10 @@ public class Unit extends Auditable<String> {
 
     private Integer resortNewPrice = 0;
 
+    private Integer loungeOldPrice = 0;
+
+    private Integer loungeNewPrice = 0;
+
     private Integer price = 0;
 
     private Double latForMapping;
@@ -238,6 +242,12 @@ public class Unit extends Auditable<String> {
                 } else {
                     price = getResortNewPrice();
                 }
+            } else if (accommodationType.getId() == 6) {
+                if (getLoungeNewPrice() == null || getLoungeNewPrice().intValue() == 0) {
+                    price = getLoungeOldPrice();
+                } else {
+                    price = getLoungeNewPrice();
+                }
             }
         }
         this.price = price;
@@ -263,6 +273,12 @@ public class Unit extends Auditable<String> {
                     price = getResortOldPrice() != null ? getResortOldPrice() : 0; // Set a default value if resortOldPrice is null
                 } else {
                     price = getResortNewPrice();
+                }
+            } else if (accommodationType.getId() == 6) {
+                if (getLoungeNewPrice() == null || getLoungeNewPrice() == 0) {
+                    price = getLoungeOldPrice() != null ? getLoungeOldPrice() : 0; // Set a default value if resortOldPrice is null
+                } else {
+                    price = getLoungeNewPrice();
                 }
             }
         }

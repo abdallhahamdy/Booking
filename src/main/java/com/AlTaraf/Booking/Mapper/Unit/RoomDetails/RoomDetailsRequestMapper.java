@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface RoomDetailsRequestMapper {
-    @Mapping(source = "id", target = "id")
+//    @Mapping(source = "id", target = "id")
 //    @Mapping(source = "roomAvailableId", target = "roomAvailable.id")
     @Mapping(source = "roomNumber", target = "roomNumber")
     @Mapping(source = "newPrice", target = "newPrice")
