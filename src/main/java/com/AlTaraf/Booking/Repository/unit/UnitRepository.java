@@ -51,7 +51,7 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     @Query("SELECT u FROM Unit u WHERE u.unitType.id = :unitTypeId")
     List<Unit> findByUnitType_IdForMap(@Param("unitTypeId") Long unitTypeId);
 
-    List<Unit> findByUserId(Long userId);
+    Page<Unit> findByUserId(Long userId, Pageable pageable);
 
     List<Unit> findAll(Specification<Unit> spec);
 

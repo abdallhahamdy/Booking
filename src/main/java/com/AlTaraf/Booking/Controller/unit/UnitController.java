@@ -2,6 +2,7 @@ package com.AlTaraf.Booking.Controller.unit;
 
 import com.AlTaraf.Booking.Dto.Unit.UnitDto;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
+import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.cityAndregion.Region;
@@ -18,12 +19,14 @@ import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
+import com.AlTaraf.Booking.Mapper.Reservation.ReservationStatusMapper;
 import com.AlTaraf.Booking.Mapper.Unit.*;
 import com.AlTaraf.Booking.Mapper.Unit.RoomDetails.RoomDetailsRequestMapper;
 import com.AlTaraf.Booking.Mapper.Unit.RoomDetails.RoomDetailsResponseMapper;
 import com.AlTaraf.Booking.Payload.request.RoomDetails.RoomDetailsRequestDto;
 import com.AlTaraf.Booking.Payload.request.UnitRequestDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
+import com.AlTaraf.Booking.Payload.response.Reservation.ReservationStatus;
 import com.AlTaraf.Booking.Payload.response.RoomDetails.RoomDetailsResponseDto;
 import com.AlTaraf.Booking.Payload.response.Unit.EventHallsResponse;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
@@ -43,6 +46,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -107,6 +111,9 @@ public class UnitController {
 
     @Autowired
     private ReservationService reservationService;
+
+    @Autowired
+    ReservationStatusMapper reservationStatusMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(UnitController.class);
 
@@ -645,6 +652,47 @@ public class UnitController {
             return ResponseEntity.ok(new ApiResponse(200,"Status changed successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/Get-Reservation-By-Status")
+    public ResponseEntity<?> getReservationByStatus(@RequestParam(name = "USER_ID") Long userId,
+                                                    @RequestParam(name = "statusUnitName") String statusUnitName,
+                                                    @RequestParam(defaultValue = "0") int page,
+                                                    @RequestParam(defaultValue = "2") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Unit> unitsPage = unitService.getUnitsByUserId(userId, pageable);
+
+        if (unitsPage == null || unitsPage.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content"));
+        }
+
+        List<ReservationStatus> reservationRequestDtoList = new ArrayList<>();
+
+        for (Unit unit : unitsPage.getContent()) {
+            System.out.println("unit: " + unit.getId());
+            Page<Reservations> reservationsPage = reservationService.findByStatusNameAndUnitId(statusUnitName, unit.getId(), pageable);
+            reservationRequestDtoList.addAll(reservationStatusMapper.toReservationStatusDtoList(reservationsPage.getContent()));
+        }
+
+        if (reservationRequestDtoList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content"));
+        }
+
+        return new ResponseEntity<>(reservationRequestDtoList, HttpStatus.OK);
+    }
+
+    @DeleteMapping("Delete/Reservation/{id}")
+    public ResponseEntity<?> deleteReservation(@PathVariable Long id) {
+
+        try {
+            reservationService.updateStatusForReservation(id, 4L);
+//            reservationService.deleteUnit(id);
+            ApiResponse response = new ApiResponse(200, "Reservation deleted successfully!");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            ApiResponse response = new ApiResponse(404, "Not Found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 }

@@ -241,8 +241,8 @@ public class UnitServiceImpl implements UnitService {
     }
 
 
-    public List<Unit> getUnitsByUserId(Long userId) {
-        return unitRepository.findByUserId(userId);
+    public Page<Unit> getUnitsByUserId(Long userId, Pageable pageable) {
+        return unitRepository.findByUserId(userId, pageable);
     }
 
     public List<Unit> findUnitsByCriteria(Long cityId, Long regionId, Long availablePeriodId) {

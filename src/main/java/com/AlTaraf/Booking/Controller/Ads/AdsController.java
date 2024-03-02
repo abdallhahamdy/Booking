@@ -14,6 +14,8 @@ import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,14 +58,15 @@ public class AdsController {
     }
 
     @GetMapping("units/byUserId/{userId}")
-    public ResponseEntity<?> getUnitsByUserId(@PathVariable Long userId) {
-        List<Unit> units = unitService.getUnitsByUserId(userId);
+    public ResponseEntity<?> getUnitsByUserId(@PathVariable Long userId,
+                                              @RequestParam(defaultValue = "0") int page,
+                                              @RequestParam(defaultValue = "10") int size) {
+        Page<Unit> unitsPage = unitService.getUnitsByUserId(userId, PageRequest.of(page, size));
 
-        if (units.isEmpty()) {
+        if (unitsPage.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No units found for user ID: " + userId));
         } else {
-            // Create an instance of UnitFavoriteMapper and use it to call the method
-            List<UnitDtoFavorite> unitGeneralResponseDtos = units.stream()
+            List<UnitDtoFavorite> unitGeneralResponseDtos = unitsPage.getContent().stream()
                     .map(unitFavoriteMapper::toUnitFavoriteDto)
                     .collect(Collectors.toList());
             return ResponseEntity.ok(unitGeneralResponseDtos);

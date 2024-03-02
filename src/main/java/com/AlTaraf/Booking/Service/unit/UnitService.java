@@ -43,7 +43,7 @@ public interface UnitService {
 
 //    void updateRoomDetailsForUnit(Long unitId);
 
-    List<Unit> getUnitsByUserId(Long userId);
+    Page<Unit> getUnitsByUserId(Long userId, Pageable pageable);
 
     List<Unit> findUnitsByFilters(Long cityId, Long regionId, Long availablePeriodsId,
                                   Long unitTypeId, Long accommodationTypeId, Set<Long> hotelClassificationIds,

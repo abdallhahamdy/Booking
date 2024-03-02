@@ -30,4 +30,8 @@ public interface ReservationService {
     void changeStatusUnitId(Long reservationId, Long newStatusUnitId);
 
     void deleteUnit(Long id);
+
+    Page<Reservations> findByUnitId(Long unitId, Pageable pageable);
+
+    Page<Reservations> findByStatusNameAndUnitId(String statusName, Long unitId, Pageable pageable);
 }

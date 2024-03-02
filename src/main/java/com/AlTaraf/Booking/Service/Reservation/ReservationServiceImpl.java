@@ -135,5 +135,15 @@ public class ReservationServiceImpl implements ReservationService {
     public void deleteUnit(Long id) {
         reservationRepository.deleteById(id);
     }
+
+    @Override
+    public Page<Reservations> findByUnitId(Long unitId, Pageable pageable) {
+        return reservationRepository.findByUnitId(unitId, pageable);
+    }
+
+    @Override
+    public Page<Reservations> findByStatusNameAndUnitId(String statusName, Long unitId, Pageable pageable) {
+        return reservationRepository.findByStatusNameAndUnitId(statusName, unitId, pageable);
+    }
 }
 
