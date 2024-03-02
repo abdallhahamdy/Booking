@@ -78,7 +78,8 @@ public class ReservationServiceImpl implements ReservationService {
 
         Unit unit = findUnitByReservationId(reservationId);
 
-        if ( unit.getUnitType().getId() == 2 && statusUnitId.equals(2L) ) {
+        if ( (unit.getUnitType().getId() == 2 || unit.getAccommodationType().getId() == 4 ||
+                unit.getAccommodationType().getId() == 6 ) && statusUnitId.equals(2L) ) {
             List<ReserveDateHalls> reserveDateHalls = reserveDateHallsRepository.findByUnitId(unit.getId());
 
             for ( ReserveDateHalls reserve: reserveDateHalls ) {
