@@ -8,7 +8,8 @@ import com.AlTaraf.Booking.Mapper.Ads.AdsMapper;
 import com.AlTaraf.Booking.Mapper.Ads.AdsStatusMapper;
 import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.Mapper.Unit.UnitGeneralResponseMapper;
-import com.AlTaraf.Booking.Payload.request.Ads.AdsDto;
+import com.AlTaraf.Booking.Payload.request.Ads.AdsRequestDto;
+import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseDto;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
@@ -74,10 +75,10 @@ public class AdsController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createAds(@RequestBody AdsDto adsDto) {
+    public ResponseEntity<?> createAds(@RequestBody AdsRequestDto adsRequestDto) {
         try {
-            Ads ads = adsMapper.toEntity(adsDto);
-            adsService.createAds(ads);
+//            Ads ads = adsMapper.toEntity(adsDto);
+            adsService.createAds(adsMapper.toEntity(adsRequestDto));
             return ResponseEntity.status(HttpStatus.CREATED).body("Ads created successfully!");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create ads: " + e.getMessage());
@@ -92,7 +93,7 @@ public class AdsController {
         List<Ads> ads = adsService.getAdsForUserAndStatus(userId, statusUnitName);
 
         if (!ads.isEmpty()) {
-            List<AdsDto> adsDtoList = adsStatusMapper.toAdsDtoList(ads);
+            List<AdsResponseDto> adsDtoList = adsStatusMapper.toAdsDtoList(ads);
             return new ResponseEntity<>(adsDtoList, HttpStatus.OK);
         } else {
             ApiResponse response = new ApiResponse(204, "No Content");
