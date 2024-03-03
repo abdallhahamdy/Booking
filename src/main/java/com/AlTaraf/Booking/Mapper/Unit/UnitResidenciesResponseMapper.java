@@ -25,5 +25,7 @@ public interface UnitResidenciesResponseMapper {
     @Mapping(source = "longForMapping", target = "longForMapping")
     @Mapping(source = "evaluation.name", target = "evaluationName")
     @Mapping(source = "evaluation.arabicName", target = "evaluationArabicName")
+    @Mapping(source = "dateOfArrival", target = "dateOfArrival")
+    @Mapping(source = "departureDate", target = "departureDate")
     UnitResidenciesResponseDto toResponseDto(Unit unit);
 }

@@ -39,6 +39,8 @@ public interface UnitGeneralResponseMapper {
     @Mapping(source = "evaluation.name", target = "evaluationName")
     @Mapping(source = "evaluation.arabicName", target = "evaluationArabicName")
     @Mapping(source = "price", target = "price", defaultValue = "0")
+    @Mapping(source = "dateOfArrival", target = "dateOfArrival")
+    @Mapping(source = "departureDate", target = "departureDate")
     UnitGeneralResponseDto toResponseDto(Unit unit);
 
     @Named("mapEntityToFeaturesHallsDto")

@@ -341,13 +341,20 @@ public class UnitController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "2") int size) {
 
-        Page<UnitDtoFavorite> units = unitService.getUnitByEvaluationInOrderByEvaluationScoreDesc(page, size);
+        try {
+            Page<UnitDtoFavorite> units = unitService.getUnitByEvaluationInOrderByEvaluationScoreDesc(page, size);
 
-        if (!units.isEmpty()) {
-            return new ResponseEntity<>(units, HttpStatus.OK);
-        } else {
-            ApiResponse response = new ApiResponse(204, "No Content for Units have high evaluation!");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            if (!units.isEmpty()) {
+                return new ResponseEntity<>(units, HttpStatus.OK);
+            } else {
+                ApiResponse response = new ApiResponse(204, "No Content for Units have high evaluation!");
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            }
+        } catch (Exception e) {
+            logger.error("Error occurred while processing get-units-by-evaluation request", e);
+            System.out.println("Error Message : " + e);
+            ApiResponse response = new ApiResponse(500, "Internal Server Error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 

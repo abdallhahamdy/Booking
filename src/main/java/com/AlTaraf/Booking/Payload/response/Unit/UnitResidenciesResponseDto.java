@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 // Residencies
@@ -43,4 +44,6 @@ public class UnitResidenciesResponseDto {
     private Double longForMapping;
     private String evaluationName;
     private String evaluationArabicName;
+    private LocalDate dateOfArrival;
+    private LocalDate departureDate;
 }
