@@ -102,7 +102,7 @@ public class UnitController {
 
     @Autowired
     private UnitGeneralResponseMapper unitGeneralResponseMapper;
-
+//
     @Autowired
     private UnitFavoriteMapper unitFavoriteMapper;
 
