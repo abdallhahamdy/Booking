@@ -541,9 +541,9 @@ public class UnitController {
             @RequestParam(required = false) Long unitTypeId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "asc") String sortDirection) {
+            @RequestParam(defaultValue = "asc", required = false) String sortDirectionByPrice) {
 
-        Sort sort = sortDirection.equalsIgnoreCase("desc") ? Sort.by("price").descending() : Sort.by("price").ascending();
+        Sort sort = sortDirectionByPrice.equalsIgnoreCase("desc") ? Sort.by("price").descending() : Sort.by("price").ascending();
         Page<Unit> unitsPage = Page.empty();
 
         if (nameUnit == null && unitTypeId != null) {
@@ -705,7 +705,7 @@ public class UnitController {
 
         try {
             reservationService.updateStatusForReservation(id, 4L);
-//            reservationService.deleteUnit(id);
+            reservationService.deleteUnit(id);
             ApiResponse response = new ApiResponse(200, "Reservation deleted successfully!");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
