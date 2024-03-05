@@ -4,6 +4,8 @@ import com.AlTaraf.Booking.Config.ImageConfig;
 import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Payload.response.ImageUploadResponse;
 import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
+import io.minio.*;
+import io.minio.errors.MinioException;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,89 +15,76 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
-public class ImageDataServiceImpl implements ImageDataService{
+public class ImageDataServiceImpl implements ImageDataService {
+
     @Autowired
     private ImageDataRepository imageDataRepository;
 
-    private static final String FTP_SERVER = "168.119.132.11";
-    private static final int FTP_PORT = 21;
-    private static final String FTP_USER = "jelastic-ftp";
-    private static final String FTP_PASSWORD = "4zRpwl30A4";
-    private static final String REMOTE_DIRECTORY = "/";
-
     public ImageUploadResponse uploadImage(MultipartFile file) throws IOException {
-        byte[] compressedImageData = ImageConfig.compressImage(file.getBytes());
+        byte[] imageData = file.getBytes();
 
-        String imagePath = uploadToFtpServer(file.getOriginalFilename(), compressedImageData);
+        String imagePath = null;
+        try {
+            imagePath = uploadToMinioServer(file.getOriginalFilename(), file.getContentType(), imageData);
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            throw new RuntimeException("Error uploading image to MinIO server", e);
+        }
 
         imageDataRepository.save(ImageData.builder()
                 .name(file.getOriginalFilename())
                 .type(file.getContentType())
-                .imageData(ImageConfig.compressImage(file.getBytes()))
+                .imageData(imageData) // Save the raw image data
                 .imagePath(imagePath)
                 .build());
 
-//        uploadToFtpServer(file.getOriginalFilename(), compressedImageData);
-
         return new ImageUploadResponse("Image uploaded successfully: " +
                 file.getOriginalFilename());
-
     }
 
-    private String  uploadToFtpServer(String filename, byte[] data) throws IOException {
-        FTPClient ftpClient = new FTPClient();
+    private String uploadToMinioServer(String filename, String contentType, byte[] data) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
         try {
-            ftpClient.connect(FTP_SERVER, FTP_PORT);
-            ftpClient.login(FTP_USER, FTP_PASSWORD);
-            ftpClient.enterLocalPassiveMode();
-            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+            MinioClient minioClient = MinioClient.builder()
+                    .endpoint("https://play.min.io")
+                    .credentials("Q3AM3UQ867SPQQA43P2F", "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG")
+                    .build();
 
-            InputStream inputStream = new ByteArrayInputStream(data);
-
-            boolean uploaded = ftpClient.storeFile(REMOTE_DIRECTORY + filename, inputStream);
-            inputStream.close();
-
-            if (uploaded) {
-                System.out.println("File uploaded successfully to FTP server.");
-                return REMOTE_DIRECTORY + filename; // Return the image path
+            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket("tes").build());
+            if (!found) {
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket("tes").build());
             } else {
-                System.out.println("Failed to upload file to FTP server.");
-                return null; // Return null if upload fails
+                System.out.println("Bucket 'tes' already exists.");
             }
-        } finally {
-            try {
-                if (ftpClient.isConnected()) {
-                    ftpClient.logout();
-                    ftpClient.disconnect();
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+
+            // Upload the data to the MinIO server
+            minioClient.putObject(PutObjectArgs.builder()
+                    .bucket("tes")
+                    .object(filename)
+                    .contentType(contentType) // Set the Content-Type
+                    .stream(new ByteArrayInputStream(data), data.length, -1)
+                    .build());
+
+            return "https://play.min.io/tes/" + filename; // Return the URL of the uploaded image
+        } catch (MinioException e) {
+            throw new RuntimeException("Error uploading image to MinIO server", e);
         }
     }
-
-//    @Override
-//    public List<ImageData> getImagesByUnitId(Long unitId) {
-//        return imageDataRepository.findByUnitId(unitId);
-//    }
-//
-//    public List<ImageData> getImagesByUnitId(Long unitId) {
-//        List<ImageData> dbImages = imageDataRepository.findByUnitId(unitId);
-//
-//        return dbImages.stream()
-//                .map(this::decompressImageData)
-//                .collect(Collectors.toList());
-//    }
-
-    private ImageData decompressImageData(ImageData dbImage) {
-        return ImageData.builder()
-                .name(dbImage.getName())
-                .type(dbImage.getType())
-                .imageData(ImageConfig.decompressImage(dbImage.getImageData()))
-                .build();
-    }
-
 }
+
+
+
+
+
+//private ImageData decompressImageData(ImageData dbImage) {
+//    return ImageData.builder()
+//            .name(dbImage.getName())
+//            .type(dbImage.getType())
+//            .imageData(ImageConfig.decompressImage(dbImage.getImageData()))
+//            .build();
+//}
 
