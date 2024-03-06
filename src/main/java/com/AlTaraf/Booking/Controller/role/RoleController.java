@@ -1,6 +1,6 @@
 package com.AlTaraf.Booking.Controller.role;
 
-import com.AlTaraf.Booking.Dto.RoleDto;
+import com.AlTaraf.Booking.Dto.Roles.RoleDto;
 import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Mapper.RoleMapper;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;

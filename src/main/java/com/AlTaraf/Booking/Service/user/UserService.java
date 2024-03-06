@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Service.user;
 
+import com.AlTaraf.Booking.Dto.User.UserRegisterDashboardDto;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.enums.ERole;
@@ -19,6 +20,8 @@ public interface UserService {
     Boolean existsByPhone(String phone);
 
     User registerUser(UserRegisterDto userRegisterDto);
+
+//    User registerUserForDashboard(UserRegisterDashboardDto userRegisterDashboardDto);
 
     User getUserById(Long id);
 

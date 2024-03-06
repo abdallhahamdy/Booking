@@ -2,6 +2,9 @@
 insert into roles (arabic_name, role) values ("عميل", "ROLE_GUEST");
 insert into roles (arabic_name, role) values ("تاجر", "ROLE_LESSOR");
 
+insert into roles_dashboard (arabic_name, role) values ("ادمن", "ROLE_ADMIN");
+insert into roles_dashboard (arabic_name, role) values ("خدمة عملاء", "ROLE_CUSTOMER_SERVICE");
+
 -- insert cities    المدن
 insert into city (arabic_name, city) values ("طرابلس","Tripoli");
 insert into city (arabic_name, city) values ("بنغازي","Benghazi");

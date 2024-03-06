@@ -1,11 +1,15 @@
 package com.AlTaraf.Booking.Controller.Admin;
 
 
+import com.AlTaraf.Booking.Dto.Roles.RoleDashboardDto;
+import com.AlTaraf.Booking.Dto.Roles.RoleDto;
 import com.AlTaraf.Booking.Dto.TechnicalSupport.TechnicalSupportDTO;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
+import com.AlTaraf.Booking.Entity.Role.RoleDashboard;
 import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupport;
 import com.AlTaraf.Booking.Entity.unit.Unit;
-import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
+import com.AlTaraf.Booking.Mapper.RoleDashboardMapper;
+import com.AlTaraf.Booking.Mapper.RoleMapper;
 import com.AlTaraf.Booking.Mapper.TechnicalSupport.TechnicalSupportMapper;
 import com.AlTaraf.Booking.Mapper.Unit.EventHallsMapper;
 import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
@@ -17,18 +21,17 @@ import com.AlTaraf.Booking.Payload.response.Unit.UnitResidenciesResponseDto;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.TechnicalSupport.TechnicalSupportService;
+import com.AlTaraf.Booking.Service.role.RoleDashboardService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,6 +65,33 @@ public class AdminController {
 
     @Autowired
     private ReservationService reservationService;
+
+    @Autowired
+    private RoleDashboardService roleDashboardService;
+
+//    @PostMapping("/Register")
+//    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDashboardDto userRegisterDashboardDto) {
+//
+//        // Perform user registration
+//        userService.registerUserForDashboard(userRegisterDashboardDto);
+//
+//        ApiResponse response = new ApiResponse(200, "User Registered Successfully!");
+//
+//        return ResponseEntity.ok(response);
+//    }
+
+    @GetMapping("/Role-All")
+    public ResponseEntity<?> getAllRoles() {
+        List<RoleDashboard> roleDashboards = roleDashboardService.getAllRoles();
+        if (!roleDashboards.isEmpty()) {
+            List<RoleDashboardDto> roleDashboardDtosDtos = RoleDashboardMapper.INSTANCE.rolesToRoleDtos(roleDashboards);
+            return ResponseEntity.ok(roleDashboardDtosDtos);
+        } else {
+            ApiResponse response = new ApiResponse(204, "No Content for Roles!");
+
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+        }
+    }
 
     @GetMapping("/Technical-Support-Get-All")
     public Page<TechnicalSupportDTO> getAllTechnicalSupport(@RequestParam(defaultValue = "0") int page,
