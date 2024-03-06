@@ -2,14 +2,13 @@ package com.AlTaraf.Booking.Controller.Admin;
 
 
 import com.AlTaraf.Booking.Dto.Roles.RoleDashboardDto;
-import com.AlTaraf.Booking.Dto.Roles.RoleDto;
 import com.AlTaraf.Booking.Dto.TechnicalSupport.TechnicalSupportDTO;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
+import com.AlTaraf.Booking.Dto.User.UserRegisterDashboardDto;
 import com.AlTaraf.Booking.Entity.Role.RoleDashboard;
 import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupport;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Mapper.RoleDashboardMapper;
-import com.AlTaraf.Booking.Mapper.RoleMapper;
 import com.AlTaraf.Booking.Mapper.TechnicalSupport.TechnicalSupportMapper;
 import com.AlTaraf.Booking.Mapper.Unit.EventHallsMapper;
 import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
@@ -24,6 +23,7 @@ import com.AlTaraf.Booking.Service.TechnicalSupport.TechnicalSupportService;
 import com.AlTaraf.Booking.Service.role.RoleDashboardService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.user.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -69,16 +69,16 @@ public class AdminController {
     @Autowired
     private RoleDashboardService roleDashboardService;
 
-//    @PostMapping("/Register")
-//    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDashboardDto userRegisterDashboardDto) {
-//
-//        // Perform user registration
-//        userService.registerUserForDashboard(userRegisterDashboardDto);
-//
-//        ApiResponse response = new ApiResponse(200, "User Registered Successfully!");
-//
-//        return ResponseEntity.ok(response);
-//    }
+    @PostMapping("/Register-Dashboard")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDashboardDto userRegisterDashboardDto) {
+
+        // Perform user registration
+        userService.registerUserForDashboard(userRegisterDashboardDto);
+
+        ApiResponse response = new ApiResponse(200, "User Registered Successfully!");
+
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/Role-All")
     public ResponseEntity<?> getAllRoles() {

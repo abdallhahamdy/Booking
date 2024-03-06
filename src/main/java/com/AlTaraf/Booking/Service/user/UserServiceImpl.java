@@ -1,15 +1,21 @@
 package com.AlTaraf.Booking.Service.user;
 
+import com.AlTaraf.Booking.Dto.User.UserRegisterDashboardDto;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
+import com.AlTaraf.Booking.Entity.Role.RoleDashboard;
+import com.AlTaraf.Booking.Entity.User.UserDashboard;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.enums.ERole;
+import com.AlTaraf.Booking.Entity.enums.ERoleDashboard;
 import com.AlTaraf.Booking.Mapper.CityMapper;
 import com.AlTaraf.Booking.Mapper.UserMapper;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
+import com.AlTaraf.Booking.Repository.role.RoleDashboardRepository;
 import com.AlTaraf.Booking.Repository.role.RoleRepository;
+import com.AlTaraf.Booking.Repository.user.UserDashboardRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Security.jwt.JwtUtils;
 import com.AlTaraf.Booking.Service.cityAndRegion.CityService;
@@ -44,6 +50,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    RoleDashboardRepository roleDashboardRepository;
+
+    @Autowired
+    private UserDashboardRepository userDashboardRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -165,6 +177,85 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
+    @Override
+    public UserDashboard registerUserForDashboard(UserRegisterDashboardDto userRegisterDashboardDto) {
+        String email = userRegisterDashboardDto.getEmail();
+        Optional<UserDashboard> existingUserDashboardOptional = userDashboardRepository.findByEmail(email);
+
+        if (existingUserDashboardOptional.isPresent()) {
+            UserDashboard existingUser = existingUserDashboardOptional.get();
+            // User with the same phone number exists, update roles if necessary
+            Set<String> strRoles = userRegisterDashboardDto.getRoles();
+            Set<RoleDashboard> newRoles = new HashSet<>();
+
+            // Convert role names to Role entities
+            if (strRoles != null) {
+                strRoles.forEach(roleName -> {
+                    RoleDashboard role = roleDashboardRepository.findByName(ERoleDashboard.valueOf(roleName))
+                            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    newRoles.add(role);
+                });
+            }
+
+            // Check if there are new roles to add
+            boolean rolesChanged = false;
+            for (RoleDashboard newRole : newRoles) {
+                if (!existingUser.getRoles().contains(newRole)) {
+                    existingUser.getRoles().add(newRole);
+                    rolesChanged = true;
+                }
+            }
+
+            // If roles are updated, save the user entity
+            if (rolesChanged) {
+                return userDashboardRepository.save(existingUser);
+            } else {
+                // If roles are not changed, return the existing user
+                return existingUser;
+            }
+        } else {
+            // User does not exist, proceed with registration
+            // Your existing registration code goes here
+            Set<String> strRoles = userRegisterDashboardDto.getRoles();
+            Set<RoleDashboard> roles = new HashSet<>();
+
+            if (strRoles == null) {
+                RoleDashboard userRole = roleDashboardRepository.findByName(ERoleDashboard.ROLE_CUSTOMER_SERVICE)
+                        .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                roles.add(userRole);
+            } else {
+                strRoles.forEach(role -> {
+                    switch (role) {
+                        case "admin":
+                            RoleDashboard adminRole = roleDashboardRepository.findByName(ERoleDashboard.ROLE_ADMIN)
+                                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                            roles.add(adminRole);
+                            break;
+                        case "service":
+                            RoleDashboard modRole = roleDashboardRepository.findByName(ERoleDashboard.ROLE_CUSTOMER_SERVICE)
+                                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                            roles.add(modRole);
+                            break;
+                        default:
+                            RoleDashboard userRole = roleDashboardRepository.findByName(ERoleDashboard.ROLE_CUSTOMER_SERVICE)
+                                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                            roles.add(userRole);
+                    }
+                });
+            }
+
+            UserDashboard userDashboard = new UserDashboard();
+            userDashboard.setUsername(userRegisterDashboardDto.getName());
+            userDashboard.setEmail(email);
+            userDashboard.setPassword(encoder.encode(userRegisterDashboardDto.getPassword()));
+            userDashboard.setPhone(userRegisterDashboardDto.getPhoneNumber()); // Use the provided phone number
+            userDashboard.setRoles(roles);
+
+            // Save the user entity
+            return userDashboardRepository.save(userDashboard);
+        }
+    }
 
     @Override
     public User getUserById(Long id) {
