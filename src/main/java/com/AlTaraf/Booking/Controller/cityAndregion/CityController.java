@@ -5,14 +5,16 @@ import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.RegionDto;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.saveCityDto;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.cityAndregion.Region;
-import com.AlTaraf.Booking.Mapper.CityMapper;
+import com.AlTaraf.Booking.Mapper.city.CityMapper;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Service.cityAndRegion.CityService;
+import com.AlTaraf.Booking.Service.cityAndRegion.RegionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,10 +27,53 @@ public class CityController {
     @Autowired
     CityMapper cityMapper;
 
-    @PostMapping("/save")
-    public ResponseEntity<?> saveCityWithRegions(@RequestBody saveCityDto saveCityDto) {
-        City savedCity = cityService.saveCityWithRegions(saveCityDto);
-        return new ResponseEntity<>(savedCity, HttpStatus.CREATED);
+    @Autowired
+    RegionService regionService;
+
+//    @PostMapping("/save")
+//    public ResponseEntity<?> saveCityWithRegions(@RequestBody saveCityDto saveCityDto) {
+//        City savedCity = cityService.saveCityWithRegions(saveCityDto);
+//        return new ResponseEntity<>(savedCity, HttpStatus.CREATED);
+//    }
+
+    @PostMapping("add")
+    public ResponseEntity<?> createCity(@RequestBody CityDto cityDto) {
+        try {
+            CityDto createdCity = cityService.createCity(cityDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(200, "created city is Sucessful "));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "created city failed "));
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCity(@PathVariable("id") Long cityId) {
+        try {
+            cityService.deleteCity(cityId);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete city");
+        }
+    }
+
+    @DeleteMapping("/region/{id}")
+    public ResponseEntity<?> deleteRegion(@PathVariable("id") Long regionId) {
+        try {
+            regionService.deleteRegion(regionId);
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200, "delete region is successful"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "Failed to delete region"));
+        }
+    }
+
+    @PostMapping("{cityId}/add-region")
+    public ResponseEntity<RegionDto> addRegionToCity(@PathVariable("cityId") Long cityId, @RequestBody RegionDto regionDto) {
+        try {
+            RegionDto addedRegion = regionService.addRegionToCity(cityId, regionDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(addedRegion);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
 //    @PostMapping("/{Id}/regions")

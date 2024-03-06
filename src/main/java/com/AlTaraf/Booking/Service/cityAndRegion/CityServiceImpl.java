@@ -5,7 +5,7 @@ import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.RegionDto;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.saveCityDto;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.cityAndregion.Region;
-import com.AlTaraf.Booking.Mapper.CityMapper;
+import com.AlTaraf.Booking.Mapper.city.CityMapper;
 import com.AlTaraf.Booking.Mapper.RegionMapper;
 import com.AlTaraf.Booking.Repository.cityAndregion.CityRepository;
 import com.AlTaraf.Booking.Repository.cityAndregion.RegionRepository;
@@ -14,6 +14,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,6 +50,30 @@ public class CityServiceImpl implements CityService {
     public Optional<City> getCityById(Long cityId) {
         return cityRepository.findById(cityId);
     }
+
+
+    @Override
+    public CityDto createCity(CityDto cityDto) {
+        City city = new City();
+        city.setCityName(cityDto.getCityName());
+        city.setArabicCityName(cityDto.getArabicCityName());
+
+        List<Region> regions = new ArrayList<>();
+        for (RegionDto regionDto : cityDto.getRegions()) {
+            Region region = new Region();
+            region.setRegionName(regionDto.getRegionName());
+            region.setRegionArabicName(regionDto.getRegionArabicName());
+            region.setCity(city); // Associate region with city
+            regions.add(region);
+        }
+
+        city.setRegions(regions);
+
+        City savedCity = cityRepository.save(city);
+
+        return new CityDto(savedCity);
+    }
+
 //    @Transactional
 //    public Region addRegionToCity(Long cityId, RegionDto regionDto) {
 //        // Fetch the city
@@ -103,6 +128,11 @@ public class CityServiceImpl implements CityService {
     public List<CityDto> getAllCities() {
         List<City> cities = cityRepository.findAll();
         return cityMapper.citiesToCityDTOs(cities);
+    }
+
+    @Override
+    public void deleteCity(Long cityId) {
+        cityRepository.deleteById(cityId);
     }
 
 

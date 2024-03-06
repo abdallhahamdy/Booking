@@ -10,7 +10,7 @@ import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Entity.enums.ERoleDashboard;
-import com.AlTaraf.Booking.Mapper.CityMapper;
+import com.AlTaraf.Booking.Mapper.city.CityMapper;
 import com.AlTaraf.Booking.Mapper.UserMapper;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
 import com.AlTaraf.Booking.Repository.role.RoleDashboardRepository;

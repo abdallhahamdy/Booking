@@ -1,4 +1,4 @@
-package com.AlTaraf.Booking.Mapper;
+package com.AlTaraf.Booking.Mapper.city;
 
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;

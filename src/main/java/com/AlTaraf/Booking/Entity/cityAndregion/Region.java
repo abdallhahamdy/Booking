@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Entity.cityAndregion;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class Region {
 
     @ManyToOne
     @JoinColumn(name = "city_id")
-    @JsonIgnoreProperties("regions")
+    @JsonBackReference
     private City city;
 
 
