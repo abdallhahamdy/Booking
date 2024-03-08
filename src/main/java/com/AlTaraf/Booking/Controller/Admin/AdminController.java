@@ -5,6 +5,10 @@ import com.AlTaraf.Booking.Dto.Roles.RoleDashboardDto;
 import com.AlTaraf.Booking.Dto.TechnicalSupport.TechnicalSupportDTO;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDashboardDto;
+import com.AlTaraf.Booking.Entity.Ads.Ads;
+import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
+import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
+import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.Role.RoleDashboard;
 import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupport;
 import com.AlTaraf.Booking.Entity.unit.Unit;
@@ -17,6 +21,10 @@ import com.AlTaraf.Booking.Mapper.Unit.UnitResidenciesResponseMapper;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitResidenciesResponseDto;
+import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
+import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
+import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
+import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.TechnicalSupport.TechnicalSupportService;
@@ -68,6 +76,18 @@ public class AdminController {
 
     @Autowired
     private RoleDashboardService roleDashboardService;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
+
+    @Autowired
+    private AdsRepository adsRepository;
+
+    @Autowired
+    private ReserveDateRepository reserveDateRepository;
+
+    @Autowired
+    private ReserveDateHallsRepository reserveDateHallsRepository;
 
     @PostMapping("/Register-Dashboard")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDashboardDto userRegisterDashboardDto) {
@@ -223,5 +243,51 @@ public class AdminController {
         }
     }
 
+    @DeleteMapping("Delete/Unit/{id}")
+    public ResponseEntity<?> deleteUnit(@PathVariable Long id) {
+
+        try {
+
+            // Find all reservations associated with the unit
+            List<Reservations> reservations = reservationRepository.findByUnitId(id);
+
+            // Delete all reservations associated with the unit
+            for (Reservations reservation : reservations) {
+                reservationRepository.delete(reservation);
+            }
+
+            // Find all reserve dates associated with the unit
+            List<ReserveDate> reserveDates = reserveDateRepository.findByUnitId(id);
+
+            // Delete all reserve dates associated with the unit
+            for (ReserveDate reserveDate : reserveDates) {
+                reserveDateRepository.delete(reserveDate);
+            }
+
+            // Find all reserve date halls associated with the unit
+            List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitId(id);
+
+            // Delete all reserve date halls associated with the unit
+            for (ReserveDateHalls reserveDateHalls : reserveDateHallsList) {
+                reserveDateHallsRepository.delete(reserveDateHalls);
+            }
+
+            // Find all ads associated with the unit
+            List<Ads> adsList = adsRepository.findByUnitId(id);
+
+            // Delete all ads associated with the unit
+            for (Ads ads : adsList) {
+                adsRepository.delete(ads);
+            }
+
+            unitService.deleteUnit(id);
+            ApiResponse response = new ApiResponse(200, "Unit deleted successfully!");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            System.out.println("Error Message Delete Unit: " + e);
+            ApiResponse response = new ApiResponse(404, "Not Found!");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
 
 }

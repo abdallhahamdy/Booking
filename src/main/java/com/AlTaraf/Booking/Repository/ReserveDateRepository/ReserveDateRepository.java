@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Repository.ReserveDateRepository;
 
+import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
 import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +19,6 @@ public interface ReserveDateRepository extends JpaRepository<ReserveDate, Long> 
 //    @Query("SELECT rd FROM ReserveDate rd WHERE rd.roomDetailsForAvailableArea.id = :roomDetailsForAvailableAreaId AND rd.unit.id = :unitId AND rd.reserve = true")
 //    List<ReserveDate> findByRoomDetailsForAvailableAreaIdAndUnitIdAndReserveTrue(@Param("roomDetailsForAvailableAreaId") Long roomDetailsForAvailableAreaId, @Param("unitId") Long unitId);
 
+    @Query("SELECT rd FROM ReserveDate rd WHERE rd.unit.id = :unitId")
+    List<ReserveDate> findByUnitId(@Param("unitId") Long unitId);
 }
