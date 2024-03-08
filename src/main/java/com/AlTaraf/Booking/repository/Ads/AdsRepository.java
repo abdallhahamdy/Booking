@@ -14,4 +14,7 @@ public interface AdsRepository extends JpaRepository<Ads, Long> {
     List<Ads> findAllAdsByUserIdAndStatusUnitName(Long userId, String statusUnitName);
 
     List<Ads> findByStatusUnitName(String statusName);
+
+    List<Ads> findByUnitId(Long unitId);
+
 }

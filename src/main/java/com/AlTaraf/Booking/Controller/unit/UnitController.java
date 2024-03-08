@@ -1,8 +1,8 @@
 package com.AlTaraf.Booking.Controller.unit;
 
-import com.AlTaraf.Booking.Config.utils.DistanceComparator;
 import com.AlTaraf.Booking.Dto.Unit.UnitDto;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
+import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
@@ -30,6 +30,7 @@ import com.AlTaraf.Booking.Payload.response.RoomDetails.RoomDetailsResponseDto;
 import com.AlTaraf.Booking.Payload.response.Unit.EventHallsResponse;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitResidenciesResponseDto;
+import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.unit.AvailablePeriods.AvailablePeriodsService;
 import com.AlTaraf.Booking.Service.unit.FeatureForHalls.FeatureForHallsService;
@@ -39,8 +40,6 @@ import com.AlTaraf.Booking.Service.unit.RoomDetailsForAvailableArea.RoomDetailsF
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.unit.feature.FeatureService;
 import com.AlTaraf.Booking.Service.unit.statusUnit.StatusUnitService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +49,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -99,7 +101,7 @@ public class UnitController {
 
     @Autowired
     private UnitGeneralResponseMapper unitGeneralResponseMapper;
-//
+
     @Autowired
     private UnitFavoriteMapper unitFavoriteMapper;
 
@@ -110,10 +112,10 @@ public class UnitController {
     private ReservationService reservationService;
 
     @Autowired
-    ReservationStatusMapper reservationStatusMapper;
+    private AdsRepository adsRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    ReservationStatusMapper reservationStatusMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(UnitController.class);
 
@@ -518,6 +520,14 @@ public class UnitController {
     public ResponseEntity<?> deleteUnit(@PathVariable Long id) {
 
         try {
+            // Find all ads associated with the unit
+            List<Ads> adsList = adsRepository.findByUnitId(id);
+
+            // Delete all ads associated with the unit
+            for (Ads ads : adsList) {
+                adsRepository.delete(ads);
+            }
+
             unitService.deleteUnit(id);
             ApiResponse response = new ApiResponse(200, "Unit deleted successfully!");
             return ResponseEntity.status(HttpStatus.OK).body(response);

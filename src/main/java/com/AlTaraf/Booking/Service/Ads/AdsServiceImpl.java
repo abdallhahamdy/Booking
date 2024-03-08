@@ -85,5 +85,10 @@ public class AdsServiceImpl implements AdsService {
     }
 
 
+    @Override
+    public List<Ads> findByUnitId(Long unitId) {
+        return adsRepository.findByUnitId(unitId);
+    }
+
     }
 

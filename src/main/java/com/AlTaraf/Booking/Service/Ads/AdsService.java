@@ -18,4 +18,6 @@ public interface AdsService {
     List<adsForSliderResponseDto> getAdsByAcceptedStatus();
 
     void updateStatusForAds(Long adsId, Long statusUnitId);
+
+    List<Ads> findByUnitId(Long unitId);
 }
