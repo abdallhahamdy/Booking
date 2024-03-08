@@ -39,7 +39,7 @@ public class ImageDataServiceImpl implements ImageDataService {
         imageDataRepository.save(ImageData.builder()
                 .name(file.getOriginalFilename())
                 .type(file.getContentType())
-                .imageData(imageData) // Save the raw image data
+//                .imageData(imageData) // Save the raw image data
                 .imagePath(imagePath)
                 .build());
 

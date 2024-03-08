@@ -1,7 +1,9 @@
 package com.AlTaraf.Booking.Mapper.Unit;
 
+import com.AlTaraf.Booking.Dto.Image.ImageDataDTO;
 import com.AlTaraf.Booking.Dto.Unit.FeatureForHalls.FeatureForHallsDto;
 import com.AlTaraf.Booking.Dto.Unit.availablePeriodsHalls.AvailablePeriodsDto;
+import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.featureForHalls.FeatureForHalls;
@@ -10,6 +12,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,7 +25,9 @@ public interface UnitGeneralResponseMapper {
     @Mapping(source = "city", target = "cityDto")
     @Mapping(source = "region", target = "regionDto")
     @Mapping(source = "accommodationType", target = "accommodationType")
-    @Mapping(source = "images", target = "images")
+//    @Mapping(source = "images", target = "images.id")
+//    @Mapping(source = "images.name", target = "images.name")
+//    @Mapping(source = "images.imagePath", target = "images.imagePath")
     @Mapping(source = "hotelClassification", target = "hotelClassification")
     @Mapping(source = "roomAvailableSet", target = "roomAvailables")
     @Mapping(source = "basicFeaturesSet", target = "features")
@@ -56,4 +61,19 @@ public interface UnitGeneralResponseMapper {
                 .map(period -> new AvailablePeriodsDto(period.getId(), period.getName(), period.getArabicName())) // Assuming AvailablePeriodsDto has constructor taking id and name
                 .collect(Collectors.toSet());
     }
+
+    default List<ImageDataDTO> mapImages(List<ImageData> images) {
+        return images.stream()
+                .map(this::mapToImageDataDTO)
+                .collect(Collectors.toList());
+    }
+
+    default ImageDataDTO mapToImageDataDTO(ImageData imageData) {
+        ImageDataDTO imageDataDTO = new ImageDataDTO();
+        imageDataDTO.setId(imageData.getId());
+        imageDataDTO.setName(imageData.getName());
+        imageDataDTO.setImagePath(imageData.getImagePath());
+        return imageDataDTO;
+    }
+
 }

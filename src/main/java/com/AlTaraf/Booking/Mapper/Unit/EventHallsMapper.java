@@ -1,8 +1,10 @@
 package com.AlTaraf.Booking.Mapper.Unit;
 
 
+import com.AlTaraf.Booking.Dto.Image.ImageDataDTO;
 import com.AlTaraf.Booking.Dto.Unit.FeatureForHalls.FeatureForHallsDto;
 import com.AlTaraf.Booking.Dto.Unit.availablePeriodsHalls.AvailablePeriodsDto;
+import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.featureForHalls.FeatureForHalls;
@@ -51,4 +53,18 @@ public interface EventHallsMapper {
     }
 
     List<EventHallsResponse> toEventHallsList(List<Unit> unitList);
+
+    default List<ImageDataDTO> mapImages(List<ImageData> images) {
+        return images.stream()
+                .map(this::mapToImageDataDTO)
+                .collect(Collectors.toList());
+    }
+
+    default ImageDataDTO mapToImageDataDTO(ImageData imageData) {
+        ImageDataDTO imageDataDTO = new ImageDataDTO();
+        imageDataDTO.setId(imageData.getId());
+        imageDataDTO.setName(imageData.getName());
+        imageDataDTO.setImagePath(imageData.getImagePath());
+        return imageDataDTO;
+    }
 }

@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Payload.response.Unit;
 
+import com.AlTaraf.Booking.Dto.Image.ImageDataDTO;
 import com.AlTaraf.Booking.Dto.Unit.FeatureForHalls.FeatureForHallsDto;
 import com.AlTaraf.Booking.Dto.Unit.availablePeriodsHalls.AvailablePeriodsDto;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;
@@ -35,7 +36,7 @@ public class UnitGeneralResponseDto {
 
     private AccommodationType accommodationType;
 
-    private List<ImageData> images;
+    private List<ImageDataDTO> images;
 
     private HotelClassification hotelClassification;
 

@@ -29,9 +29,9 @@ public class ImageData {
 
     private String imagePath;
 
-    @Lob
-    @Column(name = "imagedata", columnDefinition = "LONGBLOB")
-    private byte[] imageData;
+//    @Lob
+//    @Column(name = "imagedata", columnDefinition = "LONGBLOB")
+//    private byte[] imageData;
 
     @ManyToOne
     @JoinColumn(name = "unit_id")
