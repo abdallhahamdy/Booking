@@ -31,6 +31,7 @@ import com.AlTaraf.Booking.Payload.response.Unit.EventHallsResponse;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitResidenciesResponseDto;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
+import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.unit.AvailablePeriods.AvailablePeriodsService;
 import com.AlTaraf.Booking.Service.unit.FeatureForHalls.FeatureForHallsService;
@@ -116,6 +117,9 @@ public class UnitController {
 
     @Autowired
     ReservationStatusMapper reservationStatusMapper;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(UnitController.class);
 
@@ -520,6 +524,13 @@ public class UnitController {
     public ResponseEntity<?> deleteUnit(@PathVariable Long id) {
 
         try {
+
+            // Check if the unit is associated with any reservations
+            if (reservationRepository.existsByUnitId(id)) {
+                ApiResponse response = new ApiResponse(400, "Unit is associated with reservations and cannot be deleted!");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+
             // Find all ads associated with the unit
             List<Ads> adsList = adsRepository.findByUnitId(id);
 
