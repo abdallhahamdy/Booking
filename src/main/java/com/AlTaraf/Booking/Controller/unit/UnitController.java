@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Controller.unit;
 
+import com.AlTaraf.Booking.Config.utils.DistanceComparator;
 import com.AlTaraf.Booking.Dto.Unit.UnitDto;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
@@ -13,11 +14,9 @@ import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea
 import com.AlTaraf.Booking.Entity.unit.feature.Feature;
 import com.AlTaraf.Booking.Entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.Entity.unit.Unit;
-import com.AlTaraf.Booking.Entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.Entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
-import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationStatusMapper;
 import com.AlTaraf.Booking.Mapper.Unit.*;
@@ -40,21 +39,19 @@ import com.AlTaraf.Booking.Service.unit.RoomDetailsForAvailableArea.RoomDetailsF
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.unit.feature.FeatureService;
 import com.AlTaraf.Booking.Service.unit.statusUnit.StatusUnitService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -114,6 +111,9 @@ public class UnitController {
 
     @Autowired
     ReservationStatusMapper reservationStatusMapper;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private static final Logger logger = LoggerFactory.getLogger(UnitController.class);
 
@@ -533,6 +533,32 @@ public class UnitController {
 //        return unitService.getUnitById(id);
 //    }
 
+    private Sort getDefaultSort() {
+        return Sort.by("price").ascending();
+    }
+
+    private Sort getSortByPrice(String sortDirection) {
+        return sortDirection.equalsIgnoreCase("desc") ? Sort.by("price").descending() : Sort.by("price").ascending();
+    }
+
+    private List<UnitDtoFavorite> sortByLocation(List<UnitDtoFavorite> units, Double userLat, Double userLong, String sortDirection) {
+        units.sort(Comparator.comparingDouble(unit -> {
+            double latDiff = userLat - unit.getLatForMapping();
+            double longDiff = userLong - unit.getLongForMapping();
+            return Math.sqrt(latDiff * latDiff + longDiff * longDiff);
+        }));
+
+        if (sortDirection.equalsIgnoreCase("desc")) {
+            Collections.reverse(units);
+        }
+
+        return units;
+    }
+
+    private Sort getSortByEvaluationId(String sortDirection) {
+        return sortDirection.equalsIgnoreCase("desc") ? Sort.by("evaluation.id").descending() : Sort.by("evaluation.id").ascending();
+    }
+
     @GetMapping("/Get-Units")
     public Page<UnitDtoFavorite> getUnits(
             @RequestParam(required = false) String nameUnit,
@@ -541,36 +567,61 @@ public class UnitController {
             @RequestParam(required = false) Long unitTypeId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "asc", required = false) String sortDirectionByPrice) {
+            @RequestParam(required = false) String sortDirectionByPrice,
+            @RequestParam(required = false) String sortDirectionByEvaluationId,
+            @RequestParam(required = false) Double userLat,
+            @RequestParam(required = false) Double userLng
+    ) {
+        Sort sort = Sort.unsorted();
 
-        Sort sort = sortDirectionByPrice.equalsIgnoreCase("desc") ? Sort.by("price").descending() : Sort.by("price").ascending();
+        if (sortDirectionByPrice != null) {
+            sort = getSortByPrice(sortDirectionByPrice);
+        }
+
+        if (sortDirectionByEvaluationId != null) {
+            sort = sort.and(getSortByEvaluationId(sortDirectionByEvaluationId));
+        }
+
         Page<Unit> unitsPage = Page.empty();
 
         if (nameUnit == null && unitTypeId != null) {
             unitsPage = unitService.getUnitsByUnitTypeId(unitTypeId, PageRequest.of(page, size, sort));
-        }
-        else if (nameUnit != null && unitTypeId == null) {
+        } else if (nameUnit != null && unitTypeId == null) {
             unitsPage = unitService.filterUnitsByName(nameUnit, PageRequest.of(page, size, sort));
-        }
-        else if (nameUnit != null && unitTypeId != null) {
+        } else if (nameUnit != null && unitTypeId != null) {
             unitsPage = unitService.filterUnitsByNameAndTypeId(nameUnit, unitTypeId, PageRequest.of(page, size, sort));
-        }
-        else if (nameUnit == null && unitTypeId == null && roomAvailableName != null) {
+        } else if (nameUnit == null && unitTypeId == null && roomAvailableName != null) {
             unitsPage = unitService.filterUnitsByRoomAvailableName(roomAvailableName, PageRequest.of(page, size, sort));
-        }
-        else if (nameUnit != null && unitTypeId == null && roomAvailableName != null) {
+        } else if (nameUnit != null && unitTypeId == null && roomAvailableName != null) {
             unitsPage = unitService.findByNameUnitAndRoomAvailableNameContainingIgnoreCase(nameUnit, roomAvailableName, PageRequest.of(page, size, sort));
-        }
-        else if (nameUnit == null && unitTypeId == null && roomAvailableName == null && availableAreaName != null) {
+        } else if (nameUnit == null && unitTypeId == null && roomAvailableName == null && availableAreaName != null) {
             unitsPage = unitService.filterUnitsByAvailableAreaName(availableAreaName, PageRequest.of(page, size, sort));
-        }
-        else if (nameUnit != null && unitTypeId == null && roomAvailableName != null && availableAreaName != null) {
+        } else if (nameUnit != null && unitTypeId == null && roomAvailableName != null && availableAreaName != null) {
             unitsPage = unitService.findByNameUnitAndAvailableAreaNameContainingIgnoreCase(nameUnit, availableAreaName, PageRequest.of(page, size, sort));
-        }
-        else if (nameUnit == null && unitTypeId == null && roomAvailableName == null && availableAreaName == null) {
+        } else if (nameUnit == null && unitTypeId == null && roomAvailableName == null && availableAreaName == null) {
             unitsPage = unitService.getAllUnit(PageRequest.of(page, size, sort));
         }
+
+        if (userLat != null && userLng != null) {
+            List<UnitDtoFavorite> sortedUnits = unitsPage.stream()
+                    .sorted(Comparator.comparingDouble(unit -> calculateDistance(userLat, userLng, unit.getLatForMapping(), unit.getLongForMapping())))
+                    .map(unitFavoriteMapper::toUnitFavoriteDto)
+                    .collect(Collectors.toList());
+            return new PageImpl<>(sortedUnits, unitsPage.getPageable(), unitsPage.getTotalElements());
+        }
+
         return unitsPage.map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit));
+    }
+
+    private double calculateDistance(double userLat, double userLng, double unitLat, double unitLng) {
+        double earthRadius = 6371; // Earth's radius in kilometers
+        double dLat = Math.toRadians(unitLat - userLat);
+        double dLng = Math.toRadians(unitLng - userLng);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(userLat)) * Math.cos(Math.toRadians(unitLat)) *
+                        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return earthRadius * c;
     }
 
     @GetMapping("/Filter-Units-For-Map")

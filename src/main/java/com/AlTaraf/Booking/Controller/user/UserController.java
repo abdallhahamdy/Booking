@@ -125,6 +125,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -206,6 +207,8 @@ public class UserController {
         }
 
     }
+
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
         User user = userService.getUserById(id);

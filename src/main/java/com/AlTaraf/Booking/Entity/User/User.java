@@ -72,6 +72,10 @@ public class User extends Auditable<String> {
     @JsonManagedReference
     private List<UserFavoriteUnit> favoriteUnits;
 
+    private Double latForMapping;
+
+    private Double longForMapping;
+
     public User(Long id) {
         this.id = id;
     }
