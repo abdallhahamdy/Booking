@@ -26,8 +26,6 @@ public class CityDto {
 
     private List<RegionDto> regions = new ArrayList<>();
 
-//    private List<String> regionNames;
-
 //     Constructor to map City entity to CityDto
     public CityDto(City city) {
         this.id = city.getId();
