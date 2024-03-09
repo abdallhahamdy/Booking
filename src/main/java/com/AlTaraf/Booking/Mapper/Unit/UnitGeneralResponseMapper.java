@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public interface UnitGeneralResponseMapper {
     @Mapping(source = "id", target = "unitId")
     @Mapping(source = "unitType", target = "unitType")
+    @Mapping(target = "imagePaths", expression = "java(extractFilePaths(unit.getImages()))")
     @Mapping(source = "nameUnit", target = "nameUnit")
     @Mapping(source = "description", target = "description")
     @Mapping(source = "city", target = "cityDtoSample")
@@ -41,12 +42,20 @@ public interface UnitGeneralResponseMapper {
     @Mapping(source = "availablePeriodsHallsSet", target = "availablePeriodsHallsDto", qualifiedByName = "mapEntityToAvailablePeriodsHallsDto")
     @Mapping(source = "oldPriceHall", target = "oldPriceHall")
     @Mapping(source = "newPriceHall", target = "newPriceHall")
+    @Mapping(source = "chaletOldPrice", target = "chaletOldPrice")
+    @Mapping(source = "chaletNewPrice", target = "chaletNewPrice")
+    @Mapping(source = "resortOldPrice", target = "resortOldPrice")
+    @Mapping(source = "resortNewPrice", target = "resortNewPrice")
+    @Mapping(source = "loungeOldPrice", target = "loungeOldPrice")
+    @Mapping(source = "loungeNewPrice", target = "loungeNewPrice")
     @Mapping(source = "evaluation.name", target = "evaluationName")
     @Mapping(source = "evaluation.arabicName", target = "evaluationArabicName")
     @Mapping(source = "price", target = "price", defaultValue = "0")
     @Mapping(source = "commission", target = "commission")
     @Mapping(source = "dateOfArrival", target = "dateOfArrival")
     @Mapping(source = "departureDate", target = "departureDate")
+    @Mapping(source = "adultsAllowed", target = "adultsAllowed")
+    @Mapping(source = "childrenAllowed", target = "childrenAllowed")
     UnitGeneralResponseDto toResponseDto(Unit unit);
 
     @Named("mapEntityToFeaturesHallsDto")
@@ -75,6 +84,12 @@ public interface UnitGeneralResponseMapper {
         imageDataDTO.setName(imageData.getName());
         imageDataDTO.setImagePath(imageData.getImagePath());
         return imageDataDTO;
+    }
+
+    default List<String> extractFilePaths(List<ImageData> images) {
+        return images.stream()
+                .map(ImageData::getImagePath)
+                .collect(Collectors.toList());
     }
 
 }

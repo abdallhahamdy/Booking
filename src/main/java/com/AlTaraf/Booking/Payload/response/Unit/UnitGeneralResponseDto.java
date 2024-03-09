@@ -30,6 +30,7 @@ import java.util.Set;
 public class UnitGeneralResponseDto {
     private Long unitId;
     private UnitType unitType;
+    private List<String> imagePaths;
     private String nameUnit;
     private String description;
     private CityDtoSample cityDtoSample;
@@ -37,7 +38,7 @@ public class UnitGeneralResponseDto {
 
     private AccommodationType accommodationType;
 
-    private List<ImageDataDTO> images;
+//    private List<ImageDataDTO> images;
 
     private HotelClassification hotelClassification;
 
@@ -61,12 +62,25 @@ public class UnitGeneralResponseDto {
 
     private Double latForMapping;
     private Double longForMapping;
+
     private int oldPriceHall;
     private int newPriceHall;
+
+    private int ChaletOldPrice;
+    private int ChaletNewPrice;
+
+    private int resortOldPrice;
+    private int resortNewPrice;
+
+    private int loungeOldPrice;
+    private int loungeNewPrice;
+
     private int price;
     private String evaluationName;
     private String evaluationArabicName;
     private LocalDate dateOfArrival;
     private LocalDate departureDate;
     private int commission;
+    private int adultsAllowed;
+    private int childrenAllowed;
 }

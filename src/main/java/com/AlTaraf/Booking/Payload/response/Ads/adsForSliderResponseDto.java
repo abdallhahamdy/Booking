@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class adsForSliderResponseDto {
     private Long adsId;
     private String imagePath;
-    private UnitDtoFavorite unitDtoFavorite;
+//    private UnitDtoFavorite unitDtoFavorite;
 
     private Long unitId;
 

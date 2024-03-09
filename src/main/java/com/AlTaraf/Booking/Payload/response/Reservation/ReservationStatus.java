@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,4 +19,6 @@ public class ReservationStatus {
     private RegionDto regionDto;
     private int price;
     private Boolean isEvaluating;
+    private LocalDate dateOfArrival;
+    private LocalDate departureDate;
 }
