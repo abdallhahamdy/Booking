@@ -48,7 +48,7 @@ public class RegionServiceImpl implements RegionService {
             region.setCity(city);
             regionRepository.save(region);
 
-            city.getRegions().add(region);
+//            city.getRegions().add(region);
             cityRepository.save(city);
 
             return new RegionDto(region);

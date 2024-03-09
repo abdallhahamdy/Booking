@@ -4,6 +4,7 @@ import com.AlTaraf.Booking.Dto.Image.ImageDataDTO;
 import com.AlTaraf.Booking.Dto.Unit.FeatureForHalls.FeatureForHallsDto;
 import com.AlTaraf.Booking.Dto.Unit.availablePeriodsHalls.AvailablePeriodsDto;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;
+import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDtoSample;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.RegionDto;
 import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.unit.accommodationType.AccommodationType;
@@ -31,7 +32,7 @@ public class UnitGeneralResponseDto {
     private UnitType unitType;
     private String nameUnit;
     private String description;
-    private CityDto cityDto;
+    private CityDtoSample cityDtoSample;
     private RegionDto regionDto;
 
     private AccommodationType accommodationType;
@@ -67,4 +68,5 @@ public class UnitGeneralResponseDto {
     private String evaluationArabicName;
     private LocalDate dateOfArrival;
     private LocalDate departureDate;
+    private int commission;
 }

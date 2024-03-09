@@ -164,6 +164,8 @@ public class Unit extends Auditable<String> {
 
     private Integer price = 0;
 
+    private Integer commission = 20;
+
     private Double latForMapping;
 
     private Double longForMapping;
@@ -205,6 +207,9 @@ public class Unit extends Auditable<String> {
 
     @Column(name = "TOTAL_EVALUATION")
     private Integer totalEvaluation = 0; // Total number of evaluations
+
+    @Column(name = "BAN")
+    private Boolean ban;
 
     public Unit() {
         this.statusUnit = new StatusUnit();

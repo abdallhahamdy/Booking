@@ -184,6 +184,30 @@ public class AdminController {
         return unitsPage.map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit));
     }
 
+//    @GetMapping("/Get-Units-For-Dashboard")
+//    public Page<UnitDtoFavorite> getUnitsForDashboard(
+//            @RequestParam(required = false) String traderName,
+//            @RequestParam(required = false) String traderPhone,
+//            @RequestParam(required = false) Long unitTypeId,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "5") int size) {
+//        Page<Unit> unitsPage = Page.empty();
+//
+//        if (traderName == null && traderPhone == null && unitTypeId != null) {
+//            unitsPage = unitService.getUnitsByUnitTypeId(unitTypeId, PageRequest.of(page, size));
+//        }
+//        else if (nameUnit != null && unitTypeId == null) {
+//            unitsPage = unitService.filterUnitsByName(nameUnit, PageRequest.of(page, size));
+//        }
+//        else if (nameUnit != null && unitTypeId != null) {
+//            unitsPage = unitService.filterUnitsByNameAndTypeId(nameUnit, unitTypeId, PageRequest.of(page, size));
+//        }
+//        else if (nameUnit == null && unitTypeId == null) {
+//            unitsPage = unitService.getAllUnit(PageRequest.of(page, size));
+//        }
+//        return unitsPage.map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit));
+//    }
+
     @GetMapping("By-Id-General/{id}")
     public ResponseEntity<?> getUnitById(@PathVariable Long id) {
         Unit unit = unitService.getUnitById(id);
@@ -195,16 +219,6 @@ public class AdminController {
         }
     }
 
-    @GetMapping("By-Id-For-Residencies/{id}")
-    public ResponseEntity<?> getResidenciesUnitById(@PathVariable Long id) {
-        Unit unit = unitService.getUnitById(id);
-        if (unit != null) {
-            UnitResidenciesResponseDto responseDto = unitResidenciesResponseMapper.toResponseDto(unit);
-            return ResponseEntity.ok(responseDto);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, "Not Found!"));
-        }
-    }
 
 //    @GetMapping("/Get-Units")
 //    public Page<UnitDtoFavorite> getUnits(

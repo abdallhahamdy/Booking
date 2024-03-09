@@ -31,6 +31,6 @@ public class CityDto {
         this.id = city.getId();
         this.cityName = city.getCityName();
         this.arabicCityName = city.getArabicCityName();
-        city.getRegions().forEach(region -> this.regions.add(new RegionDto(region)));
+//        city.getRegions().forEach(region -> this.regions.add(new RegionDto(region)));
     }
 }

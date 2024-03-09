@@ -12,8 +12,6 @@ import java.util.List;
 //@NoArgsConstructor
 public class UnitDtoFavorite {
 
-    private final UserFavoriteUnitRepository userFavoriteUnitRepository;
-
     private Long unitId;
     private Long unitTypeId;
     private List<String> imagePaths; // List of image file paths

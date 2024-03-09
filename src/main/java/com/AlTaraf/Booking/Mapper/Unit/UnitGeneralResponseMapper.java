@@ -22,7 +22,7 @@ public interface UnitGeneralResponseMapper {
     @Mapping(source = "unitType", target = "unitType")
     @Mapping(source = "nameUnit", target = "nameUnit")
     @Mapping(source = "description", target = "description")
-    @Mapping(source = "city", target = "cityDto")
+    @Mapping(source = "city", target = "cityDtoSample")
     @Mapping(source = "region", target = "regionDto")
     @Mapping(source = "accommodationType", target = "accommodationType")
 //    @Mapping(source = "images", target = "images.id")
@@ -44,6 +44,7 @@ public interface UnitGeneralResponseMapper {
     @Mapping(source = "evaluation.name", target = "evaluationName")
     @Mapping(source = "evaluation.arabicName", target = "evaluationArabicName")
     @Mapping(source = "price", target = "price", defaultValue = "0")
+    @Mapping(source = "commission", target = "commission")
     @Mapping(source = "dateOfArrival", target = "dateOfArrival")
     @Mapping(source = "departureDate", target = "departureDate")
     UnitGeneralResponseDto toResponseDto(Unit unit);
