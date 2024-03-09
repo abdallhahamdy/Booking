@@ -359,6 +359,16 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
+    public Page<Unit> filterUnitsByUserNameAndTypeId(String userName, Long unitTypeId, Pageable pageable) {
+        return unitRepository.findByUsernameAndUnitType(userName, unitTypeId, pageable);
+    }
+
+    @Override
+    public Page<Unit> filterUnitsByPhoneNumberAndTypeId(String phoneNumber, Long unitTypeId, Pageable pageable) {
+        return unitRepository.findByPhoneNumberAndUnitType(phoneNumber, unitTypeId, pageable);
+    }
+
+    @Override
     public Page<Unit> filterUnitsByRoomAvailableName(String roomAvailableName, Pageable pageable) {
         return unitRepository.findByRoomAvailableName(roomAvailableName, pageable);
     }

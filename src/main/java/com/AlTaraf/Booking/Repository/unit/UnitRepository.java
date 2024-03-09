@@ -62,6 +62,12 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     @Query("SELECT u FROM Unit u WHERE LOWER(u.nameUnit) LIKE LOWER(concat('%', :nameUnit, '%')) AND u.unitType.id = :unitTypeId")
     Page<Unit> findByNameUnitAndUnitType(@Param("nameUnit") String nameUnit, @Param("unitTypeId") Long unitTypeId, Pageable pageable );
 
+    @Query("SELECT u FROM Unit u WHERE LOWER(u.user.username) LIKE LOWER(concat('%', :username, '%')) AND u.unitType.id = :unitTypeId")
+    Page<Unit> findByUsernameAndUnitType(@Param("username") String username, @Param("unitTypeId") Long unitTypeId, Pageable pageable);
+
+    @Query("SELECT u FROM Unit u WHERE LOWER(u.user.phone) LIKE LOWER(concat('%', :phoneNumber, '%')) AND u.unitType.id = :unitTypeId")
+    Page<Unit> findByPhoneNumberAndUnitType(@Param("phoneNumber") String phoneNumber, @Param("unitTypeId") Long unitTypeId, Pageable pageable);
+
     @Query("SELECT u FROM Unit u WHERE u.nameUnit = :nameUnit AND u.unitType.id = :unitTypeId")
     List<Unit> findByNameUnitAndUnitTypeForMap(@Param("nameUnit") String nameUnit, @Param("unitTypeId") Long unitTypeId );
 

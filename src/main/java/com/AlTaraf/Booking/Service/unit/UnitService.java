@@ -56,6 +56,10 @@ public interface UnitService {
 
     Page<Unit> filterUnitsByNameAndTypeId(String nameUnit, Long unitTypeId, Pageable pageable);
 
+    Page<Unit> filterUnitsByUserNameAndTypeId(String userName, Long unitTypeId, Pageable pageable);
+
+    Page<Unit> filterUnitsByPhoneNumberAndTypeId(String phoneNumber, Long unitTypeId, Pageable pageable);
+
     List<Unit> filterUnitsByNameForMap(String nameUnit);
 
     List<Unit> filterUnitsByNameAndTypeIdForMap(String nameUnit, Long unitTypeId);

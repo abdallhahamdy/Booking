@@ -3,6 +3,7 @@ package com.AlTaraf.Booking.Controller.Admin;
 
 import com.AlTaraf.Booking.Dto.Roles.RoleDashboardDto;
 import com.AlTaraf.Booking.Dto.TechnicalSupport.TechnicalSupportDTO;
+import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDashboardDto;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
@@ -14,10 +15,7 @@ import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupport;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Mapper.RoleDashboardMapper;
 import com.AlTaraf.Booking.Mapper.TechnicalSupport.TechnicalSupportMapper;
-import com.AlTaraf.Booking.Mapper.Unit.EventHallsMapper;
-import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
-import com.AlTaraf.Booking.Mapper.Unit.UnitGeneralResponseMapper;
-import com.AlTaraf.Booking.Mapper.Unit.UnitResidenciesResponseMapper;
+import com.AlTaraf.Booking.Mapper.Unit.*;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitResidenciesResponseDto;
@@ -88,6 +86,9 @@ public class AdminController {
 
     @Autowired
     private ReserveDateHallsRepository reserveDateHallsRepository;
+
+    @Autowired
+    private UnitDashboardMapper unitDashboard;
 
     @PostMapping("/Register-Dashboard")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDashboardDto userRegisterDashboardDto) {
@@ -184,29 +185,29 @@ public class AdminController {
         return unitsPage.map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit));
     }
 
-//    @GetMapping("/Get-Units-For-Dashboard")
-//    public Page<UnitDtoFavorite> getUnitsForDashboard(
-//            @RequestParam(required = false) String traderName,
-//            @RequestParam(required = false) String traderPhone,
-//            @RequestParam(required = false) Long unitTypeId,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "5") int size) {
-//        Page<Unit> unitsPage = Page.empty();
-//
-//        if (traderName == null && traderPhone == null && unitTypeId != null) {
-//            unitsPage = unitService.getUnitsByUnitTypeId(unitTypeId, PageRequest.of(page, size));
+    @GetMapping("/Get-Units-For-Dashboard")
+    public Page<UnitDashboard> getUnitsForDashboard(
+            @RequestParam(required = false) String traderName,
+            @RequestParam(required = false) String traderPhone,
+            @RequestParam Long unitTypeId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        Page<Unit> unitsPage = Page.empty();
+
+        if (traderName == null && traderPhone == null && unitTypeId != null) {
+            unitsPage = unitService.getUnitsByUnitTypeId(unitTypeId, PageRequest.of(page, size));
+        }
+//        else if (traderName != null && unitTypeId == null) {
+//            unitsPage = unitService.filterUnitsByName(traderName, PageRequest.of(page, size));
 //        }
-//        else if (nameUnit != null && unitTypeId == null) {
-//            unitsPage = unitService.filterUnitsByName(nameUnit, PageRequest.of(page, size));
-//        }
-//        else if (nameUnit != null && unitTypeId != null) {
-//            unitsPage = unitService.filterUnitsByNameAndTypeId(nameUnit, unitTypeId, PageRequest.of(page, size));
-//        }
-//        else if (nameUnit == null && unitTypeId == null) {
-//            unitsPage = unitService.getAllUnit(PageRequest.of(page, size));
-//        }
-//        return unitsPage.map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit));
-//    }
+        else if (traderName != null && unitTypeId != null) {
+            unitsPage = unitService.filterUnitsByUserNameAndTypeId(traderName, unitTypeId, PageRequest.of(page, size));
+        }
+        else if (traderName == null && unitTypeId != null && traderPhone != null) {
+            unitsPage = unitService.filterUnitsByPhoneNumberAndTypeId(traderPhone, unitTypeId,PageRequest.of(page, size));
+        }
+        return unitsPage.map(unit -> unitDashboard.toUnitDashboard(unit));
+    }
 
     @GetMapping("By-Id-General/{id}")
     public ResponseEntity<?> getUnitById(@PathVariable Long id) {
