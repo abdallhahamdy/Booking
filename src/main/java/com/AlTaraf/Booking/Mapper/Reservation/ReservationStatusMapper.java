@@ -11,6 +11,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ReservationStatusMapper {
     @Mapping(source = "id", target = "reservationId")
+    @Mapping(source = "unit.images", target = "imageDataDTOS")
     @Mapping(source = "unit.id", target = "unitId")
     @Mapping(source = "unit.nameUnit", target = "unitName")
     @Mapping(source = "unit.city", target = "cityDto")

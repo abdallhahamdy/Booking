@@ -32,6 +32,11 @@ import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitResidenciesResponseDto;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
+import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
+import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
+import com.AlTaraf.Booking.Repository.unit.UnitRepository;
+import com.AlTaraf.Booking.Repository.unit.roomAvailable.RoomAvailableRepository;
+import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.unit.AvailablePeriods.AvailablePeriodsService;
 import com.AlTaraf.Booking.Service.unit.FeatureForHalls.FeatureForHallsService;
@@ -120,6 +125,18 @@ public class UnitController {
 
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @Autowired
+    private UnitRepository unitRepository;
+
+    @Autowired
+    private RoomAvailableRepository roomAvailableRepository;
+
+    @Autowired
+    private RoomDetailsRepository roomDetailsRepository;
+
+    @Autowired
+    private RoomDetailsForAvailableAreaRepository roomDetailsForAvailableAreaRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(UnitController.class);
 
@@ -448,9 +465,17 @@ public class UnitController {
     @Transactional // Add this annotation to enable transaction management
     public ResponseEntity<?> addRoomDetails(@PathVariable Long unitId, @PathVariable Long roomAvailableId, @RequestBody RoomDetailsRequestDto roomDetailsRequestDto) {
         try {
+            // Check if RoomDetails already exists for the given unitId and roomAvailableId
+            boolean roomDetailsExists = roomDetailsRepository.existsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
+            if (roomDetailsExists) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"RoomDetails already exists for unitId: " + unitId + " and roomAvailableId: " + roomAvailableId));
+            }
+
             RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsRequestDto);
-            roomDetailsService.addRoomDetails(unitId,roomAvailableId, roomDetails);
+            roomDetailsService.addRoomDetails(unitId, roomAvailableId, roomDetails);
             return ResponseEntity.ok("RoomDetails added successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetails: " + e.getMessage());
         }
@@ -460,11 +485,17 @@ public class UnitController {
     @Transactional // Add this annotation to enable transaction management
     public ResponseEntity<?> addRoomDetailsForAvailableArea(@PathVariable Long unitId, @PathVariable Long availableAreaId, @RequestBody RoomDetailsRequestDto roomDetailsRequestDto) {
         try {
+            // Check if RoomDetailsForAvailableArea already exists for the given unitId and availableAreaId
+            boolean roomDetailsExists = roomDetailsForAvailableAreaRepository.existsByUnitIdAndAvailableAreaId(unitId, availableAreaId);
+            if (roomDetailsExists) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"RoomDetailsForAvailableArea already exists for unitId: " + unitId + " and availableAreaId: " + availableAreaId));
+            }
+
             RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsRequestMapper.toEntityAvailableArea(roomDetailsRequestDto);
-            roomDetailsForAvailableAreaService.addRoomDetails(unitId,availableAreaId, roomDetailsForAvailableArea);
-            return ResponseEntity.ok("RoomDetails added successfully");
+            roomDetailsForAvailableAreaService.addRoomDetails(unitId, availableAreaId, roomDetailsForAvailableArea);
+            return ResponseEntity.ok("RoomDetailsForAvailableArea added successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetails: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetailsForAvailableArea: " + e.getMessage());
         }
     }
 

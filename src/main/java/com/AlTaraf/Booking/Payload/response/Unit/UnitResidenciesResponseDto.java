@@ -25,6 +25,7 @@ public class UnitResidenciesResponseDto {
 
     private Long unitId;
     private Long unitTypeId;
+    private List<String> imagePaths;
     private String nameUnit;
     private String description;
 

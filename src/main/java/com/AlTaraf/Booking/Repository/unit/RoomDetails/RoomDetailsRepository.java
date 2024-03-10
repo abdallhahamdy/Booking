@@ -7,4 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RoomDetailsRepository extends JpaRepository<RoomDetails, Long> {
     RoomDetails findByUnitIdAndRoomAvailableId(Long unitId, Long roomAvailableId);
+
+    boolean existsByUnitIdAndRoomAvailableId(Long unitId, Long roomAvailableId);
+
 }

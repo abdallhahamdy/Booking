@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 // Event Halls
 @Data
@@ -17,6 +18,7 @@ import java.util.Set;
 public class EventHallsResponse {
     private Long unitId;
     private String nameUnit;
+    private List<String> imagePaths;
     private String description;
     private int capacityHalls;
     private CityDto cityDto;

@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoomDetailsRequestDto {
-    private Long id;
     private int roomNumber;
     private BigDecimal newPrice;
     private BigDecimal oldPrice;

@@ -76,6 +76,9 @@ public class User extends Auditable<String> {
 
     private Double longForMapping;
 
+    @Column(name = "BAN")
+    private Boolean ban;
+
     public User(Long id) {
         this.id = id;
     }

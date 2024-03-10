@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface EventHallsMapper {
     @Mapping(source = "id", target = "unitId")
+    @Mapping(target = "imagePaths", expression = "java(extractFilePaths(unit.getImages()))")
     @Mapping(source = "capacityHalls", target = "capacityHalls")
     @Mapping(source = "nameUnit", target = "nameUnit")
     @Mapping(source = "description", target = "description")
@@ -66,5 +67,11 @@ public interface EventHallsMapper {
         imageDataDTO.setName(imageData.getName());
         imageDataDTO.setImagePath(imageData.getImagePath());
         return imageDataDTO;
+    }
+
+    default List<String> extractFilePaths(List<ImageData> images) {
+        return images.stream()
+                .map(ImageData::getImagePath)
+                .collect(Collectors.toList());
     }
 }

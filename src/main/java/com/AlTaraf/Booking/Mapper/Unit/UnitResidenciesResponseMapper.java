@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public interface UnitResidenciesResponseMapper {
     @Mapping(source = "id", target = "unitId")
     @Mapping(source = "unitType.id", target = "unitTypeId")
+    @Mapping(target = "imagePaths", expression = "java(extractFilePaths(unit.getImages()))")
     @Mapping(source = "nameUnit", target = "nameUnit")
     @Mapping(source = "description", target = "description")
     @Mapping(source = "city", target = "cityDto")
@@ -46,5 +47,11 @@ public interface UnitResidenciesResponseMapper {
         imageDataDTO.setName(imageData.getName());
         imageDataDTO.setImagePath(imageData.getImagePath());
         return imageDataDTO;
+    }
+
+    default List<String> extractFilePaths(List<ImageData> images) {
+        return images.stream()
+                .map(ImageData::getImagePath)
+                .collect(Collectors.toList());
     }
 }

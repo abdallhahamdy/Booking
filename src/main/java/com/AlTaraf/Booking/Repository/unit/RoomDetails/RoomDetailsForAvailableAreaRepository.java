@@ -16,4 +16,7 @@ public interface RoomDetailsForAvailableAreaRepository extends JpaRepository<Roo
     @Query("SELECT COUNT(r) > 0 FROM RoomDetailsForAvailableArea r WHERE r.roomNumber = 0")
     boolean existsByRoomNumberZero();
 
+    boolean existsByUnitIdAndAvailableAreaId(Long unitId, Long availableAreaId);
+
+
 }
