@@ -28,11 +28,11 @@ public class ImageDataController {
     ImageDataRepository imageDataRepository;
 
     @PostMapping
-    public ResponseEntity<?> uploadImages(@RequestParam("images") List<MultipartFile> files) throws IOException {
+    public ResponseEntity<?> uploadImages(@RequestParam("images") List<MultipartFile> files, @RequestParam("userId") Long userId) throws IOException {
         List<ImageUploadResponse> responses = new ArrayList<>();
 
         for (MultipartFile file : files) {
-            ImageUploadResponse response = imageDataService.uploadImage(file);
+            ImageUploadResponse response = imageDataService.uploadImage(file, userId);
             responses.add(response);
         }
 

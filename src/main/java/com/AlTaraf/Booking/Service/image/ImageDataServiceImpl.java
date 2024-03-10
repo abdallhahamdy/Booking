@@ -2,8 +2,10 @@ package com.AlTaraf.Booking.Service.image;
 
 import com.AlTaraf.Booking.Config.ImageConfig;
 import com.AlTaraf.Booking.Entity.Image.ImageData;
+import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Payload.response.ImageUploadResponse;
 import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
+import com.AlTaraf.Booking.Repository.user.UserRepository;
 import io.minio.*;
 import io.minio.errors.MinioException;
 import org.apache.commons.net.ftp.FTP;
@@ -26,7 +28,10 @@ public class ImageDataServiceImpl implements ImageDataService {
     @Autowired
     private ImageDataRepository imageDataRepository;
 
-    public ImageUploadResponse uploadImage(MultipartFile file) throws IOException {
+    @Autowired
+    private UserRepository userRepository;
+
+    public ImageUploadResponse uploadImage(MultipartFile file, Long userId) throws IOException {
         byte[] imageData = file.getBytes();
 
         String imagePath = null;
@@ -36,12 +41,17 @@ public class ImageDataServiceImpl implements ImageDataService {
             throw new RuntimeException("Error uploading image to MinIO server", e);
         }
 
-        imageDataRepository.save(ImageData.builder()
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        ImageData imageDataEntity = ImageData.builder()
                 .name(file.getOriginalFilename())
                 .type(file.getContentType())
-//                .imageData(imageData) // Save the raw image data
                 .imagePath(imagePath)
-                .build());
+                .user(user)
+                .build();
+
+        imageDataRepository.save(imageDataEntity);
 
         return new ImageUploadResponse("Image uploaded successfully: " +
                 file.getOriginalFilename());
