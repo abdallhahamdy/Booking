@@ -17,7 +17,7 @@ public interface RoomDetailsRequestMapper {
     @Mapping(source = "childrenAllowed", target = "childrenAllowed")
     RoomDetails toEntity(RoomDetailsRequestDto roomDetailsRequestDto);
 
-    @Mapping(source = "id", target = "id")
+//    @Mapping(source = "id", target = "id")
 //    @Mapping(source = "roomAvailableId", target = "roomAvailable.id")
     @Mapping(source = "roomNumber", target = "roomNumber")
     @Mapping(source = "newPrice", target = "newPrice")

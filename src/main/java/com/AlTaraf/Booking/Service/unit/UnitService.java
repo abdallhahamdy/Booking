@@ -24,7 +24,9 @@ public interface UnitService {
 
     void deleteUnit(Long id);
 
-    void updateImageDataUnit(Long unitId);
+    void updateImageDataUnit( Long unitId, Long userId);
+
+    void updateImageDataAds( Long adsId, Long userId);
 
 //    void updateImageDataAds(Long adsId);
 

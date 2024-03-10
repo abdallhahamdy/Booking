@@ -57,6 +57,32 @@ public class ImageDataServiceImpl implements ImageDataService {
                 file.getOriginalFilename());
     }
 
+    public ImageUploadResponse uploadImageProfile(MultipartFile file, Long userId) throws IOException {
+        byte[] imageData = file.getBytes();
+
+        String imagePath = null;
+        try {
+            imagePath = uploadToMinioServer(file.getOriginalFilename(), file.getContentType(), imageData);
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            throw new RuntimeException("Error uploading image to MinIO server", e);
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        ImageData imageDataEntity = ImageData.builder()
+                .name(file.getOriginalFilename())
+                .type(file.getContentType())
+                .imagePath(imagePath)
+                .user(user)
+                .build();
+
+        imageDataRepository.save(imageDataEntity);
+
+        return new ImageUploadResponse("Image uploaded successfully: " +
+                file.getOriginalFilename());
+    }
+
     private String uploadToMinioServer(String filename, String contentType, byte[] data) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
         try {
             MinioClient minioClient = MinioClient.builder()

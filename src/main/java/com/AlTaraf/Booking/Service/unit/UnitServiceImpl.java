@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.Service.unit;
 
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
+import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Evaluation.Evaluation;
 import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
@@ -137,24 +138,48 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public void updateImageDataUnit(Long unitId) {
+    public void updateImageDataUnit(Long unitId, Long userId) {
         // Fetch the Unit by ID
         Unit unit = unitRepository.findById(unitId).orElse(null);
 
         if (unit != null) {
-            // Retrieve associated ImageData entities without a unit
-            List<ImageData> imageDataList = imageDataRepository.findByUnitIsNull();
+            // Retrieve associated ImageData entities
+            List<ImageData> imageDataList = imageDataRepository.findByUserId(userId);
 
             // Update the unit for each ImageData entity
             for (ImageData imageData : imageDataList) {
                 imageData.setUnit(unit);
                 imageDataRepository.save(imageData);
             }
-        } else {
+        }
+        else {
             // Handle the case when the Unit with the specified ID is not found
             throw new EntityNotFoundException("Unit not found with ID: " + unitId);
         }
 
+    }
+
+    @Override
+    public void updateImageDataAds( Long adsId, Long userId) {
+
+        // Fetch the Ads by ID
+        Ads ads = adsRepository.findById(adsId).orElse(null);
+
+        if (ads != null) {
+            // Retrieve associated ImageData entities
+            List<ImageData> imageDataList = imageDataRepository.findByUserId(userId);
+
+            // Update the unit for each ImageData entity
+            for (ImageData imageData : imageDataList) {
+                System.out.println("Name Image: "+ imageData.getName());
+                imageData.setAds(ads);
+                imageDataRepository.save(imageData);
+            }
+        }
+        else {
+            // Handle the case when the Unit with the specified ID is not found
+            throw new EntityNotFoundException("Unit not found with ID: " + adsId);
+        }
     }
 
 //    @Override
