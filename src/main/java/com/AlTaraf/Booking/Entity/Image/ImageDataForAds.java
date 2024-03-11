@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 @Entity
-@Table(name = "image_profile")
+@Table(name = "image_data_ads")
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageProfile {
+public class ImageDataForAds {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +29,10 @@ public class ImageProfile {
 
     private String imagePath;
 
+//    @Lob
+//    @Column(name = "imagedata", columnDefinition = "LONGBLOB")
+//    private byte[] imageData;
+
     @Transient
     private MultipartFile file;
 
@@ -37,6 +41,9 @@ public class ImageProfile {
     @JsonBackReference
     private User user;
 
-    @Column(name = "BACKGROUND_IMAGE")
-    private Boolean image_background;
+    @ManyToOne
+    @JoinColumn(name = "ADS_ID")
+    @JsonBackReference
+    private Ads ads;
+
 }

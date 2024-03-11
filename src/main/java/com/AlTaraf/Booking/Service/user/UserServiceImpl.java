@@ -85,8 +85,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean existsByEmailAndRolesOrPhoneNumberAndRoles(String email, String phone, Set<ERole> roleNames) {
-        return userRepository.existsByEmailAndRolesOrPhoneNumberAndRoles(email, phone, roleNames);
+    public Boolean existsByEmailAndRolesOrPhoneNumberAndRoles(String email, String phone, ERole roleNames) {
+        return userRepository.existsByEmailAndPhoneNumberAndRole(email, phone, roleNames);
     }
 
     @Override

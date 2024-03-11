@@ -80,37 +80,29 @@ public class UserController {
     @GetMapping("/check-availability")
     public ResponseEntity<?> checkAvailability(@RequestParam(value = "email", required = false) String email,
                                                @RequestParam(value = "phone") String phone,
-                                               @RequestParam(value = "roleNames") Set<String> roleNames) {
+                                               @RequestParam(value = "roleName") ERole roleName) {
 
-        Set<ERole> roleNamesSet = roleNames.stream().map(ERole::valueOf).collect(Collectors.toSet());
-
-        boolean existsByEmailAndRolesOrPhoneNumberAndRoles = userService.existsByEmailAndRolesOrPhoneNumberAndRoles(email, phone, roleNamesSet);
+        boolean existsByEmailAndRolesOrPhoneNumberAndRoles = userService.existsByEmailAndRolesOrPhoneNumberAndRoles(email, phone, roleName);
         boolean isEmailAvailable = userService.existsByEmail(email);
         boolean isPhoneAvailable = userService.existsByPhone(phone);
 
-        if (email == null || !email.isEmpty()) {
-            if (existsByEmailAndRolesOrPhoneNumberAndRoles) {
-                CheckApiResponse response = new CheckApiResponse(204, "User with the same email, phone number, and role already exists.", false);
-
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body(response);
-            }
-        } else if (isPhoneAvailable){
-
-            CheckApiResponse response = new CheckApiResponse(204, "Phone is already taken.", false);
-
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(response);
-        } else if (isEmailAvailable){
-            CheckApiResponse response = new CheckApiResponse(204, "Email is already taken.", false);
-
+        if (existsByEmailAndRolesOrPhoneNumberAndRoles) {
+            CheckApiResponse response = new CheckApiResponse(409, "User with the same email, phone number, and role already exists.", false);
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(response);
         }
 
+//        else if (isEmailAvailable) {
+//            CheckApiResponse response = new CheckApiResponse(409, "Email is already taken.", false);
+//            return ResponseEntity.status(HttpStatus.CONFLICT)
+//                    .body(response);
+//        } else if (isPhoneAvailable) {
+//            CheckApiResponse response = new CheckApiResponse(409, "Phone is already taken.", false);
+//            return ResponseEntity.status(HttpStatus.CONFLICT)
+//                    .body(response);
+//        }
 
         CheckApiResponse response = new CheckApiResponse(200, "", true);
-
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

@@ -4,6 +4,7 @@ import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Evaluation.Evaluation;
 import com.AlTaraf.Booking.Entity.Image.ImageData;
+import com.AlTaraf.Booking.Entity.Image.ImageDataForAds;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
@@ -13,6 +14,7 @@ import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Evaluation.EvaluationRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
+import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
@@ -44,6 +46,9 @@ public class UnitServiceImpl implements UnitService {
 
     @Autowired
     private ImageDataRepository imageDataRepository;
+
+    @Autowired
+    private ImageDataForAdsRepository imageDataForAdsRepository;
 
     @Autowired
     private UnitFavoriteMapper unitFavoriteMapper;
@@ -144,7 +149,7 @@ public class UnitServiceImpl implements UnitService {
 
         if (unit != null) {
             // Retrieve associated ImageData entities
-            List<ImageData> imageDataList = imageDataRepository.findByUserId(userId);
+            List<ImageData> imageDataList = imageDataRepository.findByUserIdAndUnitIsNull(userId);
 
             // Update the unit for each ImageData entity
             for (ImageData imageData : imageDataList) {
@@ -167,13 +172,13 @@ public class UnitServiceImpl implements UnitService {
 
         if (ads != null) {
             // Retrieve associated ImageData entities
-            List<ImageData> imageDataList = imageDataRepository.findByUserId(userId);
+            List<ImageDataForAds> imageDataList = imageDataForAdsRepository.findByUserIdAndAdsIsNull(userId);
 
             // Update the unit for each ImageData entity
-            for (ImageData imageData : imageDataList) {
+            for (ImageDataForAds imageData : imageDataList) {
                 System.out.println("Name Image: "+ imageData.getName());
                 imageData.setAds(ads);
-                imageDataRepository.save(imageData);
+                imageDataForAdsRepository.save(imageData);
             }
         }
         else {

@@ -13,4 +13,13 @@ import java.util.List;
 @Repository
 public interface ImageDataProfileRepository extends JpaRepository<ImageProfile, Long> {
     List<ImageData> findByUserId(Long userId);
+    void deleteByUserId(Long userId);
+
+    @Modifying
+    @Query("DELETE FROM ImageProfile ip WHERE ip.user.id = :userId AND ip.image_background = true")
+    void deleteByUserIdAndImageBackgroundTrue(@Param("userId") Long userId);
+
+    @Modifying
+    @Query("DELETE FROM ImageProfile ip WHERE ip.user.id = :userId AND ip.image_background IS NULL")
+    void deleteByUserIdAndImageBackgroundIsNull(@Param("userId") Long userId);
 }

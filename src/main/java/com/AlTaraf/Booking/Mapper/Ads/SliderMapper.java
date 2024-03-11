@@ -2,6 +2,7 @@ package com.AlTaraf.Booking.Mapper.Ads;
 
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Image.ImageData;
+import com.AlTaraf.Booking.Entity.Image.ImageDataForAds;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -27,7 +28,7 @@ public interface SliderMapper {
     List<adsForSliderResponseDto> toSliderDtoList(List<Ads> adsList);
 
     // Define a method to extract the first image path from the list of ImageData entities
-    default String extractImagePath(List<ImageData> images) {
+    default String extractImagePath(List<ImageDataForAds> images) {
         if (images != null && !images.isEmpty()) {
             return images.get(0).getImagePath();
         }

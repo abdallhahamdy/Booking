@@ -46,9 +46,9 @@ public class ImageData {
     @JsonBackReference
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "ADS_ID")
-    @JsonBackReference
-    private Ads ads;
+//    @ManyToOne
+//    @JoinColumn(name = "ADS_ID")
+//    @JsonBackReference
+//    private Ads ads;
 
 }

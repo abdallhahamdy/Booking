@@ -1,6 +1,9 @@
 package com.AlTaraf.Booking.Controller.image;
 
+import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Payload.response.ImageUploadResponse;
+import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
+import com.AlTaraf.Booking.Repository.image.ImageDataProfileRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.Service.image.ImageDataService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
@@ -17,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/image")
+@RequestMapping("/images")
 public class ImageDataController {
 
     @Autowired
@@ -29,7 +32,13 @@ public class ImageDataController {
     @Autowired
     ImageDataRepository imageDataRepository;
 
-    @PostMapping
+    @Autowired
+    ImageDataForAdsRepository imageDataForAdsRepository;
+
+    @Autowired
+    ImageDataProfileRepository imageDataProfileRepository;
+
+    @PostMapping("/unit")
     public ResponseEntity<?> uploadImages(@RequestParam("images") List<MultipartFile> files, @RequestParam("userId") Long userId) throws IOException {
         List<ImageUploadResponse> responses = new ArrayList<>();
 
@@ -42,17 +51,53 @@ public class ImageDataController {
                 .body(responses);
     }
 
-    @PostMapping
-    public ResponseEntity<?> uploadImagesProfile(@RequestParam("images") List<MultipartFile> files, @RequestParam("userId") Long userId) throws IOException {
+    @PostMapping("/Ads")
+    public ResponseEntity<?> uploadImagesForAds(@RequestParam("images") List<MultipartFile> files, @RequestParam("userId") Long userId) throws IOException {
         List<ImageUploadResponse> responses = new ArrayList<>();
 
         for (MultipartFile file : files) {
-            ImageUploadResponse response = imageDataService.uploadImage(file, userId);
+            ImageUploadResponse response = imageDataService.uploadImageForAds(file, userId);
             responses.add(response);
         }
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(responses);
+    }
+
+    @PostMapping("/profile-user")
+    public ResponseEntity<?> uploadImagesProfile(
+            @RequestParam("images") List<MultipartFile> files,
+            @RequestParam("userId") Long userId,
+            @RequestParam(value = "image_background", required = false) Boolean image_background
+            ) throws IOException {
+        List<ImageUploadResponse> responses = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            ImageUploadResponse response = imageDataService.uploadImageProfile(file, userId, image_background);
+            responses.add(response);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(responses);
+    }
+
+    @Transactional
+    @DeleteMapping("/delete-profile-user")
+    public ResponseEntity<?> deleteImagesProfile(
+            @RequestParam("userId") Long userId,
+            @RequestParam(value = "image_background", required = false) Boolean image_background) throws IOException {
+        List<ImageUploadResponse> responses = new ArrayList<>();
+
+        if (userId != null) {
+            imageDataProfileRepository.deleteByUserIdAndImageBackgroundIsNull(userId);
+        }
+
+        if (image_background != null) {
+            imageDataProfileRepository.deleteByUserIdAndImageBackgroundTrue(userId);
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse(200,"Delete image profile Success"));
     }
 
 //    @PostMapping("/update-imagedata-for-unit")
@@ -73,15 +118,15 @@ public class ImageDataController {
     @PostMapping("/update-imagedata-for-unit")
     public ResponseEntity<String> updateImageDataForUnit(
             @RequestParam("unitId") Long unitId,
-            @RequestParam(value = "userId") Long userId) {
-        unitService.updateImageDataUnit(userId, unitId);
+            @RequestParam("userId") Long userId) {
+        unitService.updateImageDataUnit(unitId, userId);
         return new ResponseEntity<>("ImageData entities updated for Unit with ID: " + unitId, HttpStatus.OK);
     }
 
 
     @PostMapping("/update-imagedata-for-ads")
     public ResponseEntity<String> updateImageDataForAds(
-            @RequestParam(value = "adsId") Long adsId,
+            @RequestParam("adsId") Long adsId,
             @RequestParam("userId") Long userId){
         unitService.updateImageDataAds(adsId, userId);
         return new ResponseEntity<>("ImageData entities updated for Ads with ID: " + adsId, HttpStatus.OK);
@@ -90,26 +135,38 @@ public class ImageDataController {
     @Transactional
     @DeleteMapping("/delete-Image-Data")
     public ResponseEntity<String> deleteImageData(
-            @RequestParam(required = false) Long unitId,
-           @RequestParam(required = false) Long adsId ){
+            @RequestParam(required = false) Long unitId){
+//           @RequestParam(required = false) Long adsId ){
 
-        if (unitId == null && adsId == null) {
-            return ResponseEntity.badRequest().body("At least one parameter should be provided.");
-        }
+//        if (unitId == null && adsId == null) {
+//            return ResponseEntity.badRequest().body("At least one parameter should be provided.");
+//        }
 
         if (unitId != null) {
             imageDataRepository.deleteByUnitId(unitId);
         }
 
-        if (adsId != null) {
-            imageDataRepository.deleteByAdsId(adsId);
-        }
+//        if (adsId != null) {
+//            imageDataRepository.deleteByAdsId(adsId);
+//        }
 //
 //        if (userId != null) {
 //            imageDataRepository.deleteByUserId(userId);
 //        }
 
         return ResponseEntity.ok("ImageData deleted successfully.");
+    }
+
+    @Transactional
+    @DeleteMapping("/delete-Image-Data-For-Ads")
+    public ResponseEntity<String> deleteImageDataForAds(
+            @RequestParam(required = false) Long adsId){
+
+        if (adsId != null) {
+            imageDataForAdsRepository.deleteByAdsId(adsId);
+        }
+
+        return ResponseEntity.ok("Image Ads deleted successfully.");
     }
 
 //    @PostMapping("/update-imagedata-for-ads")

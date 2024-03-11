@@ -2,8 +2,12 @@ package com.AlTaraf.Booking.Service.image;
 
 import com.AlTaraf.Booking.Config.ImageConfig;
 import com.AlTaraf.Booking.Entity.Image.ImageData;
+import com.AlTaraf.Booking.Entity.Image.ImageDataForAds;
+import com.AlTaraf.Booking.Entity.Image.ImageProfile;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Payload.response.ImageUploadResponse;
+import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
+import com.AlTaraf.Booking.Repository.image.ImageDataProfileRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import io.minio.*;
@@ -29,7 +33,13 @@ public class ImageDataServiceImpl implements ImageDataService {
     private ImageDataRepository imageDataRepository;
 
     @Autowired
+    private ImageDataProfileRepository imageDataProfileRepository;
+
+    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    ImageDataForAdsRepository imageDataForAdsRepository;
 
     public ImageUploadResponse uploadImage(MultipartFile file, Long userId) throws IOException {
         byte[] imageData = file.getBytes();
@@ -57,7 +67,7 @@ public class ImageDataServiceImpl implements ImageDataService {
                 file.getOriginalFilename());
     }
 
-    public ImageUploadResponse uploadImageProfile(MultipartFile file, Long userId) throws IOException {
+    public ImageUploadResponse uploadImageForAds(MultipartFile file, Long userId) throws IOException {
         byte[] imageData = file.getBytes();
 
         String imagePath = null;
@@ -70,14 +80,41 @@ public class ImageDataServiceImpl implements ImageDataService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
 
-        ImageData imageDataEntity = ImageData.builder()
+        ImageDataForAds imageDataEntity = ImageDataForAds.builder()
                 .name(file.getOriginalFilename())
                 .type(file.getContentType())
                 .imagePath(imagePath)
                 .user(user)
                 .build();
 
-        imageDataRepository.save(imageDataEntity);
+        imageDataForAdsRepository.save(imageDataEntity);
+
+        return new ImageUploadResponse("Image uploaded successfully: " +
+                file.getOriginalFilename());
+    }
+
+    public ImageUploadResponse uploadImageProfile(MultipartFile file, Long userId, Boolean image_background) throws IOException {
+        byte[] imageDataProfile = file.getBytes();
+
+        String imagePath = null;
+        try {
+            imagePath = uploadToMinioServer(file.getOriginalFilename(), file.getContentType(), imageDataProfile);
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            throw new RuntimeException("Error uploading image to MinIO server", e);
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        ImageProfile imageDataProfileEntity = ImageProfile.builder()
+                .name(file.getOriginalFilename())
+                .type(file.getContentType())
+                .imagePath(imagePath)
+                .user(user)
+                .image_background(image_background)
+                .build();
+
+        imageDataProfileRepository.save(imageDataProfileEntity);
 
         return new ImageUploadResponse("Image uploaded successfully: " +
                 file.getOriginalFilename());

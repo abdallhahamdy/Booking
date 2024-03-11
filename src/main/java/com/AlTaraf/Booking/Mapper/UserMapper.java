@@ -21,6 +21,7 @@ public interface UserMapper {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
+
     @Mapping(source = "phoneNumber", target = "phone")
     @Mapping(source = "city.cityName", target = "city.cityName")
     @Mapping(source = "roles", target = "roles", qualifiedByName = "rolesToRoleSet")
@@ -29,6 +30,7 @@ public interface UserMapper {
     @Mapping(source = "email", target = "email")
     User userRegisterDtoToUser(UserRegisterDto userRegisterDto);
 
+//    @Mapping(source = "imagesProfiles", target = "imageDataProfileDTOS")
     @Mapping(source = "phone", target = "phoneNumber")
     @Mapping(source = "city.cityName", target = "city.cityName")
     @Mapping(source = "roles", target = "roles", qualifiedByName = "roleToRoleDtoList")
@@ -55,6 +57,7 @@ public interface UserMapper {
 
 
     @Mapping(source = "id", target = "id")
+    @Mapping(source = "imagesProfiles", target = "imageDataProfileDTOS")
     @Mapping(source = "username", target = "username")
     @Mapping(source = "email", target = "email")
     @Mapping(source = "phone", target = "phone")

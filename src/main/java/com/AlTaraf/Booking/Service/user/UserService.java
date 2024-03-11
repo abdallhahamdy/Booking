@@ -14,7 +14,7 @@ public interface UserService {
 
     String generateOtpForUser ();
 
-    Boolean existsByEmailAndRolesOrPhoneNumberAndRoles(String email, String phone, Set<ERole> roleNames);
+    Boolean existsByEmailAndRolesOrPhoneNumberAndRoles(String email, String phone, ERole roleNames);
 
     Boolean existsByEmail(String email);
 

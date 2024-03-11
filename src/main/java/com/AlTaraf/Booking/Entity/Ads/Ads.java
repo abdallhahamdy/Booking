@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.Entity.Ads;
 
 import com.AlTaraf.Booking.Entity.Image.ImageData;
+import com.AlTaraf.Booking.Entity.Image.ImageDataForAds;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
@@ -24,7 +25,7 @@ public class Ads {
 
     @OneToMany(mappedBy = "ads", fetch = FetchType.LAZY)
     @JsonManagedReference
-    private List<ImageData> images;
+    private List<ImageDataForAds> images;
 
     @OneToOne
     @JoinColumn(name = "UNIT_ID")

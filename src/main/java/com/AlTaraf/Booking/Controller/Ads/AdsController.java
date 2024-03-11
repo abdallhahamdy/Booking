@@ -78,8 +78,8 @@ public class AdsController {
     public ResponseEntity<?> createAds(@RequestBody AdsRequestDto adsRequestDto) {
         try {
 //            Ads ads = adsMapper.toEntity(adsDto);
-            adsService.createAds(adsMapper.toEntity(adsRequestDto));
-            return ResponseEntity.status(HttpStatus.CREATED).body("Ads created successfully!");
+            Ads ads = adsService.createAds(adsMapper.toEntity(adsRequestDto));
+            return ResponseEntity.status(HttpStatus.CREATED).body("Ads created successfully! with id: " + ads.getId());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create ads: " + e.getMessage());
         }

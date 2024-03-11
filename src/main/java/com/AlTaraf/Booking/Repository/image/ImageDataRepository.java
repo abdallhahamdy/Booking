@@ -11,16 +11,15 @@ import java.util.List;
 
 @Repository
 public interface ImageDataRepository extends JpaRepository<ImageData, Long> {
-    List<ImageData> findByUnitIsNull();
-//    List<ImageData> findByUnitIsNull();
 
     List<ImageData> findByUnitId(Long unitId);
 
-    List<ImageData> findByAdsId(Long adsId);
     List<ImageData> findByUserId(Long userId);
 
     void deleteByUserId(Long userId);
-    void deleteByAdsId(Long adsId);
+
+    @Query("SELECT i FROM ImageData i WHERE i.user.id = :userId AND i.unit IS NULL")
+    List<ImageData> findByUserIdAndUnitIsNull(@Param("userId") Long userId);
 
     @Modifying
     @Query("DELETE FROM ImageData i WHERE i.unit.id = :unitId")

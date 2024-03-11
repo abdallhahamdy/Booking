@@ -29,12 +29,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //    @Query("SELECT u FROM User u WHERE u.phone = :phone")
 //    User findByPhone(@Param("phone") String phone);
 
-    @Query("SELECT COUNT(u.id) > 0 FROM User u " +
+    @Query("SELECT COUNT(u.id) = 1 FROM User u " +
             "JOIN u.roles r " +
-            "WHERE (u.email = :email OR u.phone = :phone) AND r.name IN :roleNames")
-    boolean existsByEmailAndRolesOrPhoneNumberAndRoles(
+            "WHERE (u.email = :email OR u.phone = :phone) AND r.name = :roleName")
+    boolean existsByEmailAndPhoneNumberAndRole(
             @Param("email") String email,
             @Param("phone") String phone,
-            @Param("roleNames") Set<ERole> roleNames);
+            @Param("roleName") ERole roleName);
 }
 
