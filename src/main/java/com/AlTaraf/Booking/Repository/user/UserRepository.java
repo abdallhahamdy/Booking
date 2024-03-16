@@ -26,8 +26,23 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByPhone(String phone);
 
+    @Query("SELECT COUNT(u) > 1 FROM User u WHERE u.phone = :phone")
+    boolean isDuplicatePhoneNumber(@Param("phone") String phone);
+
+    @Query("SELECT COUNT(u) > 1 FROM User u WHERE u.email = :email")
+    boolean isDuplicateEmail(@Param("email") String email);
+
+    @Query("SELECT CASE WHEN COUNT(u.id) > 0 THEN TRUE ELSE FALSE END " +
+            "FROM User u " +
+            "JOIN u.roles r " +
+            "WHERE u.phone = :phone AND u.id <> :userId")
+    boolean existsByPhoneForDifferentUser(@Param("phone") String phone, @Param("userId") Long userId);
+
 //    @Query("SELECT u FROM User u WHERE u.phone = :phone")
 //    User findByPhone(@Param("phone") String phone);
+
+    User findByEmail(String email);
+
 
     @Query("SELECT COUNT(u.id) = 1 FROM User u " +
             "JOIN u.roles r " +

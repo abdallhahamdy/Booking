@@ -20,6 +20,7 @@ import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Security.jwt.JwtUtils;
 import com.AlTaraf.Booking.Service.cityAndRegion.CityService;
 import com.AlTaraf.Booking.Service.role.RoleService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -77,6 +78,10 @@ public class UserServiceImpl implements UserService {
         }
 
         return userRepository.existsByEmail(email);
+    }
+    @Override
+    public boolean isDuplicatePhoneNumber(String phone) {
+        return userRepository.isDuplicatePhoneNumber(phone);
     }
 
     @Override
@@ -338,5 +343,24 @@ public class UserServiceImpl implements UserService {
 
     public Optional<User> findByPhone(String phone) {
         return userRepository.findByPhone(phone);
+    }
+
+    @Transactional
+    public void processOAuthPostLogin(String email, String name, String phone) {
+        User user = userRepository.findByEmail(email);
+
+        if (user == null) {
+            // User doesn't exist, create a new one
+            User newUser = new User();
+            newUser.setEmail(email);
+            // Set other information based on OAuth2 details if necessary
+            newUser.setUsername(name); // Example, ideally you fetch from OAuth details
+            newUser.setPhone(phone); // Example flag, adapt as necessary
+
+            userRepository.save(newUser);
+        } else {
+
+            userRepository.save(user);
+        }
     }
 }

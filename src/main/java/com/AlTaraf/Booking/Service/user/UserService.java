@@ -6,6 +6,7 @@ import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.User.UserDashboard;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 import java.util.Set;
@@ -22,6 +23,8 @@ public interface UserService {
 
     User registerUser(UserRegisterDto userRegisterDto);
 
+    boolean isDuplicatePhoneNumber( String phone);
+
     UserDashboard registerUserForDashboard(UserRegisterDashboardDto userRegisterDashboardDto);
 
     User getUserById(Long id);
@@ -36,5 +39,6 @@ public interface UserService {
 
     Optional<User> findByPhone(String phone);
 
+    void processOAuthPostLogin(String email, String name, String phone);
 }
 

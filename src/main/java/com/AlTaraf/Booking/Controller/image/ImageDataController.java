@@ -51,35 +51,35 @@ public class ImageDataController {
                 .body(responses);
     }
 
-//    @PostMapping("/Ads")
-//    public ResponseEntity<?> uploadImagesForAds(@RequestParam("images") List<MultipartFile> files, @RequestParam("userId") Long userId) throws IOException {
-//        List<ImageUploadResponse> responses = new ArrayList<>();
-//
-//        for (MultipartFile file : files) {
-//            ImageUploadResponse response = imageDataService.uploadImageForAds(file, userId);
-//            responses.add(response);
-//        }
-//
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .body(responses);
-//    }
+    @PostMapping("/Ads")
+    public ResponseEntity<?> uploadImagesForAds(@RequestParam("images") MultipartFile file, @RequestParam("userId") Long userId) throws IOException {
+        List<ImageUploadResponse> responses = new ArrayList<>();
 
-//    @PostMapping("/profile-user")
-//    public ResponseEntity<?> uploadImagesProfile(
-//            @RequestParam("images") List<MultipartFile> files,
-//            @RequestParam("userId") Long userId,
-//            @RequestParam(value = "image_background", required = false) Boolean image_background
-//            ) throws IOException {
-//        List<ImageUploadResponse> responses = new ArrayList<>();
-//
-//        for (MultipartFile file : files) {
-//            ImageUploadResponse response = imageDataService.uploadImageProfile(file, userId, image_background);
-//            responses.add(response);
-//        }
-//
-//        return ResponseEntity.status(HttpStatus.OK)
-//                .body(responses);
-//    }
+
+            ImageUploadResponse response = imageDataService.uploadImageForAds(file, userId);
+            responses.add(response);
+
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(responses);
+    }
+
+    @PostMapping("/profile-user")
+    public ResponseEntity<?> uploadImagesProfile(
+            @RequestParam("images") MultipartFile file,
+            @RequestParam("userId") Long userId,
+            @RequestParam(value = "image_background", required = false) Boolean image_background
+            ) throws IOException {
+        List<ImageUploadResponse> responses = new ArrayList<>();
+
+
+            ImageUploadResponse response = imageDataService.uploadImageProfile(file, userId, image_background);
+            responses.add(response);
+
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(responses);
+    }
 
     @Transactional
     @DeleteMapping("/delete-profile-user")

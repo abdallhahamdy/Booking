@@ -85,6 +85,7 @@ public class UserController {
         boolean existsByEmailAndRolesOrPhoneNumberAndRoles = userService.existsByEmailAndRolesOrPhoneNumberAndRoles(email, phone, roleName);
         boolean isEmailAvailable = userService.existsByEmail(email);
         boolean isPhoneAvailable = userService.existsByPhone(phone);
+        boolean isDuplicatePhone = userService.isDuplicatePhoneNumber(phone);
 
         if (existsByEmailAndRolesOrPhoneNumberAndRoles) {
             CheckApiResponse response = new CheckApiResponse(409, "User with the same email, phone number, and role already exists.", false);
@@ -98,7 +99,7 @@ public class UserController {
                     .body(response);
         }
 
-        if (!existsByEmailAndRolesOrPhoneNumberAndRoles && isPhoneAvailable && !isEmailAvailable) {
+        if (!existsByEmailAndRolesOrPhoneNumberAndRoles && isDuplicatePhone && !isEmailAvailable) {
             CheckApiResponse response = new CheckApiResponse(409, "Phone is already taken.", false);
 
             return ResponseEntity.status(HttpStatus.CONFLICT)
