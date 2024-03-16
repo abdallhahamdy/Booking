@@ -50,19 +50,15 @@ public class ImageDataServiceImpl implements ImageDataService {
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             throw new RuntimeException("Error uploading image to MinIO server", e);
         }
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
-
         ImageData imageDataEntity = ImageData.builder()
                 .name(file.getOriginalFilename())
                 .type(file.getContentType())
                 .imagePath(imagePath)
                 .user(user)
                 .build();
-
         imageDataRepository.save(imageDataEntity);
-
         return new ImageUploadResponse("Image uploaded successfully: " +
                 file.getOriginalFilename());
     }
@@ -92,7 +88,7 @@ public class ImageDataServiceImpl implements ImageDataService {
         return new ImageUploadResponse("Image uploaded successfully: " +
                 file.getOriginalFilename());
     }
-
+//
     public ImageUploadResponse uploadImageProfile(MultipartFile file, Long userId, Boolean image_background) throws IOException {
         byte[] imageDataProfile = file.getBytes();
 
@@ -126,14 +122,12 @@ public class ImageDataServiceImpl implements ImageDataService {
                     .endpoint("https://play.min.io")
                     .credentials("Q3AM3UQ867SPQQA43P2F", "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG")
                     .build();
-
             boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket("tes").build());
             if (!found) {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket("tes").build());
             } else {
                 System.out.println("Bucket 'tes' already exists.");
             }
-
             // Upload the data to the MinIO server
             minioClient.putObject(PutObjectArgs.builder()
                     .bucket("tes")
@@ -141,7 +135,6 @@ public class ImageDataServiceImpl implements ImageDataService {
                     .contentType(contentType) // Set the Content-Type
                     .stream(new ByteArrayInputStream(data), data.length, -1)
                     .build());
-
             return "https://play.min.io/tes/" + filename; // Return the URL of the uploaded image
         } catch (MinioException e) {
             throw new RuntimeException("Error uploading image to MinIO server", e);

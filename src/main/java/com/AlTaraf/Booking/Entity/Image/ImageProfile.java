@@ -29,6 +29,10 @@ public class ImageProfile {
 
     private String imagePath;
 
+//    @Lob
+//    @Column(name = "imagedata", columnDefinition = "LONGBLOB")
+//    private byte[] imageData;
+
     @Transient
     private MultipartFile file;
 
