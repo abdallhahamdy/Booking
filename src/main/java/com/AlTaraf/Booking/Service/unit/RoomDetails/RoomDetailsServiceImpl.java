@@ -34,13 +34,15 @@ public class RoomDetailsServiceImpl implements RoomDetailsService{
 
         if (unit.getPrice() == 0 ) {
 
-            if (roomDetails.getNewPrice() < roomDetails.getOldPrice()) {
-                unit.setPrice(roomDetails.getNewPrice());
-                System.out.println("roomDetails real Price: " + unit.getPrice());
-            } else {
-                unit.setPrice(roomDetails.getOldPrice());
-                System.out.println("roomDetails real Old Price: " + unit.getPrice());
-            }
+            unit.setPrice(roomDetails.getNewPrice());
+
+//            if (roomDetails.getNewPrice() < roomDetails.getOldPrice()) {
+//                unit.setPrice(roomDetails.getNewPrice());
+//                System.out.println("roomDetails real Price: " + unit.getPrice());
+//            } else {
+//                unit.setPrice(roomDetails.getNewPrice());
+//                System.out.println("roomDetails real Old Price: " + unit.getPrice());
+//            }
         }
 
         roomDetailsRepository.save(roomDetails);

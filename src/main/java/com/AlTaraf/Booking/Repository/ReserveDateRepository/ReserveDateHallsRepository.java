@@ -2,7 +2,9 @@ package com.AlTaraf.Booking.Repository.ReserveDateRepository;
 
 import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
 import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -20,4 +22,14 @@ public interface ReserveDateHallsRepository extends JpaRepository<ReserveDateHal
 
     @Query("SELECT rd FROM ReserveDateHalls rd WHERE rd.unit.id = :unitId")
     List<ReserveDateHalls> findByUnitId(@Param("unitId") Long unitId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM DateInfoHalls dih WHERE dih.reserveDateHalls.id IN (SELECT rdh.id FROM ReserveDateHalls rdh WHERE rdh.unit.id = :unitId)")
+    void deleteRelatedDateInfoHallsByUnitId(@Param("unitId") Long unitId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM ReserveDateHalls rdh WHERE rdh.unit.id = :unitId")
+    void deleteByUnitId(@Param("unitId") Long unitId);
 }

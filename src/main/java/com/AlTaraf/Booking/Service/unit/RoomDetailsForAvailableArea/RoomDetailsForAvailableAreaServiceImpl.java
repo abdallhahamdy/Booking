@@ -34,13 +34,15 @@ public class RoomDetailsForAvailableAreaServiceImpl implements RoomDetailsForAva
 
         if (unit.getPrice() == 0 ) {
 
-            if (roomDetailsForAvailableArea.getNewPrice() < roomDetailsForAvailableArea.getOldPrice()) {
-                unit.setPrice(roomDetailsForAvailableArea.getNewPrice());
-                System.out.println("roomDetailsForAvailableArea real Price: " + unit.getPrice());
-            } else {
-                unit.setPrice(roomDetailsForAvailableArea.getOldPrice());
-                System.out.println("roomDetailsForAvailableArea real Old Price: " + unit.getPrice());
-            }
+            unit.setPrice(roomDetailsForAvailableArea.getNewPrice());
+
+//            if (roomDetailsForAvailableArea.getNewPrice() < roomDetailsForAvailableArea.getOldPrice()) {
+//                unit.setPrice(roomDetailsForAvailableArea.getNewPrice());
+//                System.out.println("roomDetailsForAvailableArea real Price: " + unit.getPrice());
+//            } else {
+//                unit.setPrice(roomDetailsForAvailableArea.getOldPrice());
+//                System.out.println("roomDetailsForAvailableArea real Old Price: " + unit.getPrice());
+//            }
         }
 
         roomDetailsForAvailableAreaRepository.save(roomDetailsForAvailableArea);

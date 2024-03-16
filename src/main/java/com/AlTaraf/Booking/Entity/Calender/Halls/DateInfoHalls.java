@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Entity.Calender.Halls;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,4 +27,9 @@ public class DateInfoHalls {
 
     @Column(name = "IS_MORNING")
     private boolean isMorning;
+
+    @ManyToOne
+    @JoinColumn(name = "RESERVE_DATE_HALLS_ID")
+    @JsonBackReference
+    private ReserveDateHalls reserveDateHalls;
 }

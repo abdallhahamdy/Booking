@@ -93,18 +93,18 @@ public class UserController {
                     .body(response);
         }
 
-        if (!existsByEmailAndRolesOrPhoneNumberAndRoles && isEmailAvailable & !isPhoneAvailable) {
-            CheckApiResponse response = new CheckApiResponse(409, "Email is already taken.", false);
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(response);
-        }
-
-        if (!existsByEmailAndRolesOrPhoneNumberAndRoles && isDuplicatePhone && !isEmailAvailable) {
-            CheckApiResponse response = new CheckApiResponse(409, "Phone is already taken.", false);
-
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(response);
-        }
+//        if (!existsByEmailAndRolesOrPhoneNumberAndRoles && isEmailAvailable & !isPhoneAvailable) {
+//            CheckApiResponse response = new CheckApiResponse(409, "Email is already taken.", false);
+//            return ResponseEntity.status(HttpStatus.CONFLICT)
+//                    .body(response);
+//        }
+//
+//        if (!existsByEmailAndRolesOrPhoneNumberAndRoles && isDuplicatePhone && !isEmailAvailable) {
+//            CheckApiResponse response = new CheckApiResponse(409, "Phone is already taken.", false);
+//
+//            return ResponseEntity.status(HttpStatus.CONFLICT)
+//                    .body(response);
+//        }
 
 //        else if (isEmailAvailable) {
 //            CheckApiResponse response = new CheckApiResponse(409, "Email is already taken.", false);

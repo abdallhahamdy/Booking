@@ -23,12 +23,16 @@ import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
+import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
+import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
+import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.TechnicalSupport.TechnicalSupportService;
 import com.AlTaraf.Booking.Service.role.RoleDashboardService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.user.UserService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -89,6 +93,15 @@ public class AdminController {
 
     @Autowired
     private UnitDashboardMapper unitDashboard;
+
+    @Autowired
+    private UserFavoriteUnitRepository userFavoriteUnitRepository;
+
+    @Autowired
+    private RoomDetailsForAvailableAreaRepository roomDetailsForAvailableAreaRepository;
+
+    @Autowired
+    private ImageDataRepository imageDataRepository;
 
     @PostMapping("/Register-Dashboard")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDashboardDto userRegisterDashboardDto) {
@@ -258,42 +271,20 @@ public class AdminController {
         }
     }
 
+    @Transactional
     @DeleteMapping("Delete/Unit/{id}")
     public ResponseEntity<?> deleteUnit(@PathVariable Long id) {
 
         try {
 
-            // Find all reservations associated with the unit
-            List<Reservations> reservations = reservationRepository.findByUnitId(id);
-
-            // Delete all reservations associated with the unit
-            for (Reservations reservation : reservations) {
-                reservationRepository.delete(reservation);
-            }
-
-            // Find all reserve dates associated with the unit
-            List<ReserveDate> reserveDates = reserveDateRepository.findByUnitId(id);
-
-            // Delete all reserve dates associated with the unit
-            for (ReserveDate reserveDate : reserveDates) {
-                reserveDateRepository.delete(reserveDate);
-            }
-
-            // Find all reserve date halls associated with the unit
-            List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitId(id);
-
-            // Delete all reserve date halls associated with the unit
-            for (ReserveDateHalls reserveDateHalls : reserveDateHallsList) {
-                reserveDateHallsRepository.delete(reserveDateHalls);
-            }
-
-            // Find all ads associated with the unit
-            List<Ads> adsList = adsRepository.findByUnitId(id);
-
-            // Delete all ads associated with the unit
-            for (Ads ads : adsList) {
-                adsRepository.delete(ads);
-            }
+            userFavoriteUnitRepository.deleteByUnit(id);
+            roomDetailsForAvailableAreaRepository.deleteByUnitId(id);
+            reserveDateRepository.deleteByUnitId(id);
+            reserveDateHallsRepository.deleteRelatedDateInfoHallsByUnitId(id);
+            reserveDateHallsRepository.deleteByUnitId(id);
+            imageDataRepository.deleteByUnitId(id);
+            adsRepository.deleteByUnitId(id);
+            reservationRepository.deleteByUnitId(id);
 
             unitService.deleteUnit(id);
             ApiResponse response = new ApiResponse(200, "Unit deleted successfully!");

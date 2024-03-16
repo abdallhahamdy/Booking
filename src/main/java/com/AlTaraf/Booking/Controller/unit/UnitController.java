@@ -3,6 +3,9 @@ package com.AlTaraf.Booking.Controller.unit;
 import com.AlTaraf.Booking.Dto.Unit.UnitDto;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
+import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
+import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
+import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
@@ -32,6 +35,10 @@ import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitResidenciesResponseDto;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
+import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
+import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
+import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
+import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
@@ -137,6 +144,18 @@ public class UnitController {
 
     @Autowired
     private RoomDetailsForAvailableAreaRepository roomDetailsForAvailableAreaRepository;
+
+    @Autowired
+    private ReserveDateRepository reserveDateRepository;
+
+    @Autowired
+    private ReserveDateHallsRepository reserveDateHallsRepository;
+
+    @Autowired
+    private ImageDataRepository imageDataRepository;
+
+    @Autowired
+    private UserFavoriteUnitRepository userFavoriteUnitRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(UnitController.class);
 
@@ -551,32 +570,31 @@ public class UnitController {
         }
     }
 
+    @Transactional
     @DeleteMapping("Delete/Unit/{id}")
     public ResponseEntity<?> deleteUnit(@PathVariable Long id) {
-
         try {
-
             // Check if the unit is associated with any reservations
             if (reservationRepository.existsByUnitId(id)) {
                 ApiResponse response = new ApiResponse(400, "Unit is associated with reservations and cannot be deleted!");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
 
-            // Find all ads associated with the unit
-            List<Ads> adsList = adsRepository.findByUnitId(id);
-
-            // Delete all ads associated with the unit
-            for (Ads ads : adsList) {
-                adsRepository.delete(ads);
-            }
+            userFavoriteUnitRepository.deleteByUnit(id);
+            roomDetailsForAvailableAreaRepository.deleteByUnitId(id);
+            reserveDateRepository.deleteByUnitId(id);
+            reserveDateHallsRepository.deleteRelatedDateInfoHallsByUnitId(id);
+            reserveDateHallsRepository.deleteByUnitId(id);
+            imageDataRepository.deleteByUnitId(id);
+            adsRepository.deleteByUnitId(id);
 
             unitService.deleteUnit(id);
             ApiResponse response = new ApiResponse(200, "Unit deleted successfully!");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             System.out.println("Error Message Delete Unit: " + e);
-        ApiResponse response = new ApiResponse(404, "Not Found!");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            // Rethrow the exception to mark the transaction as rollback-only
+            throw e;
         }
     }
 

@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.Entity.Calender.Halls;
 
 import com.AlTaraf.Booking.Entity.unit.Unit;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,7 @@ public class ReserveDateHalls {
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "RESERVE_DATE_HALLS_ID", referencedColumnName = "RESERVE_DATE_HALLS_ID")
+    @JsonManagedReference
     private List<DateInfoHalls> dateInfoList;
 
     @ManyToOne

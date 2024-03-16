@@ -43,6 +43,4 @@ public class RoomDetails {
     @JoinColumn(name = "unit_id", nullable = false)
     @JsonBackReference
     private Unit unit;
-
-
 }
