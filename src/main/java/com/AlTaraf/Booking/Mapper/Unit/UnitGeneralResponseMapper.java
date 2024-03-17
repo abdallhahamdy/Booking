@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public interface UnitGeneralResponseMapper {
     @Mapping(source = "id", target = "unitId")
     @Mapping(source = "unitType", target = "unitType")
+    @Mapping(source = "user.deviceToken", target = "deviceToken")
     @Mapping(target = "imagePaths", expression = "java(extractFilePaths(unit.getImages()))")
     @Mapping(source = "nameUnit", target = "nameUnit")
     @Mapping(source = "description", target = "description")

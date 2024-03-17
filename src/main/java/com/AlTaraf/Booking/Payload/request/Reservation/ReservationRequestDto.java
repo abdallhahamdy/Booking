@@ -31,6 +31,6 @@ public class ReservationRequestDto {
 
     private LocalDate dateOfArrival;
     private LocalDate departureDate;
-
+    private String deviceToken;
 
 }

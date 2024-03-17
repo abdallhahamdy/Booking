@@ -83,6 +83,9 @@ public class User extends Auditable<String> {
     @Column(name = "BAN")
     private Boolean ban;
 
+    @Column(name = "DEVICE_TOKEN")
+    private String deviceToken;
+
     public User(Long id) {
         this.id = id;
     }

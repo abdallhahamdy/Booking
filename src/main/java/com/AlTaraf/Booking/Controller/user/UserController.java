@@ -13,6 +13,7 @@ import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Payload.response.AuthenticationResponse;
 import com.AlTaraf.Booking.Payload.response.CheckApiResponse;
 import com.AlTaraf.Booking.Payload.response.JwtResponse;
+import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Security.jwt.JwtUtils;
 import com.AlTaraf.Booking.Security.service.UserDetailsImpl;
 import com.AlTaraf.Booking.Service.cityAndRegion.CityService;
@@ -57,6 +58,9 @@ public class UserController {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    UserRepository userRepository;
 
 //    @Autowired
 //    userMapper userMapper2;
@@ -337,5 +341,18 @@ public class UserController {
 //            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 //        }
 //        }
+
+    @PatchMapping("/{userId}/device-token")
+    public ResponseEntity<?> setDeviceToken(@PathVariable Long userId, @RequestParam String deviceToken) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setDeviceToken(deviceToken);
+            userRepository.save(user);
+            return ResponseEntity.ok(new ApiResponse(200,"Device token updated successfully"));
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     }

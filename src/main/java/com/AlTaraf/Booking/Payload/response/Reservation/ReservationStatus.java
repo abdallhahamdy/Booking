@@ -25,4 +25,5 @@ public class ReservationStatus {
     private Boolean isEvaluating;
     private LocalDate dateOfArrival;
     private LocalDate departureDate;
+    private String deviceToken;
 }

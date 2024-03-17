@@ -23,6 +23,7 @@ public interface ReservationRequestMapper {
 
     @Mapping(source = "clientName", target = "clientName")
     @Mapping(source = "clientPhone", target = "clientPhone")
+    @Mapping(source = "deviceToken", target = "user.deviceToken")
     @Mapping(source = "unitId", target = "unit.id")
     @Mapping(source = "userId", target = "user.id")
     @Mapping(source = "roomAvailableId", target = "roomAvailable", qualifiedByName = "mapToRoomAvailable")

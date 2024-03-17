@@ -1,25 +1,25 @@
-package com.AlTaraf.Booking.Controller.Payment;
-
-import com.AlTaraf.Booking.Entity.Payment;
-import com.AlTaraf.Booking.Payload.request.PaymentMethod;
-import com.AlTaraf.Booking.Payload.request.PaymentRequest;
-import com.AlTaraf.Booking.Repository.payment.PayemntRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.beans.factory.annotation.Value;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.UUID;
-
+//package com.AlTaraf.Booking.Controller.Payment;
+//
+//import com.AlTaraf.Booking.Entity.Payment;
+//import com.AlTaraf.Booking.Payload.request.PaymentMethod;
+//import com.AlTaraf.Booking.Payload.request.PaymentRequest;
+//import com.AlTaraf.Booking.Repository.payment.PayemntRepository;
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.http.HttpEntity;
+//import org.springframework.http.HttpHeaders;
+//import org.springframework.http.HttpStatus;
+//import org.springframework.beans.factory.annotation.Value;
+//
+//import org.springframework.beans.factory.annotation.Value;
+//import org.springframework.http.HttpStatus;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.util.LinkedMultiValueMap;
+//import org.springframework.util.MultiValueMap;
+//import org.springframework.web.bind.annotation.*;
+//import org.springframework.web.client.RestTemplate;
+//
+//import java.util.UUID;
+//
 //@RestController
 //@RequestMapping("/payment")
 //public class Paymentcontroller {
@@ -32,11 +32,11 @@ import java.util.UUID;
 //
 //    @Autowired
 //    PayemntRepository payemntRepository;
-
+//
 //    private String generateId() {
 //        return UUID.randomUUID().toString();
 //    }
-
+//
 //    @PostMapping("/initiate_payment")
 //    public ResponseEntity<?> initiatePayment(
 //            @RequestParam float amount,
@@ -44,14 +44,14 @@ import java.util.UUID;
 //            @RequestParam String email,
 //            @RequestParam String backend_url,
 //            @RequestParam("payment_method") PaymentMethod payment_method) {
-
+//
 //        HttpHeaders headers = new HttpHeaders();
 //        headers.set("Authorization", "Bearer " + apiShopToken);
 //        headers.set("Accept", "application/json");
 //        headers.set("Content-Type", "application/x-www-form-urlencoded");
 //        headers.set("X-RateLimit-Limit", "30");
 //        headers.set("X-RateLimit-Remaining", "29");
-
+//
 //        String id = "LE4B3xwrXBNWDEGL5PYVAKbmQgrz6xvjGNZjed7y2M0JaRko9nwl14O3qbQ2n6zN";
 //        String custom_ref = generateId();
 //        String our_ref = "66666";
@@ -59,7 +59,7 @@ import java.util.UUID;
 //        System.out.println("id: " + id);
 //        System.out.println("custom_ref: " + custom_ref);
 //        System.out.println("our_ref: " + our_ref);
-
+//
 //        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
 //        body.add("id", id);
 //        body.add("amount", String.valueOf(amount));
@@ -69,7 +69,7 @@ import java.util.UUID;
 //        body.add("custom_ref", custom_ref);
 //        body.add("payment_method", payment_method.toString()); // Assuming payment_method is an enum
 //        body.add("our_ref", our_ref);
-
+//
 //        Payment paymentEntity = new Payment();
 //        paymentEntity.setAmount(amount);
 //        paymentEntity.setPhone(phone);
@@ -86,10 +86,10 @@ import java.util.UUID;
 //
 //        // Save the payment entity to the database
 //        payemntRepository.save(paymentEntity);
-
-
+//
+//
 //        HttpEntity<MultiValueMap<String, String>> httpRequest = new HttpEntity<>(body, headers);
-
+//
 //        RestTemplate restTemplate = new RestTemplate();
 ////        ResponseEntity<String> response = restTemplate.postForEntity(apiShopUrl, httpRequest, String.class);
 //
@@ -103,5 +103,5 @@ import java.util.UUID;
 //        // Return the response in the specified format
 //        return ResponseEntity.ok().body(paymentResponse);
 //    }
-
+//
 //}
