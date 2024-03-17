@@ -26,6 +26,7 @@ import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepositor
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
+import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.TechnicalSupport.TechnicalSupportService;
@@ -40,6 +41,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -102,6 +104,9 @@ public class AdminController {
 
     @Autowired
     private ImageDataRepository imageDataRepository;
+
+    @Autowired
+    private RoomDetailsRepository roomDetailsRepository;
 
     @PostMapping("/Register-Dashboard")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDashboardDto userRegisterDashboardDto) {
@@ -278,10 +283,13 @@ public class AdminController {
         try {
 
             userFavoriteUnitRepository.deleteByUnit(id);
-            roomDetailsForAvailableAreaRepository.deleteByUnitId(id);
             reserveDateRepository.deleteByUnitId(id);
             reserveDateHallsRepository.deleteRelatedDateInfoHallsByUnitId(id);
+            roomDetailsForAvailableAreaRepository.deleteByUnitId(id);
+
             reserveDateHallsRepository.deleteByUnitId(id);
+            roomDetailsRepository.deleteByUnitId(id);
+
             imageDataRepository.deleteByUnitId(id);
             adsRepository.deleteByUnitId(id);
             reservationRepository.deleteByUnitId(id);
@@ -290,6 +298,7 @@ public class AdminController {
             ApiResponse response = new ApiResponse(200, "Unit deleted successfully!");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             System.out.println("Error Message Delete Unit: " + e);
             ApiResponse response = new ApiResponse(404, "Not Found!");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);

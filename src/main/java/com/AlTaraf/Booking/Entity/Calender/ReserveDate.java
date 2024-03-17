@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import java.util.Date;
 import java.util.List;
@@ -24,8 +25,9 @@ public class ReserveDate {
     @Column(name = "RESERVER_DATE_ID")
     private Long id;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "RESERVE_DATE_LIST", joinColumns = @JoinColumn(name = "RESERVER_DATE_ID"))
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @Column(name = "DATE")
     private List<Date> dates;
 
