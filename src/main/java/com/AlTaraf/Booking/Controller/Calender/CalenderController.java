@@ -57,6 +57,8 @@ public class CalenderController {
             if (reserveDateRequest.getRoomDetailsForAvailableAreaId() != null) {
                 Optional<RoomDetailsForAvailableArea> roomDetailsOptional = roomDetailsForAvailableAreaRepository.findById(reserveDateRequest.getRoomDetailsForAvailableAreaId());
                 roomDetails = roomDetailsOptional.orElse(null);
+                System.out.println("Room Details: " + roomDetails);
+                System.out.println("Room Details2: " + roomDetailsOptional);
             }
             // Alternatively, you can create a new RoomDetailsForAvailableArea entity if needed
 

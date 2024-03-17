@@ -490,9 +490,10 @@ public class UnitController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"RoomDetails already exists for unitId: " + unitId + " and roomAvailableId: " + roomAvailableId));
             }
 
+
             RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsRequestDto);
             roomDetailsService.addRoomDetails(unitId, roomAvailableId, roomDetails);
-            return ResponseEntity.ok("RoomDetails added successfully");
+            return ResponseEntity.ok("RoomDetails added successfully " + roomDetails.getId());
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
@@ -512,7 +513,7 @@ public class UnitController {
 
             RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsRequestMapper.toEntityAvailableArea(roomDetailsRequestDto);
             roomDetailsForAvailableAreaService.addRoomDetails(unitId, availableAreaId, roomDetailsForAvailableArea);
-            return ResponseEntity.ok("RoomDetailsForAvailableArea added successfully");
+            return ResponseEntity.ok("RoomDetailsForAvailableArea added successfully " + roomDetailsForAvailableArea.getId());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetailsForAvailableArea: " + e.getMessage());
         }

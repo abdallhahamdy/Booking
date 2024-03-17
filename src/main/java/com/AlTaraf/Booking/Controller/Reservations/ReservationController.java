@@ -73,11 +73,12 @@ public class ReservationController {
                 System.out.println(roomDetails.getId() + "price: " + roomDetails.getNewPrice());
                 if (roomDetails != null) {
                     // Update the price based on room details
-                    if (roomDetails.getNewPrice() < roomDetails.getOldPrice()) {
-                        reservationsToSave.setPrice(roomDetails.getNewPrice());
-                    } else {
-                        reservationsToSave.setPrice(roomDetails.getOldPrice());
-                    }
+                    reservationsToSave.setPrice(roomDetails.getNewPrice());
+//                    if (roomDetails.getNewPrice() < roomDetails.getOldPrice()) {
+//                        reservationsToSave.setPrice(roomDetails.getNewPrice());
+//                    } else {
+//                        reservationsToSave.setPrice(roomDetails.getOldPrice());
+//                    }
                 }
             }
 
@@ -86,13 +87,14 @@ public class ReservationController {
                 RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsForAvailableAreaService.getRoomDetailsByUnitIdAndAvailableAreaId(reservationsToSave.getUnit().getId(), reservationsToSave.getAvailableArea().getId());
                 if (roomDetailsForAvailableArea.getId() != null) {
                     // Update the price based on available area details
-                    System.out.println(roomDetailsForAvailableArea.getNewPrice());
-                    System.out.println(roomDetailsForAvailableArea.getOldPrice());
-                    if (roomDetailsForAvailableArea.getNewPrice() < roomDetailsForAvailableArea.getOldPrice()) {
-                        reservationsToSave.setPrice(roomDetailsForAvailableArea.getNewPrice());
-                    } else {
-                        reservationsToSave.setPrice(roomDetailsForAvailableArea.getOldPrice());
-                    }
+                    System.out.println("roomDetailsForAvailableArea.getNewPrice(): "+roomDetailsForAvailableArea.getNewPrice());
+                    System.out.println("roomDetailsForAvailableArea.getOldPrice(): "+ roomDetailsForAvailableArea.getOldPrice());
+                    reservationsToSave.setPrice(roomDetailsForAvailableArea.getNewPrice());
+//                    if (roomDetailsForAvailableArea.getNewPrice() < roomDetailsForAvailableArea.getOldPrice()) {
+//                        reservationsToSave.setPrice(roomDetailsForAvailableArea.getNewPrice());
+//                    } else {
+//                        reservationsToSave.setPrice(roomDetailsForAvailableArea.getOldPrice());
+//                    }
                 }
             }
 
