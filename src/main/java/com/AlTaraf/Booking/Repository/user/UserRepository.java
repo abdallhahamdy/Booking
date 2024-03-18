@@ -3,6 +3,8 @@ package com.AlTaraf.Booking.Repository.user;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.User.UserDashboard;
 import com.AlTaraf.Booking.Entity.enums.ERole;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -51,5 +53,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             @Param("email") String email,
             @Param("phone") String phone,
             @Param("roleName") ERole roleName);
+
+    Page<User> findAllByRolesName(ERole roleName, Pageable pageable);
 }
 

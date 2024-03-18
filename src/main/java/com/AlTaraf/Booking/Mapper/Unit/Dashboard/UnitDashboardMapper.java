@@ -1,4 +1,4 @@
-package com.AlTaraf.Booking.Mapper.Unit;
+package com.AlTaraf.Booking.Mapper.Unit.Dashboard;
 
 import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
 import com.AlTaraf.Booking.Entity.unit.Unit;
@@ -9,10 +9,12 @@ import org.mapstruct.Mappings;
 @Mapper(componentModel = "spring")
 public interface UnitDashboardMapper {
     @Mappings({
+            @Mapping(source = "id", target = "unitId"),
             @Mapping(source = "unit.user.username", target = "traderName"),
             @Mapping(source = "unit.user.phone", target = "traderPhone"),
             @Mapping(source = "unit.region", target = "regionDto"),
-            @Mapping(source = "unit.city", target = "cityDtoSample")
+            @Mapping(source = "unit.city", target = "cityDtoSample"),
+            @Mapping(source = "statusUnit", target = "statusUnit"),
     })
     UnitDashboard toUnitDashboard(Unit unit);
 
