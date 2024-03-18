@@ -35,9 +35,6 @@ public class User extends Auditable<String> {
     @Column(name = "USER_ID")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private ProviderEnum provider;
-
     @Column(nullable = false, name = "name")
     @Size(max = 20)
     private String username;

@@ -3,16 +3,19 @@ package com.AlTaraf.Booking.Controller.user;
 import com.AlTaraf.Booking.Dto.User.UserDto;
 import com.AlTaraf.Booking.Dto.User.UserEditDto;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
+import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Mapper.UserMapper;
 import com.AlTaraf.Booking.Payload.request.LoginRequest;
+import com.AlTaraf.Booking.Payload.request.OauthRequest;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
-import com.AlTaraf.Booking.Payload.response.ApiResponse;
-import com.AlTaraf.Booking.Payload.response.AuthenticationResponse;
-import com.AlTaraf.Booking.Payload.response.CheckApiResponse;
-import com.AlTaraf.Booking.Payload.response.JwtResponse;
+import com.AlTaraf.Booking.Payload.response.*;
+import com.AlTaraf.Booking.Payload.response.OauthResponse.OauthResponse;
+import com.AlTaraf.Booking.Payload.response.OauthResponse.OauthResponseForSignUp;
+import com.AlTaraf.Booking.Repository.cityAndregion.CityRepository;
+import com.AlTaraf.Booking.Repository.role.RoleRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Security.jwt.JwtUtils;
 import com.AlTaraf.Booking.Security.service.UserDetailsImpl;
@@ -26,7 +29,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -61,6 +65,12 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    CityRepository cityRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
 
 //    @Autowired
 //    userMapper userMapper2;
@@ -354,5 +364,91 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+//    @GetMapping("/checkPhoneNull")
+//    public Boolean checkUserPhoneNullByEmail(@RequestParam String email) {
+//        User user = userRepository.findByEmail(email);
+//        if ( user != null && user.getPhone() != null ) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//
+//    }
+
+    @GetMapping("/checkPhoneNull")
+    public ResponseEntity<?> checkUserPhoneNullByEmail(@RequestParam String email) {
+        User user = userRepository.findByEmail(email);
+
+
+        if (user != null && user.getPhone() != null) {
+            OauthRequest oauthRequest = new OauthRequest();
+            oauthRequest.setPhone(user.getPhone());
+            System.out.println("user.getEmail: " + user.getEmail());
+            System.out.println("user.getPassword " + oauthRequest.getPassword());
+
+            try {
+                Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(user.getPhone(), oauthRequest.getPassword()));
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+                userDetails.setStayLoggedIn(user.isStayLoggedIn());
+
+                List<String> roles = userDetails.getAuthorities().stream()
+                        .map(item -> item.getAuthority())
+                        .collect(Collectors.toList());
+
+                return ResponseEntity.ok(new JwtResponse(
+                        jwtUtils.generateJwtToken(authentication, userDetails.isStayLoggedIn()),
+                        userDetails.getId(),
+                        userDetails.getUsername(),
+                        userDetails.getEmail(),
+                        userDetails.getPhone(),
+                        userDetails.getCity(),
+                        roles));
+            } catch (AuthenticationException e) {
+                System.out.println(e);
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed");
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404,"User Not Found")); // User not found or phone number is null
+    }
+
+    @PostMapping("/create-for-oauth")
+    public ResponseEntity<?> createUser(
+            @RequestParam String username,
+            @RequestParam String email,
+            @RequestParam String phone,
+            @RequestParam Long cityId,
+            @RequestParam ERole role) {
+
+        City city = cityRepository.findById(cityId)
+                .orElseThrow(() -> new IllegalArgumentException("City not found with id: " + cityId));
+
+        Role userRole = roleRepository.findByName(role)
+                .orElseThrow(() -> new IllegalArgumentException("Role not found: " + role));
+
+        // Check if the phone number is unique
+        if (userRepository.existsByPhone(phone)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Phone number already exists");
+        }
+
+        User userOauth = new User();
+        userOauth.setUsername(username);
+        userOauth.setEmail(email);
+        userOauth.setPhone(phone);
+        userOauth.setCity(city);
+        userOauth.setPassword(encoder.encode("defaultPassword"));
+        userOauth.setRoles(Collections.singleton(userRole));
+
+        userRepository.save(userOauth);
+
+        return ResponseEntity.ok(new ApiResponse(200, "User Created Successfully"));
+    }
+
 
     }
