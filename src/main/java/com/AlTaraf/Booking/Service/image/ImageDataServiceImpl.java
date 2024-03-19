@@ -68,7 +68,7 @@ public class ImageDataServiceImpl implements ImageDataService {
 
         String imagePath = null;
         try {
-            imagePath = uploadToMinioServer(file.getOriginalFilename(), file.getContentType(), imageData);
+            imagePath = uploadToMinioServerAds(file.getOriginalFilename(), file.getContentType(), imageData);
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             throw new RuntimeException("Error uploading image to MinIO server", e);
         }
@@ -94,7 +94,7 @@ public class ImageDataServiceImpl implements ImageDataService {
 
         String imagePath = null;
         try {
-            imagePath = uploadToMinioServer(file.getOriginalFilename(), file.getContentType(), imageDataProfile);
+            imagePath = uploadToMinioServerProfile(file.getOriginalFilename(), file.getContentType(), imageDataProfile);
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             throw new RuntimeException("Error uploading image to MinIO server", e);
         }
@@ -119,23 +119,73 @@ public class ImageDataServiceImpl implements ImageDataService {
     private String uploadToMinioServer(String filename, String contentType, byte[] data) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
         try {
             MinioClient minioClient = MinioClient.builder()
-                    .endpoint("https://play.min.io")
-                    .credentials("Q3AM3UQ867SPQQA43P2F", "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG")
+                    .endpoint("http://env-2724990.fin.libyanspider.cloud")
+                    .credentials("4aVTBOH795", "QlQYPMcq58")
                     .build();
-            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket("tes").build());
+            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket("unit").build());
             if (!found) {
-                minioClient.makeBucket(MakeBucketArgs.builder().bucket("tes").build());
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket("unit").build());
             } else {
-                System.out.println("Bucket 'tes' already exists.");
+                System.out.println("Bucket 'unit' already exists.");
             }
             // Upload the data to the MinIO server
             minioClient.putObject(PutObjectArgs.builder()
-                    .bucket("tes")
+                    .bucket("unit")
                     .object(filename)
                     .contentType(contentType) // Set the Content-Type
                     .stream(new ByteArrayInputStream(data), data.length, -1)
                     .build());
-            return "https://play.min.io/tes/" + filename; // Return the URL of the uploaded image
+            return "http://env-2724990.fin.libyanspider.cloud/unit/" + filename; // Return the URL of the uploaded image
+        } catch (MinioException e) {
+            throw new RuntimeException("Error uploading image to MinIO server", e);
+        }
+    }
+
+    private String uploadToMinioServerAds(String filename, String contentType, byte[] data) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
+        try {
+            MinioClient minioClient = MinioClient.builder()
+                    .endpoint("http://env-2724990.fin.libyanspider.cloud")
+                    .credentials("4aVTBOH795", "QlQYPMcq58")
+                    .build();
+            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket("ads").build());
+            if (!found) {
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket("ads").build());
+            } else {
+                System.out.println("Bucket 'ads' already exists.");
+            }
+            // Upload the data to the MinIO server
+            minioClient.putObject(PutObjectArgs.builder()
+                    .bucket("ads")
+                    .object(filename)
+                    .contentType(contentType) // Set the Content-Type
+                    .stream(new ByteArrayInputStream(data), data.length, -1)
+                    .build());
+            return "http://env-2724990.fin.libyanspider.cloud/ads/" + filename; // Return the URL of the uploaded image
+        } catch (MinioException e) {
+            throw new RuntimeException("Error uploading image to MinIO server", e);
+        }
+    }
+
+    private String uploadToMinioServerProfile(String filename, String contentType, byte[] data) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
+        try {
+            MinioClient minioClient = MinioClient.builder()
+                    .endpoint("http://env-2724990.fin.libyanspider.cloud")
+                    .credentials("4aVTBOH795", "QlQYPMcq58")
+                    .build();
+            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket("profile").build());
+            if (!found) {
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket("profile").build());
+            } else {
+                System.out.println("Bucket 'profile' already exists.");
+            }
+            // Upload the data to the MinIO server
+            minioClient.putObject(PutObjectArgs.builder()
+                    .bucket("profile")
+                    .object(filename)
+                    .contentType(contentType) // Set the Content-Type
+                    .stream(new ByteArrayInputStream(data), data.length, -1)
+                    .build());
+            return "http://env-2724990.fin.libyanspider.cloud/profile/" + filename; // Return the URL of the uploaded image
         } catch (MinioException e) {
             throw new RuntimeException("Error uploading image to MinIO server", e);
         }

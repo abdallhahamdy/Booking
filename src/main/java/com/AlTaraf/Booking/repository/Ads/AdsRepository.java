@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.Repository.Ads;
 
 import com.AlTaraf.Booking.Entity.Ads.Ads;
+import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,4 +26,10 @@ public interface AdsRepository extends JpaRepository<Ads, Long> {
     @Transactional
     @Query("DELETE FROM Ads a WHERE a.unit.id = :unitId")
     void deleteByUnitId(@Param("unitId") Long unitId);
+
+    void deleteByUser(User user);
+
+    List<Ads> findByUser(User user);
+
+
 }
