@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Service.unit;
 
+import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ public interface UnitService {
     Page<UnitDtoFavorite> getUnitsAddedLastMonth(int page, int size);
 
     Page<UnitDtoFavorite> getUnitsByAccommodationTypeName(String accommodationTypeName, int page, int size);
+    Page<UnitDashboard> getUnitsByAccommodationTypeNameDashboard(String accommodationTypeName, int page, int size);
 
     void deleteUnit(Long id);
 

@@ -55,5 +55,17 @@ public interface UserRepository extends JpaRepository<User, Long> {
             @Param("roleName") ERole roleName);
 
     Page<User> findAllByRolesName(ERole roleName, Pageable pageable);
+
+    Page<User> findAllByRolesNameAndUsernameAndPhone(
+            ERole roleName, String username, String phone, Pageable pageable);
+
+    Page<User> findByUsername(String username, Pageable pageable);
+
+    Page<User> findByUsernameAndRolesName(String username, ERole roleName, Pageable pageable);
+
+    Page<User> findAllByPhone(String phone, Pageable pageable);
+
+    Page<User> findAllByPhoneAndRolesName(String phone, ERole roleName, Pageable pageable);
+
 }
 

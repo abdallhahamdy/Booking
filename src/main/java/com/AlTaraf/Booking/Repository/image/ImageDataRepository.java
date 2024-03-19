@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.Repository.image;
 
 import com.AlTaraf.Booking.Entity.Image.ImageData;
+import com.AlTaraf.Booking.Entity.User.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +25,6 @@ public interface ImageDataRepository extends JpaRepository<ImageData, Long> {
     @Modifying
     @Query("DELETE FROM ImageData i WHERE i.unit.id = :unitId")
     void deleteByUnitId(@Param("unitId") Long unitId);
+
+    void deleteByUser(User user);
 }

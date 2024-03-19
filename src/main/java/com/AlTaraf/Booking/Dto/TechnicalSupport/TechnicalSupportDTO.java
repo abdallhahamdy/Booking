@@ -10,5 +10,6 @@ public class TechnicalSupportDTO {
     private String name;
     private String email;
     private String message;
+    private Boolean isRead;
     private Long userId;
 }

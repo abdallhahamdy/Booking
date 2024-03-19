@@ -25,4 +25,6 @@ public interface RoomDetailsForAvailableAreaRepository extends JpaRepository<Roo
     @Query("DELETE FROM RoomDetailsForAvailableArea r WHERE r.unit.id = :unitId")
     void deleteByUnitId(@Param("unitId") Long unitId);
 
+    @Query("SELECT r FROM RoomDetailsForAvailableArea r WHERE r.unit.id = :unitId")
+    List<RoomDetailsForAvailableArea> findByUnitId(@Param("unitId") Long unitId);
 }

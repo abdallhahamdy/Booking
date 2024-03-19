@@ -16,6 +16,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -82,6 +83,11 @@ public class User extends Auditable<String> {
 
     @Column(name = "DEVICE_TOKEN")
     private String deviceToken;
+
+    // Array of warnings
+    @ElementCollection
+    @Column(name = "warning")
+    private List<Boolean> warnings = Arrays.asList(false, false, false);
 
     public User(Long id) {
         this.id = id;

@@ -40,7 +40,7 @@ public class RoomDetailsForAvailableArea {
     @Column(name = "CHILDREN_ALLOWED")
     private int childrenAllowed;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "unit_id", nullable = false)
     @JsonBackReference
     private Unit unit;

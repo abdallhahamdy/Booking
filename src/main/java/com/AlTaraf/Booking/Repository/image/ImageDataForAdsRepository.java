@@ -1,7 +1,10 @@
 package com.AlTaraf.Booking.Repository.image;
 
+import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.Image.ImageDataForAds;
+import com.AlTaraf.Booking.Entity.User.User;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,4 +29,11 @@ public interface ImageDataForAdsRepository extends JpaRepository<ImageDataForAds
     @Modifying
     @Query("DELETE FROM ImageDataForAds i WHERE i.ads.id = :adsId")
     void deleteByAdsId(@Param("adsId") Long adsId);
+
+    void deleteByUser(User user);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM ImageDataForAds i WHERE i.ads = :ads")
+    void deleteImageDataForAdsByAds(@Param("ads") Ads ads);
 }

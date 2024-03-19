@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -21,4 +23,5 @@ public class UserDashboard {
     private Set<Role> roles = new HashSet<>();
     private CityDtoSample city;
     private Boolean ban;
+    private List<Boolean> warnings = Arrays.asList(false, false, false);
 }

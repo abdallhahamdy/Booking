@@ -10,8 +10,11 @@ import org.mapstruct.Mappings;
 public interface UnitDashboardMapper {
     @Mappings({
             @Mapping(source = "id", target = "unitId"),
+            @Mapping(source = "accommodationType", target = "accommodationType"),
             @Mapping(source = "unit.user.username", target = "traderName"),
             @Mapping(source = "unit.user.phone", target = "traderPhone"),
+            @Mapping(source = "unit.user.email", target = "traderEmail"),
+            @Mapping(source = "unit.user.ban", target = "ban"),
             @Mapping(source = "unit.region", target = "regionDto"),
             @Mapping(source = "unit.city", target = "cityDtoSample"),
             @Mapping(source = "statusUnit", target = "statusUnit"),

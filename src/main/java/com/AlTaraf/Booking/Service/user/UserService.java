@@ -40,5 +40,7 @@ public interface UserService {
     Optional<User> findByPhone(String phone);
 
     void processOAuthPostLogin(String email, String name, String phone);
+
+    void deleteUserAndAssociatedEntities(Long userId);
 }
 

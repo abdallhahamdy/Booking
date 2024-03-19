@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.Repository.unit;
 
 import com.AlTaraf.Booking.Entity.Evaluation.Evaluation;
+import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
@@ -8,9 +9,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -85,4 +88,10 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     @Query("SELECT u FROM Unit u INNER JOIN u.availableAreaSet ra WHERE LOWER(u.nameUnit) LIKE LOWER(concat('%', :nameUnit, '%')) AND LOWER(ra.arabicName) LIKE LOWER(concat('%', :availableAreaName, '%'))")
     Page<Unit> findByNameUnitAndAvailableAreaNameContainingIgnoreCase(String nameUnit, String availableAreaName, Pageable pageable);
 
+    List<Unit> findByUser(User user);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Unit u WHERE u.user = :user")
+    void deleteByUser(@Param("user") User user);
 }

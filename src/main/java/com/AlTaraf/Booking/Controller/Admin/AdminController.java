@@ -7,6 +7,8 @@ import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Dto.User.UserDashboard;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDashboardDto;
+import com.AlTaraf.Booking.Dto.packageAds.PackageAdsEditDTO;
+import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.Role.RoleDashboard;
 import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupport;
 import com.AlTaraf.Booking.Entity.User.User;
@@ -20,6 +22,7 @@ import com.AlTaraf.Booking.Mapper.Unit.Dashboard.UserDashboardMapper;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
+import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
@@ -114,6 +117,9 @@ public class AdminController {
     @Autowired
     UserDashboardMapper userDashboardMapper;
 
+    @Autowired
+    private PackageAdsRepository packageAdsRepository;
+
     @PostMapping("/Register-Dashboard")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDashboardDto userRegisterDashboardDto) {
 
@@ -154,15 +160,34 @@ public class AdminController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
 
-        Page<UnitDtoFavorite> units = unitService.getUnitsByAccommodationTypeName(accommodationTypeName, page, size);
+        Page<UnitDashboard> units = unitService.getUnitsByAccommodationTypeNameDashboard(accommodationTypeName, page, size);
 
         if (!units.isEmpty()) {
-            return new ResponseEntity<>(units, HttpStatus.OK);
+//            Page<UnitDashboard> unitDashboardPage = units.map(unit -> unitDashboard.toUnitDashboard(unit));
+            return ResponseEntity.ok(units);
         } else {
             ApiResponse response = new ApiResponse(204, "No Content for Units By Accommodation Type!");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
+
+//    return unitsPage.map(unit -> unitDashboard.toUnitDashboard(unit));
+
+//    @GetMapping("/Get-Units-By-Accommodation-Type")
+//    public ResponseEntity<?> getUnitsByAccommodationType(
+//            @RequestParam String accommodationTypeName,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "6") int size) {
+//
+//        Page<UnitDtoFavorite> units = unitService.getUnitsByAccommodationTypeName(accommodationTypeName, page, size);
+//
+//        if (!units.isEmpty()) {
+//            return new ResponseEntity<>(units, HttpStatus.OK);
+//        } else {
+//            ApiResponse response = new ApiResponse(204, "No Content for Units By Accommodation Type!");
+//            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+//        }
+//    }
 
     @DeleteMapping("/delete/{id}/Technical-Support")
     public ResponseEntity<?> deleteTechnicalSupportById(@PathVariable Long id) {
@@ -332,13 +357,27 @@ public class AdminController {
     @GetMapping("/Get-User-All-Or-ByRole")
     public ResponseEntity<Page<?>> getUsersByRole(
             @RequestParam(required = false) ERole roleName,
+            @RequestParam(required = false) String username,
+            @RequestParam(required = false) String phone,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         Page<User> usersPage;
-        if (roleName != null) {
+        if (roleName != null && username != null && phone != null) {
+            usersPage = userRepository.findAllByRolesNameAndUsernameAndPhone(roleName, username, phone, pageable);
+        } else if (roleName != null && username == null && phone == null) {
             usersPage = userRepository.findAllByRolesName(roleName, pageable);
-        } else {
+        } else if (roleName != null && username != null && phone == null) {
+            usersPage = userRepository.findByUsernameAndRolesName(username, roleName, pageable);
+        } else if (roleName == null && username == null && phone != null) {
+            usersPage = userRepository.findAllByPhone(phone, pageable);
+        }
+        else if (roleName == null && phone == null && username != null ) {
+            usersPage = userRepository.findByUsername(username, pageable);
+        } else if (roleName != null && username == null && phone != null) {
+            usersPage = userRepository.findAllByPhoneAndRolesName(phone, roleName, pageable);
+        }
+        else {
             usersPage = userRepository.findAll(pageable);
         }
         Page<UserDashboard> userDashboardPage = usersPage.map(userDashboardMapper::toUserDashboard);
@@ -346,4 +385,50 @@ public class AdminController {
         return ResponseEntity.ok(userDashboardPage);
     }
 
+    @PatchMapping("Edit-Package-Ads/{id}")
+    public ResponseEntity<?> editPackageAds(@PathVariable Long id, @RequestBody PackageAdsEditDTO packageAdsEditDTO) {
+        Optional<PackageAds> optionalPackageAds = packageAdsRepository.findById(id);
+        if (optionalPackageAds.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        PackageAds packageAds = optionalPackageAds.get();
+        if (packageAdsEditDTO.getArabicName() != null) {
+            packageAds.setArabicName(packageAdsEditDTO.getArabicName());
+        }
+        if (packageAdsEditDTO.getPrice() != 0) {
+            packageAds.setPrice(packageAdsEditDTO.getPrice());
+        }
+        if (packageAdsEditDTO.getNumberAds() != 0) {
+            packageAds.setNumberAds(packageAdsEditDTO.getNumberAds());
+        }
+
+        packageAdsRepository.save(packageAds);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200, "Updated Package Ads successfully"));
+    }
+
+    @DeleteMapping("/Delete-Users/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        userService.deleteUserAndAssociatedEntities(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{userId}/warnings")
+    public ResponseEntity<?> setWarnings(@PathVariable Long userId, @RequestBody List<Boolean> warnings) {
+        try {
+            Optional<User> optionalUser = userRepository.findById(userId);
+            if (optionalUser.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            User user = optionalUser.get();
+            user.setWarnings(warnings);
+            userRepository.save(user);
+
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200, "Warning Added Successfully"));
+        } catch (Exception e) {
+            e.printStackTrace(); // You can log the exception for debugging purposes
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Warning Not Added");
+        }
+    }
 }

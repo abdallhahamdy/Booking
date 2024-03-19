@@ -37,4 +37,6 @@ public interface UserFavoriteUnitRepository extends JpaRepository<UserFavoriteUn
     @Query("DELETE FROM UserFavoriteUnit uf WHERE uf.unit.id = :unitId")
     void deleteByUnit(@Param("unitId") Long unitId);
 
+    void deleteByUser(User user);
+
 }

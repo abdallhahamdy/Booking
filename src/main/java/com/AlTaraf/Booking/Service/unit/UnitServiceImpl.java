@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Service.unit;
 
+import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Evaluation.Evaluation;
@@ -10,6 +11,7 @@ import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
+import com.AlTaraf.Booking.Mapper.Unit.Dashboard.UnitDashboardMapper;
 import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Evaluation.EvaluationRepository;
@@ -52,6 +54,9 @@ public class UnitServiceImpl implements UnitService {
 
     @Autowired
     private UnitFavoriteMapper unitFavoriteMapper;
+
+    @Autowired
+    private UnitDashboardMapper unitDashboardMapper;
 
     @Autowired
     UserRepository userRepository;
@@ -135,6 +140,15 @@ public class UnitServiceImpl implements UnitService {
         Page<Unit> unitsPage = unitRepository.findByAccommodationType_Name(accommodationTypeName, pageRequest);
 
         return unitsPage.map(unitFavoriteMapper::toUnitFavoriteDto);
+    }
+
+    @Override
+    public Page<UnitDashboard> getUnitsByAccommodationTypeNameDashboard(String accommodationTypeName, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        Page<Unit> unitsPage = unitRepository.findByAccommodationType_Name(accommodationTypeName, pageRequest);
+
+        return unitsPage.map(unitDashboardMapper::toUnitDashboard);
     }
 
     @Override

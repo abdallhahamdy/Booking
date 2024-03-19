@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.Repository.Reservation;
 
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
+import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import jakarta.transaction.Transactional;
@@ -43,4 +44,9 @@ public interface ReservationRepository extends JpaRepository<Reservations, Long>
     @Transactional
     @Query("DELETE FROM Reservations r WHERE r.unit.id = :unitId")
     void deleteByUnitId(@Param("unitId") Long unitId);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM Reservations r WHERE r.user = :user")
+    void deleteByUser(@Param("user") User user);
 }

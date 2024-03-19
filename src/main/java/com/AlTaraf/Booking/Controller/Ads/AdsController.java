@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.Controller.Ads;
 
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
+import com.AlTaraf.Booking.Dto.packageAds.PackageAdsEditDTO;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.unit.Unit;
@@ -12,6 +13,7 @@ import com.AlTaraf.Booking.Payload.request.Ads.AdsRequestDto;
 import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseDto;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
+import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -47,6 +50,7 @@ public class AdsController {
     @Autowired
     private AdsStatusMapper adsStatusMapper;
 
+
     @GetMapping("/Package-Ads")
     public ResponseEntity<List<PackageAds>> getAllPackageAds() {
         try {
@@ -57,6 +61,7 @@ public class AdsController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @GetMapping("units/byUserId/{userId}")
     public ResponseEntity<?> getUnitsByUserId(@PathVariable Long userId,

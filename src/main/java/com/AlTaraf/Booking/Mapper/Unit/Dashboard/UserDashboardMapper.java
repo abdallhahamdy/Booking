@@ -18,6 +18,7 @@ public interface UserDashboardMapper {
             @Mapping(source = "roles", target = "roles"),
             @Mapping(source = "city", target = "city"),
             @Mapping(source = "ban", target = "ban"),
+            @Mapping(source = "warnings", target = "warnings"),
     })
     UserDashboard toUserDashboard(User user);
 

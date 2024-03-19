@@ -31,10 +31,10 @@ public class ReserveDate {
     @Column(name = "DATE")
     private List<Date> dates;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private RoomDetailsForAvailableArea roomDetailsForAvailableArea;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Unit unit;
 
 //    @Column(name = "RESERVE")

@@ -3,6 +3,9 @@ package com.AlTaraf.Booking.Service.user;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDashboardDto;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
+import com.AlTaraf.Booking.Entity.Ads.Ads;
+import com.AlTaraf.Booking.Entity.Favorite.UserFavoriteUnit;
+import com.AlTaraf.Booking.Entity.Image.ImageDataForAds;
 import com.AlTaraf.Booking.Entity.Role.RoleDashboard;
 import com.AlTaraf.Booking.Entity.User.UserDashboard;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
@@ -10,11 +13,25 @@ import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Entity.enums.ERoleDashboard;
+import com.AlTaraf.Booking.Entity.unit.Unit;
+import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
 import com.AlTaraf.Booking.Mapper.city.CityMapper;
 import com.AlTaraf.Booking.Mapper.UserMapper;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
+import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
+import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
+import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
+import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
+import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
+import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
+import com.AlTaraf.Booking.Repository.image.ImageDataProfileRepository;
+import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.Repository.role.RoleDashboardRepository;
 import com.AlTaraf.Booking.Repository.role.RoleRepository;
+import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportRepository;
+import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
+import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
+import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.user.UserDashboardRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Security.jwt.JwtUtils;
@@ -26,6 +43,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.*;
 import java.util.*;
 
 @Service
@@ -64,6 +82,41 @@ public class UserServiceImpl implements UserService {
     @Autowired
     JwtUtils jwtUtils;
 
+    @Autowired
+    private TechnicalSupportRepository technicalSupportRepository;
+
+    @Autowired
+    private AdsRepository adsRepository;
+
+    @Autowired
+    private UserFavoriteUnitRepository userFavoriteUnitRepository;
+
+    @Autowired
+    private ImageDataForAdsRepository imageDataForAdsRepository;
+
+    @Autowired
+    private ImageDataRepository imageDataRepository;
+
+    @Autowired
+    private ImageDataProfileRepository imageDataProfileRepository;
+
+    @Autowired
+    private UnitRepository unitRepository;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
+
+    @Autowired
+    private ReserveDateRepository reserveDateRepository;
+
+    @Autowired
+    private ReserveDateHallsRepository reserveDateHallsRepository;
+
+    @Autowired
+    private RoomDetailsForAvailableAreaRepository roomDetailsForAvailableAreaRepository;
+
+    @Autowired
+    private RoomDetailsRepository roomDetailsRepository;
 
     public String generateOtpForUser() {
         // For simplicity, let's assume a random 4-digit OTP
@@ -361,6 +414,42 @@ public class UserServiceImpl implements UserService {
         } else {
 
             userRepository.save(user);
+        }
+    }
+
+    @Transactional
+    public void deleteUserAndAssociatedEntities(Long userId) {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            // Delete associated entities
+            technicalSupportRepository.deleteByUser(user);
+            imageDataProfileRepository.deleteByUser(user);
+            userFavoriteUnitRepository.deleteByUser(user);
+
+//            System.out.println("Delete ");
+//
+
+//
+//            // Delete the units after deleting associated entities
+//            List<Unit> unitList = unitRepository.findByUser(user);
+//            for (Unit unit : unitList) {
+//                reserveDateRepository.deleteByUnitId(unit.getId());
+//                reserveDateHallsRepository.deleteRelatedDateInfoHallsByUnitId(unit.getId());
+//                reserveDateHallsRepository.deleteByUnitId(unit.getId());
+//                roomDetailsForAvailableAreaRepository.deleteByUnitId(unit.getId());
+//                roomDetailsRepository.deleteByUnitId(unit.getId());
+//                imageDataRepository.deleteByUnitId(unit.getId());
+//                adsRepository.deleteByUnitId(unit.getId());
+//                reservationRepository.deleteByUnitId(unit.getId());
+//            }
+//
+//            // Delete the units after deleting associated entities
+//            unitRepository.deleteByUser(user);
+//
+//            // Finally, delete the user
+//            userRepository.delete(user);
         }
     }
 }
