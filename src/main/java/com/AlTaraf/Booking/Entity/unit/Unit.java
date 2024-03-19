@@ -9,6 +9,7 @@ import com.AlTaraf.Booking.Entity.common.Auditable;
 import com.AlTaraf.Booking.Entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.Entity.unit.accommodationType.AccommodationType;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
+import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
 import com.AlTaraf.Booking.Entity.unit.feature.Feature;
 import com.AlTaraf.Booking.Entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.Entity.unit.foodOption.FoodOption;
@@ -175,6 +176,10 @@ public class Unit extends Auditable<String> {
     @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<RoomDetails> roomDetails;
+
+    @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<RoomDetailsForAvailableArea> roomDetailsForAvailableAreaList;
 
     @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
     @JsonManagedReference

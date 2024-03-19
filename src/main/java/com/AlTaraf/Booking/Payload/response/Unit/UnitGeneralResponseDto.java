@@ -9,10 +9,12 @@ import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.RegionDto;
 import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.unit.accommodationType.AccommodationType;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
+import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
 import com.AlTaraf.Booking.Entity.unit.feature.Feature;
 import com.AlTaraf.Booking.Entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.Entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
+import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
 import lombok.AllArgsConstructor;
@@ -56,6 +58,10 @@ public class UnitGeneralResponseDto {
 
     private Set<FeatureForHallsDto> featuresHallsDto;
     private Set<AvailablePeriodsDto> availablePeriodsHallsDto;
+
+    private List<RoomDetails> roomDetails;
+
+    private List<RoomDetailsForAvailableArea> roomDetailsForAvailableAreaList;
 
 //    private int oldPriceHall;
 //    private int newPriceHall;

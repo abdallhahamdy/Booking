@@ -41,6 +41,8 @@ public interface UnitGeneralResponseMapper {
     @Mapping(source = "capacityHalls", target = "capacityHalls")
     @Mapping(source = "featuresHallsSet", target = "featuresHallsDto", qualifiedByName = "mapEntityToFeaturesHallsDto")
     @Mapping(source = "availablePeriodsHallsSet", target = "availablePeriodsHallsDto", qualifiedByName = "mapEntityToAvailablePeriodsHallsDto")
+    @Mapping(source = "roomDetailsForAvailableAreaList", target = "roomDetailsForAvailableAreaList")
+    @Mapping(source = "roomDetails", target = "roomDetails")
     @Mapping(source = "oldPriceHall", target = "oldPriceHall")
     @Mapping(source = "newPriceHall", target = "newPriceHall")
     @Mapping(source = "chaletOldPrice", target = "chaletOldPrice")
