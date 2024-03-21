@@ -52,6 +52,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/Api/Admin")
+@CrossOrigin
 public class AdminController {
 
     @Autowired
@@ -120,6 +121,7 @@ public class AdminController {
     @Autowired
     private PackageAdsRepository packageAdsRepository;
 
+    @CrossOrigin
     @PostMapping("/Register-Dashboard")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDashboardDto userRegisterDashboardDto) {
 
@@ -131,6 +133,7 @@ public class AdminController {
         return ResponseEntity.ok(response);
     }
 
+    @CrossOrigin
     @GetMapping("/Role-All")
     public ResponseEntity<?> getAllRoles() {
         List<RoleDashboard> roleDashboards = roleDashboardService.getAllRoles();
@@ -144,6 +147,7 @@ public class AdminController {
         }
     }
 
+    @CrossOrigin
     @GetMapping("/Technical-Support-Get-All")
     public Page<TechnicalSupportDTO> getAllTechnicalSupport(@RequestParam(defaultValue = "0") int page,
                                                             @RequestParam(defaultValue = "5") int size) {
@@ -155,6 +159,7 @@ public class AdminController {
     }
 
     @GetMapping("/Get-Units-By-Accommodation-Type")
+    @CrossOrigin
     public ResponseEntity<?> getUnitsByAccommodationType(
             @RequestParam String accommodationTypeName,
             @RequestParam(defaultValue = "0") int page,
@@ -190,6 +195,7 @@ public class AdminController {
 //    }
 
     @DeleteMapping("/delete/{id}/Technical-Support")
+    @CrossOrigin
     public ResponseEntity<?> deleteTechnicalSupportById(@PathVariable Long id) {
         try {
             technicalSupportService.deleteTechnicalSupportById(id);
@@ -201,6 +207,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/deleteAll/Technical-Support")
+    @CrossOrigin
     public ResponseEntity<?> deleteAllTechnicalSupport() {
         try {
             technicalSupportService.deleteAllTechnicalSupport();
@@ -235,6 +242,7 @@ public class AdminController {
 //    }
 
     @GetMapping("/Get-Units-For-Dashboard")
+    @CrossOrigin
     public Page<UnitDashboard> getUnitsForDashboard(
             @RequestParam(required = false) String traderName,
             @RequestParam(required = false) String traderPhone,
@@ -259,6 +267,7 @@ public class AdminController {
     }
 
     @GetMapping("By-Id-General/{id}")
+    @CrossOrigin
     public ResponseEntity<?> getUnitById(@PathVariable Long id) {
         Unit unit = unitService.getUnitById(id);
         if (unit != null) {
@@ -288,6 +297,7 @@ public class AdminController {
 //    }
 
     @PutMapping("Change/Status/Ads/{adsId}/{statusUnitId}")
+    @CrossOrigin
     public ResponseEntity<?> updateStatusForAds(@PathVariable Long adsId, @PathVariable Long statusUnitId) {
         try {
             adsService.updateStatusForAds(adsId, statusUnitId);
@@ -298,6 +308,7 @@ public class AdminController {
     }
 
     @PutMapping("Change/Status/Units/{unitId}/{statusUnitId}")
+    @CrossOrigin
     public ResponseEntity<?> updateStatusForUnits(@PathVariable Long unitId, @PathVariable Long statusUnitId) {
         try {
             unitService.updateStatusForUser(unitId, statusUnitId);
@@ -307,6 +318,7 @@ public class AdminController {
         }
     }
 
+    @CrossOrigin
     @Transactional
     @DeleteMapping("Delete/Unit/{id}")
     public ResponseEntity<?> deleteUnit(@PathVariable Long id) {
@@ -336,6 +348,7 @@ public class AdminController {
         }
     }
 
+    @CrossOrigin
     @PutMapping("/{userId}/ban")
     public ResponseEntity<?> toggleBanStatus(@PathVariable Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
@@ -354,6 +367,7 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200, "Ban for User are Changed"));
     }
 
+    @CrossOrigin
     @GetMapping("/Get-User-All-Or-ByRole")
     public ResponseEntity<Page<?>> getUsersByRole(
             @RequestParam(required = false) ERole roleName,
@@ -385,6 +399,7 @@ public class AdminController {
         return ResponseEntity.ok(userDashboardPage);
     }
 
+    @CrossOrigin
     @PatchMapping("Edit-Package-Ads/{id}")
     public ResponseEntity<?> editPackageAds(@PathVariable Long id, @RequestBody PackageAdsEditDTO packageAdsEditDTO) {
         Optional<PackageAds> optionalPackageAds = packageAdsRepository.findById(id);
@@ -407,12 +422,14 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200, "Updated Package Ads successfully"));
     }
 
+    @CrossOrigin
     @DeleteMapping("/Delete-Users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         userService.deleteUserAndAssociatedEntities(id);
         return ResponseEntity.ok().build();
     }
 
+    @CrossOrigin
     @PutMapping("/{userId}/warnings")
     public ResponseEntity<?> setWarnings(@PathVariable Long userId, @RequestBody List<Boolean> warnings) {
         try {

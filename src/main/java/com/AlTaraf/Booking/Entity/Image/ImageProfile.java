@@ -16,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class ImageProfile {
 
     @Id
@@ -43,4 +42,8 @@ public class ImageProfile {
 
     @Column(name = "BACKGROUND_IMAGE")
     private Boolean image_background;
+
+    public ImageProfile() {
+        this.image_background = false;
+    }
 }
