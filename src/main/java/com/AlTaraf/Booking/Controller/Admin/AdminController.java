@@ -2,9 +2,10 @@ package com.AlTaraf.Booking.Controller.Admin;
 
 
 import com.AlTaraf.Booking.Dto.Roles.RoleDashboardDto;
-import com.AlTaraf.Booking.Dto.TechnicalSupport.TechnicalSupportDTO;
+import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupportForUnits;
+import com.AlTaraf.Booking.Mapper.TechnicalSupport.TechnicalSupportUnitsMapper;
+import com.AlTaraf.Booking.Payload.response.TechnicalSupport.TechnicalSupportResponse;
 import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
-import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Dto.User.UserDashboard;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDashboardDto;
 import com.AlTaraf.Booking.Dto.packageAds.PackageAdsEditDTO;
@@ -20,6 +21,7 @@ import com.AlTaraf.Booking.Mapper.Unit.*;
 import com.AlTaraf.Booking.Mapper.Unit.Dashboard.UnitDashboardMapper;
 import com.AlTaraf.Booking.Mapper.Unit.Dashboard.UserDashboardMapper;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
+import com.AlTaraf.Booking.Payload.response.TechnicalSupport.TechnicalSupportUnitsResponse;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
@@ -28,12 +30,15 @@ import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepo
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
+import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportRepository;
+import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportUnitRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.TechnicalSupport.TechnicalSupportService;
+import com.AlTaraf.Booking.Service.TechnicalSupport.TechnicalSupportUnitsService;
 import com.AlTaraf.Booking.Service.role.RoleDashboardService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.user.UserService;
@@ -57,6 +62,9 @@ public class AdminController {
 
     @Autowired
     TechnicalSupportService technicalSupportService;
+
+    @Autowired
+    TechnicalSupportUnitsService technicalSupportUnitsService;
 
     @Autowired
     UserService userService;
@@ -121,6 +129,18 @@ public class AdminController {
     @Autowired
     private PackageAdsRepository packageAdsRepository;
 
+    @Autowired
+    private TechnicalSupportRepository technicalSupportRepository;
+
+    @Autowired
+    private TechnicalSupportUnitRepository technicalSupportUnitRepository;
+
+    @Autowired
+    private TechnicalSupportMapper technicalSupportMapper;
+
+    @Autowired
+    private TechnicalSupportUnitsMapper technicalSupportUnitsMapper;
+
     @CrossOrigin
     @PostMapping("/Register-Dashboard")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDashboardDto userRegisterDashboardDto) {
@@ -149,13 +169,70 @@ public class AdminController {
 
     @CrossOrigin
     @GetMapping("/Technical-Support-Get-All")
-    public Page<TechnicalSupportDTO> getAllTechnicalSupport(@RequestParam(defaultValue = "0") int page,
-                                                            @RequestParam(defaultValue = "5") int size) {
+    public Page<TechnicalSupportResponse> getAllTechnicalSupport(@RequestParam(defaultValue = "0") int page,
+                                                                 @RequestParam(defaultValue = "5") int size) {
         Page<TechnicalSupport> technicalSupportPage = technicalSupportService.getAllTechnicalSupport(PageRequest.of(page, size));
-        List<TechnicalSupportDTO> technicalSupportDTOList = technicalSupportPage.getContent().stream()
+        List<TechnicalSupportResponse> technicalSupportResponseList = technicalSupportPage.getContent().stream()
                 .map(TechnicalSupportMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
-        return new PageImpl<>(technicalSupportDTOList, PageRequest.of(page, size), technicalSupportPage.getTotalElements());
+        return new PageImpl<>(technicalSupportResponseList, PageRequest.of(page, size), technicalSupportPage.getTotalElements());
+    }
+
+    @CrossOrigin
+    @GetMapping("/Technical-Support-Unit-Get-All")
+    public Page<TechnicalSupportUnitsResponse> getAllTechnicalSupportUnit(@RequestParam(defaultValue = "0") int page,
+                                                                 @RequestParam(defaultValue = "5") int size) {
+        Page<TechnicalSupportForUnits> technicalSupportPage = technicalSupportUnitsService.getAllTechnicalSupport(PageRequest.of(page, size));
+        List<TechnicalSupportUnitsResponse> technicalSupportResponseList = technicalSupportPage.getContent().stream()
+                .map(TechnicalSupportUnitsMapper.INSTANCE::toDto)
+                .collect(Collectors.toList());
+        return new PageImpl<>(technicalSupportResponseList, PageRequest.of(page, size), technicalSupportPage.getTotalElements());
+    }
+
+    @CrossOrigin
+    @PatchMapping("Technical-Support/{id}/mark-as-seen")
+    public ResponseEntity<?> markAsSeen(@PathVariable Long id) {
+        Optional<TechnicalSupport> optionalTechnicalSupport = technicalSupportRepository.findById(id);
+        if (optionalTechnicalSupport.isPresent()) {
+            TechnicalSupport technicalSupport = optionalTechnicalSupport.get();
+            technicalSupport.setSeen(true);
+            technicalSupportRepository.save(technicalSupport);
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200, "Marked As seen"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, "Technical Support Id Not Found"));
+        }
+    }
+
+    @CrossOrigin
+    @PatchMapping("Technical-Support-Unit/{id}/mark-as-seen")
+    public ResponseEntity<?> markAsSeenUnit(@PathVariable Long id) {
+        Optional<TechnicalSupportForUnits> optionalTechnicalSupport = technicalSupportUnitRepository.findById(id);
+        if (optionalTechnicalSupport.isPresent()) {
+            TechnicalSupportForUnits technicalSupportForUnits = optionalTechnicalSupport.get();
+            technicalSupportForUnits.setSeen(true);
+            technicalSupportUnitRepository.save(technicalSupportForUnits);
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200, "Marked As seen"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, "Technical Support Unit Id Not Found"));
+        }
+    }
+
+    @CrossOrigin
+    @GetMapping("/Technical-Support/{id}")
+    public ResponseEntity<TechnicalSupportResponse> getByIdTechnicalSupport(@PathVariable Long id) {
+        Optional<TechnicalSupport> optionalTechnicalSupport = technicalSupportRepository.findById(id);
+        return optionalTechnicalSupport
+                .map(technicalSupport -> ResponseEntity.ok().body(technicalSupportMapper.toDto(technicalSupport)))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @CrossOrigin
+    @GetMapping("/Technical-Support-Units/{id}")
+    public ResponseEntity<TechnicalSupportUnitsResponse> getByIdTechnicalSupportUnits(@PathVariable Long id) {
+        Optional<TechnicalSupportForUnits> optionalTechnicalSupport = technicalSupportUnitRepository.findById(id);
+        return optionalTechnicalSupport
+                .map(technicalSupportForUnits -> ResponseEntity.ok().body(technicalSupportUnitsMapper.toDto(technicalSupportForUnits)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/Get-Units-By-Accommodation-Type")
@@ -215,6 +292,30 @@ public class AdminController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse(500, "Failed to delete all technical support messages."));
+        }
+    }
+
+    @DeleteMapping("/delete/{id}/Technical-Support-Units")
+    @CrossOrigin
+    public ResponseEntity<?> deleteTechnicalSupportUnitsById(@PathVariable Long id) {
+        try {
+            technicalSupportUnitsService.deleteTechnicalSupportById(id);
+            return ResponseEntity.ok(new ApiResponse(200, "Technical support Unit message deleted successfully."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(500, "Failed to delete technical support Unit message."));
+        }
+    }
+
+    @DeleteMapping("/deleteAll/Technical-Support-Units")
+    @CrossOrigin
+    public ResponseEntity<?> deleteAllTechnicalSupportUnits() {
+        try {
+            technicalSupportUnitsService.deleteAllTechnicalSupport();
+            return ResponseEntity.ok(new ApiResponse(200, "All technical support Unit messages deleted successfully."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse(500, "Failed to delete all technical support Unit messages."));
         }
     }
 

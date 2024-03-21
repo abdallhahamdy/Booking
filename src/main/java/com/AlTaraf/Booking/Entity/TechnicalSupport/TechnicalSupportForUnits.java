@@ -2,12 +2,12 @@ package com.AlTaraf.Booking.Entity.TechnicalSupport;
 
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.common.Auditable;
+import com.AlTaraf.Booking.Entity.unit.Unit;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Duration;
@@ -18,9 +18,9 @@ import java.time.ZoneId;
 @EntityListeners(AuditingEntityListener.class)
 @Data
 @AllArgsConstructor
-@Table(name = "technical_support")
+@Table(name = "technical_support_units")
 @Entity
-public class TechnicalSupport extends Auditable<String>  {
+public class TechnicalSupportForUnits extends Auditable<String>  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,8 +40,12 @@ public class TechnicalSupport extends Auditable<String>  {
 
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID", nullable = true)
+    @JoinColumn(name = "USER_ID")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "UNIT_ID")
+    private Unit unit;
 
     @Transient
     private Duration elapsedTime;
@@ -54,7 +58,7 @@ public class TechnicalSupport extends Auditable<String>  {
         );
     }
 
-    public TechnicalSupport() {
+    public TechnicalSupportForUnits() {
         this.seen = false;
     }
 }

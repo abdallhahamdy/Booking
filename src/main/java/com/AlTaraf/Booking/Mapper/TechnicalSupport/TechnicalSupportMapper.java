@@ -1,7 +1,8 @@
 package com.AlTaraf.Booking.Mapper.TechnicalSupport;
 
-import com.AlTaraf.Booking.Dto.TechnicalSupport.TechnicalSupportDTO;
+import com.AlTaraf.Booking.Payload.response.TechnicalSupport.TechnicalSupportResponse;
 import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupport;
+import com.AlTaraf.Booking.Payload.request.TechnicalSupport.TechnicalSupportRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -12,12 +13,10 @@ public interface TechnicalSupportMapper {
     TechnicalSupportMapper INSTANCE = Mappers.getMapper(TechnicalSupportMapper.class);
 
     @Mapping(target = "user.id", source = "userId")
-    @Mapping(target = "id", source = "id")
     @Mapping(target = "email", source = "email")
     @Mapping(target = "message", source = "message")
     @Mapping(target = "name", source = "name")
-    @Mapping(target = "isRead", source = "isRead")
-    TechnicalSupport toEntity(TechnicalSupportDTO technicalSupportDTO);
+    TechnicalSupport toEntity(TechnicalSupportRequest technicalSupportRequest);
 
 
     @Mapping(target = "userId", source = "user.id")
@@ -25,8 +24,9 @@ public interface TechnicalSupportMapper {
     @Mapping(target = "email", source = "email")
     @Mapping(target = "message", source = "message")
     @Mapping(target = "name", source = "name")
-    @Mapping(target = "isRead", source = "isRead")
-    TechnicalSupportDTO toDto(TechnicalSupport technicalSupport);
+    @Mapping(target = "seen", source = "seen")
+    @Mapping(target = "elapsedTime", source = "elapsedTime")
+    TechnicalSupportResponse toDto(TechnicalSupport technicalSupport);
 
-    TechnicalSupportDTO toDTO(TechnicalSupport technicalSupport);
+    TechnicalSupportResponse toDTO(TechnicalSupport technicalSupport);
 }
