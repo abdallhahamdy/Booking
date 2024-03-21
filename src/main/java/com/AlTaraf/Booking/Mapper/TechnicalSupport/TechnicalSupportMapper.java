@@ -6,8 +6,9 @@ import com.AlTaraf.Booking.Payload.request.TechnicalSupport.TechnicalSupportRequ
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import org.springframework.stereotype.Component;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface TechnicalSupportMapper {
 
     TechnicalSupportMapper INSTANCE = Mappers.getMapper(TechnicalSupportMapper.class);
