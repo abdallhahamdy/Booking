@@ -4,6 +4,8 @@ import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -32,4 +34,8 @@ public interface AdsRepository extends JpaRepository<Ads, Long> {
     List<Ads> findByUser(User user);
 
 
+
+//    Page<Ads> findAll(Pageable pageable);
+
+    Page<Ads> findAllByStatusUnitId(Long statusUnitId, Pageable pageable);
 }

@@ -12,6 +12,8 @@ import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -90,5 +92,14 @@ public class AdsServiceImpl implements AdsService {
         return adsRepository.findByUnitId(unitId);
     }
 
+//    @Override
+//    public Page<Ads> findAllAds(Pageable pageable) {
+//        return adsRepository.findAll(pageable);
+//    }
+
+    @Override
+    public Page<Ads> findAllByStatusUnitId(Long statusUnitId, Pageable pageable) {
+        return adsRepository.findAllByStatusUnitId(statusUnitId, pageable);
     }
+}
 
