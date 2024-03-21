@@ -1,28 +1,27 @@
 package com.AlTaraf.Booking.Controller;
 
-import com.AlTaraf.Booking.Service.notification.FCMService;
-import com.AlTaraf.Booking.model.NotificationRequest;
-import com.AlTaraf.Booking.model.NotificationResponse;
+import com.AlTaraf.Booking.Dto.MessageDTO;
+import com.AlTaraf.Booking.Service.FcmService;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.concurrent.ExecutionException;
 
 @RestController
 public class NotificationController {
     @Autowired
-    private FCMService fcmService;
+    private FcmService fcmService;
 
     @PostMapping("/notification")
-    public ResponseEntity sendNotification(@RequestBody NotificationRequest request) throws ExecutionException, InterruptedException {
-        fcmService.sendMessageToToken(request);
-        return new ResponseEntity<>(new NotificationResponse(HttpStatus.OK.value(), "Notification has been sent."), HttpStatus.OK);
+    String  sendToSpecificDevice(
+            @RequestBody MessageDTO note,
+            @RequestParam String token) throws FirebaseMessagingException {
+
+        return fcmService.sendNotificationToSpecificDevice(note,token);
     }
 
 }
