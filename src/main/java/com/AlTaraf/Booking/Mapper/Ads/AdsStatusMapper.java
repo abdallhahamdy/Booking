@@ -10,7 +10,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AdsStatusMapper {
-//    @Mapping(source = "id", target = "id")
+    @Mapping(source = "id", target = "id")
     @Mapping(source = "unit.id", target = "unitId")
     @Mapping(source = "unit.unitType.id", target = "unitTypeId")
     @Mapping(source = "images", target = "imageDataDTOS")
@@ -18,6 +18,7 @@ public interface AdsStatusMapper {
     @Mapping(source = "unit.city", target = "cityDto")
     @Mapping(source = "unit.region", target = "regionDto")
     @Mapping(source = "packageAds.id", target = "packageAdsId")
+    @Mapping(source = "statusUnit", target = "statusUnit")
     AdsResponseDto toDto(Ads ads);
 
     List<AdsResponseDto> toAdsDtoList(List<Ads> ads);

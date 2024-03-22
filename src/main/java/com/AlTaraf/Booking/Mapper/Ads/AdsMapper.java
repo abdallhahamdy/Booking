@@ -11,14 +11,14 @@ public interface AdsMapper {
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "unit.id", target = "unitId")
-    @Mapping(source = "user.id", target = "userId")
+//    @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "packageAds.id", target = "packageAdsId")
 //    @Mapping(source = "statusUnit.id", target = "statusId")
     AdsResponseDto toDto(Ads ads);
 
 //    @Mapping(source = "id", target = "id")
     @Mapping(source = "unitId", target = "unit.id")
-    @Mapping(source = "userId", target = "user.id")
+//    @Mapping(source = "userId", target = "user.id")
     @Mapping(source = "packageAdsId", target = "packageAds.id")
 //    @Mapping(source = "statusId", target = "statusUnit.id")
     Ads toEntity(AdsRequestDto adsDto);

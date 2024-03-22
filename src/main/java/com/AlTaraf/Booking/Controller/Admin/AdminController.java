@@ -2,7 +2,9 @@ package com.AlTaraf.Booking.Controller.Admin;
 
 
 import com.AlTaraf.Booking.Dto.Roles.RoleDashboardDto;
+import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupportForUnits;
+import com.AlTaraf.Booking.Mapper.Ads.AdsStatusMapper;
 import com.AlTaraf.Booking.Mapper.TechnicalSupport.TechnicalSupportUnitsMapper;
 import com.AlTaraf.Booking.Payload.response.TechnicalSupport.TechnicalSupportResponse;
 import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
@@ -15,11 +17,13 @@ import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupport;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Entity.unit.Unit;
+//import com.AlTaraf.Booking.Mapper.Ads.AdsStatusMapper;
 import com.AlTaraf.Booking.Mapper.RoleDashboardMapper;
 import com.AlTaraf.Booking.Mapper.TechnicalSupport.TechnicalSupportMapper;
 import com.AlTaraf.Booking.Mapper.Unit.*;
 import com.AlTaraf.Booking.Mapper.Unit.Dashboard.UnitDashboardMapper;
 import com.AlTaraf.Booking.Mapper.Unit.Dashboard.UserDashboardMapper;
+import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Payload.response.TechnicalSupport.TechnicalSupportUnitsResponse;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
@@ -121,6 +125,9 @@ public class AdminController {
     private RoomDetailsRepository roomDetailsRepository;
 
     @Autowired
+    AdsStatusMapper adsStatusMapper;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -142,6 +149,9 @@ public class AdminController {
     private TechnicalSupportUnitsMapper technicalSupportUnitsMapper;
 
     @CrossOrigin
+//    @Autowired
+//    AdsStatusMapper adsStatusMapper;
+
     @PostMapping("/Register-Dashboard")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDashboardDto userRegisterDashboardDto) {
 
@@ -549,4 +559,21 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Warning Not Added");
         }
     }
+    @GetMapping("Get-Ads-For-Dashboard")
+    public ResponseEntity<Page<AdsResponseDto>> getAllAdsByPageAndSize(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) Long statusId
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Ads> adsPage;
+        if (statusId != null) {
+            adsPage = adsRepository.findAllByStatusUnitId(statusId, pageable);
+        } else {
+            adsPage = adsRepository.findAll(pageable);
+        }
+        Page<AdsResponseDto> adsResponsePage = adsPage.map(adsStatusMapper::toDto);
+        return ResponseEntity.ok(adsResponsePage);
+    }
+
 }

@@ -4,6 +4,7 @@ import com.AlTaraf.Booking.Dto.Image.ImageDataDTO;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDtoSample;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.RegionDto;
+import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,5 +24,5 @@ public class AdsResponseDto {
     private String unitName;
     private CityDtoSample cityDto;
     private RegionDto regionDto;
-    private Long statusId;
+    private StatusUnit statusUnit;
 }
