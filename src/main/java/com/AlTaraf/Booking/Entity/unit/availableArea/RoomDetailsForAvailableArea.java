@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 public class RoomDetailsForAvailableArea {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ROOM_DETAILS_ID")
+    @Column(name = "ROOM_DETAILS_FOR_AVAILABLE_AREA_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -22,7 +22,7 @@ public class ReserveDate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "RESERVER_DATE_ID")
+    @Column(name = "RESERVE_DATE_ID")
     private Long id;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -31,10 +31,12 @@ public class ReserveDate {
     @Column(name = "DATE")
     private List<Date> dates;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "ROOM_DETAILS_FOR_AVAILABLE_AREA_ID")
     private RoomDetailsForAvailableArea roomDetailsForAvailableArea;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinColumn(name = "UNIT_ID")
     private Unit unit;
 
 //    @Column(name = "RESERVE")
