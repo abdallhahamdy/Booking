@@ -33,6 +33,7 @@ import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
+import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportRepository;
 import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportUnitRepository;
@@ -147,6 +148,9 @@ public class AdminController {
 
     @Autowired
     private TechnicalSupportUnitsMapper technicalSupportUnitsMapper;
+
+    @Autowired
+    private ImageDataForAdsRepository imageDataForAdsRepository;
 
     @CrossOrigin
 //    @Autowired
@@ -441,10 +445,11 @@ public class AdminController {
             reserveDateHallsRepository.deleteRelatedDateInfoHallsByUnitId(id);
             roomDetailsForAvailableAreaRepository.deleteByUnitId(id);
 
-            reserveDateHallsRepository.deleteByUnitId(id);
+//            reserveDateHallsRepository.deleteByUnitId(id);
             roomDetailsRepository.deleteByUnitId(id);
 
             imageDataRepository.deleteByUnitId(id);
+            imageDataForAdsRepository.deleteByUnitId(id);
             adsRepository.deleteByUnitId(id);
             reservationRepository.deleteByUnitId(id);
 
