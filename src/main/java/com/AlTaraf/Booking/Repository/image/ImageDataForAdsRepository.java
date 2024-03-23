@@ -36,4 +36,8 @@ public interface ImageDataForAdsRepository extends JpaRepository<ImageDataForAds
     @Transactional
     @Query("DELETE FROM ImageDataForAds i WHERE i.ads = :ads")
     void deleteImageDataForAdsByAds(@Param("ads") Ads ads);
+
+    @Modifying
+    @Query("DELETE FROM ImageData i WHERE i.unit.id = :unitId")
+    void deleteByUnitId(@Param("unitId") Long unitId);
 }
