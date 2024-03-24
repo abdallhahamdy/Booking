@@ -21,7 +21,6 @@ import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
-import com.AlTaraf.Booking.Service.unit.RoomDetails.RoomDetailsService;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -219,15 +218,8 @@ public class Unit extends Auditable<String> {
         this.favorite = false;
         this.dateOfArrival = LocalDate.now(); // Set dateOfArrival to the current date
         this.departureDate = LocalDate.now().plusDays(30); // Set departureDate to 30 days after dateOfArrival
-//        this.setFavorite(false);
     }
 
-//    public void setNewPriceHall(int newPriceHall) {
-//        if (oldPriceHall != null && newPriceHall >= oldPriceHall) {
-//            throw new IllegalArgumentException("New price must be less than old price.");
-//        }
-//        this.newPriceHall = newPriceHall;
-//    }
 
     public void setPrice(Integer price) {
         if (unitType != null && unitType.getId() == 2) {
