@@ -3,14 +3,22 @@ package com.AlTaraf.Booking.Controller.Calender;
 import com.AlTaraf.Booking.Dto.calender.ReserveDateHallsDto;
 import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
 import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
+import com.AlTaraf.Booking.Entity.Calender.Hotel.ReserveDateHotel;
+import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
+import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Mapper.Calender.ReserveDateHallsMapper;
+import com.AlTaraf.Booking.Mapper.Calender.ReserveDateHotelMapper;
 import com.AlTaraf.Booking.Mapper.Calender.ReserveDateMapper;
 import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateDto;
+import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateHotelDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
+import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHotelRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
+import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
+import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +35,9 @@ public class CalenderController {
     private ReserveDateRepository reserveDateRepository;
 
     @Autowired
+    private ReserveDateHotelRepository reserveDateHotelRepository;
+
+    @Autowired
     private ReserveDateHallsRepository reserveDateHallsRepository;
 
     @Autowired
@@ -37,6 +48,12 @@ public class CalenderController {
 
     @Autowired
     RoomDetailsForAvailableAreaRepository roomDetailsForAvailableAreaRepository;
+
+    @Autowired
+    RoomDetailsRepository roomDetailsRepository;
+
+    @Autowired
+    UnitRepository unitRepository;
 
     @PostMapping("/reserve-date-halls")
     public ResponseEntity<?> createReserveDateForHalls(@RequestBody ReserveDateHallsDto reserveDateHallsDto) {
@@ -62,6 +79,15 @@ public class CalenderController {
             }
             // Alternatively, you can create a new RoomDetailsForAvailableArea entity if needed
 
+            // Fetch the Unit entity
+            Optional<Unit> unitOptional = unitRepository.findById(reserveDateRequest.getUnitId());
+            Unit unit = unitOptional.orElseThrow(() -> new RuntimeException("Unit not found"));
+
+            // Set the Unit in the RoomDetailsForAvailableArea entity
+            if (roomDetails != null) {
+                roomDetails.setUnit(unit);
+            }
+
             // Map the ReserveDateDto to a ReserveDate entity
             ReserveDate reserveDate = ReserveDateMapper.INSTANCE.reserveDateRequestToReserveDate(reserveDateRequest);
 
@@ -71,6 +97,42 @@ public class CalenderController {
             // Save the ReserveDate entity
             ReserveDate savedReserveDate = reserveDateRepository.save(reserveDate);
             return ResponseEntity.ok("Reserve date created successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create reserve date: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/For-Hotel")
+    public ResponseEntity<?> createReserveDateHotel(@RequestBody ReserveDateHotelDto reserveDateHotelDto) {
+        try {
+            // Fetch or create the roomDetailsForAvailableArea entity
+            RoomDetails roomDetails = null;
+            if (reserveDateHotelDto.getRoomDetailsId() != null) {
+                Optional<RoomDetails> roomDetailsOptional = roomDetailsRepository.findById(reserveDateHotelDto.getRoomDetailsId());
+                roomDetails = roomDetailsOptional.orElse(null);
+                System.out.println("Room Details: " + roomDetails);
+                System.out.println("Room Details2: " + roomDetailsOptional);
+            }
+            // Alternatively, you can create a new RoomDetailsForAvailableArea entity if needed
+
+            // Fetch the Unit entity
+            Optional<Unit> unitOptional = unitRepository.findById(reserveDateHotelDto.getUnitId());
+            Unit unit = unitOptional.orElseThrow(() -> new RuntimeException("Unit not found"));
+
+            // Set the Unit in the RoomDetailsForAvailableArea entity
+            if (roomDetails != null) {
+                roomDetails.setUnit(unit);
+            }
+
+            // Map the ReserveDateDto to a ReserveDate entity
+            ReserveDateHotel reserveDateHotel = ReserveDateHotelMapper.INSTANCE.reserveDateRequestToReserveDateHotel(reserveDateHotelDto);
+
+            // Set the roomDetailsForAvailableArea in the ReserveDate entity
+            reserveDateHotel.setRoomDetails(roomDetails);
+
+            // Save the ReserveDate entity
+            ReserveDateHotel savedReserveDate = reserveDateHotelRepository.save(reserveDateHotel);
+            return ResponseEntity.ok("Reserve date Hotel created successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create reserve date: " + e.getMessage());
         }
@@ -98,6 +160,28 @@ public class CalenderController {
         }
     }
 
+    @GetMapping("hotel/{roomDetailsId}/{unitId}")
+    public ResponseEntity<?> getReserveDatesHotelByRoomDetailsIdAndUnitId(@PathVariable Long roomDetailsId, @PathVariable Long unitId) {
+
+        try {
+
+            boolean roomNumberZeroExists = roomDetailsRepository.existsByRoomNumberZero();
+
+            if (roomNumberZeroExists) {
+                List<ReserveDateHotel> reserveDatesHotels = reserveDateHotelRepository.findByRoomDetailsIdAndUnitId(roomDetailsId, unitId);
+                List<ReserveDateHotelDto> reserveDateRequests = reserveDatesHotels.stream()
+                        .map(ReserveDateHotelMapper.INSTANCE::reserveDateHotelToReserveDateHotelRequest)
+                        .collect(Collectors.toList());
+                return ResponseEntity.ok(reserveDateRequests);
+            }
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(205, "Room Still Available"));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get reserve dates: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/For-Add-Unit/{roomDetailsForAvailableAreaId}/{unitId}")
     public ResponseEntity<?> getReserveDatesByRoomDetailsForAvailableAreaIdAndUnitIdForUnit(@PathVariable Long roomDetailsForAvailableAreaId, @PathVariable Long unitId) {
 
@@ -108,6 +192,22 @@ public class CalenderController {
                 .map(ReserveDateMapper.INSTANCE::reserveDateToReserveDateRequest)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(reserveDateRequests);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get reserve dates: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/For-Add-Unit-hotel/{roomDetailsId}/{unitId}")
+    public ResponseEntity<?> getReserveDatesHotelByRoomDetailsForRoomAvailableAndUnitIdForUnit(@PathVariable Long roomDetailsId, @PathVariable Long unitId) {
+
+        try {
+
+            List<ReserveDateHotel> reserveDatesHotels = reserveDateHotelRepository.findByRoomDetailsIdAndUnitId(roomDetailsId, unitId);
+            List<ReserveDateHotelDto> reserveDateRequests = reserveDatesHotels.stream()
+                    .map(ReserveDateHotelMapper.INSTANCE::reserveDateHotelToReserveDateHotelRequest)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(reserveDateRequests);
 
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get reserve dates: " + e.getMessage());
