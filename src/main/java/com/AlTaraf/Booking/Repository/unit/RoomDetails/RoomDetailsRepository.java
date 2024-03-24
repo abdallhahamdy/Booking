@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 public interface RoomDetailsRepository extends JpaRepository<RoomDetails, Long> {
     RoomDetails findByUnitIdAndRoomAvailableId(Long unitId, Long roomAvailableId);
 
+    @Query("SELECT COUNT(r) > 0 FROM RoomDetails r WHERE r.roomNumber = 0")
+    boolean existsByRoomNumberZero();
+
     boolean existsByUnitIdAndRoomAvailableId(Long unitId, Long roomAvailableId);
 
     @Modifying
