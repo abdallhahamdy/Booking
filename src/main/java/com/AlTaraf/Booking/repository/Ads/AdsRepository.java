@@ -22,7 +22,7 @@ public interface AdsRepository extends JpaRepository<Ads, Long> {
 
     List<Ads> findByStatusUnitName(String statusName);
 
-    List<Ads> findByUnitId(Long unitId);
+    Ads findByUnitId(Long unitId);
 
     @Modifying
     @Transactional

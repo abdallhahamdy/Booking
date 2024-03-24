@@ -23,7 +23,7 @@ public class Ads {
     @Column(name = "ADS_ID")
     private Long id;
 
-    @OneToMany(mappedBy = "ads", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ads", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<ImageDataForAds> images;
 

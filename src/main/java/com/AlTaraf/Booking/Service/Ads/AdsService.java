@@ -21,7 +21,7 @@ public interface AdsService {
 
     void updateStatusForAds(Long adsId, Long statusUnitId);
 
-    List<Ads> findByUnitId(Long unitId);
+    Ads findByUnitId(Long unitId);
 
 //    Page<Ads> findAllAds(Pageable pageable);
 
