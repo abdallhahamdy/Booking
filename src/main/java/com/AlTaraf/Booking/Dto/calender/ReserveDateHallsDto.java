@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Dto.calender;
 
+import com.AlTaraf.Booking.Dto.calender.Date.DateInfoHallsDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

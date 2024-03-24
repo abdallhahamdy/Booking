@@ -1,6 +1,6 @@
 package com.AlTaraf.Booking.Payload.request.ReserveDate;
 
-import com.AlTaraf.Booking.Dto.calender.DateInfoHallsDto;
+import com.AlTaraf.Booking.Dto.calender.Date.DateInfoHallsDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

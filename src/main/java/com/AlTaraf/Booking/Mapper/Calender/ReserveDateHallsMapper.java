@@ -1,17 +1,15 @@
 package com.AlTaraf.Booking.Mapper.Calender;
 
-import com.AlTaraf.Booking.Dto.calender.DateInfoHallsDto;
+import com.AlTaraf.Booking.Dto.calender.Date.DateInfoHallsDto;
 import com.AlTaraf.Booking.Dto.calender.ReserveDateHallsDto;
 import com.AlTaraf.Booking.Entity.Calender.Halls.DateInfoHalls;
 import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface ReserveDateHallsMapper {

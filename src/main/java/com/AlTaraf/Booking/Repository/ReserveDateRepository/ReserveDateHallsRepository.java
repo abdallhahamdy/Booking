@@ -32,4 +32,9 @@ public interface ReserveDateHallsRepository extends JpaRepository<ReserveDateHal
     @Transactional
     @Query("DELETE FROM ReserveDateHalls rdh WHERE rdh.unit.id = :unitId")
     void deleteByUnitId(@Param("unitId") Long unitId);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM DateInfoHalls di WHERE di.reserveDateHalls.id = :reserveDateHallsId")
+    void deleteDateInfoHallsByReserveDateHallsId(@Param("reserveDateHallsId") Long reserveDateHallsId);
 }

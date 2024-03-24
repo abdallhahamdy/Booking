@@ -24,6 +24,12 @@ public interface ReserveDateRepository extends JpaRepository<ReserveDate, Long> 
     @Query("SELECT rd FROM ReserveDate rd WHERE rd.unit.id = :unitId")
     List<ReserveDate> findByUnitId(@Param("unitId") Long unitId);
 
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM DateInfo di WHERE di.reserveDate.id = :reserveDateId")
+    void deleteDateInfoByReserveDateId(@Param("reserveDateId") Long reserveDateId);
+
     @Modifying
     @Transactional
     @Query("DELETE FROM ReserveDate rd WHERE rd.unit.id = :unitId")
@@ -33,4 +39,10 @@ public interface ReserveDateRepository extends JpaRepository<ReserveDate, Long> 
     @Transactional
     @Query("DELETE FROM ReserveDate rd WHERE rd.roomDetailsForAvailableArea.id = :roomDetailsForAvailableAreaId AND rd.unit.id = :unitId")
     void deleteByRoomDetailsForAvailableAreaIdAndUnitId(@Param("roomDetailsForAvailableAreaId") Long roomDetailsForAvailableAreaId, @Param("unitId") Long unitId);
+
+//    @Modifying
+//    @Transactional
+//    @Query("DELETE FROM ReserveDateList rdl WHERE rdl.reserveDate.id = :reserveDate")
+//    void deleteReserveDateListByReserveDate(@Param("reserveDate") ReserveDate reserveDate);
+
 }

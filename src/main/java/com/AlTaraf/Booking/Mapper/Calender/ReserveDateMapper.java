@@ -1,5 +1,7 @@
 package com.AlTaraf.Booking.Mapper.Calender;
 
+import com.AlTaraf.Booking.Dto.calender.Date.DateInfoDto;
+import com.AlTaraf.Booking.Entity.Calender.DateInfo;
 import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
 import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateDto;
@@ -17,14 +19,14 @@ public interface ReserveDateMapper {
 
     ReserveDateMapper INSTANCE = Mappers.getMapper(ReserveDateMapper.class);
 
-    @Mapping(source = "dateList", target = "dates", qualifiedByName = "toDateList")
+    @Mapping(source = "dateInfoList", target = "dateInfoList")
     @Mapping(source = "roomDetailsForAvailableAreaId", target = "roomDetailsForAvailableArea.id")
     @Mapping(source = "unitId", target = "unit.id")
     @Mapping(source = "accommodationTypeId", target = "unit.accommodationType.id")
     @Mapping(source = "unitTypeId", target = "unit.unitType.id")
     ReserveDate reserveDateRequestToReserveDate(ReserveDateDto reserveDateRequest);
 
-    @Mapping(source = "dates", target = "dateList", qualifiedByName = "toDateList")
+    @Mapping(source = "dateInfoList", target = "dateInfoList")
     @Mapping(source = "roomDetailsForAvailableArea.id", target = "roomDetailsForAvailableAreaId")
     @Mapping(source = "unit.id", target = "unitId")
     ReserveDateDto reserveDateToReserveDateRequest(ReserveDate reserveDate);
@@ -35,6 +37,9 @@ public interface ReserveDateMapper {
                 .map(date -> new Date(date.getTime()))
                 .collect(Collectors.toList());
     }
+
+    @Mapping(source = "dateInfoList", target = "dateInfoList")
+    List<DateInfo> mapDateInfoDtoList(List<DateInfoDto> dateInfoList);
 
 
     default RoomDetailsForAvailableArea mapRoomDetailsForAvailableArea(Long roomDetailsForAvailableAreaId) {
