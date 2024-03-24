@@ -9,7 +9,6 @@ import com.AlTaraf.Booking.Mapper.TechnicalSupport.TechnicalSupportUnitsMapper;
 import com.AlTaraf.Booking.Payload.response.TechnicalSupport.TechnicalSupportResponse;
 import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
 import com.AlTaraf.Booking.Dto.User.UserDashboard;
-import com.AlTaraf.Booking.Dto.User.UserRegisterDashboardDto;
 import com.AlTaraf.Booking.Dto.packageAds.PackageAdsEditDTO;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.Role.RoleDashboard;
@@ -17,7 +16,6 @@ import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupport;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Entity.unit.Unit;
-//import com.AlTaraf.Booking.Mapper.Ads.AdsStatusMapper;
 import com.AlTaraf.Booking.Mapper.RoleDashboardMapper;
 import com.AlTaraf.Booking.Mapper.TechnicalSupport.TechnicalSupportMapper;
 import com.AlTaraf.Booking.Mapper.Unit.*;
@@ -31,6 +29,7 @@ import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
+import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHotelRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
@@ -48,12 +47,11 @@ import com.AlTaraf.Booking.Service.role.RoleDashboardService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.user.UserService;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -152,20 +150,8 @@ public class AdminController {
     @Autowired
     private ImageDataForAdsRepository imageDataForAdsRepository;
 
-    @CrossOrigin
-//    @Autowired
-//    AdsStatusMapper adsStatusMapper;
-
-    @PostMapping("/Register-Dashboard")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDashboardDto userRegisterDashboardDto) {
-
-        // Perform user registration
-        userService.registerUserForDashboard(userRegisterDashboardDto);
-
-        ApiResponse response = new ApiResponse(200, "User Registered Successfully!");
-
-        return ResponseEntity.ok(response);
-    }
+    @Autowired
+    ReserveDateHotelRepository reserveDateHotelRepository;
 
     @CrossOrigin
     @GetMapping("/Role-All")
@@ -180,6 +166,7 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
+
 
     @CrossOrigin
     @GetMapping("/Technical-Support-Get-All")
@@ -259,7 +246,6 @@ public class AdminController {
         Page<UnitDashboard> units = unitService.getUnitsByAccommodationTypeNameDashboard(accommodationTypeName, page, size);
 
         if (!units.isEmpty()) {
-//            Page<UnitDashboard> unitDashboardPage = units.map(unit -> unitDashboard.toUnitDashboard(unit));
             return ResponseEntity.ok(units);
         } else {
             ApiResponse response = new ApiResponse(204, "No Content for Units By Accommodation Type!");
@@ -267,23 +253,6 @@ public class AdminController {
         }
     }
 
-//    return unitsPage.map(unit -> unitDashboard.toUnitDashboard(unit));
-
-//    @GetMapping("/Get-Units-By-Accommodation-Type")
-//    public ResponseEntity<?> getUnitsByAccommodationType(
-//            @RequestParam String accommodationTypeName,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "6") int size) {
-//
-//        Page<UnitDtoFavorite> units = unitService.getUnitsByAccommodationTypeName(accommodationTypeName, page, size);
-//
-//        if (!units.isEmpty()) {
-//            return new ResponseEntity<>(units, HttpStatus.OK);
-//        } else {
-//            ApiResponse response = new ApiResponse(204, "No Content for Units By Accommodation Type!");
-//            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
-//        }
-//    }
 
     @DeleteMapping("/delete/{id}/Technical-Support")
     @CrossOrigin
@@ -333,28 +302,6 @@ public class AdminController {
         }
     }
 
-//    @GetMapping("/Get-Units")
-//    public Page<UnitDtoFavorite> getUnits(
-//            @RequestParam(required = false) String nameUnit,
-//            @RequestParam(required = false) Long unitTypeId,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "5") int size) {
-//        Page<Unit> unitsPage = Page.empty();
-//
-//        if (nameUnit == null && unitTypeId != null) {
-//            unitsPage = unitService.getUnitsByUnitTypeId(unitTypeId, PageRequest.of(page, size));
-//        }
-//        else if (nameUnit != null && unitTypeId == null) {
-//            unitsPage = unitService.filterUnitsByName(nameUnit, PageRequest.of(page, size));
-//        }
-//        else if (nameUnit != null && unitTypeId != null) {
-//            unitsPage = unitService.filterUnitsByNameAndTypeId(nameUnit, unitTypeId, PageRequest.of(page, size));
-//        }
-//        else if (nameUnit == null && unitTypeId == null) {
-//            unitsPage = unitService.getAllUnit(PageRequest.of(page, size));
-//        }
-//        return unitsPage.map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit));
-//    }
 
     @GetMapping("/Get-Units-For-Dashboard")
     @CrossOrigin
@@ -369,9 +316,7 @@ public class AdminController {
         if (traderName == null && traderPhone == null && unitTypeId != null) {
             unitsPage = unitService.getUnitsByUnitTypeId(unitTypeId, PageRequest.of(page, size));
         }
-//        else if (traderName != null && unitTypeId == null) {
-//            unitsPage = unitService.filterUnitsByName(traderName, PageRequest.of(page, size));
-//        }
+
         else if (traderName != null && unitTypeId != null) {
             unitsPage = unitService.filterUnitsByUserNameAndTypeId(traderName, unitTypeId, PageRequest.of(page, size));
         }
@@ -393,23 +338,6 @@ public class AdminController {
         }
     }
 
-
-//    @GetMapping("/Get-Units")
-//    public Page<UnitDtoFavorite> getUnits(
-//            @RequestParam(required = false) String nameUnit,
-//            @RequestParam(required = false) String roomAvailableName,
-//            @RequestParam(required = false) String availableAreaName,
-//            @RequestParam(required = false) Long unitTypeId,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "5") int size,
-//            @RequestParam(defaultValue = "asc") String sortDirection) {
-//        Sort sort = sortDirection.equalsIgnoreCase("desc") ? Sort.by("price").descending() : Sort.by("price").ascending();
-//        Page<Unit> unitsPage = Page.empty();
-//        if (nameUnit == null && unitTypeId == null && roomAvailableName == null && availableAreaName == null) {
-//            unitsPage = unitService.getAllUnit(PageRequest.of(page, size, sort));
-//        }
-//        return unitsPage.map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit));
-//    }
 
     @PutMapping("Change/Status/Ads/{adsId}/{statusUnitId}")
     @CrossOrigin
@@ -437,30 +365,15 @@ public class AdminController {
     @Transactional
     @DeleteMapping("Delete/Unit/{id}")
     public ResponseEntity<?> deleteUnit(@PathVariable Long id) {
-
         try {
-
-            userFavoriteUnitRepository.deleteByUnit(id);
-            reserveDateRepository.deleteByUnitId(id);
-            reserveDateHallsRepository.deleteRelatedDateInfoHallsByUnitId(id);
-            roomDetailsForAvailableAreaRepository.deleteByUnitId(id);
-
-//            reserveDateHallsRepository.deleteByUnitId(id);
-            roomDetailsRepository.deleteByUnitId(id);
-
-            imageDataRepository.deleteByUnitId(id);
-            imageDataForAdsRepository.deleteByUnitId(id);
-            adsRepository.deleteByUnitId(id);
-            reservationRepository.deleteByUnitId(id);
-
-            unitService.deleteUnit(id);
+            unitService.deleteUnitWithDependencies(id);
             ApiResponse response = new ApiResponse(200, "Unit deleted successfully!");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            System.out.println("Error Message Delete Unit: " + e);
-            ApiResponse response = new ApiResponse(404, "Not Found!");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            // Log the exception or handle it in some way
+            System.err.println("Error deleting unit: " + e.getMessage());
+            ApiResponse response = new ApiResponse(500, "Internal Server Error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
@@ -483,7 +396,7 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200, "Ban for User are Changed"));
     }
 
-    @CrossOrigin
+    @CrossOrigin(origins = "https://webtest-40bba.web.app/")
     @GetMapping("/Get-User-All-Or-ByRole")
     public ResponseEntity<Page<?>> getUsersByRole(
             @RequestParam(required = false) ERole roleName,
