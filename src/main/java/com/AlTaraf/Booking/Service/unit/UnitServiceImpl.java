@@ -3,6 +3,9 @@ package com.AlTaraf.Booking.Service.unit;
 import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
+import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
+import com.AlTaraf.Booking.Entity.Calender.Hotel.ReserveDateHotel;
+import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import com.AlTaraf.Booking.Entity.Evaluation.Evaluation;
 import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.Image.ImageDataForAds;
@@ -16,11 +19,18 @@ import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Evaluation.EvaluationRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
+import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
+import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHotelRepository;
+import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
+import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
+import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
+import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
+import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Specifications.UnitSpecifications;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +39,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -69,6 +80,33 @@ public class UnitServiceImpl implements UnitService {
 
     @Autowired
     ReservationRepository reservationsRepository;
+
+    @Autowired
+    private ReservationRepository reservationRepository;
+
+    @Autowired
+    private ReserveDateRepository reserveDateRepository;
+
+    @Autowired
+    private ReserveDateHallsRepository reserveDateHallsRepository;
+
+    @Autowired
+    ReserveDateHotelRepository reserveDateHotelRepository;
+
+    @Autowired
+    private RoomDetailsForAvailableAreaRepository roomDetailsForAvailableAreaRepository;
+
+    @Autowired
+    private UserFavoriteUnitRepository userFavoriteUnitRepository;
+
+    @Autowired
+    private RoomDetailsRepository roomDetailsRepository;
+
+    @Autowired
+    private AdsService adsService;
+
+    @Autowired
+    UnitService unitService;
 
     public Unit saveUnit(Unit unit) {
         try {
@@ -124,10 +162,6 @@ public class UnitServiceImpl implements UnitService {
 
         return unitsPage.map(unitFavoriteMapper::toUnitFavoriteDto);
     }
-//    public Page<Unit> getFavoriteUnits(int page, int size) {
-//        PageRequest pageRequest = PageRequest.of(page, size);
-//        return unitRepository.findByFavoriteTrue(pageRequest);
-//    }
 
     public Unit getUnitById(Long id) {
         return unitRepository.findById(id).orElse(null);
@@ -183,6 +217,7 @@ public class UnitServiceImpl implements UnitService {
 
         // Fetch the Ads by ID
         Ads ads = adsRepository.findById(adsId).orElse(null);
+//        Unit unit = unitRepository.findById(unitId).orElse(null);
 
         if (ads != null) {
             // Retrieve associated ImageData entities
@@ -191,7 +226,8 @@ public class UnitServiceImpl implements UnitService {
             // Update the unit for each ImageData entity
             for (ImageDataForAds imageData : imageDataList) {
                 System.out.println("Name Image: "+ imageData.getName());
-                imageData.setAds(ads);
+                imageData.setAds(ads);//                imageData.setUnit(unit);
+
                 imageDataForAdsRepository.save(imageData);
             }
         }
@@ -201,26 +237,6 @@ public class UnitServiceImpl implements UnitService {
         }
     }
 
-//    @Override
-//    public void updateImageDataAds(Long adsId) {
-//        // Fetch the Unit by ID
-//        Ads ads = adsRepository.findById(adsId).orElse(null);
-//
-//        if (ads != null) {
-//            // Retrieve associated ImageData entities without a unit
-//            List<ImageData> imageDataList = imageDataRepository.findByUnitIsNull();
-//
-//            // Update the unit for each ImageData entity
-//            for (ImageData imageData : imageDataList) {
-//                imageData.setUnit(unit);
-//                imageDataRepository.save(imageData);
-//            }
-//        } else {
-//            // Handle the case when the Unit with the specified ID is not found
-//            throw new EntityNotFoundException("Unit not found with ID: " + unitId);
-//        }
-//
-//    }
 
     @Override
     public Page<UnitDtoFavorite> getAllUnitDtoFavorites(Pageable pageable) {
@@ -237,11 +253,6 @@ public class UnitServiceImpl implements UnitService {
     public List<Unit> getAllUnitForMap() {
         return unitRepository.findAll();
     }
-
-//    @Override
-//    public Page<Unit> getAllUnits(Pageable pageable) {
-//        return unitRepository.findAll(pageable);
-//    }
 
     @Override
     public Page<Unit> filterUnitsByName(String nameUnit, Pageable pageable) {
@@ -304,10 +315,6 @@ public class UnitServiceImpl implements UnitService {
             spec = spec.and(UnitSpecifications.byAvailablePeriod(availablePeriodId));
         }
 
-//        if (newPriceHall != 0) {
-//            spec = spec.and(UnitSpecifications.byNewPriceHall(newPriceHall));
-//        }
-
         return unitRepository.findAll(spec);
     }
 
@@ -335,9 +342,6 @@ public class UnitServiceImpl implements UnitService {
             spec = spec.and(UnitSpecifications.byAvailablePeriod(availablePeriodsId));
         }
 
-//        if (newPriceHall != 0) {
-//            spec = spec.and(UnitSpecifications.byNewPriceHall(newPriceHall));
-//        }
 
         if (unitTypeId != null) {
             spec = spec.and(UnitSpecifications.byUnitTypeId(unitTypeId));
@@ -348,12 +352,10 @@ public class UnitServiceImpl implements UnitService {
         }
 
         if (hotelClassificationIds != null) {
-//            spec = spec.and(UnitSpecifications.byHotelClassificationId(hotelClassificationId));
             spec = spec.and(UnitSpecifications.byHotelClassificationIds(hotelClassificationIds));
         }
 
         if (evaluationIds != null) {
-//            spec = spec.and(UnitSpecifications.byHotelClassificationId(hotelClassificationId));
             spec = spec.and(UnitSpecifications.byEvaluationIds(evaluationIds));
         }
 
@@ -484,13 +486,6 @@ public class UnitServiceImpl implements UnitService {
 
 
             unit.setEvaluation(evaluation);
-            // Update the existing Evaluation entity associated with the Unit
-//            Evaluation evaluation = unit.getEvaluation();
-//            if (evaluation == null) {
-//                evaluation = new Evaluation();
-//                unit.setEvaluation(evaluation);
-//            }
-//            evaluation.setId(evaluationId);
 
             unit.incrementTotalEvaluation();
 
@@ -501,6 +496,45 @@ public class UnitServiceImpl implements UnitService {
 
     public void updateEvaluationsForUnits(Long unitId) {
             calculateAndSetAverageEvaluation(unitId);
+    }
 
+    @Transactional
+    public void deleteUnitWithDependencies(Long id) {
+        List<ReserveDate> reserveDateList = reserveDateRepository.findByUnitId(id);
+        for (ReserveDate reserveDate: reserveDateList) {
+            reserveDateRepository.deleteDateInfoByReserveDateId(reserveDate.getId());
+        }
+
+        List<ReserveDateHotel> reserveDateHotelList = reserveDateHotelRepository.findByUnitId(id);
+        for (ReserveDateHotel reserveDateHotel: reserveDateHotelList) {
+            reserveDateHotelRepository.deleteDateInfoHotelByReserveDateHotelId(reserveDateHotel.getId());
+        }
+
+        List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitId(id);
+        for (ReserveDateHalls reserveDateHalls: reserveDateHallsList) {
+            reserveDateHallsRepository.deleteDateInfoHallsByReserveDateHallsId(reserveDateHalls.getId());
+        }
+
+        reserveDateHotelRepository.deleteByUnitId(id);
+        reserveDateHallsRepository.deleteByUnitId(id);
+        reserveDateRepository.deleteByUnitId(id);
+
+        userFavoriteUnitRepository.deleteByUnit(id);
+
+
+        roomDetailsForAvailableAreaRepository.deleteByUnitId(id);
+        roomDetailsRepository.deleteByUnitId(id);
+
+
+        imageDataRepository.deleteByUnitId(id);
+        reservationRepository.deleteByUnitId(id);
+
+        Ads ads = adsRepository.findByUnitId(id);
+
+        if (ads != null) {
+            adsService.deleteAds(ads.getId());
+        }
+
+        unitService.deleteUnit(id);
     }
 }

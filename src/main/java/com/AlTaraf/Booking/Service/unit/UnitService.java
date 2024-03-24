@@ -5,6 +5,7 @@ import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -30,10 +31,6 @@ public interface UnitService {
 
     void updateImageDataAds( Long adsId, Long userId);
 
-//    void updateImageDataAds(Long adsId);
-
-//    Page<Unit> getAllUnits(Pageable pageable);
-
     Page<UnitDtoFavorite> getAllUnitDtoFavorites(Pageable pageable);
     List<Unit> getAllUnitForMap();
     Page<Unit> getAllUnit(Pageable pageable);
@@ -44,8 +41,6 @@ public interface UnitService {
 
     Page<Unit> getUnitsByUnitTypeId(Long unitTypeId, Pageable pageable);
     List<Unit> getUnitTypeIdForMap(Long unitTypeId);
-
-//    void updateRoomDetailsForUnit(Long unitId);
 
     Page<Unit> getUnitsByUserId(Long userId, Pageable pageable);
 
@@ -80,4 +75,8 @@ public interface UnitService {
     void calculateAndSetAverageEvaluation(Long unitId);
 
     void updateEvaluationsForUnits(Long unitId);
+
+    @Transactional
+    void deleteUnitWithDependencies(Long id);
+
 }
