@@ -6,10 +6,8 @@ import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.User.UserDashboard;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
-import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
-import java.util.Set;
 
 public interface UserService {
 
@@ -32,14 +30,10 @@ public interface UserService {
     void resetPasswordByPhone(String phone, PasswordResetDto passwordResetDto);
 
     void updateUser(User user);
-//    User updateUser(Long id, UserRegisterDto userRegisterDto);
-//    UserRegisterDto getUserById(Long id);
-//    List<UserRegisterDto> getAllUsers();
-//    void deleteUser(Long id);
 
     Optional<User> findByPhone(String phone);
 
-    void processOAuthPostLogin(String email, String name, String phone);
+    User findByEmail(String email);
 
     void deleteUserAndAssociatedEntities(Long userId);
 }

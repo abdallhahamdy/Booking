@@ -3,9 +3,6 @@ package com.AlTaraf.Booking.Service.user;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDashboardDto;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
-import com.AlTaraf.Booking.Entity.Ads.Ads;
-import com.AlTaraf.Booking.Entity.Favorite.UserFavoriteUnit;
-import com.AlTaraf.Booking.Entity.Image.ImageDataForAds;
 import com.AlTaraf.Booking.Entity.Role.RoleDashboard;
 import com.AlTaraf.Booking.Entity.User.UserDashboard;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
@@ -14,7 +11,6 @@ import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Entity.enums.ERoleDashboard;
 import com.AlTaraf.Booking.Entity.unit.Unit;
-import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
 import com.AlTaraf.Booking.Mapper.city.CityMapper;
 import com.AlTaraf.Booking.Mapper.UserMapper;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
@@ -37,13 +33,13 @@ import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Security.jwt.JwtUtils;
 import com.AlTaraf.Booking.Service.cityAndRegion.CityService;
 import com.AlTaraf.Booking.Service.role.RoleService;
+import com.AlTaraf.Booking.Service.unit.UnitService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.util.*;
 
 @Service
@@ -117,6 +113,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RoomDetailsRepository roomDetailsRepository;
+
+    @Autowired
+    private UnitService unitService;
 
     public String generateOtpForUser() {
         // For simplicity, let's assume a random 4-digit OTP
@@ -338,84 +337,15 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-//    @Override
-//    public User updateUser(Long id, UserRegisterDto userRegisterDto) {
-//        User existingUser = userRepository.findById(id)
-//                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
-//
-//        // Update user properties based on the UserRegisterDto
-//        existingUser.setUsername(userRegisterDto.getName());
-//        existingUser.setEmail(userRegisterDto.getEmail());
-//        existingUser.setPassword(userRegisterDto.getPassword());
-//        existingUser.setPhone(userRegisterDto.getPhoneNumber());
-//
-//        // Check if the city exists
-//        CityDto cityDto = userRegisterDto.getCity();
-//        City city = cityMapper.cityDTOToCity(cityDto);  // Use CityMapper to convert CityDto to City
-//        if (city == null) {
-//            throw new RuntimeException("City " + cityDto.getCityName() + " not found");
-//        }
-//        existingUser.setCity(city);
-//
-//        // Check if the roles exist
-//        Set<RoleDto> roleDtos = userRegisterDto.getRoles();
-//        Set<Role> roles = new HashSet<>();
-//        for (RoleDto roleDto : roleDtos) {
-//            Role role = roleService.getRoleByName(roleDto.getRoleNameDto());
-//            if (role == null) {
-//                throw new RuntimeException("Role " + roleDto.getRoleNameDto() + " not found");
-//            }
-//            roles.add(role);
-//        }
-//        existingUser.setRoles(roles);
-//
-//        // Save the updated user entity
-//        return userRepository.save(existingUser);
-//    }
-
-//    @Override
-//    public UserRegisterDto getUserById(Long id) {
-//        User user = userRepository.findById(id)
-//                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
-//
-//        return userMapper.userToUserRegisterDto(user);
-//    }
-
-//    @Override
-//    public List<UserRegisterDto> getAllUsers() {
-//        List<User> users = userRepository.findAll();
-//        return userMapper.userListToUserRegisterDtoList(users);
-//    }
-
-//    @Override
-//    public void deleteUser(Long id) {
-//        userRepository.deleteById(id);
-//    }
-
-    // Example method to generate OTP (replace with your implementation)
 
     public Optional<User> findByPhone(String phone) {
         return userRepository.findByPhone(phone);
     }
 
-    @Transactional
-    public void processOAuthPostLogin(String email, String name, String phone) {
-        User user = userRepository.findByEmail(email);
-
-        if (user == null) {
-            // User doesn't exist, create a new one
-            User newUser = new User();
-            newUser.setEmail(email);
-            // Set other information based on OAuth2 details if necessary
-            newUser.setUsername(name); // Example, ideally you fetch from OAuth details
-            newUser.setPhone(phone); // Example flag, adapt as necessary
-
-            userRepository.save(newUser);
-        } else {
-
-            userRepository.save(user);
-        }
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
+
 
     @Transactional
     public void deleteUserAndAssociatedEntities(Long userId) {
@@ -428,28 +358,17 @@ public class UserServiceImpl implements UserService {
             imageDataProfileRepository.deleteByUser(user);
             userFavoriteUnitRepository.deleteByUser(user);
 
-//            System.out.println("Delete ");
-//
+            // Delete the units after deleting associated entities
+            List<Unit> unitList = unitRepository.findByUser(user);
+            for (Unit unit : unitList) {
+                unitService.deleteUnitWithDependencies(unit.getId());
+            }
 
-//
-//            // Delete the units after deleting associated entities
-//            List<Unit> unitList = unitRepository.findByUser(user);
-//            for (Unit unit : unitList) {
-//                reserveDateRepository.deleteByUnitId(unit.getId());
-//                reserveDateHallsRepository.deleteRelatedDateInfoHallsByUnitId(unit.getId());
-//                reserveDateHallsRepository.deleteByUnitId(unit.getId());
-//                roomDetailsForAvailableAreaRepository.deleteByUnitId(unit.getId());
-//                roomDetailsRepository.deleteByUnitId(unit.getId());
-//                imageDataRepository.deleteByUnitId(unit.getId());
-//                adsRepository.deleteByUnitId(unit.getId());
-//                reservationRepository.deleteByUnitId(unit.getId());
-//            }
-//
-//            // Delete the units after deleting associated entities
-//            unitRepository.deleteByUser(user);
-//
-//            // Finally, delete the user
-//            userRepository.delete(user);
+            // Delete the units after deleting associated entities
+            unitRepository.deleteByUser(user);
+
+            // Finally, delete the user
+            userRepository.delete(user);
         }
     }
 }
