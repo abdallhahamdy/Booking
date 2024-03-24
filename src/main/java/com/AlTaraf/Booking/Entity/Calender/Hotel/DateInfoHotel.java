@@ -1,5 +1,6 @@
-package com.AlTaraf.Booking.Entity.Calender.Halls;
+package com.AlTaraf.Booking.Entity.Calender.Hotel;
 
+import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,27 +10,22 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 @Entity
-@Table(name = "DATE_INFO_HALLS")
+@Table(name = "DATE_INFO_HOTEL")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DateInfoHalls {
+public class DateInfoHotel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "DATE_INFO_HALLS_ID")
+    @Column(name = "DATE_INFO_HOTEL_ID")
     private Long id;
 
     @Column(name = "DATE")
     private Date date;
 
-    @Column(name = "IS_EVENING")
-    private boolean isEvening;
-
-    @Column(name = "IS_MORNING")
-    private boolean isMorning;
 
     @ManyToOne
-    @JoinColumn(name = "RESERVE_DATE_HALLS_ID")
+    @JoinColumn(name = "RESERVE_HOTEL_DATE_ID")
     @JsonBackReference
-    private ReserveDateHalls reserveDateHalls;
+    private ReserveDateHotel reserveDateHotel;
 }

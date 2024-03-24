@@ -1,4 +1,4 @@
-package com.AlTaraf.Booking.Dto.calender;
+package com.AlTaraf.Booking.Dto.calender.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,10 +9,8 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DateInfoHallsDto {
+public class DateInfoDto {
     private Long id;
     private Date date;
-    private boolean isEvening;
-    private boolean isMorning;
 
 }
