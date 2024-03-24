@@ -16,7 +16,8 @@ import java.util.List;
 @Repository
 public interface ImageDataForAdsRepository extends JpaRepository<ImageDataForAds, Long> {
 
-    List<ImageDataForAds> findByAdsId(Long adsId);
+    ImageDataForAds findByAdsId(Long adsId);
+
     List<ImageDataForAds> findByUserId(Long userId);
 
     void deleteByUserId(Long userId);
@@ -37,7 +38,13 @@ public interface ImageDataForAdsRepository extends JpaRepository<ImageDataForAds
     @Query("DELETE FROM ImageDataForAds i WHERE i.ads = :ads")
     void deleteImageDataForAdsByAds(@Param("ads") Ads ads);
 
+    ImageDataForAds findByUnitId(Long unitId);
+
+
     @Modifying
-    @Query("DELETE FROM ImageData i WHERE i.unit.id = :unitId")
+    @Query("DELETE FROM ImageDataForAds i WHERE i.unit.id = :unitId")
     void deleteByUnitId(@Param("unitId") Long unitId);
+
+    ImageDataForAds findByUserIdAndUnitIdAndAdsId(Long userId, Long unitId, Long adsId);
+
 }

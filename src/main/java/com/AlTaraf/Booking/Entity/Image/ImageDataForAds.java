@@ -41,9 +41,13 @@ public class ImageDataForAds {
     @JsonBackReference
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ADS_ID")
     @JsonBackReference
     private Ads ads;
+
+    @ManyToOne
+    @JoinColumn(name = "UNIT_ID")
+    private Unit unit;
 
 }
