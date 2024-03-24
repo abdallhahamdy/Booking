@@ -509,14 +509,14 @@ public class UnitServiceImpl implements UnitService {
         for (ReserveDateHotel reserveDateHotel: reserveDateHotelList) {
             reserveDateHotelRepository.deleteDateInfoHotelByReserveDateHotelId(reserveDateHotel.getId());
         }
-
-        List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitId(id);
-        for (ReserveDateHalls reserveDateHalls: reserveDateHallsList) {
-            reserveDateHallsRepository.deleteDateInfoHallsByReserveDateHallsId(reserveDateHalls.getId());
-        }
+//
+//        List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitId(id);
+//        for (ReserveDateHalls reserveDateHalls: reserveDateHallsList) {
+//            reserveDateHallsRepository.deleteDateInfoHallsByReserveDateHallsId(reserveDateHalls.getId());
+//        }
 
         reserveDateHotelRepository.deleteByUnitId(id);
-        reserveDateHallsRepository.deleteByUnitId(id);
+//        reserveDateHallsRepository.deleteByUnitId(id);
         reserveDateRepository.deleteByUnitId(id);
 
         userFavoriteUnitRepository.deleteByUnit(id);
