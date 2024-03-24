@@ -454,10 +454,15 @@ public class AdminController {
     @CrossOrigin
     @DeleteMapping("/Delete-Users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        userService.deleteUserAndAssociatedEntities(id);
-        return ResponseEntity.ok().build();
+        try {
+            userService.deleteUserAndAssociatedEntities(id);
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200,"Deleted User Successfully"));
+        } catch (Exception e) {
+            // Log the exception or handle it in some way
+            System.err.println("Error deleting user: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "Error When Delete User"));
+        }
     }
-
     @CrossOrigin
     @PutMapping("/{userId}/warnings")
     public ResponseEntity<?> setWarnings(@PathVariable Long userId, @RequestBody List<Boolean> warnings) {
