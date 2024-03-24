@@ -176,16 +176,6 @@ public class UnitController {
                 unitToSave.setOldPriceHall(0); // Set oldPriceHall to 0 if it's null
             }
 
-            // Check if newPriceHall is less than oldPriceHall
-//            if (unitToSave.getNewPriceHall() != null &&
-//                    unitToSave.getNewPriceHall() != 0 &&
-//                    unitToSave.getOldPriceHall() != null &&
-//                    unitToSave.getNewPriceHall() >= unitToSave.getOldPriceHall()) {
-//                throw new IllegalArgumentException("New price must be less than old price.");
-//            }
-
-
-
             if (unitToSave.getResortNewPrice() == null) {
                 unitToSave.setResortNewPrice(0); // Or set it to some default value
             }
@@ -193,16 +183,6 @@ public class UnitController {
             if (unitToSave.getResortOldPrice() == null) {
                 unitToSave.setResortOldPrice(0); // Set oldPriceHall to 0 if it's null
             }
-
-            // Check if newPriceHall is less than oldPriceHall
-//            if (unitToSave.getResortNewPrice() != null &&
-//                    unitToSave.getResortNewPrice() != 0 &&
-//                    unitToSave.getResortOldPrice() != null &&
-//                    unitToSave.getResortOldPrice() >= unitToSave.getResortOldPrice()) {
-//                throw new IllegalArgumentException("New price must be less than old price.");
-//            }
-
-
 
             if (unitToSave.getChaletNewPrice() == null) {
                 unitToSave.setChaletNewPrice(0); // Or set it to some default value
@@ -219,14 +199,6 @@ public class UnitController {
             if (unitToSave.getLoungeOldPrice() == null) {
                 unitToSave.setLoungeOldPrice(0); // Set oldPriceHall to 0 if it's null
             }
-
-            // Check if newPriceHall is less than oldPriceHall
-//            if (unitToSave.getChaletNewPrice() != null &&
-//                    unitToSave.getChaletNewPrice() != 0 &&
-//                    unitToSave.getChaletOldPrice() != null &&
-//                    unitToSave.getChaletOldPrice() >= unitToSave.getChaletOldPrice()) {
-//                throw new IllegalArgumentException("New price must be less than old price.");
-//            }
 
             // Calculate the price based on the unitType
             unitToSave.calculatePrice();
@@ -260,9 +232,7 @@ public class UnitController {
             }
 
             // Update the unit fields
-//            if (unitRequestDto.getId() != null) {
-//                unitToUpdate.setId(unitRequestDto.getId());
-//            }
+
             if (unitRequestDto.getUnitTypeId() != null) {
                 unitToUpdate.setUnitType(new UnitType(unitRequestDto.getUnitTypeId()));
             }
@@ -306,60 +276,7 @@ public class UnitController {
                         .map(id -> new Feature(id))
                         .collect(Collectors.toSet()));
             }
-//            if (unitRequestDto.getSubFeaturesIds() != null) {
-//                unitToUpdate.setSubFeaturesSet(unitRequestDto.getSubFeaturesIds().stream()
-//                        .map(id -> new SubFeature(id))
-//                        .collect(Collectors.toSet()));
-//            }
-//            if (unitRequestDto.getFoodOptionsIds() != null) {
-//                unitToUpdate.setFoodOptionsSet(unitRequestDto.getFoodOptionsIds().stream()
-//                        .map(id -> new FoodOption(id))
-//                        .collect(Collectors.toSet()));
-//            }
-//            if (unitRequestDto.getCapacityHalls() != 0) {
-//                unitToUpdate.setCapacityHalls(unitRequestDto.getCapacityHalls());
-//            }
-//            if (unitRequestDto.getFeaturesHallsIds() != null) {
-//                unitToUpdate.setFeaturesHallsSet(unitRequestDto.getFeaturesHallsIds().stream()
-//                        .map(id -> new FeatureForHalls(id))
-//                        .collect(Collectors.toSet()));
-//            }
-//            if (unitRequestDto.getAvailablePeriodsHallsIds() != null) {
-//                unitToUpdate.setAvailablePeriodsHallsSet(unitRequestDto.getAvailablePeriodsHallsIds().stream()
-//                        .map(id -> new AvailablePeriods(id))
-//                        .collect(Collectors.toSet()));
-//            }
-//
-//            if (unitRequestDto.getOldPriceHall() != 0) {
-//                unitToUpdate.setOldPriceHall(unitRequestDto.getOldPriceHall());
-//            }
-//            if (unitRequestDto.getNewPriceHall() != 0) {
-//                unitToUpdate.setNewPriceHall(unitRequestDto.getNewPriceHall());
-//            }
-//
-//
-//
-//            if (unitRequestDto.getChaletOldPrice() != 0) {
-//                unitToUpdate.setChaletOldPrice(unitRequestDto.getChaletOldPrice());
-//            }
-//            if (unitRequestDto.getChaletNewPrice() != 0) {
-//                unitToUpdate.setChaletNewPrice(unitRequestDto.getChaletNewPrice());
-//            }
-//
-//            if (unitRequestDto.getResortOldPrice() != 0) {
-//                unitToUpdate.setResortOldPrice(unitRequestDto.getResortOldPrice());
-//            }
-//            if (unitRequestDto.getResortNewPrice() != 0) {
-//                unitToUpdate.setResortNewPrice(unitRequestDto.getResortNewPrice());
-//            }
 
-
-//            if (unitRequestDto.getLatForMapping() != null) {
-//                unitToUpdate.setLatForMapping(unitRequestDto.getLatForMapping());
-//            }
-//            if (unitRequestDto.getLongForMapping() != null) {
-//                unitToUpdate.setLongForMapping(unitRequestDto.getLongForMapping());
-//            }
             // Update other fields similarly...
 
             // Save the updated unit in the database
@@ -600,10 +517,6 @@ public class UnitController {
         }
     }
 
-//        @GetMapping("unit/{id}")
-//    public Unit getUnitById(@PathVariable Long id) {
-//        return unitService.getUnitById(id);
-//    }
 
     private Sort getDefaultSort() {
         return Sort.by("price").ascending();
@@ -785,9 +698,6 @@ public class UnitController {
     @PutMapping("Change/Status/Units/{reservationId}/{statusUnitId}")
     public ResponseEntity<?> updateStatusForReservations(@PathVariable Long reservationId, @PathVariable Long statusUnitId) {
         try {
-
-//            AvailableArea availableArea = reservationService.getAvailableAreaByReservations(reservationId);
-//            System.out.println("Available Area: " + availableArea.getId());
 
             reservationService.updateStatusForReservation(reservationId, statusUnitId);
             return ResponseEntity.ok(new ApiResponse(200,"Status changed successfully"));
