@@ -153,7 +153,6 @@ public class AdminController {
     @Autowired
     ReserveDateHotelRepository reserveDateHotelRepository;
 
-    @CrossOrigin
     @GetMapping("/Role-All")
     public ResponseEntity<?> getAllRoles() {
         List<RoleDashboard> roleDashboards = roleDashboardService.getAllRoles();
@@ -168,7 +167,6 @@ public class AdminController {
     }
 
 
-    @CrossOrigin
     @GetMapping("/Technical-Support-Get-All")
     public Page<TechnicalSupportResponse> getAllTechnicalSupport(@RequestParam(defaultValue = "0") int page,
                                                                  @RequestParam(defaultValue = "5") int size) {
@@ -179,7 +177,6 @@ public class AdminController {
         return new PageImpl<>(technicalSupportResponseList, PageRequest.of(page, size), technicalSupportPage.getTotalElements());
     }
 
-    @CrossOrigin
     @GetMapping("/Technical-Support-Unit-Get-All")
     public Page<TechnicalSupportUnitsResponse> getAllTechnicalSupportUnit(@RequestParam(defaultValue = "0") int page,
                                                                  @RequestParam(defaultValue = "5") int size) {
@@ -190,7 +187,6 @@ public class AdminController {
         return new PageImpl<>(technicalSupportResponseList, PageRequest.of(page, size), technicalSupportPage.getTotalElements());
     }
 
-    @CrossOrigin
     @PatchMapping("Technical-Support/{id}/mark-as-seen")
     public ResponseEntity<?> markAsSeen(@PathVariable Long id) {
         Optional<TechnicalSupport> optionalTechnicalSupport = technicalSupportRepository.findById(id);
@@ -204,7 +200,6 @@ public class AdminController {
         }
     }
 
-    @CrossOrigin
     @PatchMapping("Technical-Support-Unit/{id}/mark-as-seen")
     public ResponseEntity<?> markAsSeenUnit(@PathVariable Long id) {
         Optional<TechnicalSupportForUnits> optionalTechnicalSupport = technicalSupportUnitRepository.findById(id);
@@ -218,7 +213,6 @@ public class AdminController {
         }
     }
 
-    @CrossOrigin
     @GetMapping("/Technical-Support/{id}")
     public ResponseEntity<TechnicalSupportResponse> getByIdTechnicalSupport(@PathVariable Long id) {
         Optional<TechnicalSupport> optionalTechnicalSupport = technicalSupportRepository.findById(id);
@@ -227,7 +221,6 @@ public class AdminController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @CrossOrigin
     @GetMapping("/Technical-Support-Units/{id}")
     public ResponseEntity<TechnicalSupportUnitsResponse> getByIdTechnicalSupportUnits(@PathVariable Long id) {
         Optional<TechnicalSupportForUnits> optionalTechnicalSupport = technicalSupportUnitRepository.findById(id);
@@ -237,7 +230,6 @@ public class AdminController {
     }
 
     @GetMapping("/Get-Units-By-Accommodation-Type")
-    @CrossOrigin
     public ResponseEntity<?> getUnitsByAccommodationType(
             @RequestParam String accommodationTypeName,
             @RequestParam(defaultValue = "0") int page,
@@ -255,7 +247,6 @@ public class AdminController {
 
 
     @DeleteMapping("/delete/{id}/Technical-Support")
-    @CrossOrigin
     public ResponseEntity<?> deleteTechnicalSupportById(@PathVariable Long id) {
         try {
             technicalSupportService.deleteTechnicalSupportById(id);
@@ -267,7 +258,6 @@ public class AdminController {
     }
 
     @DeleteMapping("/deleteAll/Technical-Support")
-    @CrossOrigin
     public ResponseEntity<?> deleteAllTechnicalSupport() {
         try {
             technicalSupportService.deleteAllTechnicalSupport();
@@ -279,7 +269,6 @@ public class AdminController {
     }
 
     @DeleteMapping("/delete/{id}/Technical-Support-Units")
-    @CrossOrigin
     public ResponseEntity<?> deleteTechnicalSupportUnitsById(@PathVariable Long id) {
         try {
             technicalSupportUnitsService.deleteTechnicalSupportById(id);
@@ -291,7 +280,6 @@ public class AdminController {
     }
 
     @DeleteMapping("/deleteAll/Technical-Support-Units")
-    @CrossOrigin
     public ResponseEntity<?> deleteAllTechnicalSupportUnits() {
         try {
             technicalSupportUnitsService.deleteAllTechnicalSupport();
@@ -304,7 +292,6 @@ public class AdminController {
 
 
     @GetMapping("/Get-Units-For-Dashboard")
-    @CrossOrigin
     public Page<UnitDashboard> getUnitsForDashboard(
             @RequestParam(required = false) String traderName,
             @RequestParam(required = false) String traderPhone,
@@ -327,7 +314,6 @@ public class AdminController {
     }
 
     @GetMapping("By-Id-General/{id}")
-    @CrossOrigin
     public ResponseEntity<?> getUnitById(@PathVariable Long id) {
         Unit unit = unitService.getUnitById(id);
         if (unit != null) {
@@ -340,7 +326,6 @@ public class AdminController {
 
 
     @PutMapping("Change/Status/Ads/{adsId}/{statusUnitId}")
-    @CrossOrigin
     public ResponseEntity<?> updateStatusForAds(@PathVariable Long adsId, @PathVariable Long statusUnitId) {
         try {
             adsService.updateStatusForAds(adsId, statusUnitId);
@@ -351,7 +336,6 @@ public class AdminController {
     }
 
     @PutMapping("Change/Status/Units/{unitId}/{statusUnitId}")
-    @CrossOrigin
     public ResponseEntity<?> updateStatusForUnits(@PathVariable Long unitId, @PathVariable Long statusUnitId) {
         try {
             unitService.updateStatusForUser(unitId, statusUnitId);
@@ -361,7 +345,6 @@ public class AdminController {
         }
     }
 
-    @CrossOrigin
     @Transactional
     @DeleteMapping("Delete/Unit/{id}")
     public ResponseEntity<?> deleteUnit(@PathVariable Long id) {
@@ -377,7 +360,6 @@ public class AdminController {
         }
     }
 
-    @CrossOrigin
     @PutMapping("/{userId}/ban")
     public ResponseEntity<?> toggleBanStatus(@PathVariable Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
@@ -396,7 +378,6 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200, "Ban for User are Changed"));
     }
 
-    @CrossOrigin(origins = "https://webtest-40bba.web.app/")
     @GetMapping("/Get-User-All-Or-ByRole")
     public ResponseEntity<Page<?>> getUsersByRole(
             @RequestParam(required = false) ERole roleName,
@@ -428,7 +409,6 @@ public class AdminController {
         return ResponseEntity.ok(userDashboardPage);
     }
 
-    @CrossOrigin
     @PatchMapping("Edit-Package-Ads/{id}")
     public ResponseEntity<?> editPackageAds(@PathVariable Long id, @RequestBody PackageAdsEditDTO packageAdsEditDTO) {
         Optional<PackageAds> optionalPackageAds = packageAdsRepository.findById(id);
@@ -451,7 +431,6 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200, "Updated Package Ads successfully"));
     }
 
-    @CrossOrigin
     @DeleteMapping("/Delete-Users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
@@ -463,7 +442,6 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "Error When Delete User"));
         }
     }
-    @CrossOrigin
     @PutMapping("/{userId}/warnings")
     public ResponseEntity<?> setWarnings(@PathVariable Long userId, @RequestBody List<Boolean> warnings) {
         try {
