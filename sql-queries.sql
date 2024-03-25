@@ -1,6 +1,8 @@
 -- INSERT ROLES  الادوار
 insert into roles (arabic_name, role) values ("عميل", "ROLE_GUEST");
 insert into roles (arabic_name, role) values ("تاجر", "ROLE_LESSOR");
+insert into roles (arabic_name, role) values ("ادمن", "ROLE_ADMIN");
+insert into roles (arabic_name, role) values ("خدمة عملاء", "ROLE_SERVICE");
 
 insert into roles_dashboard (arabic_name, role) values ("ادمن", "ROLE_ADMIN");
 insert into roles_dashboard (arabic_name, role) values ("خدمة عملاء", "ROLE_CUSTOMER_SERVICE");
