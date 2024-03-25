@@ -7,29 +7,34 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.cors.CorsConfigurationSource;
+
 
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://dash-board-95ff3.web.app",
-                        "http://node6984-env-9709071.fin.libyanspider.cloud",
-                        "http://localhost:8080")
+                .allowedOrigins("https://webwebweb-6e98c.web.app",
+                        "https://env-5463350.fin.libyanspider.cloud"
+                        )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("Origin", "Content-Type", "Accept", "Authorization")
+                .allowedHeaders("*")
                 .allowCredentials(true);
     }
 
 //    @Bean
-//    public CorsFilter corsFilter() {
+//    CorsConfigurationSource corsConfigurationSource() {
 //        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowCredentials(true);
-//        config.addAllowedOrigin("https://dash-board-95ff3.web.app");
-//        config.addAllowedHeader("*");
-//        config.addAllowedMethod("*");
-//        source.registerCorsConfiguration("/**", config);
-//        return new CorsFilter(source);
+//        CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+//        corsConfiguration.setAllowedOrigins(allowedOrigins);
+//        corsConfiguration.setAllowCredentials(true);
+//        corsConfiguration.addAllowedMethod(HttpMethod.PUT);
+//        corsConfiguration.addAllowedMethod(HttpMethod.DELETE);
+//        corsConfiguration.addAllowedMethod(HttpMethod.OPTIONS);
+//        corsConfiguration.addAllowedMethod(HttpMethod.PATCH);
+//        corsConfiguration.addAllowedMethod(HttpMethod.POST);
+//        source.registerCorsConfiguration("/**", corsConfiguration);
+//        return source;
 //    }
 }
