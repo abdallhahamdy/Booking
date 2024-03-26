@@ -1,7 +1,6 @@
 package com.AlTaraf.Booking.Controller.Admin;
 
 
-import com.AlTaraf.Booking.Dto.Roles.RoleDashboardDto;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupportForUnits;
 import com.AlTaraf.Booking.Mapper.Ads.AdsStatusMapper;
@@ -11,12 +10,10 @@ import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
 import com.AlTaraf.Booking.Dto.User.UserDashboard;
 import com.AlTaraf.Booking.Dto.packageAds.PackageAdsEditDTO;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
-import com.AlTaraf.Booking.Entity.Role.RoleDashboard;
 import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupport;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Entity.unit.Unit;
-import com.AlTaraf.Booking.Mapper.RoleDashboardMapper;
 import com.AlTaraf.Booking.Mapper.TechnicalSupport.TechnicalSupportMapper;
 import com.AlTaraf.Booking.Mapper.Unit.*;
 import com.AlTaraf.Booking.Mapper.Unit.Dashboard.UnitDashboardMapper;
@@ -43,7 +40,6 @@ import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.TechnicalSupport.TechnicalSupportService;
 import com.AlTaraf.Booking.Service.TechnicalSupport.TechnicalSupportUnitsService;
-import com.AlTaraf.Booking.Service.role.RoleDashboardService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.user.UserService;
 import jakarta.transaction.Transactional;
@@ -92,9 +88,6 @@ public class AdminController {
 
     @Autowired
     private ReservationService reservationService;
-
-    @Autowired
-    private RoleDashboardService roleDashboardService;
 
     @Autowired
     private ReservationRepository reservationRepository;
@@ -152,19 +145,6 @@ public class AdminController {
 
     @Autowired
     ReserveDateHotelRepository reserveDateHotelRepository;
-
-    @GetMapping("/Role-All")
-    public ResponseEntity<?> getAllRoles() {
-        List<RoleDashboard> roleDashboards = roleDashboardService.getAllRoles();
-        if (!roleDashboards.isEmpty()) {
-            List<RoleDashboardDto> roleDashboardDtosDtos = RoleDashboardMapper.INSTANCE.rolesToRoleDtos(roleDashboards);
-            return ResponseEntity.ok(roleDashboardDtosDtos);
-        } else {
-            ApiResponse response = new ApiResponse(204, "No Content for Roles!");
-
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
-        }
-    }
 
 
     @GetMapping("/Technical-Support-Get-All")
