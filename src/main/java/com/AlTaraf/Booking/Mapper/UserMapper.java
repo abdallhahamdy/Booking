@@ -64,6 +64,8 @@ public interface UserMapper {
     @Mapping(source = "city.id", target = "cityId")
     @Mapping(source = "createdDate", target = "createdDate")
     @Mapping(source = "lastModifiedDate", target = "lastModifiedDate")
+    @Mapping(source = "roles", target = "roles")
+    @Mapping(source = "deviceToken", target = "deviceToken")
     UserDto userToUserDto(User user);
 
     @Named("roleToRoleDtoList")

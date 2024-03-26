@@ -169,6 +169,11 @@ public class UserController {
 
             // Get the user from the database
             Optional<User> optionalUser = userService.findByPhone(loginRequest.getPhone());
+            User userForDeviceToken = userRepository.findByPhoneForUser(loginRequest.getPhone());
+            userForDeviceToken.setDeviceToken(loginRequest.getDeviceToken());
+
+            userRepository.save(userForDeviceToken);
+
             if (!optionalUser.isPresent()) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(new ApiResponse(500, "Error in login. User not found"));
