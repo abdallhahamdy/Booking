@@ -1,11 +1,9 @@
 -- INSERT ROLES  الادوار
-insert into roles (arabic_name, role) values ("عميل", "ROLE_GUEST");
-insert into roles (arabic_name, role) values ("تاجر", "ROLE_LESSOR");
-insert into roles (arabic_name, role) values ("ادمن", "ROLE_ADMIN");
-insert into roles (arabic_name, role) values ("خدمة عملاء", "ROLE_SERVICE");
+insert into roles (arabic_name, role, english_name) values ("عميل", "ROLE_GUEST", "Guest");
+insert into roles (arabic_name, role, english_name) values ("تاجر", "ROLE_LESSOR", "Lessor");
+insert into roles (arabic_name, role, english_name) values ("ادمن", "ROLE_ADMIN", "Admin");
+insert into roles (arabic_name, role, english_name) values ("خدمة عملاء", "ROLE_SERVICE", "Customer Service");
 
-insert into roles_dashboard (arabic_name, role) values ("ادمن", "ROLE_ADMIN");
-insert into roles_dashboard (arabic_name, role) values ("خدمة عملاء", "ROLE_CUSTOMER_SERVICE");
 
 -- insert cities    المدن
 insert into city (arabic_name, city) values ("طرابلس","Tripoli");
@@ -21,37 +19,39 @@ insert into region (arabic_name, region, city_id) values ("الرويسات","ُ
 insert into region (arabic_name, region, city_id) values ("الرملة","Ramla", 3);
 
 -- insert unit_type نوع الوحدة
-insert into unit_type (type_arabic_name, type_name) values ("اقامات","RESIDENCIES");
-insert into unit_type (type_arabic_name, type_name) values ("قاعات مناسبات","EVENT_HALLS");
+
+insert into unit_type (type_arabic_name, type_name) values ("اقامات","Residencies");
+insert into unit_type (type_arabic_name, type_name) values ("قاعات مناسبات","Event Halls");
 
 -- insert accommodation_type   نوع الاقامة
-insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("فندق","HOTEL");
-insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("شقة فندقية","HOTEL_APARTMENT");
-insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("شقة خارجية","EXTERNAL_APARTMENT");
-insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("شالية","CHALET");
-insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("منتجع","RESORT");
-insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("استراحة","LOUNGE");
 
--- insert hotel_classification   تصنيف الفندق
-insert into hotel_classification  (hotel_classification_arabic_name, hotel_classification_name) values ("نجمة واحدة","ONE_STAR");
-insert into hotel_classification  (hotel_classification_arabic_name, hotel_classification_name) values ("نجمتان","TWO_STARS");
-insert into hotel_classification  (hotel_classification_arabic_name, hotel_classification_name) values ("3 نجوم","THREE_STARS");
-insert into hotel_classification  (hotel_classification_arabic_name, hotel_classification_name) values ("4 نجوم","FOUR_STARS");
-insert into hotel_classification  (hotel_classification_arabic_name, hotel_classification_name) values ("5 نجوم","FIVE_STARS");
-insert into hotel_classification  (hotel_classification_arabic_name, hotel_classification_name) values ("غير مصنف","UNCLASSIFIED");
+insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("فندق","Hotel");
+insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("شقة فندقية","Hotel Apartment");
+insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("شقة خارجية","External Apartment");
+insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("شالية","Chalet");
+insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("منتجع","Resort");
+insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("استراحة","Lounge");
 
+
+insert into hotel_classification  (hotel_classification_arabic_name, hotel_classification_name) values ("نجمة واحدة","One Star");
+insert into hotel_classification  (hotel_classification_arabic_name, hotel_classification_name) values ("نجمتان","Two Stars");
+insert into hotel_classification  (hotel_classification_arabic_name, hotel_classification_name) values ("3 نجوم","Three Stars");
+insert into hotel_classification  (hotel_classification_arabic_name, hotel_classification_name) values ("4 نجوم","Four Stars");
+insert into hotel_classification  (hotel_classification_arabic_name, hotel_classification_name) values ("5 نجوم","Five Stars");
+insert into hotel_classification  (hotel_classification_arabic_name, hotel_classification_name) values ("غير مصنف","Unclassified");
 
 -- insert room_available الغرف المتاحة 
 
-insert into room_available (room_available_name_arabic, room_available_name) values ("غرفة فردية","SINGLE_ROOM");
-insert into room_available (room_available_name_arabic, room_available_name) values ("غرفة زوجية بسرير واحد","DOUBLE_ROOM_ONE_BED");
-insert into room_available (room_available_name_arabic, room_available_name) values ("غرفة زوجية بسريرين","DOUBLE_ROOM_TWO_BED");
-insert into room_available (room_available_name_arabic, room_available_name) values ("جناح","SUITE");
+insert into room_available (room_available_name_arabic, room_available_name) values ("غرفة فردية","Single Room");
+insert into room_available (room_available_name_arabic, room_available_name) values ("غرفة زوجية بسرير واحد","Double Room Has One Bed");
+insert into room_available (room_available_name_arabic, room_available_name) values ("غرفة زوجية بسريرين","Double Room Has Two Bed");
+insert into room_available (room_available_name_arabic, room_available_name) values ("جناح","Suite");
 
 -- insert feature المميزات 
-insert into feature (feature_arabic_name, feature_name) values ("حمام سباحة","SWIMMING_POOL");
-insert into feature (feature_arabic_name, feature_name) values ("اطلالة علي البحر","SEA_VIEW");
-insert into feature (feature_arabic_name, feature_name) values ("موقف سيارات","PARKING");
+
+insert into feature (feature_arabic_name, feature_name) values ("حمام سباحة","Swimming Pool");
+insert into feature (feature_arabic_name, feature_name) values ("اطلالة علي البحر","Sea View");
+insert into feature (feature_arabic_name, feature_name) values ("موقف سيارات","Parking");
 
 -- insert sub_feature مميزات فرعية 
 insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("واي فاي","Wi-Fi");
@@ -73,10 +73,11 @@ insert into food_option (food_option_arabic_name, food_option_name) values ("ا�
 insert into food_option (food_option_arabic_name, food_option_name) values ("اعداد الوجبات ذاتيا","self-preparation of meals");
 
 -- insert status_unit   	حالة الوحدة
-insert into status_unit (status_arabic_name, status_name) values ("انتظار","PENDING");
-insert into status_unit (status_arabic_name, status_name) values ("المقبولة","ACCEPTED");
-insert into status_unit (status_arabic_name, status_name) values ("المرفوضة","REJECTED");
-insert into status_unit (status_arabic_name, status_name) values ("الملغاة","CANCELED");
+
+insert into status_unit (status_arabic_name, status_name) values ("انتظار","Pending");
+insert into status_unit (status_arabic_name, status_name) values ("المقبولة","Accepted");
+insert into status_unit (status_arabic_name, status_name) values ("المرفوضة","Rejected");
+insert into status_unit (status_arabic_name, status_name) values ("الملغاة","Canceled");
 
 -- insert feature halls    مميزات لقاعات المناسبات
 insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("دي جي","DJ");
