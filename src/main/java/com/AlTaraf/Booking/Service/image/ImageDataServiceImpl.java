@@ -122,20 +122,20 @@ public class ImageDataServiceImpl implements ImageDataService {
                     .endpoint("https://play.min.io")
                     .credentials("Q3AM3UQ867SPQQA43P2F", "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG")
                     .build();
-            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket("0123-2123-1232-3232-232").build());
+            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket("ehgzly").build());
             if (!found) {
-                minioClient.makeBucket(MakeBucketArgs.builder().bucket("0123-2123-1232-3232-232").build());
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket("ehgzly").build());
             } else {
-                System.out.println("Bucket '0123-2123-1232-3232-232' already exists.");
+                System.out.println("Bucket 'ehgzly' already exists.");
             }
             // Upload the data to the MinIO server
             minioClient.putObject(PutObjectArgs.builder()
-                    .bucket("0123-2123-1232-3232-232")
+                    .bucket("ehgzly")
                     .object(filename)
                     .contentType(contentType) // Set the Content-Type
                     .stream(new ByteArrayInputStream(data), data.length, -1)
                     .build());
-            return "https://play.min.io/0123-2123-1232-3232-232/" + filename; // Return the URL of the uploaded image
+            return "https://play.min.io/ehgzly/" + filename; // Return the URL of the uploaded image
         } catch (MinioException e) {
             throw new RuntimeException("Error uploading image to MinIO server", e);
         }
