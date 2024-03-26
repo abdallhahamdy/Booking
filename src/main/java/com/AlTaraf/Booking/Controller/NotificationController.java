@@ -8,7 +8,7 @@ import com.AlTaraf.Booking.Mapper.Notification.NotificationForAllMapper;
 import com.AlTaraf.Booking.Mapper.Notification.NotificationMapper;
 import com.AlTaraf.Booking.Repository.NotificationRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
-import com.AlTaraf.Booking.Service.NotificationService;
+import com.AlTaraf.Booking.Service.notification.NotificationService;
 import com.AlTaraf.Booking.Entity.Notifications.Notifications;
 import org.springframework.beans.factory.annotation.Autowired;
 
