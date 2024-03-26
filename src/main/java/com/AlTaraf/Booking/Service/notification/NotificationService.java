@@ -1,4 +1,4 @@
-package com.AlTaraf.Booking.Service;
+package com.AlTaraf.Booking.Service.notification;
 
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Repository.NotificationRepository;
