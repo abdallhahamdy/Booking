@@ -25,6 +25,10 @@ public interface CityService {
 
     CityDto createCity(CityDto cityDto);
 
+    void save(City city);
+
+    Optional<City> findById(Long id);
+
 //    CityDto saveCity(CityDto cityDto);
 //    CityDto updateCity(Long id, CityDto cityDto);
 //    void deleteCity(Long id);

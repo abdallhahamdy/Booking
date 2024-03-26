@@ -135,6 +135,15 @@ public class CityServiceImpl implements CityService {
         cityRepository.deleteById(cityId);
     }
 
+    @Override
+    public void save(City city) {
+        cityRepository.save(city);
+    }
+
+    @Override
+    public Optional<City> findById(Long id) {
+        return cityRepository.findById(id);
+    }
 
 //    @Override
 //    public CityDto updateCity(Long id, CityDto cityDto) {
