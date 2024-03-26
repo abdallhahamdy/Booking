@@ -17,4 +17,5 @@ public class LoginRequest {
     private String password;
     private boolean stayLoggedIn;
     private Set<String> roles;
+    private String deviceToken;
 }
