@@ -1,4 +1,4 @@
-package com.AlTaraf.Booking.model;
+package com.AlTaraf.Booking.Entity.Notifications;
 
 import com.AlTaraf.Booking.Entity.User.User;
 import jakarta.persistence.*;
