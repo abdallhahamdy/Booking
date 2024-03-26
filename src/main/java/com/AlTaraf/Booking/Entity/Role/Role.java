@@ -22,4 +22,6 @@ public class Role {
     private ERole name;
 
     private String arabicName;
+
+    private String englishName;
 }
