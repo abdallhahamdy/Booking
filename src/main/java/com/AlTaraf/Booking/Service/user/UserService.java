@@ -1,9 +1,7 @@
 package com.AlTaraf.Booking.Service.user;
 
-import com.AlTaraf.Booking.Dto.User.UserRegisterDashboardDto;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
 import com.AlTaraf.Booking.Entity.User.User;
-import com.AlTaraf.Booking.Entity.User.UserDashboard;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
 
@@ -23,8 +21,6 @@ public interface UserService {
 
     boolean isDuplicatePhoneNumber( String phone);
 
-    UserDashboard registerUserForDashboard(UserRegisterDashboardDto userRegisterDashboardDto);
-
     User getUserById(Long id);
 
     void resetPasswordByPhone(String phone, PasswordResetDto passwordResetDto);
@@ -33,7 +29,6 @@ public interface UserService {
 
     Optional<User> findByPhone(String phone);
 
-    User findByEmail(String email);
 
     void deleteUserAndAssociatedEntities(Long userId);
 }
