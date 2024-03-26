@@ -1,7 +1,6 @@
 package com.AlTaraf.Booking.Repository.user;
 
 import com.AlTaraf.Booking.Entity.User.User;
-import com.AlTaraf.Booking.Entity.User.UserDashboard;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,11 +10,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
+
+    @Query("SELECT u FROM User u WHERE u.id = :userId")
+    User findByUserId(@Param("userId") Long userId);
 
     Optional<User> findByUsername(String username);
 
@@ -40,8 +42,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "WHERE u.phone = :phone AND u.id <> :userId")
     boolean existsByPhoneForDifferentUser(@Param("phone") String phone, @Param("userId") Long userId);
 
-//    @Query("SELECT u FROM User u WHERE u.phone = :phone")
-//    User findByPhone(@Param("phone") String phone);
+    @Query("SELECT u FROM User u WHERE u.phone = :phone")
+    User findByPhoneForUser(@Param("phone") String phone);
 
     User findByEmail(String email);
 
@@ -66,6 +68,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findAllByPhone(String phone, Pageable pageable);
 
     Page<User> findAllByPhoneAndRolesName(String phone, ERole roleName, Pageable pageable);
+
+//    @Query("SELECT u FROM User u WHERE u.id NOT IN " +
+//            "(SELECT ur.user.id FROM UserRole ur WHERE ur.role.name = 'ROLE_ADMIN' OR ur.role.name = 'ROLE_SERVICE')")
+//    Page<User> findAllExceptAdminAndService(Pageable pageable);
+
+    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.name = :roleName")
+    List<User> findByRolesName(@Param("roleName") ERole roleName);
 
 }
 
