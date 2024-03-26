@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/cities")
@@ -97,14 +98,46 @@ public class CityController {
         }
     }
 
-    @PutMapping("/{Id}/regions/{regionId}")
+    @PutMapping("/{cityId}/regions/{regionId}")
     public ResponseEntity<Region> updateRegionInCity(
-            @PathVariable Long Id,
+            @PathVariable Long cityId,
             @PathVariable Long regionId,
             @RequestBody RegionDto RegionDto) {
 
-        Region updatedRegion = cityService.updateRegionInCity(Id, regionId, RegionDto);
+        Region updatedRegion = cityService.updateRegionInCity(cityId, regionId, RegionDto);
         return new ResponseEntity<>(updatedRegion, HttpStatus.OK);
+    }
+
+    @PutMapping("/cities/{cityId}/English-Name")
+    public ResponseEntity<?> updateCityEnglishName(
+            @PathVariable Long cityId,
+            @RequestParam String newName
+    ) {
+        Optional<City> optionalCity = cityService.findById(cityId);
+        if (optionalCity.isPresent()) {
+            City city = optionalCity.get();
+            city.setCityName(newName);
+            cityService.save(city);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/cities/{cityId}/Arabic-Name")
+    public ResponseEntity<?> updateCityArabicName(
+            @PathVariable Long cityId,
+            @RequestParam String newName
+    ) {
+        Optional<City> optionalCity = cityService.findById(cityId);
+        if (optionalCity.isPresent()) {
+            City city = optionalCity.get();
+            city.setArabicCityName(newName);
+            cityService.save(city);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 //    @GetMapping("/{id}")
