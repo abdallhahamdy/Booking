@@ -1,6 +1,6 @@
 package com.AlTaraf.Booking.Repository;
 
-import com.AlTaraf.Booking.model.Notifications;
+import com.AlTaraf.Booking.Entity.Notifications.Notifications;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -2,7 +2,7 @@ package com.AlTaraf.Booking.Mapper.Notification;
 
 import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequest;
 import com.AlTaraf.Booking.Dto.Notifications.Response.PushNotificationResponse;
-import com.AlTaraf.Booking.model.Notifications;
+import com.AlTaraf.Booking.Entity.Notifications.Notifications;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

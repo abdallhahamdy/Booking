@@ -3,7 +3,7 @@ package com.AlTaraf.Booking.Service;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Repository.NotificationRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
-import com.AlTaraf.Booking.model.Notifications;
+import com.AlTaraf.Booking.Entity.Notifications.Notifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +16,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse.BodyHandlers;
-import java.util.Optional;
 
 @Service
 public class NotificationService {
