@@ -182,31 +182,29 @@ public class UserServiceImpl implements UserService {
                 roles.add(userRole);
             } else {
                 strRoles.forEach(role -> {
-                    switch (role) {
-                        case "lessor":
+                    switch (ERole.valueOf(role.toUpperCase())) {
+                        case ROLE_LESSOR:
                             Role adminRole = roleRepository.findByName(ERole.ROLE_LESSOR)
                                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                             roles.add(adminRole);
                             break;
-                        case "guest":
+                        case ROLE_GUEST:
                             Role modRole = roleRepository.findByName(ERole.ROLE_GUEST)
                                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                             roles.add(modRole);
                             break;
-                        case "admin":
+                        case ROLE_ADMIN:
                             Role dashRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                             roles.add(dashRole);
                             break;
-                        case "service":
+                        case ROLE_SERVICE:
                             Role serviceRole = roleRepository.findByName(ERole.ROLE_SERVICE)
                                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                             roles.add(serviceRole);
                             break;
                         default:
-                            Role userRole = roleRepository.findByName(ERole.ROLE_GUEST)
-                                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                            roles.add(userRole);
+                            throw new RuntimeException("Error: Unrecognized role provided: " + role);
                     }
                 });
             }
