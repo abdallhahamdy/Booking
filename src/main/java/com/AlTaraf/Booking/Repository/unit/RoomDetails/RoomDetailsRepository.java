@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Repository.unit.RoomDetails;
 
+import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface RoomDetailsRepository extends JpaRepository<RoomDetails, Long> {
-    RoomDetails findByUnitIdAndRoomAvailableId(Long unitId, Long roomAvailableId);
+
+    @Query("SELECT r FROM RoomDetails r WHERE r.unit.id = :unitId AND r.roomAvailable.id = :roomAvailable")
+    RoomDetails findByUnitIdAndRoomAvailableId(@Param("unitId") Long unitId, @Param("roomAvailable") Long roomAvailableId);
 
     @Query("SELECT COUNT(r) > 0 FROM RoomDetails r WHERE r.roomNumber = 0")
     boolean existsByRoomNumberZero();

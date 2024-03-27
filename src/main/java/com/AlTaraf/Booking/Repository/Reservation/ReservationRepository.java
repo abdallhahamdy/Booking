@@ -4,6 +4,7 @@ import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
+import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,9 @@ public interface ReservationRepository extends JpaRepository<Reservations, Long>
 
     @Query("SELECT r.availableArea FROM Reservations r WHERE r.id = :reservationId")
     AvailableArea findAvailableAreaIdByReservationId(@Param("reservationId") Long reservationId);
+
+    @Query("SELECT r.roomAvailable FROM Reservations r WHERE r.id = :reservationId")
+    RoomAvailable findRoomAvailableIdByReservationId(@Param("reservationId") Long reservationId);
 
     @Query("SELECT r FROM Reservations r JOIN r.user u JOIN r.statusUnit s WHERE u.id = :userId AND s.name = :statusUnitName")
     Page<Reservations> findByUserIdAndStatusUnitName(@Param("userId") Long userId, @Param("statusUnitName") String statusUnitName, Pageable pageable);

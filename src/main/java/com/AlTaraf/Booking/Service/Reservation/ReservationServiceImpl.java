@@ -6,11 +6,14 @@ import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
+import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
+import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
+import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +41,9 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Autowired
     ReserveDateHallsRepository reserveDateHallsRepository;
+
+    @Autowired
+    RoomDetailsRepository roomDetailsRepository;
 
     @Override
     public Reservations saveReservation(Reservations reservations) {
@@ -109,6 +115,27 @@ public class ReservationServiceImpl implements ReservationService {
 
         }
 
+        if ( statusUnitId.equals(2L) && getRoomAvailableByReservations(reservationId) != null ) {
+
+            RoomAvailable roomAvailable = getRoomAvailableByReservations(reservationId);
+            RoomDetails roomDetails = roomDetailsRepository.findByUnitIdAndRoomAvailableId(unit.getId(), roomAvailable.getId());
+
+//            List<ReserveDate> reserveDate = reserveDateRepository.findByRoomDetailsForAvailableAreaIdAndUnitId(roomDetailsForAvailableArea.getId(), unit.getId());
+
+//            for (ReserveDate date : reserveDate ) {
+//                System.out.println("set True");
+//                date.setReserve(true);
+//            }
+
+
+            int numberRoom = roomDetails.getRoomNumber();
+            if (numberRoom > 0) {
+                numberRoom--;
+                roomDetails.setRoomNumber(numberRoom);
+            }
+
+        }
+
         StatusUnit statusUnit = statusRepository.findById(statusUnitId)
                 .orElseThrow(() -> new EntityNotFoundException("StatusUnit not found with id: " + statusUnitId));
 
@@ -119,6 +146,11 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public AvailableArea getAvailableAreaByReservations(Long reservationId) {
         return reservationRepository.findAvailableAreaIdByReservationId(reservationId);
+    }
+
+    @Override
+    public RoomAvailable getRoomAvailableByReservations(Long reservationId) {
+        return reservationRepository.findRoomAvailableIdByReservationId(reservationId);
     }
 
     @Override
