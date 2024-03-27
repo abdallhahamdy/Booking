@@ -13,19 +13,22 @@ public interface RoleMapper {
 
     RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
 
-    @Mapping(source = "name", target = "roleName")
+    @Mapping(source = "name", target = "name")
     @Mapping(source = "id", target = "id")
     @Mapping(source = "arabicName", target = "arabicName")
+    @Mapping(source = "englishName", target = "englishName")
     RoleDto roleToRoleDto(Role role);
 
-    @Mapping(source = "roleName", target = "name")
+    @Mapping(source = "name", target = "name")
     @Mapping(source = "id", target = "id")
     @Mapping(source = "arabicName", target = "arabicName")
+    @Mapping(source = "englishName", target = "englishName")
     Role roleDtoToRole(RoleDto roleDto);
 
-    @Mapping(source = "roleName", target = "name")
+    @Mapping(source = "name", target = "name")
     @Mapping(source = "id", target = "id")
     @Mapping(source = "arabicName", target = "arabicName")
+    @Mapping(source = "englishName", target = "englishName")
     List<RoleDto> rolesToRoleDtos(List<Role> roles); // Add this method
 
 
