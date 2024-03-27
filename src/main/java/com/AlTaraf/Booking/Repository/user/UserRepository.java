@@ -50,9 +50,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT COUNT(u.id) = 1 FROM User u " +
             "JOIN u.roles r " +
-            "WHERE (u.email = :email OR u.phone = :phone) AND r.name = :roleName")
+            "WHERE (u.phone = :phone) AND r.name = :roleName")
     boolean existsByEmailAndPhoneNumberAndRole(
-            @Param("email") String email,
+//            @Param("email") String email,
             @Param("phone") String phone,
             @Param("roleName") ERole roleName);
 

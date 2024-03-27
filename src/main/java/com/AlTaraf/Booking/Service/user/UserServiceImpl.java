@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean existsByEmailAndRolesOrPhoneNumberAndRoles(String email, String phone, ERole roleNames) {
-        return userRepository.existsByEmailAndPhoneNumberAndRole(email, phone, roleNames);
+        return userRepository.existsByEmailAndPhoneNumberAndRole( phone, roleNames);
     }
 
     @Override
