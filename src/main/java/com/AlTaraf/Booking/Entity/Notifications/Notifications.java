@@ -19,6 +19,6 @@ public class Notifications {
     private String logoUrl;
 
     public Notifications() {
-        this.logoUrl = "https://play.min.io/0123-2123-1232-3232-232/logo.jpeg";
+        this.logoUrl = "https://play.min.io/ehgzly/logo.jpeg";
     }
 }
