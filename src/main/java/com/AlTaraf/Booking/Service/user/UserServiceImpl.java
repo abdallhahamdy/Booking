@@ -11,6 +11,7 @@ import com.AlTaraf.Booking.Mapper.city.CityMapper;
 import com.AlTaraf.Booking.Mapper.UserMapper;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
+import com.AlTaraf.Booking.Repository.NotificationRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
@@ -104,6 +105,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UnitService unitService;
+
+    @Autowired
+    NotificationRepository notificationRepository;
 
     public String generateOtpForUser() {
         // For simplicity, let's assume a random 4-digit OTP
@@ -275,6 +279,7 @@ public class UserServiceImpl implements UserService {
             technicalSupportRepository.deleteByUser(user);
             imageDataProfileRepository.deleteByUser(user);
             userFavoriteUnitRepository.deleteByUser(user);
+            notificationRepository.deleteByUserId(userId);
 
             // Delete the units after deleting associated entities
             List<Unit> unitList = unitRepository.findByUser(user);
