@@ -16,7 +16,6 @@ public interface TechnicalSupportUnitsMapper {
 
     @Mapping(target = "user.id", source = "userId")
     @Mapping(target = "unit.id", source = "unitId")
-    @Mapping(target = "email", source = "email")
     @Mapping(target = "message", source = "message")
     @Mapping(target = "name", source = "name")
     TechnicalSupportForUnits toEntity(TechnicalSupportUnitsRequest technicalSupportUnitsRequest);
@@ -25,7 +24,6 @@ public interface TechnicalSupportUnitsMapper {
     @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "unitId", source = "unit.id")
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "email", source = "email")
     @Mapping(target = "message", source = "message")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "seen", source = "seen")

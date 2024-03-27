@@ -29,15 +29,10 @@ public class TechnicalSupportForUnits extends Auditable<String>  {
     private String name;
 
     @Column
-    @Email
-    private String email;
-
-    @Column
     private String message;
 
     @Column
     private Boolean seen;
-
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")

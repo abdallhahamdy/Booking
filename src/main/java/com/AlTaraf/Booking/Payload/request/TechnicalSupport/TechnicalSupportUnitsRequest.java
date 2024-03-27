@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TechnicalSupportUnitsRequest {
     private String name;
-    private String email;
     private String message;
     private Long userId;
     private Long unitId;
