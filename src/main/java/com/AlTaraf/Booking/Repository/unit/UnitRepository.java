@@ -26,7 +26,7 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
     Page<Unit> findByHotelClassification_NameIn(List<String> hotelClassificationNames, Pageable pageable);
 
-    @Query("SELECT u FROM Unit u WHERE u.statusUnit.id = 2 JOIN u.evaluation e ORDER BY e.score DESC")
+    @Query("SELECT u FROM Unit u JOIN u.evaluation e WHERE u.statusUnit.id = 2 ORDER BY e.score DESC")
     Page<Unit> findByEvaluationInOrderByEvaluationScoreDesc(Pageable pageable);
 
     @Query("SELECT u FROM Unit u WHERE u.statusUnit.id = 2 AND u.createdDate BETWEEN :startOfDay AND :endOfDay")
@@ -40,7 +40,7 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 //    Page<Unit> findByNameUnitContainingIgnoreCase(String nameUnit, Pageable pageable);
 
     List<Unit> findAllByUserIdAndStatusUnitName(Long userId, String statusUnitName);
-    @Query("SELECT u FROM Unit u WHERE u.user.id = :userId AND u.statusUnit.id = 2 AND u.statusUnit.name = :statusUnitName")
+    @Query("SELECT u FROM Unit u WHERE u.user.id = :userId AND u.statusUnit.name = :statusUnitName")
     Page<Unit> findAllByUserIdAndStatusUnitName(Long userId, String statusUnitName, Pageable pageable);
 
     Page<Unit> findByUser_IdAndFavorite(Long userId, boolean favorite, Pageable pageable);
@@ -56,6 +56,9 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
     @Query("SELECT u FROM Unit u WHERE u.unitType.id = :unitTypeId AND u.statusUnit.id = 2")
     Page<Unit> findByUnitType_Id(Long unitTypeId, Pageable pageable);
+
+    @Query("SELECT u FROM Unit u WHERE u.unitType.id = :unitTypeId")
+    Page<Unit> findByUnitType_IdForDashboard(Long unitTypeId, Pageable pageable);
 
     @Query("SELECT u FROM Unit u WHERE u.unitType.id = :unitTypeId")
     List<Unit> findByUnitType_IdForMap(@Param("unitTypeId") Long unitTypeId);

@@ -297,6 +297,11 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
+    public Page<Unit> getUnitsByUnitTypeIdForDashboard(Long unitTypeId, Pageable pageable) {
+        return unitRepository.findByUnitType_IdForDashboard(unitTypeId, pageable);
+    }
+
+    @Override
     public List<Unit> getUnitTypeIdForMap(Long unitTypeId) {
         return unitRepository.findByUnitType_IdForMap(unitTypeId);
     }

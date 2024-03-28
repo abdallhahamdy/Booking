@@ -81,4 +81,6 @@ public interface UnitService {
 
     Unit getUnitById(Long unitId, Sort sort);
 
+    Page<Unit> getUnitsByUnitTypeIdForDashboard(Long unitTypeId, Pageable pageable);
+
 }
