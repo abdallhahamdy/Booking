@@ -282,14 +282,14 @@ public class AdminController {
         Page<Unit> unitsPage = Page.empty();
 
         if (traderName == null && traderPhone == null && unitTypeId != null) {
-            unitsPage = unitService.getUnitsByUnitTypeId(unitTypeId, PageRequest.of(page, size));
+            unitsPage = unitService.getUnitsByUnitTypeIdForDashboard(unitTypeId, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id")));
         }
 
         else if (traderName != null && unitTypeId != null) {
-            unitsPage = unitService.filterUnitsByUserNameAndTypeId(traderName, unitTypeId, PageRequest.of(page, size));
+            unitsPage = unitService.filterUnitsByUserNameAndTypeId(traderName, unitTypeId, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id")));
         }
         else if (traderName == null && unitTypeId != null && traderPhone != null) {
-            unitsPage = unitService.filterUnitsByPhoneNumberAndTypeId(traderPhone, unitTypeId,PageRequest.of(page, size));
+            unitsPage = unitService.filterUnitsByPhoneNumberAndTypeId(traderPhone, unitTypeId,PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id")));
         }
         return unitsPage.map(unit -> unitDashboard.toUnitDashboard(unit));
     }
