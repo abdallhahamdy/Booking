@@ -11,6 +11,7 @@ public interface UnitDashboardMapper {
     @Mappings({
             @Mapping(source = "id", target = "unitId"),
             @Mapping(source = "accommodationType", target = "accommodationType"),
+            @Mapping(source = "unit.user.id", target = "userId"),
             @Mapping(source = "unit.user.username", target = "traderName"),
             @Mapping(source = "unit.user.phone", target = "traderPhone"),
             @Mapping(source = "unit.user.email", target = "traderEmail"),

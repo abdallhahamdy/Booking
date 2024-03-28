@@ -11,6 +11,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class UnitDashboard {
     private Long unitId;
+    private Long userId;
     private AccommodationType accommodationType;
     private String traderName;
     private String traderPhone;
