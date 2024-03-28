@@ -396,6 +396,10 @@ public class UserController {
 
                 userDetails.setStayLoggedIn(user.isStayLoggedIn());
 
+                user.setDeviceToken(user.getDeviceToken());
+
+                userRepository.save(user);
+
                 List<String> roles = userDetails.getAuthorities().stream()
                         .map(item -> item.getAuthority())
                         .collect(Collectors.toList());
