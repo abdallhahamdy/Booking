@@ -7,6 +7,7 @@ import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -37,6 +38,7 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 //    Page<Unit> findByNameUnitContainingIgnoreCase(String nameUnit, Pageable pageable);
 
     List<Unit> findAllByUserIdAndStatusUnitName(Long userId, String statusUnitName);
+    List<Unit> findAllByUserIdAndStatusUnitName(Long userId, String statusUnitName, Sort sort);
 
     Page<Unit> findByUser_IdAndFavorite(Long userId, boolean favorite, Pageable pageable);
 

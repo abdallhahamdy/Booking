@@ -5,6 +5,7 @@ import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -20,9 +21,9 @@ public interface UnitService {
     Page<UnitDtoFavorite> getFavoriteUnitsForUser(Long userId, int page, int size);
     Unit getUnitById(Long id);
 
-    Page<UnitDtoFavorite> getUnitsAddedLastMonth(int page, int size);
+    Page<UnitDtoFavorite> getUnitsAddedLastMonth(int page, int size, Sort sort);
 
-    Page<UnitDtoFavorite> getUnitsByAccommodationTypeName(String accommodationTypeName, int page, int size);
+    Page<UnitDtoFavorite> getUnitsByAccommodationTypeName(String accommodationTypeName, int page, int size, Sort sort);
     Page<UnitDashboard> getUnitsByAccommodationTypeNameDashboard(String accommodationTypeName, int page, int size);
 
     void deleteUnit(Long id);
@@ -35,9 +36,9 @@ public interface UnitService {
     List<Unit> getAllUnitForMap();
     Page<Unit> getAllUnit(Pageable pageable);
 
-    List<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName);
+    List<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName, Sort sort);
 
-    Page<UnitDtoFavorite> getUnitsByUserCity(Long userId, Pageable pageable);
+    Page<UnitDtoFavorite> getUnitsByUserCity(Long userId, Pageable pageable, Sort sort);
 
     Page<Unit> getUnitsByUnitTypeId(Long unitTypeId, Pageable pageable);
     List<Unit> getUnitTypeIdForMap(Long unitTypeId);
@@ -78,5 +79,7 @@ public interface UnitService {
 
     @Transactional
     void deleteUnitWithDependencies(Long id);
+
+    Unit getUnitById(Long unitId, Sort sort);
 
 }

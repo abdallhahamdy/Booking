@@ -37,15 +37,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -145,14 +144,14 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public Page<UnitDtoFavorite> getUnitsAddedLastMonth(int page, int size) {
+    public Page<UnitDtoFavorite> getUnitsAddedLastMonth(int page, int size, Sort sort) {
         LocalDateTime startOfLastMonth = LocalDateTime.now().minusDays(30);
         LocalDateTime endOfLastMonth = LocalDateTime.now();
 
         Date startDate = Date.from(startOfLastMonth.atZone(ZoneId.systemDefault()).toInstant());
         Date endDate = Date.from(endOfLastMonth.atZone(ZoneId.systemDefault()).toInstant());
 
-        PageRequest pageRequest = PageRequest.of(page, size);
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
 
         Page<Unit> unitsPage = unitRepository.findByCreatedDateBetween(startDate, endDate, pageRequest);
 
@@ -167,9 +166,18 @@ public class UnitServiceImpl implements UnitService {
         return unitRepository.findById(id).orElse(null);
     }
 
+    public Unit getUnitById(Long unitId, Sort sort) {
+        List<Unit> units = unitRepository.findById(unitId)
+                .map(Collections::singletonList)
+                .orElse(Collections.emptyList());
+
+        units.sort(Comparator.comparing(Unit::getId)); // Sort the list by unit ID
+
+        return units.isEmpty() ? null : units.get(0);
+    }
     @Override
-    public Page<UnitDtoFavorite> getUnitsByAccommodationTypeName(String accommodationTypeName, int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
+    public Page<UnitDtoFavorite> getUnitsByAccommodationTypeName(String accommodationTypeName, int page, int size, Sort sort) {
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
 
         Page<Unit> unitsPage = unitRepository.findByAccommodationType_Name(accommodationTypeName, pageRequest);
 
@@ -266,13 +274,11 @@ public class UnitServiceImpl implements UnitService {
 
 
     @Override
-    public List<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName) {
-        // Retrieve a List of Units for the given USER_ID and StatusUnit name
-        return unitRepository.findAllByUserIdAndStatusUnitName(userId, statusUnitName);
+    public List<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName, Sort sort) {
+        return unitRepository.findAllByUserIdAndStatusUnitName(userId, statusUnitName, sort);
     }
-
     @Override
-    public Page<UnitDtoFavorite> getUnitsByUserCity(Long userId, Pageable pageable) {
+    public Page<UnitDtoFavorite> getUnitsByUserCity(Long userId, Pageable pageable, Sort sort) {
         User user = userRepository.findById(userId).orElse(null);
 
         if (user == null || user.getCity() == null) {

@@ -323,7 +323,8 @@ public class UnitController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "2") int size) {
 
-        Page<UnitDtoFavorite> units = unitService.getUnitsAddedLastMonth(page, size);
+        Sort sort = Sort.by("id").ascending();
+        Page<UnitDtoFavorite> units = unitService.getUnitsAddedLastMonth(page, size, sort);
 
         if (!units.isEmpty()) {
             return new ResponseEntity<>(units, HttpStatus.OK);
@@ -339,7 +340,9 @@ public class UnitController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
 
-        Page<UnitDtoFavorite> units = unitService.getUnitsByAccommodationTypeName(accommodationTypeName, page, size);
+        Sort sort = Sort.by("id").ascending(); // Sort by unit ID in ascending order
+
+        Page<UnitDtoFavorite> units = unitService.getUnitsByAccommodationTypeName(accommodationTypeName, page, size, sort);
 
         if (!units.isEmpty()) {
             return new ResponseEntity<>(units, HttpStatus.OK);
@@ -355,7 +358,9 @@ public class UnitController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
 
-        Page<UnitDtoFavorite> units = unitService.getUnitsByUserCity(userId, PageRequest.of(page, size));
+        Sort sort = Sort.by("id").ascending(); // Sort by unit ID in ascending order
+
+        Page<UnitDtoFavorite> units = unitService.getUnitsByUserCity(userId, PageRequest.of(page, size), sort);
 
         if (units.hasContent()) {
             return new ResponseEntity<>(units, HttpStatus.OK);
@@ -478,7 +483,8 @@ public class UnitController {
             @RequestParam(name = "USER_ID") Long userId,
             @RequestParam(name = "statusUnitName") String statusUnitName) {
 
-        List<Unit> units = unitService.getUnitsForUserAndStatus(userId, statusUnitName);
+        Sort sort = Sort.by("id").ascending();
+        List<Unit> units = unitService.getUnitsForUserAndStatus(userId, statusUnitName, sort);
 
         if (!units.isEmpty()) {
             List<UnitDto> unitDtos = unitMapper.toUnitDtoList(units);
@@ -711,7 +717,7 @@ public class UnitController {
                                                     @RequestParam(name = "statusUnitName") String statusUnitName,
                                                     @RequestParam(defaultValue = "0") int page,
                                                     @RequestParam(defaultValue = "2") int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         Page<Unit> unitsPage = unitService.getUnitsByUserId(userId, pageable);
 
         if (unitsPage == null || unitsPage.isEmpty()) {
