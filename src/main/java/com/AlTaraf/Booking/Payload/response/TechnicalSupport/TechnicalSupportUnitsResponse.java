@@ -12,6 +12,7 @@ import java.time.Duration;
 public class TechnicalSupportUnitsResponse {
     private Long id;
     private String name;
+    private String email;
     private String message;
     private Boolean seen;
     private Long userId;
