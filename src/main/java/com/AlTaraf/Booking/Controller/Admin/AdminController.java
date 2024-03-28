@@ -3,7 +3,7 @@ package com.AlTaraf.Booking.Controller.Admin;
 
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupportForUnits;
-import com.AlTaraf.Booking.Mapper.Ads.AdsStatusMapper;
+import com.AlTaraf.Booking.Mapper.Ads.AdsMapper;
 import com.AlTaraf.Booking.Mapper.TechnicalSupport.TechnicalSupportUnitsMapper;
 import com.AlTaraf.Booking.Payload.response.TechnicalSupport.TechnicalSupportResponse;
 import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
@@ -117,7 +117,7 @@ public class AdminController {
     private RoomDetailsRepository roomDetailsRepository;
 
     @Autowired
-    AdsStatusMapper adsStatusMapper;
+    AdsMapper adsMapper;
 
     @Autowired
     private UserRepository userRepository;
@@ -453,7 +453,7 @@ public class AdminController {
         } else {
             adsPage = adsRepository.findAll(pageable);
         }
-        Page<AdsResponseDto> adsResponsePage = adsPage.map(adsStatusMapper::toDto);
+        Page<AdsResponseDto> adsResponsePage = adsPage.map(adsMapper::toDto);
         return ResponseEntity.ok(adsResponsePage);
     }
 
