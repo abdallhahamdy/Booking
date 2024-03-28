@@ -254,7 +254,7 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     public Page<Unit> getAllUnit(Pageable pageable) {
-        return unitRepository.findAll(pageable);
+        return unitRepository.findAllByStatusUnitId(pageable);
     }
 
     @Override
@@ -274,8 +274,8 @@ public class UnitServiceImpl implements UnitService {
 
 
     @Override
-    public List<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName, Sort sort) {
-        return unitRepository.findAllByUserIdAndStatusUnitName(userId, statusUnitName, sort);
+    public Page<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName, Pageable pageable) {
+        return unitRepository.findAllByUserIdAndStatusUnitName(userId, statusUnitName, pageable);
     }
     @Override
     public Page<UnitDtoFavorite> getUnitsByUserCity(Long userId, Pageable pageable, Sort sort) {
@@ -397,6 +397,10 @@ public class UnitServiceImpl implements UnitService {
             spec = spec.and((root, query, criteriaBuilder) ->
                     criteriaBuilder.lessThanOrEqualTo(root.get("price"), priceMax));
         }
+
+        spec = spec.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("statusUnit").get("id"), 2));
+
         return unitRepository.findAll(spec);
     }
 

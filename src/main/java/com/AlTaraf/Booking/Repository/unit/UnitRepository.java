@@ -26,31 +26,35 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
     Page<Unit> findByHotelClassification_NameIn(List<String> hotelClassificationNames, Pageable pageable);
 
-    @Query("SELECT u FROM Unit u JOIN u.evaluation e ORDER BY e.score DESC")
+    @Query("SELECT u FROM Unit u WHERE u.statusUnit.id = 2 JOIN u.evaluation e ORDER BY e.score DESC")
     Page<Unit> findByEvaluationInOrderByEvaluationScoreDesc(Pageable pageable);
 
+    @Query("SELECT u FROM Unit u WHERE u.statusUnit.id = 2 AND u.createdDate BETWEEN :startOfDay AND :endOfDay")
     Page<Unit> findByCreatedDateBetween(Date startOfDay, Date endOfDay, Pageable pageable);
 
     Page<Unit> findByStatusUnit_Name(String name, Pageable pageable);
 
+    @Query("SELECT u FROM Unit u WHERE u.accommodationType.name = :accommodationTypeName AND u.statusUnit.id = 2")
     Page<Unit> findByAccommodationType_Name(String accommodationTypeName, Pageable pageable);
 
 //    Page<Unit> findByNameUnitContainingIgnoreCase(String nameUnit, Pageable pageable);
 
     List<Unit> findAllByUserIdAndStatusUnitName(Long userId, String statusUnitName);
-    List<Unit> findAllByUserIdAndStatusUnitName(Long userId, String statusUnitName, Sort sort);
+    @Query("SELECT u FROM Unit u WHERE u.user.id = :userId AND u.statusUnit.id = 2 AND u.statusUnit.name = :statusUnitName")
+    Page<Unit> findAllByUserIdAndStatusUnitName(Long userId, String statusUnitName, Pageable pageable);
 
     Page<Unit> findByUser_IdAndFavorite(Long userId, boolean favorite, Pageable pageable);
 
+    @Query("SELECT u FROM Unit u WHERE u.city = :city AND u.statusUnit.id = 2")
     Page<Unit> findByCity(City city, Pageable pageable);
 
-    @Query("SELECT u FROM Unit u WHERE LOWER(u.nameUnit) LIKE LOWER(concat('%', :nameUnit, '%'))")
+    @Query("SELECT u FROM Unit u WHERE LOWER(u.nameUnit) LIKE LOWER(concat('%', :nameUnit, '%')) AND u.statusUnit.id = 2")
     Page<Unit> findByNameUnitContainingIgnoreCase(String nameUnit, Pageable pageable);
 
     @Query("SELECT u FROM Unit u WHERE LOWER(u.nameUnit) LIKE LOWER(concat('%', :nameUnit, '%'))")
     List<Unit> findByNameUnitContainingIgnoreCaseForMap(String nameUnit );
 
-    @Query("SELECT u FROM Unit u WHERE u.unitType.id = :unitTypeId")
+    @Query("SELECT u FROM Unit u WHERE u.unitType.id = :unitTypeId AND u.statusUnit.id = 2")
     Page<Unit> findByUnitType_Id(Long unitTypeId, Pageable pageable);
 
     @Query("SELECT u FROM Unit u WHERE u.unitType.id = :unitTypeId")
@@ -64,7 +68,7 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     List<Unit> findByRoomAvailable(@Param("roomAvailable") RoomAvailable roomAvailable);
 
 
-    @Query("SELECT u FROM Unit u WHERE LOWER(u.nameUnit) LIKE LOWER(concat('%', :nameUnit, '%')) AND u.unitType.id = :unitTypeId")
+    @Query("SELECT u FROM Unit u WHERE LOWER(u.nameUnit) LIKE LOWER(concat('%', :nameUnit, '%')) AND u.unitType.id = :unitTypeId AND u.statusUnit.id = 2")
     Page<Unit> findByNameUnitAndUnitType(@Param("nameUnit") String nameUnit, @Param("unitTypeId") Long unitTypeId, Pageable pageable );
 
     @Query("SELECT u FROM Unit u WHERE LOWER(u.user.username) LIKE LOWER(concat('%', :username, '%')) AND u.unitType.id = :unitTypeId")
@@ -78,16 +82,16 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
 //    Page<Unit> findByRoomAvailableSet_NameContainingIgnoreCase(String roomAvailableName, Pageable pageable);
 
-    @Query("SELECT u FROM Unit u JOIN u.roomAvailableSet ra WHERE LOWER(ra.arabicName) LIKE LOWER(concat('%', :roomAvailableName, '%'))")
+    @Query("SELECT u FROM Unit u JOIN u.roomAvailableSet ra WHERE LOWER(ra.arabicName) LIKE LOWER(concat('%', :roomAvailableName, '%')) AND u.statusUnit.id = 2")
     Page<Unit> findByRoomAvailableName(@Param("roomAvailableName") String roomAvailableName, Pageable pageable);
 
-    @Query("SELECT u FROM Unit u INNER JOIN u.roomAvailableSet ra WHERE LOWER(u.nameUnit) LIKE LOWER(concat('%', :nameUnit, '%')) AND LOWER(ra.arabicName) LIKE LOWER(concat('%', :roomAvailableName, '%'))")
+    @Query("SELECT u FROM Unit u INNER JOIN u.roomAvailableSet ra WHERE LOWER(u.nameUnit) LIKE LOWER(concat('%', :nameUnit, '%')) AND LOWER(ra.arabicName) LIKE LOWER(concat('%', :roomAvailableName, '%')) AND u.statusUnit.id = 2")
     Page<Unit> findByNameUnitAndRoomAvailableNameContainingIgnoreCase(String nameUnit, String roomAvailableName, Pageable pageable);
 
-    @Query("SELECT u FROM Unit u JOIN u.availableAreaSet ra WHERE LOWER(ra.arabicName) LIKE LOWER(concat('%', :availableAreaName, '%'))")
+    @Query("SELECT u FROM Unit u JOIN u.availableAreaSet ra WHERE LOWER(ra.arabicName) LIKE LOWER(concat('%', :availableAreaName, '%')) AND u.statusUnit.id = 2")
     Page<Unit> findByAvailableAreaName(@Param("availableAreaName") String availableAreaName, Pageable pageable);
 
-    @Query("SELECT u FROM Unit u INNER JOIN u.availableAreaSet ra WHERE LOWER(u.nameUnit) LIKE LOWER(concat('%', :nameUnit, '%')) AND LOWER(ra.arabicName) LIKE LOWER(concat('%', :availableAreaName, '%'))")
+    @Query("SELECT u FROM Unit u INNER JOIN u.availableAreaSet ra WHERE LOWER(u.nameUnit) LIKE LOWER(concat('%', :nameUnit, '%')) AND LOWER(ra.arabicName) LIKE LOWER(concat('%', :availableAreaName, '%')) AND u.statusUnit.id = 2")
     Page<Unit> findByNameUnitAndAvailableAreaNameContainingIgnoreCase(String nameUnit, String availableAreaName, Pageable pageable);
 
     List<Unit> findByUser(User user);
@@ -96,4 +100,7 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     @Modifying
     @Query("DELETE FROM Unit u WHERE u.user = :user")
     void deleteByUser(@Param("user") User user);
+
+    @Query("SELECT u FROM Unit u WHERE u.statusUnit.id = 2")
+    Page<Unit> findAllByStatusUnitId(Pageable pageable);
 }

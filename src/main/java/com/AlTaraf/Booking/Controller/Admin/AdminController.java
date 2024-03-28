@@ -48,6 +48,7 @@ import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.core.session.SessionInformation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -350,6 +351,13 @@ public class AdminController {
         User user = optionalUser.get();
         if (user.getBan() == null) {
             user.setBan(true);
+//            // Invalidate user's session
+//            List<SessionInformation> sessions = sessionRegistry.getAllSessions(user, false);
+//            if (sessions != null) {
+//                for (SessionInformation session : sessions) {
+//                    session.expireNow();
+//                }
+//            }
         } else {
             user.setBan(!user.getBan());
         }

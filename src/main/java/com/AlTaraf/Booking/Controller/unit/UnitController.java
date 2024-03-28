@@ -481,13 +481,15 @@ public class UnitController {
     @GetMapping("/Status-Unit/Unit")
     public ResponseEntity<?> getUnitsForUserAndStatus(
             @RequestParam(name = "USER_ID") Long userId,
-            @RequestParam(name = "statusUnitName") String statusUnitName) {
+            @RequestParam(name = "statusUnitName") String statusUnitName,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
-        Sort sort = Sort.by("id").ascending();
-        List<Unit> units = unitService.getUnitsForUserAndStatus(userId, statusUnitName, sort);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Page<Unit> unitPage = unitService.getUnitsForUserAndStatus(userId, statusUnitName, pageable);
 
-        if (!units.isEmpty()) {
-            List<UnitDto> unitDtos = unitMapper.toUnitDtoList(units);
+        if (unitPage.hasContent()) {
+            List<UnitDto> unitDtos = unitMapper.toUnitDtoList(unitPage.getContent());
             return new ResponseEntity<>(unitDtos, HttpStatus.OK);
         } else {
             ApiResponse response = new ApiResponse(204, "No Content");
