@@ -61,15 +61,16 @@ public class NotificationController {
         }
     }
 
-    @PostMapping("/Send-For-Guest-One-Account")
+    @PostMapping("/Send-For-Guest-One-User")
     public ResponseEntity<?> sendPushNotificationforGuest(@RequestBody PushNotificationRequest request) {
         try {
             Notifications notification = notificationMapper.dtoToEntity(request);
             notificationRepository.save(notification);
 
             User user = userRepository.findByRolesNameAndUserId(ERole.ROLE_GUEST,request.getUserId());
-            notificationService.sendPushMessage(request.getTitle(), request.getBody(), user.getId());
-
+            if (user != null ) {
+                notificationService.sendPushMessage(request.getTitle(), request.getBody(), user.getId());
+            }
             return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200,"Push notification sent successfully to user with role Guest!"));
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,8 +85,9 @@ public class NotificationController {
             notificationRepository.save(notification);
 
             User user = userRepository.findByRolesNameAndUserId(ERole.ROLE_LESSOR,request.getUserId());
-            notificationService.sendPushMessage(request.getTitle(), request.getBody(), user.getId());
-
+            if (user != null ) {
+                notificationService.sendPushMessage(request.getTitle(), request.getBody(), user.getId());
+            }
             return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200,"Push notification sent successfully to user with role Lessor!"));
         } catch (Exception e) {
             e.printStackTrace();
