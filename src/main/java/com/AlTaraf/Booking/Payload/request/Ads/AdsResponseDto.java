@@ -4,6 +4,7 @@ import com.AlTaraf.Booking.Dto.Image.ImageDataDTO;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDtoSample;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.RegionDto;
+import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,13 +17,15 @@ import java.util.List;
 @NoArgsConstructor
 public class AdsResponseDto {
     private Long id;
-    private List<ImageDataDTO> imageDataDTOS;
+    private ImageDataDTO imageDataDTO;
     private Long unitId;
-    private Long unitTypeId;
-    private Long packageAdsId;
+    private Long userId;
+
+    //    private Long unitTypeId;
+    private PackageAds packageAds;
 //    private List<ImageData> images;
-    private String unitName;
-    private CityDtoSample cityDto;
-    private RegionDto regionDto;
+//    private String unitName;
+//    private CityDtoSample cityDto;
+//    private RegionDto regionDto;
     private StatusUnit statusUnit;
 }
