@@ -21,6 +21,6 @@ public interface AdsMapper {
     @Mapping(source = "unitId", target = "unit.id")
     @Mapping(source = "userId", target = "user.id")
     @Mapping(source = "packageAdsId", target = "packageAds.id")
-    @Mapping(source = "statusUnit", target = "statusUnit")
+    @Mapping(source = "statusUnitId", target = "statusUnit.id")
     Ads toEntity(AdsRequestDto adsDto);
 }

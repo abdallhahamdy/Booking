@@ -16,7 +16,7 @@ public class AdsRequestDto {
     //    private Long unitTypeId;
     private Long userId;
     private Long packageAdsId;
-    private StatusUnit statusUnit;
+    private Long statusUnitId;
 //    private List<ImageData> images;
 //    private String unitName;
 //    private CityDto cityDto;
