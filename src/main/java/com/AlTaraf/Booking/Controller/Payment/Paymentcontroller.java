@@ -52,9 +52,6 @@ public class Paymentcontroller {
         headers.set("X-RateLimit-Limit", "30");
         headers.set("X-RateLimit-Remaining", "29");
 
-//        String id = "LE4B3xwrXBNWDEGL5PYVAKbmQgrz6xvjGNZjed7y2M0JaRko9nwl14O3qbQ2n6zN";
-////        String custom_ref = generateId();
-//        String our_ref = "66666";
 
         Payment paymentEntity = new Payment();
         paymentEntity.setAmount(amount);
@@ -80,14 +77,6 @@ public class Paymentcontroller {
         body.add("payment_method", payment_method.toString()); // Assuming payment_method is an enum
         body.add("our_ref", paymentEntity.getOur_ref());
 
-
-        // Assuming generateId() generates a unique custom_ref for each payment
-//        String custom_ref = generateId();
-
-        // Set other fields as needed
-
-
-        // Save the payment entity to the database
         payemntRepository.save(paymentEntity);
 
 
@@ -98,14 +87,5 @@ public class Paymentcontroller {
 
         return new ResponseEntity<>(response.getBody(), response.getStatusCode());
     }
-
-//    @PostMapping("/payment_response")
-//    public ResponseEntity<?> handlePaymentResponse(@RequestBody PaymentResponse paymentResponse) {
-//        // Handle the payment response according to your requirements
-//        // For example, you can log the response or process it further
-//
-//        // Return the response in the specified format
-//        return ResponseEntity.ok().body(paymentResponse);
-//    }
 
 }
