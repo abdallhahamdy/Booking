@@ -21,6 +21,7 @@ import com.AlTaraf.Booking.Security.jwt.JwtUtils;
 import com.AlTaraf.Booking.Security.service.UserDetailsImpl;
 import com.AlTaraf.Booking.Service.cityAndRegion.CityService;
 import com.AlTaraf.Booking.Service.user.UserService;
+import com.AlTaraf.Booking.i18n.I18nUtil;
 import jakarta.validation.Valid;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,9 @@ public class UserController {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    I18nUtil i18nUtil;
+
 //    @Autowired
 //    userMapper userMapper2;
 
@@ -83,10 +87,10 @@ public class UserController {
         // Generate and send OTP (you need to implement this logic)
         String otp = userService.generateOtpForUser();
         if (otp != null ) {
-            AuthenticationResponse response = new AuthenticationResponse(200, "OTP Sent successfully!", otp);
+            AuthenticationResponse response = new AuthenticationResponse(200, i18nUtil.getMessage("Otp.message"), otp);
             return ResponseEntity.ok(response);
         } else {
-            ApiResponse response = new ApiResponse(404, "Not Found!");
+            ApiResponse response = new ApiResponse(404, i18nUtil.getMessage("Not_found.message"));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
@@ -102,7 +106,7 @@ public class UserController {
         boolean isDuplicatePhone = userService.isDuplicatePhoneNumber(phone);
 
         if (existsByEmailAndRolesOrPhoneNumberAndRoles) {
-            CheckApiResponse response = new CheckApiResponse(409, "User with the same email, phone number, and role already exists.", false);
+            CheckApiResponse response = new CheckApiResponse(409, i18nUtil.getMessage("Authentication.message"), false);
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(response);
         }
@@ -134,7 +138,7 @@ public class UserController {
         // Perform user registration
         userService.registerUser(userRegisterDto);
 
-        ApiResponse response = new ApiResponse(200, "User Registered Successfully!");
+        ApiResponse response = new ApiResponse(200, i18nUtil.getMessage("Registration.message"));
 
         return ResponseEntity.ok(response);
     }
@@ -148,7 +152,7 @@ public class UserController {
             // Check if the phone number exists in the database
             if (!userService.existsByPhone(loginRequest.getPhone())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ApiResponse(400, "Phone number not registered"));
+                        .body(new ApiResponse(400, i18nUtil.getMessage("Duplicate_phone.message")));
             }
 
             Authentication authentication = authenticationManager.authenticate(
@@ -170,7 +174,7 @@ public class UserController {
 
             if (!optionalUser.isPresent()) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(new ApiResponse(500, "Error in login. User not found"));
+                        .body(new ApiResponse(500, i18nUtil.getMessage("User_not_found.message")));
             }
             User user = optionalUser.get();
 
@@ -189,7 +193,7 @@ public class UserController {
 
             if (Collections.disjoint(userRoles, requestRoles)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ApiResponse(400, "Your role is not correct"));
+                        .body(new ApiResponse(400, i18nUtil.getMessage("role_is_not_correct.message")));
             }
 
             List<String> roles = userDetails.getAuthorities().stream()
@@ -207,7 +211,7 @@ public class UserController {
         } catch (Exception e) {
             // Log the exception for debugging
             logger.error("Error during login:", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "Error in login Password is not correct"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, i18nUtil.getMessage("error_login.message")));
         }
     }
 
@@ -219,14 +223,14 @@ public class UserController {
         // Perform password reset
         try {
             userService.resetPasswordByPhone(phone, passwordResetDto);
-            return ResponseEntity.ok(new ApiResponse(200, "Password reset successfully."));
+            return ResponseEntity.ok(new ApiResponse(200, i18nUtil.getMessage("Password_reset.message")));
         } catch (Exception e) {
+            System.out.println("Failed to reset password: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse(400, "Failed to reset password: " + e.getMessage()));
+                    .body(new ApiResponse(400, i18nUtil.getMessage("Password_reset_failed.message")));
         }
 
     }
-
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
@@ -236,7 +240,7 @@ public class UserController {
             UserDto userDto = userMapper.INSTANCE.userToUserDto(user);
             return ResponseEntity.ok(userDto);
         } else {
-            ApiResponse response = new ApiResponse(404, "Not Found!");
+            ApiResponse response = new ApiResponse(404, i18nUtil.getMessage("Not_found.message"));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
@@ -259,7 +263,7 @@ public class UserController {
 
             if (userEditDto.getEmail() != null) {
                 if (isEmailAvailable){
-                    CheckApiResponse response = new CheckApiResponse(204, "Email is already taken.", false);
+                    CheckApiResponse response = new CheckApiResponse(204, i18nUtil.getMessage("Email_taken.message"), false);
 
                     return ResponseEntity.status(HttpStatus.CONFLICT)
                             .body(response);
@@ -270,7 +274,7 @@ public class UserController {
 
             if (userEditDto.getPhone() != null ) {
                 if (isPhoneAvailable){
-                    CheckApiResponse response = new CheckApiResponse(204, "Phone is already taken.", false);
+                    CheckApiResponse response = new CheckApiResponse(204, i18nUtil.getMessage("Phone_taken.message"), false);
                     return ResponseEntity.status(HttpStatus.CONFLICT)
                             .body(response);
                 } else {
@@ -301,11 +305,11 @@ public class UserController {
             // Save the updated user
             userService.updateUser(existingUser);
 
-            ApiResponse response = new ApiResponse(200, "User Updated Successfully!");
+            ApiResponse response = new ApiResponse(200, i18nUtil.getMessage("User_updated.message"));
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "Error updating user."));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, i18nUtil.getMessage("Error_updating_user.message")));
         }
     }
 
@@ -351,18 +355,18 @@ public class UserController {
 //        }
 //        }
 
-    @PatchMapping("/{userId}/device-token")
-    public ResponseEntity<?> setDeviceToken(@PathVariable Long userId, @RequestParam String deviceToken) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            user.setDeviceToken(deviceToken);
-            userRepository.save(user);
-            return ResponseEntity.ok(new ApiResponse(200,"Device token updated successfully"));
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+//    @PatchMapping("/{userId}/device-token")
+//    public ResponseEntity<?> setDeviceToken(@PathVariable Long userId, @RequestParam String deviceToken) {
+//        Optional<User> optionalUser = userRepository.findById(userId);
+//        if (optionalUser.isPresent()) {
+//            User user = optionalUser.get();
+//            user.setDeviceToken(deviceToken);
+//            userRepository.save(user);
+//            return ResponseEntity.ok(new ApiResponse(200,"Device token updated successfully"));
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
 //    @GetMapping("/checkPhoneNull")
 //    public Boolean checkUserPhoneNullByEmail(@RequestParam String email) {
@@ -414,11 +418,11 @@ public class UserController {
                         roles));
             } catch (AuthenticationException e) {
                 System.out.println(e);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(i18nUtil.getMessage("Authentication_failed.message"));
             }
         }
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404,"User Not Found")); // User not found or phone number is null
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404,i18nUtil.getMessage("User_not_found.message"))); // User not found or phone number is null
     }
 
     @PostMapping("/create-for-oauth")
@@ -437,7 +441,7 @@ public class UserController {
 
         // Check if the phone number is unique
         if (userRepository.existsByPhone(phone)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Phone number already exists");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(i18nUtil.getMessage("Phone_taken.message"));
         }
 
         User userOauth = new User();
@@ -450,7 +454,7 @@ public class UserController {
 
         userRepository.save(userOauth);
 
-        return ResponseEntity.ok(new ApiResponse(200, "User Created Successfully"));
+        return ResponseEntity.ok(new ApiResponse(200, i18nUtil.getMessage("Registration.message")));
     }
 
 
