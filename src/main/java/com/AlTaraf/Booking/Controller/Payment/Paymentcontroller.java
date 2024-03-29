@@ -41,9 +41,7 @@ public class Paymentcontroller {
     public ResponseEntity<?> initiatePayment(
             @RequestParam float amount,
             @RequestParam String phone,
-            @RequestParam String email,
-            @RequestParam String backend_url,
-            @RequestParam("payment_method") PaymentMethod payment_method) {
+            @RequestParam String email) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + apiShopToken);
@@ -57,25 +55,19 @@ public class Paymentcontroller {
         paymentEntity.setAmount(amount);
         paymentEntity.setPhone(phone);
         paymentEntity.setEmail(email);
-        paymentEntity.setBackend_url(backend_url);
         paymentEntity.setCustom_ref(paymentEntity.getCustom_ref());
-        paymentEntity.setOur_ref(paymentEntity.getOur_ref());
-        paymentEntity.setPayment_method(payment_method);
 
 
         System.out.println("id: " + paymentEntity.getId());
         System.out.println("custom_ref: " + paymentEntity.getCustom_ref());
-        System.out.println("our_ref: " + paymentEntity.getOur_ref());
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("id", paymentEntity.getId());
         body.add("amount", String.valueOf(amount));
         body.add("phone", phone);
         body.add("email", email);
-        body.add("backend_url", backend_url);
+        body.add("backend_url", paymentEntity.getBackend_url());
         body.add("custom_ref", paymentEntity.getCustom_ref());
-        body.add("payment_method", payment_method.toString()); // Assuming payment_method is an enum
-        body.add("our_ref", paymentEntity.getOur_ref());
 
         payemntRepository.save(paymentEntity);
 
