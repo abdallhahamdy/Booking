@@ -70,7 +70,7 @@ public class AdsController {
         Page<Unit> unitsPage = unitService.getUnitsByUserId(userId, PageRequest.of(page, size));
 
         if (unitsPage.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No units found for user ID: " + userId));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, i18nUtil.getMessage("No_unit_for_user.message") + " " + userId));
         } else {
             List<UnitDtoFavorite> unitGeneralResponseDtos = unitsPage.getContent().stream()
                     .map(unitFavoriteMapper::toUnitFavoriteDto)
