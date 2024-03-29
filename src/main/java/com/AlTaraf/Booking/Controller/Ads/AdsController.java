@@ -1,7 +1,6 @@
 package com.AlTaraf.Booking.Controller.Ads;
 
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
-import com.AlTaraf.Booking.Dto.packageAds.PackageAdsEditDTO;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.unit.Unit;
@@ -13,9 +12,9 @@ import com.AlTaraf.Booking.Payload.request.Ads.AdsRequestDto;
 import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseDto;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
-import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
+import com.AlTaraf.Booking.i18n.I18nUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -50,15 +48,17 @@ public class AdsController {
     @Autowired
     private AdsStatusMapper adsStatusMapper;
 
+    @Autowired
+    I18nUtil i18nUtil;
 
     @GetMapping("/Package-Ads")
-    public ResponseEntity<List<PackageAds>> getAllPackageAds() {
+    public ResponseEntity<?> getAllPackageAds() {
         try {
             List<PackageAds> allPackageAds = adsService.getAllPackageAds();
             return new ResponseEntity<>(allPackageAds, HttpStatus.OK);
         } catch (Exception e) {
             // Handle the exception here
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return  ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, i18nUtil.getMessage("No_content.message")));
         }
     }
 
@@ -82,11 +82,11 @@ public class AdsController {
     @PostMapping("/create")
     public ResponseEntity<?> createAds(@RequestBody AdsRequestDto adsRequestDto) {
         try {
-//            Ads ads = adsMapper.toEntity(adsDto);
             Ads ads = adsService.createAds(adsMapper.toEntity(adsRequestDto));
-            return ResponseEntity.status(HttpStatus.CREATED).body("Ads created successfully! with id: " + ads.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(200, i18nUtil.getMessage("Ads_created.message") + " " + ads.getId()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create ads: " + e.getMessage());
+            System.out.println("Exception create Ads: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500,i18nUtil.getMessage("Failed_create_ads.message") + " " + e.getMessage()));
         }
     }
 
@@ -101,7 +101,7 @@ public class AdsController {
             List<AdsResponseDto> adsDtoList = adsStatusMapper.toAdsDtoList(ads);
             return new ResponseEntity<>(adsDtoList, HttpStatus.OK);
         } else {
-            ApiResponse response = new ApiResponse(204, "No Content");
+            ApiResponse response = new ApiResponse(204, i18nUtil.getMessage("No_content.message"));
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
@@ -111,18 +111,23 @@ public class AdsController {
 
         try {
             adsService.deleteAds(id);
-            ApiResponse response = new ApiResponse(200, "Ads deleted successfully!");
+            ApiResponse response = new ApiResponse(200, i18nUtil.getMessage("Ads_deleted.message"));
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            ApiResponse response = new ApiResponse(404, "Not Found!");
+            ApiResponse response = new ApiResponse(404, i18nUtil.getMessage("Not_found.message"));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
 
     @GetMapping("/Accepted/Status")
-    public ResponseEntity<List<adsForSliderResponseDto>> getAdsByAcceptedStatus() {
-        List<adsForSliderResponseDto> ads = adsService.getAdsByAcceptedStatus();
-        return ResponseEntity.ok(ads);
+    public ResponseEntity<?> getAdsByAcceptedStatus() {
+        try {
+            List<adsForSliderResponseDto> ads = adsService.getAdsByAcceptedStatus();
+            return ResponseEntity.ok(ads);
+        } catch (Exception e) {
+            System.out.println("Exception Accepted Ads: " + e);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, i18nUtil.getMessage("No_content.message")));
+        }
     }
 
 }
