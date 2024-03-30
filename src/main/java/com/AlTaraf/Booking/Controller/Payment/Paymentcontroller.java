@@ -30,6 +30,9 @@ public class Paymentcontroller {
     @Value("${api.shop.token}")
     private String apiShopToken;
 
+    @Value("${api.shop.transaction}")
+    private String apiShopTransaction;
+
     @Autowired
     PayemntRepository payemntRepository;
 
@@ -76,6 +79,31 @@ public class Paymentcontroller {
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(apiShopUrl, httpRequest, String.class);
+
+        return new ResponseEntity<>(response.getBody(), response.getStatusCode());
+    }
+
+    @PostMapping("/Transaction")
+    public ResponseEntity<?> Transaction(
+            @RequestParam String custom_ref
+    ) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + apiShopToken);
+        headers.set("Accept", "application/json");
+        headers.set("Content-Type", "application/x-www-form-urlencoded");
+        headers.set("X-RateLimit-Limit", "30");
+        headers.set("X-RateLimit-Remaining", "29");
+
+        Payment paymentEntity = new Payment();
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("store_id", paymentEntity.getId());
+        body.add("custom_ref", custom_ref);
+
+        HttpEntity<MultiValueMap<String, String>> httpRequest = new HttpEntity<>(body, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.postForEntity(apiShopTransaction, httpRequest, String.class);
 
         return new ResponseEntity<>(response.getBody(), response.getStatusCode());
     }
