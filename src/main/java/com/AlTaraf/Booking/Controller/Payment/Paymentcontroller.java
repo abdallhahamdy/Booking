@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Controller.Payment;
 
+import com.AlTaraf.Booking.Dto.PaymentResponseDTO;
 import com.AlTaraf.Booking.Entity.Payment;
 import com.AlTaraf.Booking.Payload.request.PaymentMethod;
 import com.AlTaraf.Booking.Payload.request.PaymentRequest;
@@ -103,7 +104,21 @@ public class Paymentcontroller {
         HttpEntity<MultiValueMap<String, String>> httpRequest = new HttpEntity<>(body, headers);
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.postForEntity(apiShopTransaction, httpRequest, String.class);
+        ResponseEntity<PaymentResponseDTO> response = restTemplate.postForEntity(apiShopTransaction, httpRequest, PaymentResponseDTO.class);
+
+        // Save the amount to the database
+        PaymentResponseDTO paymentResponse = response.getBody();
+        if (paymentResponse != null && paymentResponse.getAmount() != null) {
+            try {
+                double amount = Double.parseDouble(paymentResponse.getAmount());
+                System.out.println("amount: " + amount);
+                // Save the amount to the database
+            } catch (NumberFormatException e) {
+                // Handle parsing error
+                System.err.println("Failed to parse amount: " + paymentResponse.getAmount());
+            }
+            // Save the other relevant data as needed
+        }
 
         return new ResponseEntity<>(response.getBody(), response.getStatusCode());
     }
