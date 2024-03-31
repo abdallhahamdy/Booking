@@ -458,6 +458,15 @@ public class UnitServiceImpl implements UnitService {
                 .orElseThrow(() -> new EntityNotFoundException("StatusUnit not found with id: " + statusUnitId));
 
         unit.setStatusUnit(statusUnit);
+
+        User user = unit.getUser();
+        System.out.println("user: " + user.getId());
+
+        double currentWallentBalance = user.getWallet();
+        currentWallentBalance -= unit.getCommission();
+        user.setWallet(currentWallentBalance);
+        userRepository.save(user);
+
         unitRepository.save(unit);
     }
 
@@ -551,5 +560,15 @@ public class UnitServiceImpl implements UnitService {
         }
 
         unitService.deleteUnit(id);
+    }
+
+
+    @Override
+    public void setCommissionForAllUnits(Double commission) {
+        List<Unit> units = unitRepository.findAll();
+        for (Unit unit : units) {
+            unit.setCommission(commission);
+        }
+        unitRepository.saveAll(units);
     }
 }

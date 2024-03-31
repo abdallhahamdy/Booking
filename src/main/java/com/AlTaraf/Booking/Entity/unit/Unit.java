@@ -164,7 +164,7 @@ public class Unit extends Auditable<String> {
 
     private Integer price = 0;
 
-    private Integer commission = 20;
+    private Double commission = 20.0;
 
     private Double latForMapping;
 

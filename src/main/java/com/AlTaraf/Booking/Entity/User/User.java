@@ -89,7 +89,20 @@ public class User extends Auditable<String> {
     @Column(name = "warning")
     private List<Boolean> warnings = Arrays.asList(false, false, false);
 
+    @Column(name = "WALLET")
+    private Double wallet;
+
+    public Double getWallet() {
+        return wallet != null ? wallet : 0.0;
+    }
+
     public User(Long id) {
         this.id = id;
     }
+
+//    public User() {
+//        if (wallet == null) {
+//            wallet = 0.0;
+//        }
+//    }
 }

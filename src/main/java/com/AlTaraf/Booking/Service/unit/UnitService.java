@@ -83,4 +83,6 @@ public interface UnitService {
 
     Page<Unit> getUnitsByUnitTypeIdForDashboard(Long unitTypeId, Pageable pageable);
 
+    void setCommissionForAllUnits(Double commission);
+
 }
