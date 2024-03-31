@@ -465,4 +465,18 @@ public class AdminController {
         return ResponseEntity.ok(adsResponsePage);
     }
 
+    @PutMapping("/Set-Commission-All-Units")
+    public ResponseEntity<String> setCommissionForAllUnits(@RequestParam Double commission) {
+        unitService.setCommissionForAllUnits(commission);
+        return ResponseEntity.ok("Commission set successfully for all units.");
+    }
+
+    @PutMapping("/Set-Commission-All-Reservations")
+    public ResponseEntity<String> setCommissionForAllReservations(@RequestParam Double commission) {
+        reservationService.setCommissionForAllReservations(commission);
+        return ResponseEntity.ok("Commission set successfully for all reservations.");
+    }
+
+
+
 }
