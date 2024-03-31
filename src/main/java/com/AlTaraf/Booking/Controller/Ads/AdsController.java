@@ -14,7 +14,6 @@ import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
-import com.AlTaraf.Booking.i18n.I18nUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -48,9 +47,6 @@ public class AdsController {
     @Autowired
     private AdsStatusMapper adsStatusMapper;
 
-    @Autowired
-    I18nUtil i18nUtil;
-
     @GetMapping("/Package-Ads")
     public ResponseEntity<?> getAllPackageAds() {
         try {
@@ -58,7 +54,7 @@ public class AdsController {
             return new ResponseEntity<>(allPackageAds, HttpStatus.OK);
         } catch (Exception e) {
             // Handle the exception here
-            return  ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, i18nUtil.getMessage("No_content.message")));
+            return  ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content"));
         }
     }
 
@@ -70,7 +66,7 @@ public class AdsController {
         Page<Unit> unitsPage = unitService.getUnitsByUserId(userId, PageRequest.of(page, size));
 
         if (unitsPage.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, i18nUtil.getMessage("No_unit_for_user.message") + " " + userId));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No units found for user ID: " + userId));
         } else {
             List<UnitDtoFavorite> unitGeneralResponseDtos = unitsPage.getContent().stream()
                     .map(unitFavoriteMapper::toUnitFavoriteDto)
@@ -83,10 +79,9 @@ public class AdsController {
     public ResponseEntity<?> createAds(@RequestBody AdsRequestDto adsRequestDto) {
         try {
             Ads ads = adsService.createAds(adsMapper.toEntity(adsRequestDto));
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(200, i18nUtil.getMessage("Ads_created.message") + " " + ads.getId()));
+            return ResponseEntity.status(HttpStatus.CREATED).body("Ads created successfully! with id: " + ads.getId());
         } catch (Exception e) {
-            System.out.println("Exception create Ads: " + e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500,i18nUtil.getMessage("Failed_create_ads.message") + " " + e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create ads: " + e.getMessage());
         }
     }
 
@@ -101,7 +96,7 @@ public class AdsController {
             List<AdsResponseDto> adsDtoList = adsStatusMapper.toAdsDtoList(ads);
             return new ResponseEntity<>(adsDtoList, HttpStatus.OK);
         } else {
-            ApiResponse response = new ApiResponse(204, i18nUtil.getMessage("No_content.message"));
+            ApiResponse response = new ApiResponse(204, "No Content");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
@@ -111,10 +106,10 @@ public class AdsController {
 
         try {
             adsService.deleteAds(id);
-            ApiResponse response = new ApiResponse(200, i18nUtil.getMessage("Ads_deleted.message"));
+            ApiResponse response = new ApiResponse(200, "Ads deleted successfully!");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            ApiResponse response = new ApiResponse(404, i18nUtil.getMessage("Not_found.message"));
+            ApiResponse response = new ApiResponse(404, "Not Found!");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
@@ -126,7 +121,7 @@ public class AdsController {
             return ResponseEntity.ok(ads);
         } catch (Exception e) {
             System.out.println("Exception Accepted Ads: " + e);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, i18nUtil.getMessage("No_content.message")));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content"));
         }
     }
 
