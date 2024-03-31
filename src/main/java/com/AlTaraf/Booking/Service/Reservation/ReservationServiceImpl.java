@@ -1,8 +1,8 @@
 package com.AlTaraf.Booking.Service.Reservation;
 
 import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
-import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
+import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
@@ -15,6 +15,7 @@ import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepositor
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
+import com.AlTaraf.Booking.Repository.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -45,6 +46,9 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Autowired
     RoomDetailsRepository roomDetailsRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public Reservations saveReservation(Reservations reservations) {
@@ -141,6 +145,15 @@ public class ReservationServiceImpl implements ReservationService {
                 .orElseThrow(() -> new EntityNotFoundException("StatusUnit not found with id: " + statusUnitId));
 
         reservations.setStatusUnit(statusUnit);
+
+        User user = reservations.getUser();
+        System.out.println("user: " + user.getId());
+
+        double currentWallentBalance = user.getWallet();
+        currentWallentBalance -= reservations.getCommision();
+        user.setWallet(currentWallentBalance);
+        userRepository.save(user);
+
         reservationRepository.save(reservations);
     }
 
@@ -178,6 +191,15 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public Page<Reservations> findByStatusNameAndUnitId(String statusName, Long unitId, Pageable pageable) {
         return reservationRepository.findByStatusNameAndUnitId(statusName, unitId, pageable);
+    }
+
+    @Override
+    public void setCommissionForAllReservations(Double commission) {
+        List<Reservations> reservations = reservationRepository.findAll();
+        for (Reservations reservation : reservations) {
+            reservation.setCommision(commission);
+        }
+        reservationRepository.saveAll(reservations);
     }
 }
 

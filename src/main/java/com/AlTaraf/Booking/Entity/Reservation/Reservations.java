@@ -135,6 +135,9 @@ public class Reservations extends Auditable<String> {
 
     @Column(name = "IS_EVALUATING")
     private Boolean isEvaluating;
+    
+    @Column(name = "COMMISION")
+    private Double commision = 20.0;
 
     public Reservations() {
         this.statusUnit = new StatusUnit();
