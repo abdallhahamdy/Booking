@@ -22,10 +22,10 @@ public class AdsResponseDto {
     private Long userId;
 
     //    private Long unitTypeId;
-    private PackageAds packageAds;
+//    private PackageAds packageAds;
     private List<ImageDataDTO> imageDataDTOs;
 //    private String unitName;
 //    private CityDtoSample cityDto;
 //    private RegionDto regionDto;
-    private StatusUnit statusUnit;
+//    private StatusUnit statusUnit;
 }

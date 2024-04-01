@@ -39,8 +39,6 @@ public class Ads {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-//    private Boolean showInSlider;
-
     @ManyToOne
     @JoinColumn(name = "STATUS_ID")
     private StatusUnit statusUnit;
