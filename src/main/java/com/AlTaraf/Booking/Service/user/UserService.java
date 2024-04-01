@@ -31,5 +31,7 @@ public interface UserService {
 
 
     void deleteUserAndAssociatedEntities(Long userId);
+
+    void setPackageAdsForUser(Long userId, Long packageAdsId);
 }
 

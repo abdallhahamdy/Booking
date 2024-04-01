@@ -26,5 +26,5 @@ public class PackageAds {
     private int price;
 
     @Column(name = "NUMBER_ADS")
-    private int numberAds;
+    private Integer numberAds;
 }

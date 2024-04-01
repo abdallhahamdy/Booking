@@ -14,6 +14,7 @@ import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
+import com.AlTaraf.Booking.Service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,6 +47,9 @@ public class AdsController {
 
     @Autowired
     private AdsStatusMapper adsStatusMapper;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/Package-Ads")
     public ResponseEntity<?> getAllPackageAds() {
@@ -122,6 +126,16 @@ public class AdsController {
         } catch (Exception e) {
             System.out.println("Exception Accepted Ads: " + e);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content"));
+        }
+    }
+
+    @PostMapping("/{userId}/packageAds/{packageAdsId}")
+    public ResponseEntity<?> setPackageAdsForUser(@PathVariable Long userId, @PathVariable Long packageAdsId) {
+        try {
+            userService.setPackageAdsForUser(userId, packageAdsId);
+            return ResponseEntity.ok("PackageAds set successfully for user.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

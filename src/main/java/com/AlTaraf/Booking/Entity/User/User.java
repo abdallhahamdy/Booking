@@ -1,7 +1,7 @@
 package com.AlTaraf.Booking.Entity.User;
 
+import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.Favorite.UserFavoriteUnit;
-import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.Image.ImageProfile;
 import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
@@ -92,6 +92,13 @@ public class User extends Auditable<String> {
     @Column(name = "WALLET")
     private Double wallet;
 
+    @ManyToOne
+    @JoinColumn(name = "PACKAGE_ADS_ID")
+    private PackageAds packageAds;
+
+    @Column(name = "NUMBER_ADS")
+    private Integer numberAds;
+
     public Double getWallet() {
         return wallet != null ? wallet : 0.0;
     }
@@ -105,4 +112,8 @@ public class User extends Auditable<String> {
 //            wallet = 0.0;
 //        }
 //    }
+
+    public int getNumberAds() {
+        return numberAds != null ? numberAds : 0;
+    }
 }

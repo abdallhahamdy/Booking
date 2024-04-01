@@ -2,7 +2,7 @@ package com.AlTaraf.Booking.Service.Ads;
 
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
-import com.AlTaraf.Booking.Entity.unit.Unit;
+import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Mapper.Ads.SliderMapper;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
@@ -10,6 +10,7 @@ import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
+import com.AlTaraf.Booking.Repository.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,6 +36,9 @@ public class AdsServiceImpl implements AdsService {
 
     @Autowired
     UnitRepository unitRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
     @Override
     public List<adsForSliderResponseDto> getAdsByStatusUnitId(Long statusUnitId) {
@@ -81,6 +85,16 @@ public class AdsServiceImpl implements AdsService {
 
         StatusUnit statusUnit = statusRepository.findById(statusUnitId)
                 .orElseThrow(() -> new EntityNotFoundException("StatusUnit not found with id: " + statusUnitId));
+
+        User user = ads.getUser();
+        System.out.println("user: " + ads.getUser().getId());
+
+        System.out.println("number ads for user: " + user.getNumberAds());
+
+        Integer numberAds = user.getNumberAds();
+        numberAds--;
+        user.setNumberAds(numberAds);
+        userRepository.save(user);
 
         ads.setStatusUnit(statusUnit);
         adsRepository.save(ads);
