@@ -3,7 +3,9 @@ package com.AlTaraf.Booking.Controller.Ads;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
+import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.unit.Unit;
+import com.AlTaraf.Booking.Exception.InsufficientFundsException;
 import com.AlTaraf.Booking.Mapper.Ads.AdsMapper;
 import com.AlTaraf.Booking.Mapper.Ads.AdsStatusMapper;
 import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
@@ -12,6 +14,7 @@ import com.AlTaraf.Booking.Payload.request.Ads.AdsRequestDto;
 import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseDto;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
+import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.user.UserService;
@@ -50,6 +53,9 @@ public class AdsController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/Package-Ads")
     public ResponseEntity<?> getAllPackageAds() {
@@ -132,9 +138,11 @@ public class AdsController {
     @PostMapping("/{userId}/packageAds/{packageAdsId}")
     public ResponseEntity<?> setPackageAdsForUser(@PathVariable Long userId, @PathVariable Long packageAdsId) {
         try {
-            userService.setPackageAdsForUser(userId, packageAdsId);
-            return ResponseEntity.ok("PackageAds set successfully for user.");
+            User user = userService.setPackageAdsForUser(userId, packageAdsId);
+            return ResponseEntity.ok("PackageAds set successfully for user. User's wallet balance is now: " + user.getWallet());
         } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (InsufficientFundsException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

@@ -8,6 +8,7 @@ import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Entity.unit.Unit;
+import com.AlTaraf.Booking.Exception.InsufficientFundsException;
 import com.AlTaraf.Booking.Mapper.city.CityMapper;
 import com.AlTaraf.Booking.Mapper.UserMapper;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
@@ -300,17 +301,29 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public void setPackageAdsForUser(Long userId, Long packageAdsId) {
+    public User setPackageAdsForUser(Long userId, Long packageAdsId) throws InsufficientFundsException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
 
         PackageAds packageAds = packageAdsRepository.findById(packageAdsId)
                 .orElseThrow(() -> new IllegalArgumentException("PackageAds not found with id: " + packageAdsId));
-        System.out.println("packageAds.getNumberAds: " + packageAds.getNumberAds());
+
+        if (user.getWallet() < packageAds.getPrice()) {
+            throw new InsufficientFundsException("Your wallet balance is not enough to purchase this package.");
+        }
+
         user.setPackageAds(packageAds);
         user.setNumberAds(packageAds.getNumberAds());
-        System.out.println("user.getNumberAds: " + user.getNumberAds());
 
+        if (user.getWallet() > 0) {
+
+            double currentWalletBalance = user.getWallet();
+            currentWalletBalance -= packageAds.getPrice();
+            user.setWallet(currentWalletBalance);
+
+        }
         userRepository.save(user);
+
+        return user;
     }
 }

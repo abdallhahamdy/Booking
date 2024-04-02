@@ -3,6 +3,7 @@ package com.AlTaraf.Booking.Service.user;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.enums.ERole;
+import com.AlTaraf.Booking.Exception.InsufficientFundsException;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
 
 import java.util.Optional;
@@ -32,6 +33,6 @@ public interface UserService {
 
     void deleteUserAndAssociatedEntities(Long userId);
 
-    void setPackageAdsForUser(Long userId, Long packageAdsId);
+    User setPackageAdsForUser(Long userId, Long packageAdsId) throws InsufficientFundsException;
 }
 
