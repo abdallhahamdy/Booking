@@ -25,4 +25,5 @@ public class UserDto {
     private Date lastModifiedDate;
     private Set<Role> roles;
     private String deviceToken;
+    private Double wallet;
 }

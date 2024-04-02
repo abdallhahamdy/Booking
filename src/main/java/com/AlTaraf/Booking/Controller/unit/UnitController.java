@@ -707,7 +707,7 @@ public class UnitController {
     public ResponseEntity<?> updateStatusForReservations(@PathVariable Long reservationId, @PathVariable Long statusUnitId) {
         try {
 
-            reservationService.updateStatusForReservation(reservationId, statusUnitId);
+             reservationService.updateStatusForReservation(reservationId, statusUnitId);
             return ResponseEntity.ok(new ApiResponse(200,"Status changed successfully"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status: " + e.getMessage());
