@@ -14,6 +14,7 @@ import com.AlTaraf.Booking.Payload.request.Ads.AdsRequestDto;
 import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseDto;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
+import com.AlTaraf.Booking.Payload.response.ApiResponse2;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
@@ -139,12 +140,18 @@ public class AdsController {
     public ResponseEntity<?> setPackageAdsForUser(@PathVariable Long userId, @PathVariable Long packageAdsId) {
         try {
             User user = userService.setPackageAdsForUser(userId, packageAdsId);
-            return ResponseEntity.ok("PackageAds set successfully for user. User's wallet balance is now: " + user.getWallet());
+
+//            return ResponseEntity.ok("PackageAds set successfully for user. User's wallet balance is now: " + user.getWallet());
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200,"Successful_package_ads.message"));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"Fail_package_ads.message"));
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body()
         } catch (InsufficientFundsException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"Fail_package_ads.message"));
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
 
 }

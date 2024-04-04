@@ -1,8 +1,12 @@
 package com.AlTaraf.Booking.Entity.Notifications;
 
+import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.User.User;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "NOTIFICATIONS")
@@ -16,9 +20,10 @@ public class Notifications {
     private String body;
     @ManyToOne
     private User user;
+
     private String logoUrl;
 
     public Notifications() {
-        this.logoUrl = "https://play.min.io/ehgzly/logo.jpeg";
+        this.logoUrl = "https://play.min.io/ehgzly/logo.jpg";
     }
 }

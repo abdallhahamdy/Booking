@@ -2,6 +2,7 @@ package com.AlTaraf.Booking.Controller;
 
 import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequest;
 import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequestForAll;
+import com.AlTaraf.Booking.Dto.Notifications.Response.PushNotificationResponse;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Mapper.Notification.NotificationForAllMapper;
@@ -153,15 +154,19 @@ public class NotificationController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Page<Notifications>> getNotificationsByUserId(
+    public ResponseEntity<?> getNotificationsByUserId(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Notifications> notifications = notificationService.getNotificationsByUserId(userId, pageable);
-        return ResponseEntity.ok(notifications);
+
+        Page<PushNotificationResponse> response = notifications.map(NotificationMapper.INSTANCE::entityToDto);
+
+        return ResponseEntity.ok(response);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Notifications> getNotificationById(@PathVariable Long id) {
