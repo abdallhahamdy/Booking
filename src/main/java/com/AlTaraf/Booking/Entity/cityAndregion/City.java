@@ -21,7 +21,7 @@ public class City {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "city", nullable = false, unique = true)
+    @Column(name = "city")
     private String cityName;  // Renamed the property to avoid conflict with the entity name
 
     @Column(name = "arabic_name")

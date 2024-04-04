@@ -17,7 +17,7 @@ public class Region {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "region", nullable = false, unique = true)
+    @Column(name = "region")
     private String regionName;  // Renamed the property to avoid conflict with the entity name
 
     @Column(name = "arabic_name")

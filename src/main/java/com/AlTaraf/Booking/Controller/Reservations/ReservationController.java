@@ -111,7 +111,8 @@ public class ReservationController {
                 // Check if the reservation has room available or available area
 
             // Return the unitId in the response body
-            return ResponseEntity.status(HttpStatus.CREATED).body("Reservation Process is successfully with id: " + saveReservation.getId() );
+//            return ResponseEntity.status(HttpStatus.CREATED).body("Reservation Process is successfully with id: " + saveReservation.getId() );
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(200, "Successful_Reservation.message") );
         } catch (Exception e) {
 //            // Log the exception
             logger.error("Error occurred while processing create-reservation request", e);
