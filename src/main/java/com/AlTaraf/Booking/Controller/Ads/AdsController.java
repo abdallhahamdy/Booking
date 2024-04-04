@@ -65,7 +65,7 @@ public class AdsController {
             return new ResponseEntity<>(allPackageAds, HttpStatus.OK);
         } catch (Exception e) {
             // Handle the exception here
-            return  ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content"));
+            return  ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No_content.message"));
         }
     }
 
@@ -77,7 +77,7 @@ public class AdsController {
         Page<Unit> unitsPage = unitService.getUnitsByUserId(userId, PageRequest.of(page, size));
 
         if (unitsPage.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No units found for user ID: " + userId));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No_unit_for_user.message:  " + userId));
         } else {
             List<UnitDtoFavorite> unitGeneralResponseDtos = unitsPage.getContent().stream()
                     .map(unitFavoriteMapper::toUnitFavoriteDto)
@@ -90,9 +90,10 @@ public class AdsController {
     public ResponseEntity<?> createAds(@RequestBody AdsRequestDto adsRequestDto) {
         try {
             Ads ads = adsService.createAds(adsMapper.toEntity(adsRequestDto));
-            return ResponseEntity.status(HttpStatus.CREATED).body("Ads created successfully! with id: " + ads.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).body("Ads_created.message " + ads.getId());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create ads: " + e.getMessage());
+            System.out.println("Error Create Ads: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed_create_ads.message ");
         }
     }
 
@@ -107,7 +108,7 @@ public class AdsController {
             List<AdsResponseDto> adsDtoList = adsStatusMapper.toAdsDtoList(ads);
             return new ResponseEntity<>(adsDtoList, HttpStatus.OK);
         } else {
-            ApiResponse response = new ApiResponse(204, "No Content");
+            ApiResponse response = new ApiResponse(204, "No_content.message");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
@@ -117,10 +118,10 @@ public class AdsController {
 
         try {
             adsService.deleteAds(id);
-            ApiResponse response = new ApiResponse(200, "Ads deleted successfully!");
+            ApiResponse response = new ApiResponse(200, "Ads_deleted.message");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            ApiResponse response = new ApiResponse(404, "Not Found!");
+            ApiResponse response = new ApiResponse(404, "Not_found.message");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
@@ -132,7 +133,7 @@ public class AdsController {
             return ResponseEntity.ok(ads);
         } catch (Exception e) {
             System.out.println("Exception Accepted Ads: " + e);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content"));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No_content.message"));
         }
     }
 
