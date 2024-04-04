@@ -71,6 +71,7 @@ insert into food_option (food_option_arabic_name, food_option_name) values ("ج�
 insert into food_option (food_option_arabic_name, food_option_name) values ("افطار+غذاء","breakfast + lunch");
 insert into food_option (food_option_arabic_name, food_option_name) values ("افطار+عشاء","breakfast + dinner");
 insert into food_option (food_option_arabic_name, food_option_name) values ("اعداد الوجبات ذاتيا","self-preparation of meals");
+insert into food_option (food_option_arabic_name, food_option_name) values ("لا يوفر وجبات","No meals provided");
 
 -- insert status_unit   	حالة الوحدة
 
@@ -80,10 +81,6 @@ insert into status_unit (status_arabic_name, status_name) values ("المرفو�
 insert into status_unit (status_arabic_name, status_name) values ("الملغاة","Canceled");
 
 -- insert feature halls    مميزات لقاعات المناسبات
-insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("دي جي","DJ");
-insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("فقرات استعراضية","show segments");
-insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("قاعة مكيفة","air-conditioned hall");
-
 insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("خدمات الضيافة والسفرجة","hospitality and backing services");
 insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("الديكور","decoration");
 insert into feature_halls (FEATURE_ARABIC_NAME, FEATURE_NAME) values ("سيرفز","servers");
