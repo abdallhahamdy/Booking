@@ -336,13 +336,13 @@ public class UnitController {
 
     @GetMapping("/Get-Units-By-Accommodation-Type")
     public ResponseEntity<?> getUnitsByAccommodationType(
-            @RequestParam String accommodationTypeName,
+            @RequestParam Long accommodationTypeId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
 
         Sort sort = Sort.by("id").ascending(); // Sort by unit ID in ascending order
 
-        Page<UnitDtoFavorite> units = unitService.getUnitsByAccommodationTypeName(accommodationTypeName, page, size, sort);
+        Page<UnitDtoFavorite> units = unitService.getUnitsByAccommodationTypeName(accommodationTypeId, page, size, sort);
 
         if (!units.isEmpty()) {
             return new ResponseEntity<>(units, HttpStatus.OK);

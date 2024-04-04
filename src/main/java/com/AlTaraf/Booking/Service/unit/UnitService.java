@@ -23,8 +23,8 @@ public interface UnitService {
 
     Page<UnitDtoFavorite> getUnitsAddedLastMonth(int page, int size, Sort sort);
 
-    Page<UnitDtoFavorite> getUnitsByAccommodationTypeName(String accommodationTypeName, int page, int size, Sort sort);
-    Page<UnitDashboard> getUnitsByAccommodationTypeNameDashboard(String accommodationTypeName, int page, int size);
+    Page<UnitDtoFavorite> getUnitsByAccommodationTypeName(Long accommodationTypeId, int page, int size, Sort sort);
+    Page<UnitDashboard> getUnitsByAccommodationTypeNameDashboard(Long accommodationTypeId, int page, int size);
 
     void deleteUnit(Long id);
 

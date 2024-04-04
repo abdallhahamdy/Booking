@@ -176,19 +176,19 @@ public class UnitServiceImpl implements UnitService {
         return units.isEmpty() ? null : units.get(0);
     }
     @Override
-    public Page<UnitDtoFavorite> getUnitsByAccommodationTypeName(String accommodationTypeName, int page, int size, Sort sort) {
+    public Page<UnitDtoFavorite> getUnitsByAccommodationTypeName(Long accommodationTypeId, int page, int size, Sort sort) {
         PageRequest pageRequest = PageRequest.of(page, size, sort);
 
-        Page<Unit> unitsPage = unitRepository.findByAccommodationType_Name(accommodationTypeName, pageRequest);
+        Page<Unit> unitsPage = unitRepository.findByAccommodationType_Id(accommodationTypeId, pageRequest);
 
         return unitsPage.map(unitFavoriteMapper::toUnitFavoriteDto);
     }
 
     @Override
-    public Page<UnitDashboard> getUnitsByAccommodationTypeNameDashboard(String accommodationTypeName, int page, int size) {
+    public Page<UnitDashboard> getUnitsByAccommodationTypeNameDashboard(Long accommodationTypeId, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
 
-        Page<Unit> unitsPage = unitRepository.findByAccommodationType_Name(accommodationTypeName, pageRequest);
+        Page<Unit> unitsPage = unitRepository.findByAccommodationType_Id(accommodationTypeId, pageRequest);
 
         return unitsPage.map(unitDashboardMapper::toUnitDashboard);
     }
