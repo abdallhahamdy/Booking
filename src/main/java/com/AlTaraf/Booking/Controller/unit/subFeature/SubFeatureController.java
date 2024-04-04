@@ -26,7 +26,7 @@ public class SubFeatureController {
         if (!subFeatureList.isEmpty()) {
             return new ResponseEntity<>(subFeatureList, HttpStatus.OK);
         } else {
-            ApiResponse response = new ApiResponse(204, "No Content Sub Feature for Units.");
+            ApiResponse response = new ApiResponse(204, "No_content.message");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
 //            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

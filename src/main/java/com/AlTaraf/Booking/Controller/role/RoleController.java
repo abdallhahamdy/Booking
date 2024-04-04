@@ -28,7 +28,7 @@ public class RoleController {
             RoleDto roleDto = RoleMapper.INSTANCE.roleToRoleDto(role);
             return ResponseEntity.ok(roleDto);
         } else {
-            ApiResponse response = new ApiResponse(404, "Not Found!");
+            ApiResponse response = new ApiResponse(404, "Not_found.message");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
@@ -41,7 +41,7 @@ public class RoleController {
             List<RoleDto> roleDtos = RoleMapper.INSTANCE.rolesToRoleDtos(roles);
             return ResponseEntity.ok(roleDtos);
         } else {
-            ApiResponse response = new ApiResponse(204, "No Content for Roles!");
+            ApiResponse response = new ApiResponse(204, "No_content.message");
 
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }

@@ -26,7 +26,7 @@ public class FoodOptionsController {
         if (!foodOptionList.isEmpty()) {
             return new ResponseEntity<>(foodOptionList, HttpStatus.OK);
         } else {
-            ApiResponse response = new ApiResponse(204, "No Content for Food Options!");
+            ApiResponse response = new ApiResponse(204, "No_content.message");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
 //            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

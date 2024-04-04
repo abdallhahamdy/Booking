@@ -26,7 +26,7 @@ public class HotelClassificationController {
         if (!classifications.isEmpty()) {
             return new ResponseEntity<>(classifications, HttpStatus.OK);
         } else {
-            ApiResponse response = new ApiResponse(204, "No Content for Hotel Classification Not Available!!");
+            ApiResponse response = new ApiResponse(204, "No_content.message");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
