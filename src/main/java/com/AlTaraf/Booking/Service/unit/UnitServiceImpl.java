@@ -4,7 +4,6 @@ import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
-import com.AlTaraf.Booking.Entity.Calender.Hotel.ReserveDateHotel;
 import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import com.AlTaraf.Booking.Entity.Evaluation.Evaluation;
 import com.AlTaraf.Booking.Entity.Image.ImageData;
@@ -20,7 +19,6 @@ import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Evaluation.EvaluationRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
-import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHotelRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
@@ -45,7 +43,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UnitServiceImpl implements UnitService {
@@ -88,9 +85,6 @@ public class UnitServiceImpl implements UnitService {
 
     @Autowired
     private ReserveDateHallsRepository reserveDateHallsRepository;
-
-    @Autowired
-    ReserveDateHotelRepository reserveDateHotelRepository;
 
     @Autowired
     private RoomDetailsForAvailableAreaRepository roomDetailsForAvailableAreaRepository;
@@ -529,18 +523,13 @@ public class UnitServiceImpl implements UnitService {
             reserveDateRepository.deleteDateInfoByReserveDateId(reserveDate.getId());
         }
 
-        List<ReserveDateHotel> reserveDateHotelList = reserveDateHotelRepository.findByUnitId(id);
-        for (ReserveDateHotel reserveDateHotel: reserveDateHotelList) {
-            reserveDateHotelRepository.deleteDateInfoHotelByReserveDateHotelId(reserveDateHotel.getId());
-        }
 //
-//        List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitId(id);
-//        for (ReserveDateHalls reserveDateHalls: reserveDateHallsList) {
-//            reserveDateHallsRepository.deleteDateInfoHallsByReserveDateHallsId(reserveDateHalls.getId());
-//        }
+        List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitId(id);
+        for (ReserveDateHalls reserveDateHalls: reserveDateHallsList) {
+            reserveDateHallsRepository.deleteDateInfoHallsByReserveDateHallsId(reserveDateHalls.getId());
+        }
 
-        reserveDateHotelRepository.deleteByUnitId(id);
-//        reserveDateHallsRepository.deleteByUnitId(id);
+        reserveDateHallsRepository.deleteByUnitId(id);
         reserveDateRepository.deleteByUnitId(id);
 
         userFavoriteUnitRepository.deleteByUnit(id);
