@@ -3,11 +3,13 @@ package com.AlTaraf.Booking.Service.image;
 import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.Image.ImageDataForAds;
 import com.AlTaraf.Booking.Entity.Image.ImageProfile;
+import com.AlTaraf.Booking.Entity.Image.Pdf;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Payload.response.ImageUploadResponse;
 import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataProfileRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
+import com.AlTaraf.Booking.Repository.image.PdfRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import io.minio.*;
 import io.minio.errors.MinioException;
@@ -35,6 +37,9 @@ public class ImageDataServiceImpl implements ImageDataService {
 
     @Autowired
     ImageDataForAdsRepository imageDataForAdsRepository;
+
+    @Autowired
+    PdfRepository pdfRepository;
 
     public ImageUploadResponse uploadImage(MultipartFile file, Long userId) throws IOException {
         byte[] imageData = file.getBytes();
@@ -109,6 +114,32 @@ public class ImageDataServiceImpl implements ImageDataService {
         imageDataProfileRepository.save(imageDataProfileEntity);
 
         return new ImageUploadResponse("Image uploaded successfully: " +
+                file.getOriginalFilename());
+    }
+
+    public ImageUploadResponse uploadPdf(MultipartFile file, Long userId) throws IOException {
+        byte[] imageData = file.getBytes();
+
+        String imagePath = null;
+        try {
+            imagePath = uploadToMinioServer(file.getOriginalFilename(), file.getContentType(), imageData);
+        } catch (NoSuchAlgorithmException | InvalidKeyException e) {
+            throw new RuntimeException("Error uploading Pdf to MinIO server", e);
+        }
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        Pdf pdf = Pdf.builder()
+                .name(file.getOriginalFilename())
+                .type(file.getContentType())
+                .imagePath(imagePath)
+                .user(user)
+                .build();
+
+        pdfRepository.save(pdf);
+
+        return new ImageUploadResponse("Pdf uploaded successfully: " +
                 file.getOriginalFilename());
     }
 

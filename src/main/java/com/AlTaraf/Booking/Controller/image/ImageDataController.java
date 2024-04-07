@@ -73,6 +73,23 @@ public class ImageDataController {
         }
     }
 
+    @PostMapping("/Pdf")
+    public ResponseEntity<?> uploadPdf(@RequestParam("pdf") MultipartFile file, @RequestParam("userId") Long userId) {
+        List<ImageUploadResponse> responses = new ArrayList<>();
+
+        try {
+            ImageUploadResponse response = imageDataService.uploadPdf(file, userId);
+            responses.add(response);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(responses);
+        } catch (IOException e) {
+            System.out.println("Exception Upload Image: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed_Upload.message ");
+        }
+    }
+
     @PostMapping("/profile-user")
     public ResponseEntity<?> uploadImagesProfile(
             @RequestParam("images") MultipartFile file,
