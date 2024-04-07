@@ -26,7 +26,6 @@ import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
-import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHotelRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
@@ -48,7 +47,6 @@ import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.security.core.session.SessionInformation;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -144,10 +142,6 @@ public class AdminController {
     @Autowired
     private ImageDataForAdsRepository imageDataForAdsRepository;
 
-    @Autowired
-    ReserveDateHotelRepository reserveDateHotelRepository;
-
-
     @GetMapping("/Technical-Support-Get-All")
     public Page<TechnicalSupportResponse> getAllTechnicalSupport(@RequestParam(defaultValue = "0") int page,
                                                                  @RequestParam(defaultValue = "5") int size) {
@@ -212,11 +206,11 @@ public class AdminController {
 
     @GetMapping("/Get-Units-By-Accommodation-Type")
     public ResponseEntity<?> getUnitsByAccommodationType(
-            @RequestParam String accommodationTypeName,
+            @RequestParam Long accommodationTypeId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
 
-        Page<UnitDashboard> units = unitService.getUnitsByAccommodationTypeNameDashboard(accommodationTypeName, page, size);
+        Page<UnitDashboard> units = unitService.getUnitsByAccommodationTypeNameDashboard(accommodationTypeId, page, size);
 
         if (!units.isEmpty()) {
             return ResponseEntity.ok(units);
