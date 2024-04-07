@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -136,20 +137,35 @@ public class AdsController {
         }
     }
 
+    @GetMapping("/{userId}/check-package-ads")
+    public ResponseEntity<String> checkUserPackageAds(@PathVariable Long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            if (user.getPackageAds() != null) {
+                return ResponseEntity.ok("User_Has_Package.message");
+            } else {
+                return ResponseEntity.ok("");
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping("/{userId}/packageAds/{packageAdsId}")
     public ResponseEntity<?> setPackageAdsForUser(@PathVariable Long userId, @PathVariable Long packageAdsId) {
         try {
             User user = userService.setPackageAdsForUser(userId, packageAdsId);
 
 //            return ResponseEntity.ok("PackageAds set successfully for user. User's wallet balance is now: " + user.getWallet());
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200,"Successful_package_ads.message"));
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200,"Successful_package_ads.message" + user.getWallet()));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"Fail_package_ads.message"));
 //            return ResponseEntity.badRequest().body(e.getMessage());
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body()
         } catch (InsufficientFundsException e) {
 //            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"Fail_package_ads.message"));
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("Fail_package_ads_wallet.message");
         }
     }
 

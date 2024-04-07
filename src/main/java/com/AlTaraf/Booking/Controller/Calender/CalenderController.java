@@ -52,9 +52,10 @@ public class CalenderController {
         try {
             ReserveDateHalls reserveDateHalls = ReserveDateHallsMapper.INSTANCE.toEntity(reserveDateHallsDto);
             ReserveDateHalls savedReserveDate = reserveDateHallsRepository.save(reserveDateHalls);
-            return ResponseEntity.ok("Reserve date Halls created successfully");
+            return ResponseEntity.ok("Reserve_Date_Success.message");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create reserve date Halls: " + e.getMessage());
+            System.out.println("Failed Reserve Date Halls: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Reserve_Date_Fail.message " );
         }
     }
 
@@ -88,9 +89,10 @@ public class CalenderController {
 
             // Save the ReserveDate entity
             ReserveDate savedReserveDate = reserveDateRepository.save(reserveDate);
-            return ResponseEntity.ok("Reserve date created successfully");
+            return ResponseEntity.ok("Reserve_Date_Success.message");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create reserve date: " + e.getMessage());
+            System.out.println("Failed Reserve Date: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Reserve_Date_Fail.message " );
         }
     }
 
@@ -109,10 +111,11 @@ public class CalenderController {
                 return ResponseEntity.ok(reserveDateRequests);
             }
 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(205, "Room Still Available"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(205, "Room_Still_Available.message"));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get reserve dates: " + e.getMessage());
+            System.out.println("Failed to get Reserve Dates: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed_Get_Reserve_Date.message ");
         }
     }
 
@@ -128,7 +131,8 @@ public class CalenderController {
         return ResponseEntity.ok(reserveDateRequests);
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get reserve dates: " + e.getMessage());
+            System.out.println("Failed to get Reserve Dates: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed_Get_Reserve_Date.message ");
         }
     }
 
@@ -141,7 +145,7 @@ public class CalenderController {
                     .collect(Collectors.toList());
             return ResponseEntity.ok(reserveDateHallsDtoList);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No reserve Date "));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No_Reserve_Date.message "));
         }
     }
 
@@ -154,7 +158,7 @@ public class CalenderController {
                     .collect(Collectors.toList());
             return ResponseEntity.ok(reserveDateHallsDtoList);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No reserve Date "));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No_Reserve_Date.message "));
         }
     }
 

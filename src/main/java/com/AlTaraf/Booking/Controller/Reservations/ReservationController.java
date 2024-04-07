@@ -63,7 +63,7 @@ public class ReservationController {
 
 
     @PostMapping("/Create-Reservation")
-    public ResponseEntity<?> createReservation(@RequestBody ReservationRequestDto reservationRequestDto) {
+    public ResponseEntity<?> createReservation( @RequestBody ReservationRequestDto reservationRequestDto) {
         try {
             // Convert UnitRequestDto to Unit
             Reservations reservationsToSave = reservationRequestMapper.toReservation(reservationRequestDto);
@@ -105,8 +105,10 @@ public class ReservationController {
                 reservationsToSave.setPrice(unit.getPrice());
 
             }
+
+            Long userId = reservationRequestDto.getUserId();
                 // Save the unit in the database
-                Reservations saveReservation = reservationService.saveReservation(reservationsToSave);
+                Reservations saveReservation = reservationService.saveReservation(userId,reservationsToSave);
 
                 // Check if the reservation has room available or available area
 
@@ -119,7 +121,7 @@ public class ReservationController {
 
             System.out.println("Error Message: " + e);
             // Return user-friendly error response
-            ApiResponse response = new ApiResponse(400, "Failed to create Reservation. Please check your input and try again.");
+            ApiResponse response = new ApiResponse(400, "Failed_Reservation.message");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
@@ -147,7 +149,7 @@ public class ReservationController {
             List<ReservationStatus> reservationRequestDtoList = reservationStatusMapper.toReservationStatusDtoList(reservations.getContent());
             return new ResponseEntity<>(reservationRequestDtoList, HttpStatus.OK);
         } else {
-            ApiResponse response = new ApiResponse(204, "No Content");
+            ApiResponse response = new ApiResponse(204, "No_content.message");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
@@ -158,13 +160,15 @@ public class ReservationController {
     Reservations existingReservation = reservationService.getReservationById(reservationId);
     Unit unit = reservationService.findUnitByReservationId(reservationId);
 
+    Long userId = existingReservation.getUser().getId();
+
     if (existingReservation == null) {
         return ResponseEntity.notFound().build();
     }
 
     Evaluation evaluation = evaluationRepository.findById(evaluationId).orElse(null);
     if (evaluation == null) {
-        return ResponseEntity.badRequest().body("No Evaluation Founded");
+        return ResponseEntity.badRequest().body("No_Evaluation_Founded.message");
     }
 
     // Set the Evaluation for the Reservation
@@ -175,10 +179,10 @@ public class ReservationController {
 
     try {
         // Save the updated Reservation
-        reservationService.saveReservation(existingReservation);
-        return ResponseEntity.ok().body("Evaluation set successfully.");
+        reservationService.saveReservation(userId, existingReservation);
+        return ResponseEntity.ok().body("Evaluation_Set_Successfully.message");
     } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to set evaluation.");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Evaluation_Set_Failed.message");
     }
 
 }
@@ -189,10 +193,10 @@ public class ReservationController {
         try {
             reservationService.updateStatusForReservation(id, 4L);
             reservationService.deleteUnit(id);
-            ApiResponse response = new ApiResponse(200, "Reservation deleted successfully!");
+            ApiResponse response = new ApiResponse(200, "Reservation_Deleted_Successfully.message!");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            ApiResponse response = new ApiResponse(404, "Not Found!");
+            ApiResponse response = new ApiResponse(404, "Not_found.message");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }

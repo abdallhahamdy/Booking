@@ -37,9 +37,9 @@ public class TechnicalSupportController {
             TechnicalSupport technicalSupport = TechnicalSupportMapper.INSTANCE.toEntity(technicalSupportRequest);
             technicalSupportService.saveTechnicalSupport(technicalSupport);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(200, "The Message Sent to technical Support Team."));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(201, "Technical_Support.message"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "The Message doesn't Sent "));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400, "Technical_Support_Error.message "));
         }
     }
 
@@ -50,9 +50,9 @@ public class TechnicalSupportController {
             TechnicalSupportForUnits technicalSupportForUnits = TechnicalSupportUnitsMapper.INSTANCE.toEntity(technicalSupportUnitsRequest);
             technicalSupportUnitsService.saveTechnicalSupport(technicalSupportForUnits);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(200, "The Message Sent to technical Support Units Team."));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(201, "Technical_Support.message"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "The Message doesn't Sent "));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(400, "Technical_Support_Error.message"));
         }
     }
 

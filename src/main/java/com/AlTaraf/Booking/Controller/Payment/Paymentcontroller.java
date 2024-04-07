@@ -1,18 +1,14 @@
 package com.AlTaraf.Booking.Controller.Payment;
 
-import com.AlTaraf.Booking.Dto.PaymentResponseDTO;
+
 import com.AlTaraf.Booking.Entity.Payment;
-import com.AlTaraf.Booking.Payload.request.PaymentMethod;
-import com.AlTaraf.Booking.Payload.request.PaymentRequest;
 import com.AlTaraf.Booking.Repository.payment.PayemntRepository;
+import com.AlTaraf.Booking.Repository.user.UserRepository;
+import com.AlTaraf.Booking.Service.Payment.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Value;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -37,13 +33,19 @@ public class Paymentcontroller {
     @Autowired
     PayemntRepository payemntRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    PaymentService paymentService;
+
     private String generateId() {
         return UUID.randomUUID().toString();
     }
 
     @PostMapping("/initiate_payment")
     public ResponseEntity<?> initiatePayment(
-            @RequestParam float amount,
+            @RequestParam Double amount,
             @RequestParam String phone,
             @RequestParam String email) {
 
@@ -75,6 +77,7 @@ public class Paymentcontroller {
 
         payemntRepository.save(paymentEntity);
 
+        System.out.println("Kos Omk");
 
         HttpEntity<MultiValueMap<String, String>> httpRequest = new HttpEntity<>(body, headers);
 
@@ -84,43 +87,12 @@ public class Paymentcontroller {
         return new ResponseEntity<>(response.getBody(), response.getStatusCode());
     }
 
-    @PostMapping("/Transaction")
-    public ResponseEntity<?> Transaction(
+    @PostMapping("/Transaction/{userId}")
+    public ResponseEntity<?> transaction(
+            @PathVariable Long userId,
             @RequestParam String custom_ref
     ) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + apiShopToken);
-        headers.set("Accept", "application/json");
-        headers.set("Content-Type", "application/x-www-form-urlencoded");
-        headers.set("X-RateLimit-Limit", "30");
-        headers.set("X-RateLimit-Remaining", "29");
-
-        Payment paymentEntity = new Payment();
-
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("store_id", paymentEntity.getId());
-        body.add("custom_ref", custom_ref);
-
-        HttpEntity<MultiValueMap<String, String>> httpRequest = new HttpEntity<>(body, headers);
-
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<PaymentResponseDTO> response = restTemplate.postForEntity(apiShopTransaction, httpRequest, PaymentResponseDTO.class);
-
-        // Save the amount to the database
-        PaymentResponseDTO paymentResponse = response.getBody();
-        if (paymentResponse != null && paymentResponse.getAmount() != null) {
-            try {
-                double amount = Double.parseDouble(paymentResponse.getAmount());
-                System.out.println("amount: " + amount);
-                // Save the amount to the database
-            } catch (NumberFormatException e) {
-                // Handle parsing error
-                System.err.println("Failed to parse amount: " + paymentResponse.getAmount());
-            }
-            // Save the other relevant data as needed
-        }
-
-        return new ResponseEntity<>(response.getBody(), response.getStatusCode());
+        return paymentService.sendTransactionRequest(userId, custom_ref, apiShopToken, userRepository, apiShopTransaction);
     }
 
 }

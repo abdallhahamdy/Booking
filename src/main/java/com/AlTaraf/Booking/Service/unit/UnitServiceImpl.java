@@ -13,6 +13,7 @@ import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
+import com.AlTaraf.Booking.Exception.InsufficientFundsException;
 import com.AlTaraf.Booking.Mapper.Unit.Dashboard.UnitDashboardMapper;
 import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
@@ -101,14 +102,13 @@ public class UnitServiceImpl implements UnitService {
     @Autowired
     UnitService unitService;
 
-    public Unit saveUnit(Unit unit) {
-        try {
+    public Unit saveUnit(Long userId, Unit unit) throws InsufficientFundsException {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+            if (user.getWallet() < unit.getCommission()) {
+                throw new InsufficientFundsException("Failed_Add_Unit.message");
+            }
             return unitRepository.save(unit);
-        } catch (Exception e) {
-            // Log the exception
-            e.printStackTrace();
-            throw e;
-        }
     }
 
 
@@ -456,9 +456,12 @@ public class UnitServiceImpl implements UnitService {
         User user = unit.getUser();
         System.out.println("user: " + user.getId());
 
-        double currentWallentBalance = user.getWallet();
-        currentWallentBalance -= unit.getCommission();
-        user.setWallet(currentWallentBalance);
+        if (user.getWallet() > 0) {
+
+            double currentWallentBalance = user.getWallet();
+            currentWallentBalance -= unit.getCommission();
+            user.setWallet(currentWallentBalance);
+        }
         userRepository.save(user);
 
         unitRepository.save(unit);

@@ -9,6 +9,7 @@ import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
+import com.AlTaraf.Booking.Exception.InsufficientFundsException;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
@@ -51,14 +52,13 @@ public class ReservationServiceImpl implements ReservationService {
     UserRepository userRepository;
 
     @Override
-    public Reservations saveReservation(Reservations reservations) {
-        try {
-            return reservationRepository.save(reservations);
-        } catch (Exception e) {
-            // Log the exception
-            e.printStackTrace();
-            throw e;
+    public Reservations saveReservation(Long userId, Reservations reservations) throws InsufficientFundsException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+        if (user.getWallet() < reservations.getCommision()) {
+            throw new InsufficientFundsException("Failed_Add_Reservation.message");
         }
+        return reservationRepository.save(reservations);
     }
 
     @Override
@@ -149,9 +149,11 @@ public class ReservationServiceImpl implements ReservationService {
         User user = reservations.getUser();
         System.out.println("user: " + user.getId());
 
-        double currentWallentBalance = user.getWallet();
-        currentWallentBalance -= reservations.getCommision();
-        user.setWallet(currentWallentBalance);
+        if (user.getWallet() > 0) {
+            double currentWallentBalance = user.getWallet();
+            currentWallentBalance -= reservations.getCommision();
+            user.setWallet(currentWallentBalance);
+        }
         userRepository.save(user);
 
         reservationRepository.save(reservations);

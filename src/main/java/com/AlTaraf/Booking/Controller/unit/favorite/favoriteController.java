@@ -53,15 +53,15 @@ public class favoriteController {
             // Check if the user already has the unit in their favorites
             boolean alreadyExists = userFavoriteUnitService.existsByUserAndUnit(user, unit);
             if (alreadyExists) {
-                return ResponseEntity.badRequest().body(new ApiResponse(400, "Unit is already in the user's favorite list."));
+                return ResponseEntity.badRequest().body(new ApiResponse(400, "Unit_Already_In_Favorite.message"));
             }
 
             // Save the favorite unit for the user
             userFavoriteUnitService.saveUserFavoriteUnit(user, unit);
 
-            return ResponseEntity.ok(new ApiResponse(200, "Added to favorite list successfully."));
+            return ResponseEntity.ok(new ApiResponse(201, "Added_Favorite_List.message"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "Failed to add to favorite list."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400, "Failed_Added_Favorite_List.message"));
         }
     }
 
@@ -80,11 +80,11 @@ public class favoriteController {
     public ResponseEntity<?> deleteUserFavoriteUnit(@PathVariable Long userId, @PathVariable Long unitId) {
         try {
             userFavoriteUnitService.deleteUserFavoriteUnit(userId, unitId);
-            return ResponseEntity.ok().body(new ApiResponse(200, "UserFavoriteUnit deleted successfully."));
+            return ResponseEntity.ok().body(new ApiResponse(201, "Deleted_Favorite_List.message"));
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, "Not_found.message"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(500, "An error occurred while deleting UserFavoriteUnit."));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "No_content.message"));
         }
     }
 

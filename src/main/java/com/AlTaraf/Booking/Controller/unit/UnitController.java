@@ -21,6 +21,7 @@ import com.AlTaraf.Booking.Entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
+import com.AlTaraf.Booking.Exception.InsufficientFundsException;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationStatusMapper;
 import com.AlTaraf.Booking.Mapper.Unit.*;
 import com.AlTaraf.Booking.Mapper.Unit.RoomDetails.RoomDetailsRequestMapper;
@@ -203,8 +204,10 @@ public class UnitController {
             // Calculate the price based on the unitType
             unitToSave.calculatePrice();
 
+            Long userId = unitRequestDto.getUserId();
+
             // Save the unit in the database
-            Unit savedUnit = unitService.saveUnit(unitToSave);
+            Unit savedUnit = unitService.saveUnit(userId, unitToSave);
 
             // Return the unitId in the response body
             return ResponseEntity.status(HttpStatus.CREATED).body("Unit created successfully with id: " + savedUnit.getId());
@@ -212,7 +215,13 @@ public class UnitController {
             // Return user-friendly error response
             ApiResponse response = new ApiResponse(400, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        } catch (Exception e) {
+        }
+        catch (InsufficientFundsException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"Fail_package_ads.message"));
+            return ResponseEntity.badRequest().body("Fail_package_unit_wallet.message");
+        }
+
+        catch (Exception e) {
             // Log the exception
             e.printStackTrace();
             // Return generic error response
@@ -279,8 +288,13 @@ public class UnitController {
 
             // Update other fields similarly...
 
+            Unit unit = unitRepository.findById(unitId)
+                    .orElseThrow(() -> new IllegalArgumentException("Unit not found with id: " + unitId));
+
+            Long userId= unit.getUser().getId();
+
             // Save the updated unit in the database
-            Unit updatedUnit = unitService.saveUnit(unitToUpdate);
+            Unit updatedUnit = unitService.saveUnit(userId,unitToUpdate);
 
             // Return a success response with the updated unitId in the body
             return ResponseEntity.ok("Unit updated successfully with id: " + updatedUnit.getId());

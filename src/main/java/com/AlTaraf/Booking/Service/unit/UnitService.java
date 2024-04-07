@@ -3,6 +3,7 @@ package com.AlTaraf.Booking.Service.unit;
 import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.unit.Unit;
+import com.AlTaraf.Booking.Exception.InsufficientFundsException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -13,7 +14,7 @@ import java.util.Set;
 
 public interface UnitService {
 
-    Unit saveUnit(Unit unit);
+    Unit saveUnit(Long userId, Unit unit) throws InsufficientFundsException;
 
     Page<UnitDtoFavorite> getUnitsByHotelClassificationNames(List<String> hotelClassificationNames, int page, int size);
 

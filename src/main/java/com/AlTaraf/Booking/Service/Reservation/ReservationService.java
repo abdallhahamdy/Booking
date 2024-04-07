@@ -1,19 +1,17 @@
 package com.AlTaraf.Booking.Service.Reservation;
 
-import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
+import com.AlTaraf.Booking.Exception.InsufficientFundsException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface ReservationService {
-    Reservations saveReservation(Reservations reservations);
+    Reservations saveReservation(Long userId, Reservations reservations) throws InsufficientFundsException;
 
     Reservations getReservationById(Long id); // Add this method to get a reservation by ID
 

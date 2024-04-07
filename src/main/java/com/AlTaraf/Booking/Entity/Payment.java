@@ -1,10 +1,8 @@
 package com.AlTaraf.Booking.Entity;
 
+import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Payload.request.PaymentMethod;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,24 +25,26 @@ public class Payment {
     private String id;
 
     @Column(name = "Amount")
-    @NotNull
-    private float amount;
+    private Double amount;
 
     @Column(name = "Phone")
-    @NotNull
     private String phone;
 
     @Column(name = "Email")
-    @NotNull
     private String email;
 
     @Column(name = "Backend_Url")
-    @NotNull
     private String backend_url;
 
     private PaymentMethod payment_method;
 
     private String our_ref;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
+
+    private Boolean isActive;
 
     public Payment() {
         this.id = "LE4B3xwrXBNWDEGL5PYVAKbmQgrz6xvjGNZjed7y2M0JaRko9nwl14O3qbQ2n6zN";

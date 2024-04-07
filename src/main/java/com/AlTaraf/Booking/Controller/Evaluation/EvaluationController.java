@@ -26,7 +26,7 @@ public class EvaluationController {
         if (!evaluationList.isEmpty()) {
             return new ResponseEntity<>(evaluationList, HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content for Evaluation !"));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No_content.message"));
         }
     }
 
