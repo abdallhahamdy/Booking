@@ -204,28 +204,22 @@ public class UnitController {
             // Calculate the price based on the unitType
             unitToSave.calculatePrice();
 
-            Long userId = unitRequestDto.getUserId();
 
-            // Save the unit in the database
-            Unit savedUnit = unitService.saveUnit(userId, unitToSave);
+            Unit savedUnit = unitService.saveUnit(unitToSave);
 
             // Return the unitId in the response body
-            return ResponseEntity.status(HttpStatus.CREATED).body("Unit created successfully with id: " + savedUnit.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).body("Successful_Add_Unit.message " + savedUnit.getId());
         } catch (IllegalArgumentException e) {
             // Return user-friendly error response
             ApiResponse response = new ApiResponse(400, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-        }
-        catch (InsufficientFundsException e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"Fail_package_ads.message"));
-            return ResponseEntity.badRequest().body("Fail_package_unit_wallet.message");
         }
 
         catch (Exception e) {
             // Log the exception
             e.printStackTrace();
             // Return generic error response
-            ApiResponse response = new ApiResponse(400, "Failed to create unit. Please check your input and try again.");
+            ApiResponse response = new ApiResponse(400, "Failed_Add_Unit.message");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
@@ -288,13 +282,8 @@ public class UnitController {
 
             // Update other fields similarly...
 
-            Unit unit = unitRepository.findById(unitId)
-                    .orElseThrow(() -> new IllegalArgumentException("Unit not found with id: " + unitId));
-
-            Long userId= unit.getUser().getId();
-
             // Save the updated unit in the database
-            Unit updatedUnit = unitService.saveUnit(userId,unitToUpdate);
+            Unit updatedUnit = unitService.saveUnit(unitToUpdate);
 
             // Return a success response with the updated unitId in the body
             return ResponseEntity.ok("Unit updated successfully with id: " + updatedUnit.getId());

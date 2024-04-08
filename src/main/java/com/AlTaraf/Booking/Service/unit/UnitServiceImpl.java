@@ -102,13 +102,14 @@ public class UnitServiceImpl implements UnitService {
     @Autowired
     UnitService unitService;
 
-    public Unit saveUnit(Long userId, Unit unit) throws InsufficientFundsException {
-            User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
-            if (user.getWallet() < unit.getCommission()) {
-                throw new InsufficientFundsException("Failed_Add_Unit.message");
-            }
+    public Unit saveUnit(Unit unit) {
+        try {
             return unitRepository.save(unit);
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            throw e;
+        }
     }
 
 
@@ -453,16 +454,16 @@ public class UnitServiceImpl implements UnitService {
 
         unit.setStatusUnit(statusUnit);
 
-        User user = unit.getUser();
-        System.out.println("user: " + user.getId());
+//        User user = unit.getUser();
+//        System.out.println("user: " + user.getId());
 
-        if (user.getWallet() > 0) {
-
-            double currentWallentBalance = user.getWallet();
-            currentWallentBalance -= unit.getCommission();
-            user.setWallet(currentWallentBalance);
-        }
-        userRepository.save(user);
+//        if (user.getWallet() > 0) {
+//
+//            double currentWallentBalance = user.getWallet();
+//            currentWallentBalance -= unit.getCommission();
+//            user.setWallet(currentWallentBalance);
+//        }
+//        userRepository.save(user);
 
         unitRepository.save(unit);
     }

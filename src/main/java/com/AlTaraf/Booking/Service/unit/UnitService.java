@@ -14,7 +14,7 @@ import java.util.Set;
 
 public interface UnitService {
 
-    Unit saveUnit(Long userId, Unit unit) throws InsufficientFundsException;
+    Unit saveUnit( Unit unit);
 
     Page<UnitDtoFavorite> getUnitsByHotelClassificationNames(List<String> hotelClassificationNames, int page, int size);
 
