@@ -27,6 +27,8 @@ import com.AlTaraf.Booking.Service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -112,16 +114,20 @@ public class AdsController {
     @GetMapping("/Status-Unit/Ads")
     public ResponseEntity<?> getAdsByUserAndStatus(
             @RequestParam(name = "USER_ID") Long userId,
-            @RequestParam(name = "statusUnitId") Long statusUnitId) {
+            @RequestParam(name = "statusUnitId") Long statusUnitId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
-        List<Ads> ads = adsService.getAdsForUserAndStatus(userId, statusUnitId);
+
+        List<Ads> ads = adsService.getAdsForUserAndStatus(userId, statusUnitId, pageable);
 
         if (!ads.isEmpty()) {
             List<AdsResponseStatusDto> adsDtoList = adsStatusMapper.toAdsDtoList(ads);
             return new ResponseEntity<>(adsDtoList, HttpStatus.OK);
         } else {
             ApiResponse response = new ApiResponse(200, "No_content.message");
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
 

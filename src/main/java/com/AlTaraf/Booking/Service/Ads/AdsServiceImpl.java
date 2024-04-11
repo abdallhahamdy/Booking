@@ -62,9 +62,9 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public List<Ads> getAdsForUserAndStatus(Long userId, Long  statusUnitId) {
+    public List<Ads> getAdsForUserAndStatus(Long userId, Long  statusUnitId, Pageable pageable) {
         // Retrieve a List of Ads for the given USER_ID and StatusUnit name
-        return adsRepository.findAllAdsByUserIdAndStatusUnitId(userId, statusUnitId);
+        return adsRepository.findAllAdsByUserIdAndStatusUnitId(userId, statusUnitId, pageable);
     }
 
     @Override
