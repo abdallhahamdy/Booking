@@ -170,9 +170,8 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Page<Reservations> getReservationForUserAndStatus(Long userId, String statusUnitName, int page, int size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        return reservationRepository.findByUserIdAndStatusUnitName(userId, statusUnitName, pageRequest  );
+    public Page<Reservations> getReservationForUserAndStatus(Long userId, Long statusUnitId , Pageable pageable) {
+        return reservationRepository.findByUserIdAndStatusUnitId(userId, statusUnitId, pageable);
     }
 
     @Override

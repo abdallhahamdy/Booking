@@ -5,6 +5,7 @@ import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
+import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationGetByIdMapper;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationRequestMapper;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationStatusMapper;
@@ -13,6 +14,8 @@ import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Payload.response.Reservation.ReservationResponseGetId;
 import com.AlTaraf.Booking.Payload.response.Reservation.ReservationStatus;
 import com.AlTaraf.Booking.Repository.Evaluation.EvaluationRepository;
+import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
+import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.unit.RoomDetails.RoomDetailsService;
 import com.AlTaraf.Booking.Service.unit.RoomDetailsForAvailableArea.RoomDetailsForAvailableAreaService;
@@ -20,6 +23,9 @@ import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.unit.availableArea.AvailableAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,6 +64,12 @@ public class ReservationController {
 
     @Autowired
     private ReservationStatusMapper reservationStatusMapper;
+
+    @Autowired
+    ReservationRepository reservationRepository;
+
+    @Autowired
+    StatusRepository statusRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(ReservationController.class);
 
@@ -139,11 +151,13 @@ public class ReservationController {
     @GetMapping("/Status-Reservation")
     public ResponseEntity<?> getReservationsForUserAndStatus(
             @RequestParam(name = "USER_ID") Long userId,
-            @RequestParam(name = "statusUnitName") String statusUnitName,
+            @RequestParam(name = "statusUnitId") Long statusUnitId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "2") int size) {
 
-        Page<Reservations> reservations = reservationService.getReservationForUserAndStatus(userId, statusUnitName, page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+
+        Page<Reservations> reservations = reservationService.getReservationForUserAndStatus(userId, statusUnitId, pageable);
 
         if (!reservations.isEmpty()) {
             List<ReservationStatus> reservationRequestDtoList = reservationStatusMapper.toReservationStatusDtoList(reservations.getContent());
@@ -188,17 +202,33 @@ public class ReservationController {
 }
 
     @DeleteMapping("Delete/Reservation/{id}")
-    public ResponseEntity<?> deleteReservation(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUnit(@PathVariable Long id) {
 
-        try {
-            reservationService.updateStatusForReservation(id, 4L);
-            reservationService.deleteUnit(id);
-            ApiResponse response = new ApiResponse(200, "Reservation_Deleted_Successfully.message!");
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            ApiResponse response = new ApiResponse(404, "Not_found.message");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
+        Reservations reservations = reservationRepository.findById(id).orElse(null);
+
+        StatusUnit statusUnit = statusRepository.findById(4L).orElse(null);
+
+        reservations.setStatusUnit(statusUnit);
+
+        reservationRepository.save(reservations);
+
+        ApiResponse response = new ApiResponse(200, "Reservation_deleted.message");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+
     }
+
+//    @DeleteMapping("Delete/Reservation/{id}")
+//    public ResponseEntity<?> deleteReservation(@PathVariable Long id) {
+//
+//        try {
+//            reservationService.updateStatusForReservation(id, 4L);
+//            reservationService.deleteUnit(id);
+//            ApiResponse response = new ApiResponse(200, "Reservation_Deleted_Successfully.message!");
+//            return ResponseEntity.status(HttpStatus.OK).body(response);
+//        } catch (Exception e) {
+//            ApiResponse response = new ApiResponse(404, "Not_found.message");
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+//        }
+//    }
 
 }

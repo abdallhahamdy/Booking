@@ -27,7 +27,7 @@ public interface ReservationService {
 
     RoomAvailable getRoomAvailableByReservations(Long reservationId);
 
-    Page<Reservations> getReservationForUserAndStatus(Long userId, String statusUnitName, int page, int size);
+    Page<Reservations> getReservationForUserAndStatus(Long userId, Long statusUnitId , Pageable pageable);
 
     void changeStatusUnitId(Long reservationId, Long newStatusUnitId);
 
