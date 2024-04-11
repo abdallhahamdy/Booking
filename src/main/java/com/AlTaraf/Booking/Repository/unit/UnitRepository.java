@@ -40,8 +40,8 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 //    Page<Unit> findByNameUnitContainingIgnoreCase(String nameUnit, Pageable pageable);
 
     List<Unit> findAllByUserIdAndStatusUnitName(Long userId, String statusUnitName);
-    @Query("SELECT u FROM Unit u WHERE u.user.id = :userId AND u.statusUnit.name = :statusUnitName")
-    Page<Unit> findAllByUserIdAndStatusUnitName(Long userId, String statusUnitName, Pageable pageable);
+    @Query("SELECT u FROM Unit u WHERE u.user.id = :userId AND u.statusUnit.id = :statusUnitId")
+    Page<Unit> findAllByUserIdAndStatusUnitId(Long userId, Long statusUnitId, Pageable pageable);
 
     Page<Unit> findByUser_IdAndFavorite(Long userId, boolean favorite, Pageable pageable);
 

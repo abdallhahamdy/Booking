@@ -20,6 +20,7 @@ import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
+import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
 import com.AlTaraf.Booking.Exception.InsufficientFundsException;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationStatusMapper;
@@ -44,6 +45,7 @@ import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAr
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.unit.roomAvailable.RoomAvailableRepository;
+import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.unit.AvailablePeriods.AvailablePeriodsService;
@@ -158,6 +160,8 @@ public class UnitController {
     @Autowired
     private UserFavoriteUnitRepository userFavoriteUnitRepository;
 
+    @Autowired
+    StatusRepository statusUnitRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(UnitController.class);
 
@@ -484,12 +488,12 @@ public class UnitController {
     @GetMapping("/Status-Unit/Unit")
     public ResponseEntity<?> getUnitsForUserAndStatus(
             @RequestParam(name = "USER_ID") Long userId,
-            @RequestParam(name = "statusUnitName") String statusUnitName,
+            @RequestParam(name = "statusUnitId") Long statusUnitId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-        Page<Unit> unitPage = unitService.getUnitsForUserAndStatus(userId, statusUnitName, pageable);
+        Page<Unit> unitPage = unitService.getUnitsForUserAndStatus(userId, statusUnitId, pageable);
 
         if (unitPage.hasContent()) {
             List<UnitDto> unitDtos = unitMapper.toUnitDtoList(unitPage.getContent());
@@ -500,32 +504,20 @@ public class UnitController {
         }
     }
 
-    @Transactional
     @DeleteMapping("Delete/Unit/{id}")
     public ResponseEntity<?> deleteUnit(@PathVariable Long id) {
-        try {
-            // Check if the unit is associated with any reservations
-            if (reservationRepository.existsByUnitId(id)) {
-                ApiResponse response = new ApiResponse(400, "Unit is associated with reservations and cannot be deleted!");
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-            }
 
-            userFavoriteUnitRepository.deleteByUnit(id);
-            roomDetailsForAvailableAreaRepository.deleteByUnitId(id);
-            reserveDateRepository.deleteByUnitId(id);
-            reserveDateHallsRepository.deleteRelatedDateInfoHallsByUnitId(id);
-            reserveDateHallsRepository.deleteByUnitId(id);
-            imageDataRepository.deleteByUnitId(id);
-            adsRepository.deleteByUnitId(id);
+        Unit unit = unitRepository.findById(id).orElse(null);
 
-            unitService.deleteUnit(id);
-            ApiResponse response = new ApiResponse(200, "Unit deleted successfully!");
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            System.out.println("Error Message Delete Unit: " + e);
-            // Rethrow the exception to mark the transaction as rollback-only
-            throw e;
-        }
+        StatusUnit statusUnit = statusUnitRepository.findById(4L).orElse(null);
+
+        unit.setStatusUnit(statusUnit);
+
+        unitRepository.save(unit);
+
+        ApiResponse response = new ApiResponse(200, "Unit_deleted.message");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+
     }
 
 

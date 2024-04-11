@@ -37,7 +37,7 @@ public interface UnitService {
     List<Unit> getAllUnitForMap();
     Page<Unit> getAllUnit(Pageable pageable);
 
-    Page<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName, Pageable pageable);
+    Page<Unit> getUnitsForUserAndStatus(Long userId, Long statusUnitId, Pageable pageable);
     Page<UnitDtoFavorite> getUnitsByUserCity(Long userId, Pageable pageable, Sort sort);
 
     Page<Unit> getUnitsByUnitTypeId(Long unitTypeId, Pageable pageable);

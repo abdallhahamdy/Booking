@@ -276,9 +276,10 @@ public class UnitServiceImpl implements UnitService {
 
 
     @Override
-    public Page<Unit> getUnitsForUserAndStatus(Long userId, String statusUnitName, Pageable pageable) {
-        return unitRepository.findAllByUserIdAndStatusUnitName(userId, statusUnitName, pageable);
+    public Page<Unit> getUnitsForUserAndStatus(Long userId, Long statusUnitId, Pageable pageable) {
+        return unitRepository.findAllByUserIdAndStatusUnitId(userId, statusUnitId, pageable);
     }
+
     @Override
     public Page<UnitDtoFavorite> getUnitsByUserCity(Long userId, Pageable pageable, Sort sort) {
         User user = userRepository.findById(userId).orElse(null);
