@@ -14,6 +14,7 @@ import com.AlTaraf.Booking.Payload.request.Ads.AdsRequestDto;
 import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseDto;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
+import com.AlTaraf.Booking.Payload.response.ApiResponseFlag;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
@@ -138,14 +139,14 @@ public class AdsController {
     }
 
     @GetMapping("/{userId}/check-package-ads")
-    public ResponseEntity<String> checkUserPackageAds(@PathVariable Long userId) {
+    public ResponseEntity<?> checkUserPackageAds(@PathVariable Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             if (user.getPackageAds() != null) {
-                return ResponseEntity.ok("User_Has_Package.message");
+                return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseFlag(200,"false", false));
             } else {
-                return ResponseEntity.ok("");
+                return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseFlag(204,"true", true));
             }
         } else {
             return ResponseEntity.notFound().build();
