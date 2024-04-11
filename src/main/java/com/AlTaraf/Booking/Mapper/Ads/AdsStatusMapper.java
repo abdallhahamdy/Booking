@@ -13,16 +13,17 @@ import java.util.List;
 public interface AdsStatusMapper {
     @Mapping(source = "id", target = "id")
     @Mapping(source = "unit.id", target = "unitId")
+    @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "unit.unitType.id", target = "unitTypeId")
     @Mapping(source = "images", target = "imageDataDTO")
     @Mapping(source = "unit.nameUnit", target = "unitName")
     @Mapping(source = "unit.city", target = "cityDto")
     @Mapping(source = "unit.region", target = "regionDto")
-    @Mapping(source = "packageAds", target = "packageAds")
+    @Mapping(source = "user.packageAds", target = "packageAds")
     @Mapping(source = "statusUnit", target = "statusUnit")
     AdsResponseStatusDto toDto(Ads ads);
 
-    List<AdsResponseDto> toAdsDtoList(List<Ads> ads);
+    List<AdsResponseStatusDto> toAdsDtoList(List<Ads> ads);
 
 //    @Mapping(source = "id", target = "id")
     @Mapping(source = "unitId", target = "unit.id")

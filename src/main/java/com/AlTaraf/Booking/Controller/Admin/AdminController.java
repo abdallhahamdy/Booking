@@ -471,6 +471,18 @@ public class AdminController {
         return ResponseEntity.ok("Commission set successfully for all reservations.");
     }
 
+    @DeleteMapping("Delete/Ads/{id}")
+    public ResponseEntity<?> deleteAds(@PathVariable Long id) {
+
+        try {
+            adsService.deleteAds(id);
+            ApiResponse response = new ApiResponse(200, "Ads_deleted.message");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+            ApiResponse response = new ApiResponse(404, "Not_found.message");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+    }
 
 
 }

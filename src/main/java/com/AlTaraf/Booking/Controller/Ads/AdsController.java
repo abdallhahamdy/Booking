@@ -5,6 +5,7 @@ import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.unit.Unit;
+import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Exception.InsufficientFundsException;
 import com.AlTaraf.Booking.Mapper.Ads.AdsMapper;
 import com.AlTaraf.Booking.Mapper.Ads.AdsStatusMapper;
@@ -12,12 +13,16 @@ import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.Mapper.Unit.UnitGeneralResponseMapper;
 import com.AlTaraf.Booking.Payload.request.Ads.AdsRequestDto;
 import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseDto;
+import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseStatusDto;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Payload.response.ApiResponseFlag;
+import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
+import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
+import com.AlTaraf.Booking.Service.unit.statusUnit.StatusUnitService;
 import com.AlTaraf.Booking.Service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -58,6 +63,12 @@ public class AdsController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    AdsRepository adsRepository;
+
+    @Autowired
+    StatusRepository statusUnitRepository;
 
     @GetMapping("/Package-Ads")
     public ResponseEntity<?> getAllPackageAds() {
@@ -101,31 +112,37 @@ public class AdsController {
     @GetMapping("/Status-Unit/Ads")
     public ResponseEntity<?> getAdsByUserAndStatus(
             @RequestParam(name = "USER_ID") Long userId,
-            @RequestParam(name = "statusUnitName") String statusUnitName) {
+            @RequestParam(name = "statusUnitId") Long statusUnitId) {
 
-        List<Ads> ads = adsService.getAdsForUserAndStatus(userId, statusUnitName);
+        List<Ads> ads = adsService.getAdsForUserAndStatus(userId, statusUnitId);
 
         if (!ads.isEmpty()) {
-            List<AdsResponseDto> adsDtoList = adsStatusMapper.toAdsDtoList(ads);
+            List<AdsResponseStatusDto> adsDtoList = adsStatusMapper.toAdsDtoList(ads);
             return new ResponseEntity<>(adsDtoList, HttpStatus.OK);
         } else {
-            ApiResponse response = new ApiResponse(204, "No_content.message");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            ApiResponse response = new ApiResponse(200, "No_content.message");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
 
     @DeleteMapping("Delete/Ads/{id}")
     public ResponseEntity<?> deleteAds(@PathVariable Long id) {
 
-        try {
-            adsService.deleteAds(id);
-            ApiResponse response = new ApiResponse(200, "Ads_deleted.message");
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } catch (Exception e) {
-            ApiResponse response = new ApiResponse(404, "Not_found.message");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
+        Ads ads = adsRepository.findById(id).orElse(null);
+
+        StatusUnit statusUnit = statusUnitRepository.findById(4L).orElse(null);
+
+
+
+        ads.setStatusUnit(statusUnit);
+
+        adsRepository.save(ads);
+
+        ApiResponse response = new ApiResponse(200, "Ads_deleted.message");
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+
     }
+
 
     @GetMapping("/Accepted/Status")
     public ResponseEntity<?> getAdsByAcceptedStatus() {

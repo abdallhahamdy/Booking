@@ -13,7 +13,7 @@ public interface AdsService {
     List<PackageAds> getAllPackageAds();
     Ads createAds(Ads ads);
 
-    List<Ads> getAdsForUserAndStatus(Long userId, String statusUnitName);
+    List<Ads> getAdsForUserAndStatus(Long userId, Long statusUnitId);
 
     void deleteAds(Long id);
 

@@ -31,9 +31,9 @@ public class Ads {
     @JoinColumn(name = "UNIT_ID")
     private Unit unit;
 
-    @ManyToOne
-    @JoinColumn(name = "PACKAGE_ADS_ID")
-    private PackageAds packageAds;
+//    @ManyToOne
+//    @JoinColumn(name = "PACKAGE_ADS_ID")
+//    private PackageAds packageAds;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
