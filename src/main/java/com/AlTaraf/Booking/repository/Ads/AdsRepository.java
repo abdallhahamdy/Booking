@@ -18,8 +18,8 @@ import java.util.List;
 public interface AdsRepository extends JpaRepository<Ads, Long> {
     List<Ads> findByStatusUnitId(Long statusUnitId);
 
-    List<Ads> findAllAdsByUserIdAndStatusUnitName(Long userId, String statusUnitName);
-
+    @Query("SELECT a FROM Ads a WHERE a.user.id = :userId AND a.statusUnit.id = :statusUnitId")
+    List<Ads> findAllAdsByUserIdAndStatusUnitId(@Param("userId") Long userId, @Param("statusUnitId") Long statusUnitId);
     List<Ads> findByStatusUnitName(String statusName);
 
     Ads findByUnitId(Long unitId);

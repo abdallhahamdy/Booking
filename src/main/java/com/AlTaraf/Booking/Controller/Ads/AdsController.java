@@ -132,8 +132,6 @@ public class AdsController {
 
         StatusUnit statusUnit = statusUnitRepository.findById(4L).orElse(null);
 
-
-
         ads.setStatusUnit(statusUnit);
 
         adsRepository.save(ads);
