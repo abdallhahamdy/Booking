@@ -15,6 +15,7 @@ import java.util.List;
 public interface ReserveDateHallsRepository extends JpaRepository<ReserveDateHalls, Long> {
 
     @Query("SELECT rd FROM ReserveDateHalls rd WHERE rd.unit.id = :unitId AND rd.reserve = true")
+//    @Query("SELECT rd FROM ReserveDateHalls rd WHERE rd.unit.id = :unitId")
     List<ReserveDateHalls> findByUnitIdAndReserveIsTrue(@Param("unitId") Long unitId);
 
     @Query("SELECT rd FROM ReserveDateHalls rd WHERE rd.unit.id = :unitId")

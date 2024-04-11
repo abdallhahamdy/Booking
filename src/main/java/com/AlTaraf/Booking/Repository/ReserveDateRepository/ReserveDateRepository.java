@@ -1,6 +1,5 @@
 package com.AlTaraf.Booking.Repository.ReserveDateRepository;
 
-import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
 import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
