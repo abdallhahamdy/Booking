@@ -13,7 +13,6 @@ import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
-import com.AlTaraf.Booking.Exception.InsufficientFundsException;
 import com.AlTaraf.Booking.Mapper.Unit.Dashboard.UnitDashboardMapper;
 import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
@@ -24,6 +23,8 @@ import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepositor
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
+import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportRepository;
+import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportUnitRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
@@ -101,6 +102,12 @@ public class UnitServiceImpl implements UnitService {
 
     @Autowired
     UnitService unitService;
+
+    @Autowired
+    TechnicalSupportUnitRepository technicalSupportUnitRepository;
+
+    @Autowired
+    TechnicalSupportRepository technicalSupportRepository;
 
     public Unit saveUnit(Unit unit) {
         try {
@@ -545,6 +552,8 @@ public class UnitServiceImpl implements UnitService {
 
         imageDataRepository.deleteByUnitId(id);
         reservationRepository.deleteByUnitId(id);
+
+        technicalSupportUnitRepository.deleteByUnitId(id);
 
         Ads ads = adsRepository.findByUnitId(id);
 
