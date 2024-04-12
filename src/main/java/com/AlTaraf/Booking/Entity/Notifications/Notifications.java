@@ -23,6 +23,9 @@ public class Notifications {
 
     private String logoUrl;
 
+    @ManyToOne
+    private Role role;
+
     public Notifications() {
         this.logoUrl = "https://play.min.io/ehgzly/logo.jpg";
     }

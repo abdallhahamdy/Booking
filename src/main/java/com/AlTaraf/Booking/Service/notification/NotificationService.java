@@ -1,6 +1,7 @@
 package com.AlTaraf.Booking.Service.notification;
 
 import com.AlTaraf.Booking.Entity.User.User;
+import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Repository.NotificationRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Entity.Notifications.Notifications;
@@ -71,4 +72,7 @@ public class NotificationService {
         return notificationRepository.findByUserId(userId, pageable);
     }
 
+    public Page<Notifications> findAllByUserIdAndRoleName(Long userId, ERole roleName, Pageable pageable) {
+        return notificationRepository.findAllByUserIdAndRoleName(userId, roleName, pageable);
+    }
 }

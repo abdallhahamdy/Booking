@@ -3,12 +3,14 @@ package com.AlTaraf.Booking.Controller;
 import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequest;
 import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequestForAll;
 import com.AlTaraf.Booking.Dto.Notifications.Response.PushNotificationResponse;
+import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Mapper.Notification.NotificationForAllMapper;
 import com.AlTaraf.Booking.Mapper.Notification.NotificationMapper;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Repository.NotificationRepository;
+import com.AlTaraf.Booking.Repository.role.RoleRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.notification.NotificationService;
 import com.AlTaraf.Booking.Entity.Notifications.Notifications;
@@ -44,6 +46,9 @@ public class NotificationController {
     @Autowired
     NotificationForAllMapper notificationForAllMapper;
 
+    @Autowired
+    RoleRepository roleRepository;
+
 
     @PostMapping("/Send")
     public ResponseEntity<?> sendPushNotification(@RequestBody PushNotificationRequest request) {
@@ -65,6 +70,9 @@ public class NotificationController {
     public ResponseEntity<?> sendPushNotificationforGuest(@RequestBody PushNotificationRequest request) {
         try {
             Notifications notification = notificationMapper.dtoToEntity(request);
+            Role role = roleRepository.findById(1L).orElse(null);
+
+            notification.setRole(role);
             notificationRepository.save(notification);
 
             User user = userRepository.findByRolesNameAndUserId(ERole.ROLE_GUEST,request.getUserId());
@@ -82,6 +90,9 @@ public class NotificationController {
     public ResponseEntity<?> sendPushNotificationforLessor(@RequestBody PushNotificationRequest request) {
         try {
             Notifications notification = notificationMapper.dtoToEntity(request);
+            Role role = roleRepository.findById(2L).orElse(null);
+
+            notification.setRole(role);
             notificationRepository.save(notification);
 
             User user = userRepository.findByRolesNameAndUserId(ERole.ROLE_LESSOR,request.getUserId());
@@ -119,6 +130,11 @@ public class NotificationController {
     public ResponseEntity<?> sendPushNotificationforAllGuest(@RequestBody PushNotificationRequestForAll request) {
         try {
             Notifications notification = notificationForAllMapper.dtoToEntity(request);
+
+            Role role = roleRepository.findById(1L).orElse(null);
+
+            notification.setRole(role);
+
             notificationRepository.save(notification);
 
             List<User> users = userRepository.findByRolesName(ERole.ROLE_GUEST);
@@ -138,6 +154,10 @@ public class NotificationController {
     public ResponseEntity<?> sendPushNotificationforLessor(@RequestBody PushNotificationRequestForAll request) {
         try {
             Notifications notification = notificationForAllMapper.dtoToEntity(request);
+
+            Role role = roleRepository.findById(2L).orElse(null);
+
+            notification.setRole(role); // Set role ID to 2
             notificationRepository.save(notification);
 
             List<User> users = userRepository.findByRolesName(ERole.ROLE_LESSOR);
@@ -152,29 +172,40 @@ public class NotificationController {
         }
     }
 
+//    @GetMapping("/user/{userId}")
+//    public ResponseEntity<?> getNotificationsByUserId(
+//            @PathVariable Long userId,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size) {
+//
+//        Pageable pageable = PageRequest.of(page, size);
+//        Page<Notifications> notifications = notificationService.getNotificationsByUserId(userId, pageable);
+//
+//        Page<PushNotificationResponse> response = notifications.map(NotificationMapper.INSTANCE::entityToDto);
+//
+//        return ResponseEntity.ok(response);
+//    }
+
+
     @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getNotificationsByUserId(
+    public ResponseEntity<?> getNotificationsByUserIdAndRoleName(
             @PathVariable Long userId,
+            @RequestParam(required = false) ERole roleName,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<Notifications> notifications = notificationService.getNotificationsByUserId(userId, pageable);
+        Page<Notifications> notifications;
+
+        if (roleName == null) {
+            notifications = notificationService.getNotificationsByUserId(userId, pageable);
+        } else {
+            notifications = notificationService.findAllByUserIdAndRoleName(userId, roleName, pageable);
+        }
 
         Page<PushNotificationResponse> response = notifications.map(NotificationMapper.INSTANCE::entityToDto);
 
         return ResponseEntity.ok(response);
-    }
-
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Notifications> getNotificationById(@PathVariable Long id) {
-        Optional<Notifications> notification = notificationRepository.findById(id);
-        if (notification.isPresent()) {
-            return ResponseEntity.ok(notification.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
     }
 
 }
