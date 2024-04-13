@@ -67,6 +67,7 @@ public interface UserMapper {
     @Mapping(source = "roles", target = "roles")
     @Mapping(source = "deviceToken", target = "deviceToken")
     @Mapping(source = "wallet", target = "wallet")
+    @Mapping(source = "packageAds", target = "packageAds")
     UserDto userToUserDto(User user);
 
     @Named("roleToRoleDtoList")

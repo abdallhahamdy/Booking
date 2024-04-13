@@ -2,6 +2,7 @@ package com.AlTaraf.Booking.Dto.User;
 
 
 import com.AlTaraf.Booking.Dto.Image.ImageDataProfileDTO;
+import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.Role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,4 +27,6 @@ public class UserDto {
     private Set<Role> roles;
     private String deviceToken;
     private Double wallet;
+
+    private PackageAds packageAds;
 }
