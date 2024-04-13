@@ -1,7 +1,9 @@
 package com.AlTaraf.Booking.Service.Reservation;
 
+import com.AlTaraf.Booking.Dto.TotalTransactions.TotalTransactionsDto;
 import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
+import com.AlTaraf.Booking.Entity.TotalTransactions.TotalTransactions;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
@@ -10,9 +12,11 @@ import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Exception.InsufficientFundsException;
+import com.AlTaraf.Booking.Mapper.TotalTransactions.TotalTransactionsMapper;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
+import com.AlTaraf.Booking.Repository.TotalTransactions.TotalTransactionsRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
@@ -50,6 +54,18 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    TotalTransactionsMapper totalTransactionsMapper;
+
+    @Autowired
+    TotalTransactionsRepository totalTransactionsRepository;
+
+//    @Autowired
+//    TotalTransactionsDto totalTransactionsDto;
+
+//    @Autowired
+//    TotalTransactions totalTransactions;
 
     @Override
     public Reservations saveReservation(Long userId, Reservations reservations) throws InsufficientFundsException {
@@ -153,6 +169,18 @@ public class ReservationServiceImpl implements ReservationService {
             double currentWallentBalance = user.getWallet();
             currentWallentBalance -= reservations.getCommision();
             user.setWallet(currentWallentBalance);
+
+            TotalTransactions totalTransactions = totalTransactionsRepository.findById(1L).orElse(null);
+
+            Long totalReservationsTransactions = totalTransactions.getTotalReservationsTransactions();
+            Long totalTransactionsNumber = totalTransactions.getTotalTransactions();
+            totalReservationsTransactions++;
+            totalTransactionsNumber++;
+
+            totalTransactions.setTotalReservationsTransactions(totalReservationsTransactions);
+            totalTransactions.setTotalTransactions(totalTransactionsNumber);
+//            totalTransactionsMapper.toEntity(totalTransactionsDto);
+            totalTransactionsRepository.save(totalTransactions);
         }
         userRepository.save(user);
 

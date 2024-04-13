@@ -4,6 +4,8 @@ insert into roles (arabic_name, role, english_name) values ("تاجر", "ROLE_LE
 insert into roles (arabic_name, role, english_name) values ("ادمن", "ROLE_ADMIN", "Admin");
 insert into roles (arabic_name, role, english_name) values ("خدمة عملاء", "ROLE_SERVICE", "Customer Service");
 
+insert into TOTAL_TRANSACTIONS (TOTAL_TRANSACTIONS, TOTAL_RESERVATIONS_TRANSACTIONS, TOTAL_SUBSCRIPTIONS_TRANSACTIONS) values (0,0,0);
+
 
 -- insert cities    المدن
 insert into city (arabic_name, city) values ("طرابلس","Tripoli");
