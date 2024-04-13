@@ -3,6 +3,7 @@ package com.AlTaraf.Booking.Service.user;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
+import com.AlTaraf.Booking.Entity.TotalTransactions.TotalTransactions;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.User.User;
@@ -18,6 +19,7 @@ import com.AlTaraf.Booking.Repository.NotificationRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
+import com.AlTaraf.Booking.Repository.TotalTransactions.TotalTransactionsRepository;
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataProfileRepository;
@@ -114,6 +116,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     PackageAdsRepository packageAdsRepository;
+
+    @Autowired
+    TotalTransactionsRepository totalTransactionsRepository;
 
     public String generateOtpForUser() {
         // For simplicity, let's assume a random 4-digit OTP
@@ -320,6 +325,18 @@ public class UserServiceImpl implements UserService {
             double currentWalletBalance = user.getWallet();
             currentWalletBalance -= packageAds.getPrice();
             user.setWallet(currentWalletBalance);
+
+            TotalTransactions totalTransactions = totalTransactionsRepository.findById(1L).orElse(null);
+
+            Long totalSubscriptions = totalTransactions.getTotalSubscriptionsTransactions();
+            Long totalTransactionsNumber = totalTransactions.getTotalTransactions();
+            totalSubscriptions++;
+            totalTransactionsNumber++;
+
+            totalTransactions.setTotalSubscriptionsTransactions(totalSubscriptions);
+            totalTransactions.setTotalTransactions(totalTransactionsNumber);
+//            totalTransactionsMapper.toEntity(totalTransactionsDto);
+            totalTransactionsRepository.save(totalTransactions);
 
         }
         userRepository.save(user);
