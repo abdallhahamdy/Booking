@@ -72,7 +72,15 @@ public class NotificationService {
         return notificationRepository.findByUserId(userId, pageable);
     }
 
-    public Page<Notifications> findAllByUserIdAndRoleName(Long userId, ERole roleName, Pageable pageable) {
-        return notificationRepository.findAllByUserIdAndRoleName(userId, roleName, pageable);
+    public Page<Notifications> findAllByUserIdAndRoleId(Long userId, Long roleId, Pageable pageable) {
+        return notificationRepository.findAllByUserIdAndRoleId(userId, roleId, pageable);
+    }
+
+    public Page<Notifications> findAllByRoleIdAndUserIdIsNull( Long roleId, Pageable pageable) {
+        return notificationRepository.findAllByRoleId( roleId, pageable);
+    }
+
+    public Page<Notifications> findAllByRoleIdIsNullAndUserIdIsNull(Pageable pageable) {
+        return notificationRepository.findAllByRoleIdIsNullAndUserIdIsNull(pageable);
     }
 }

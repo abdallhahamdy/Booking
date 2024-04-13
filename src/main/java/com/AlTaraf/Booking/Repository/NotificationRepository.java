@@ -21,10 +21,16 @@ public interface NotificationRepository extends JpaRepository<Notifications, Lon
     @Query("DELETE FROM Notifications n WHERE n.user.id = :userId")
     void deleteByUserId(@Param("userId") Long userId);
 
-//    @Query("SELECT n FROM Notifications n JOIN n.user u WHERE u.id = :userId AND u.roles.name = :roleName")
-//    Page<Notifications> findAllByUserIdAndUserRoleName(@Param("userId") Long userId, @Param("roleName") ERole roleName, Pageable pageable);
+    @Query("SELECT n FROM Notifications n JOIN n.user u JOIN n.role r WHERE u.id = :userId AND r.id = :roleId")
+    Page<Notifications> findAllByUserIdAndRoleId(@Param("userId") Long userId, @Param("roleId") Long roleId, Pageable pageable);
 
-    @Query("SELECT n FROM Notifications n JOIN n.user u JOIN n.role r WHERE u.id = :userId AND r.name = :roleName")
-    Page<Notifications> findAllByUserIdAndRoleName(@Param("userId") Long userId, @Param("roleName") ERole roleName, Pageable pageable);
+//    @Query("SELECT n FROM Notifications n JOIN n.user u JOIN n.role r WHERE (:userId IS NULL OR u.id = :userId) AND (:roleId IS NULL OR r.id = :roleId)")
+//    Page<Notifications> findAllByUserIdAndRoleIdOrUserIdIsNull(@Param("userId") Long userId, @Param("roleId") Long roleId, Pageable pageable);
+
+    @Query("SELECT n FROM Notifications n WHERE n.user.id IS NULL AND n.role.id = :roleId")
+    Page<Notifications> findAllByRoleId(@Param("roleId") Long roleId, Pageable pageable);
+
+    @Query("SELECT n FROM Notifications n WHERE n.user.id IS NULL AND n.role.id IS NULL")
+    Page<Notifications> findAllByRoleIdIsNullAndUserIdIsNull(Pageable pageable);
 
 }

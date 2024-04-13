@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -187,23 +188,39 @@ public class NotificationController {
 //    }
 
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getNotificationsByUserIdAndRoleName(
-            @PathVariable Long userId,
-            @RequestParam(required = false) ERole roleName,
+    @GetMapping("/user")
+    public ResponseEntity<?> getNotificationsByUserIdAndRoleId(
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) Long roleId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Notifications> notifications;
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Page<PushNotificationResponse> response;
 
-        if (roleName == null) {
-            notifications = notificationService.getNotificationsByUserId(userId, pageable);
-        } else {
-            notifications = notificationService.findAllByUserIdAndRoleName(userId, roleName, pageable);
+//        if (userId == null && roleId == null) {
+//            System.out.println("YOOO");
+//            System.out.println("roleId null: qwdqwd " + roleId);
+//            System.out.println("userId null: " + userId);
+//            Page<Notifications> notifications = notificationService.findAllByRoleIdIsNullAndUserIdIsNull(pageable);
+//            response = notifications.map(NotificationMapper.INSTANCE::entityToDto);
+//        }
+
+        if (roleId == null) {
+            System.out.println("roleId null: " + roleId);
+            System.out.println("userId: " + userId);
+            Page<Notifications> notifications = notificationService.getNotificationsByUserId(userId, pageable);
+            response = notifications.map(NotificationMapper.INSTANCE::entityToDto);
+        } else if (userId == null) {
+            System.out.println("userId null: " + userId);
+            System.out.println("roleId: " + roleId);
+            Page<Notifications> notifications = notificationService.findAllByRoleIdAndUserIdIsNull( roleId, pageable);
+            response = notifications.map(NotificationMapper.INSTANCE::entityToDto);
         }
-
-        Page<PushNotificationResponse> response = notifications.map(NotificationMapper.INSTANCE::entityToDto);
+        else {
+            Page<Notifications> notifications = notificationService.findAllByUserIdAndRoleId(userId, roleId, pageable);
+            response = notifications.map(NotificationMapper.INSTANCE::entityToDto);
+        }
 
         return ResponseEntity.ok(response);
     }
