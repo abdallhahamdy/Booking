@@ -23,7 +23,7 @@ public class PackageAds {
     private String arabicName;
 
     @Column(name = "PRICE")
-    private int price;
+    private Double price;
 
     @Column(name = "NUMBER_ADS")
     private Integer numberAds;

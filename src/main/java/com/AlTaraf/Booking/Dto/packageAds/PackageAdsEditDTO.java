@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PackageAdsEditDTO {
     private String arabicName;
-    private int price;
+    private Double price;
     private int numberAds;
 }
