@@ -1,9 +1,10 @@
 package com.AlTaraf.Booking.Service.Reservation;
 
-import com.AlTaraf.Booking.Dto.TotalTransactions.TotalTransactionsDto;
 import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
-import com.AlTaraf.Booking.Entity.TotalTransactions.TotalTransactions;
+import com.AlTaraf.Booking.Entity.Transactions.TotalTransactions;
+import com.AlTaraf.Booking.Entity.Transactions.Transactions;
+import com.AlTaraf.Booking.Entity.Transactions.TransactionsDetail;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
@@ -12,11 +13,13 @@ import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Exception.InsufficientFundsException;
-import com.AlTaraf.Booking.Mapper.TotalTransactions.TotalTransactionsMapper;
+import com.AlTaraf.Booking.Mapper.Transactions.TotalTransactionsMapper;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
-import com.AlTaraf.Booking.Repository.TotalTransactions.TotalTransactionsRepository;
+import com.AlTaraf.Booking.Repository.Transactions.TotalTransactionsRepository;
+import com.AlTaraf.Booking.Repository.Transactions.TransactionsDetailRepository;
+import com.AlTaraf.Booking.Repository.Transactions.TransactionsRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
@@ -24,11 +27,10 @@ import com.AlTaraf.Booking.Repository.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -60,6 +62,12 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Autowired
     TotalTransactionsRepository totalTransactionsRepository;
+
+    @Autowired
+    TransactionsRepository transactionsRepository;
+
+    @Autowired
+    TransactionsDetailRepository transactionsDetailRepository;
 
 //    @Autowired
 //    TotalTransactionsDto totalTransactionsDto;
@@ -179,8 +187,20 @@ public class ReservationServiceImpl implements ReservationService {
 
             totalTransactions.setTotalReservationsTransactions(totalReservationsTransactions);
             totalTransactions.setTotalTransactions(totalTransactionsNumber);
+
 //            totalTransactionsMapper.toEntity(totalTransactionsDto);
             totalTransactionsRepository.save(totalTransactions);
+
+            Transactions transactions = transactionsRepository.findById(1L).orElse(null);
+
+            TransactionsDetail transactionsDetail = new TransactionsDetail();
+            transactionsDetail.setTransactions(transactions);
+            transactionsDetail.setDate(new Date());
+            transactionsDetail.setPhone(user.getPhone());
+            transactionsDetail.setValue(reservations.getCommision());
+            transactionsDetail.setUser(user);
+
+            transactionsDetailRepository.save(transactionsDetail);
         }
         userRepository.save(user);
 

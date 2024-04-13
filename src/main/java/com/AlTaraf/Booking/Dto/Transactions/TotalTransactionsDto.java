@@ -1,4 +1,4 @@
-package com.AlTaraf.Booking.Dto.TotalTransactions;
+package com.AlTaraf.Booking.Dto.Transactions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

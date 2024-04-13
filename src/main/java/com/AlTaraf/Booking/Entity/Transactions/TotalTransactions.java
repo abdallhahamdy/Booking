@@ -1,4 +1,4 @@
-package com.AlTaraf.Booking.Entity.TotalTransactions;
+package com.AlTaraf.Booking.Entity.Transactions;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,7 +1,7 @@
-package com.AlTaraf.Booking.Mapper.TotalTransactions;
+package com.AlTaraf.Booking.Mapper.Transactions;
 
-import com.AlTaraf.Booking.Dto.TotalTransactions.TotalTransactionsDto;
-import com.AlTaraf.Booking.Entity.TotalTransactions.TotalTransactions;
+import com.AlTaraf.Booking.Dto.Transactions.TotalTransactionsDto;
+import com.AlTaraf.Booking.Entity.Transactions.TotalTransactions;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

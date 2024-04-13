@@ -3,7 +3,9 @@ package com.AlTaraf.Booking.Service.user;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
-import com.AlTaraf.Booking.Entity.TotalTransactions.TotalTransactions;
+import com.AlTaraf.Booking.Entity.Transactions.TotalTransactions;
+import com.AlTaraf.Booking.Entity.Transactions.Transactions;
+import com.AlTaraf.Booking.Entity.Transactions.TransactionsDetail;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.User.User;
@@ -19,7 +21,9 @@ import com.AlTaraf.Booking.Repository.NotificationRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
-import com.AlTaraf.Booking.Repository.TotalTransactions.TotalTransactionsRepository;
+import com.AlTaraf.Booking.Repository.Transactions.TotalTransactionsRepository;
+import com.AlTaraf.Booking.Repository.Transactions.TransactionsDetailRepository;
+import com.AlTaraf.Booking.Repository.Transactions.TransactionsRepository;
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataProfileRepository;
@@ -119,6 +123,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     TotalTransactionsRepository totalTransactionsRepository;
+
+    @Autowired
+    TransactionsRepository transactionsRepository;
+
+    @Autowired
+    TransactionsDetailRepository transactionsDetailRepository;
 
     public String generateOtpForUser() {
         // For simplicity, let's assume a random 4-digit OTP
@@ -338,6 +348,16 @@ public class UserServiceImpl implements UserService {
 //            totalTransactionsMapper.toEntity(totalTransactionsDto);
             totalTransactionsRepository.save(totalTransactions);
 
+            Transactions transactions = transactionsRepository.findById(2L).orElse(null);
+
+            TransactionsDetail transactionsDetail = new TransactionsDetail();
+            transactionsDetail.setTransactions(transactions);
+            transactionsDetail.setDate(new Date());
+            transactionsDetail.setPhone(user.getPhone());
+            transactionsDetail.setValue(packageAds.getPrice());
+            transactionsDetail.setUser(user);
+
+            transactionsDetailRepository.save(transactionsDetail);
         }
         userRepository.save(user);
 
