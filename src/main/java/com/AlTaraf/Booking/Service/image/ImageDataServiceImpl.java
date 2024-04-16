@@ -146,8 +146,8 @@ public class ImageDataServiceImpl implements ImageDataService {
     private String uploadToMinioServer(String filename, String contentType, byte[] data) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
         try {
             MinioClient minioClient = MinioClient.builder()
-                    .endpoint("https://play.min.io")
-                    .credentials("Q3AM3UQ867SPQQA43P2F", "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG")
+                    .endpoint("http://env-9854507.tip2.libyanspider.cloud")
+                    .credentials("LlolsrYmi3", "RtBvEYOeR6")
                     .build();
             boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket("ehgzly").build());
             if (!found) {
@@ -162,7 +162,7 @@ public class ImageDataServiceImpl implements ImageDataService {
                     .contentType(contentType) // Set the Content-Type
                     .stream(new ByteArrayInputStream(data), data.length, -1)
                     .build());
-            return "https://play.min.io/ehgzly/" + filename; // Return the URL of the uploaded image
+            return "http://env-9854507.tip2.libyanspider.cloud/ehgzly/" + filename; // Return the URL of the uploaded image
         } catch (MinioException e) {
             throw new RuntimeException("Error uploading image to MinIO server", e);
         }
