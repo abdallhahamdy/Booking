@@ -16,6 +16,8 @@ public interface TransactionDetailsMapper {
     @Mapping(target = "phone", source = "phone")
     @Mapping(target = "date", source = "date")
     @Mapping(target = "transactions", source = "transactions")
+    @Mapping(target = "gatewayEnglishName", source = "gatewayEnglishName")
+    @Mapping(target = "gatewayArabicName", source = "gatewayArabicName")
     @Mapping(target = "value", source = "value")
     TransactionDetailsDto toDto(TransactionsDetail transactionsDetail);
 

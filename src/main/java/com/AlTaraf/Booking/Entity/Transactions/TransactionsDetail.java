@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -18,6 +19,9 @@ public class TransactionsDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "CUSTOM_REF")
+    private String customRef;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
@@ -32,6 +36,12 @@ public class TransactionsDetail {
     @ManyToOne
     @JoinColumn(name = "TRANSACTION_ID")
     private Transactions transactions;
+
+    @Column(name = "GATEWAY_ENGLISH_NAME")
+    private String gatewayEnglishName;
+
+    @Column(name = "GATEWAY_ARABIC_NAME")
+    private String gatewayArabicName;
 
     @Column(name = "VALUE")
     private Double value;

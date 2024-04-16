@@ -22,6 +22,12 @@ public class TransactionDetailsDto {
 
     private Transactions transactions;
 
+    private String gatewayEnglishName;
+
+    private String gatewayArabicName;
+
+    private String customRef;
+
     private Double value;
 
 
