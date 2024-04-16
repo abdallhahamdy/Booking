@@ -6,6 +6,7 @@ insert into roles (arabic_name, role, english_name) values ("خدمة عملاء
 
 insert into transactions (arabic_name, english_name) values ("حجز", "Reservation");
 insert into transactions (arabic_name, english_name) values ("باقة اعلانات", "Package Ads");
+insert into transactions (arabic_name, english_name) values ("شحن", "Charge");
 
 insert into total_transactions (TOTAL_TRANSACTIONS, TOTAL_RESERVATIONS_TRANSACTIONS, TOTAL_SUBSCRIPTIONS_TRANSACTIONS) values (0,0,0);
 
