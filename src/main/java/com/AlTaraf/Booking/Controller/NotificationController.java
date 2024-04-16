@@ -173,21 +173,6 @@ public class NotificationController {
         }
     }
 
-//    @GetMapping("/user/{userId}")
-//    public ResponseEntity<?> getNotificationsByUserId(
-//            @PathVariable Long userId,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "10") int size) {
-//
-//        Pageable pageable = PageRequest.of(page, size);
-//        Page<Notifications> notifications = notificationService.getNotificationsByUserId(userId, pageable);
-//
-//        Page<PushNotificationResponse> response = notifications.map(NotificationMapper.INSTANCE::entityToDto);
-//
-//        return ResponseEntity.ok(response);
-//    }
-
-
     @GetMapping("/user")
     public ResponseEntity<?> getNotificationsByUserIdAndRoleId(
             @RequestParam(required = false) Long userId,
@@ -197,14 +182,6 @@ public class NotificationController {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         Page<PushNotificationResponse> response;
-
-//        if (userId == null && roleId == null) {
-//            System.out.println("YOOO");
-//            System.out.println("roleId null: qwdqwd " + roleId);
-//            System.out.println("userId null: " + userId);
-//            Page<Notifications> notifications = notificationService.findAllByRoleIdIsNullAndUserIdIsNull(pageable);
-//            response = notifications.map(NotificationMapper.INSTANCE::entityToDto);
-//        }
 
         if (roleId == null) {
             System.out.println("roleId null: " + roleId);
