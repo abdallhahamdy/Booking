@@ -1,7 +1,11 @@
 package com.AlTaraf.Booking.Service.Payment;
 
 import com.AlTaraf.Booking.Dto.TransactionResponseDTO;
+import com.AlTaraf.Booking.Entity.Transactions.Transactions;
+import com.AlTaraf.Booking.Entity.Transactions.TransactionsDetail;
 import com.AlTaraf.Booking.Entity.User.User;
+import com.AlTaraf.Booking.Repository.Transactions.TransactionsDetailRepository;
+import com.AlTaraf.Booking.Repository.Transactions.TransactionsRepository;
 import com.AlTaraf.Booking.Repository.payment.PayemntRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +21,21 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     PayemntRepository payemntRepository;
+
+    @Autowired
+    TransactionsRepository transactionsRepository;
+
+    @Autowired
+    TransactionsDetailRepository transactionsDetailRepository;
 
     @Override
     public ResponseEntity<?> sendTransactionRequest(Long userId, String customRef, String apiShopToken, UserRepository userRepository, String apiShopTransaction) {
@@ -52,8 +66,30 @@ public class PaymentServiceImpl implements PaymentService {
 
             if (transactionResponseDTO != null && transactionResponseDTO.getData() != null) {
                 Double amount = Double.parseDouble(transactionResponseDTO.getData().getAmount());
+                System.out.println("gateway_name: " + transactionResponseDTO.getData().getGateway_name());
+                System.out.println("gateway: " + transactionResponseDTO.getData().getGateway());
+                System.out.println("custom_ref: " + transactionResponseDTO.getData().getCustom_ref());
+                System.out.println("owner_phone: " + transactionResponseDTO.getData().getOwner_phone());
                 System.out.println("amount: " + amount);
                 System.out.println("user id: " + user.getId());
+
+                Transactions transactions = transactionsRepository.findById(3L).orElse(null);
+
+                TransactionsDetail transactionsDetail = new TransactionsDetail();
+//                transactionsDetail.setId(UUID.fromString(transactionResponseDTO.getData().getCustom_ref()));
+                transactionsDetail.setCustomRef(transactionResponseDTO.getData().getCustom_ref());
+                transactionsDetail.setTransactions(transactions);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+                Date parsedDate = dateFormat.parse(transactionResponseDTO.getData().getDate_time());
+
+                transactionsDetail.setDate(parsedDate);
+                transactionsDetail.setPhone(transactionResponseDTO.getData().getOwner_phone());
+                transactionsDetail.setValue(amount);
+                transactionsDetail.setUser(user);
+                transactionsDetail.setGatewayArabicName(transactionResponseDTO.getData().getGateway());
+                transactionsDetail.setGatewayEnglishName(transactionResponseDTO.getData().getGateway_name());
+
+                transactionsDetailRepository.save(transactionsDetail);
 
                 double currentWalletBalance = user.getWallet();
                 currentWalletBalance += amount;
