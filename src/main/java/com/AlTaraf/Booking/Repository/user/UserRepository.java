@@ -27,6 +27,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByPhone(String phone);
 
+    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.id = :roleId")
+    List<User> findByRoleId(@Param("roleId") Long roleId);
 
     Optional<User> findByPhone(String phone);
 

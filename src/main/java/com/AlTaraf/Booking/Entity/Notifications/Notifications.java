@@ -26,6 +26,9 @@ public class Notifications {
     @ManyToOne
     private Role role;
 
+    @Column
+    private Boolean seen;
+
     public Notifications() {
         this.logoUrl = "https://play.min.io/ehgzly/logo.jpg";
     }

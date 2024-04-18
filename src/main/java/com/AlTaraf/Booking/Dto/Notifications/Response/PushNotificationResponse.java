@@ -12,5 +12,6 @@ public class PushNotificationResponse {
     private String title;
     private String body;
     private Long userId;
+    private Boolean seen;
     private String logoUrl;
 }

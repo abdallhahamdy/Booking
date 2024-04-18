@@ -14,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notifications, Long> {
 
+    @Query("SELECT n FROM Notifications n WHERE n.role.id = :roleId AND n.user.id IS NULL")
+    Page<Notifications> findByRoleIdAndUserIdIsNull(@Param("roleId") Long roleId, Pageable pageable);
+
     Page<Notifications> findByUserId(Long userId, Pageable pageable);
 
     @Modifying
@@ -32,5 +35,10 @@ public interface NotificationRepository extends JpaRepository<Notifications, Lon
 
     @Query("SELECT n FROM Notifications n WHERE n.user.id IS NULL AND n.role.id IS NULL")
     Page<Notifications> findAllByRoleIdIsNullAndUserIdIsNull(Pageable pageable);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE Notifications n SET n.seen = true WHERE n.user.id = :userId AND n.role.id = :roleId")
+    void setNotificationsSeenByUserIdAndRoleId(@Param("userId") Long userId, @Param("roleId") Long roleId);
 
 }

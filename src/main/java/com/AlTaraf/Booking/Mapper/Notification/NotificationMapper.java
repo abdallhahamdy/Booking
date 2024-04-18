@@ -21,5 +21,6 @@ public interface NotificationMapper {
     @Mapping(source = "title", target = "title")
     @Mapping(source = "body", target = "body")
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "seen", target = "seen")
     PushNotificationResponse entityToDto(Notifications pushNotificationRequest);
 }
