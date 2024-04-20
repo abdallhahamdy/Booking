@@ -12,6 +12,7 @@ import lombok.Data;
 public class UnitDashboard {
     private Long unitId;
     private Long userId;
+    private String unitName;
     private AccommodationType accommodationType;
     private String traderName;
     private String traderPhone;
