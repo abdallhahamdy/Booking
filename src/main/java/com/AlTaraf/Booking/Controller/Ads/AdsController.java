@@ -115,12 +115,10 @@ public class AdsController {
             if (numberAds > 0) {
                 numberAds--;
                 user.setNumberAds(numberAds);
-                System.out.println("user number Ads: " + user.getNumberAds());
             }
 
             if (numberAds == 0) {
                 user.setPackageAds(packageAds);
-                System.out.println("user package Ads: " + user.getPackageAds());
             }
 
             userRepository.save(user);
