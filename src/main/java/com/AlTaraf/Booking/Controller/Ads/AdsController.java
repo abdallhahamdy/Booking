@@ -18,6 +18,7 @@ import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Payload.response.ApiResponseFlag;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
+import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
@@ -72,6 +73,9 @@ public class AdsController {
     @Autowired
     StatusRepository statusUnitRepository;
 
+    @Autowired
+    PackageAdsRepository packageAdsRepository;
+
     @GetMapping("/Package-Ads")
     public ResponseEntity<?> getAllPackageAds() {
         try {
@@ -103,7 +107,23 @@ public class AdsController {
     @PostMapping("/create")
     public ResponseEntity<?> createAds(@RequestBody AdsRequestDto adsRequestDto) {
         try {
+            User user = userRepository.findByUserId(adsRequestDto.getUserId());
+            PackageAds packageAds = packageAdsRepository.findById(0L).orElse(null);
             Ads ads = adsService.createAds(adsMapper.toEntity(adsRequestDto));
+
+            int numberAds = user.getNumberAds();
+            if (numberAds > 0) {
+                numberAds--;
+                user.setNumberAds(numberAds);
+                System.out.println("user number Ads: " + user.getNumberAds());
+            }
+
+            if (numberAds == 0) {
+                user.setPackageAds(packageAds);
+                System.out.println("user package Ads: " + user.getPackageAds());
+            }
+
+            userRepository.save(user);
             return ResponseEntity.status(HttpStatus.CREATED).body("Ads_created.message " + ads.getId());
         } catch (Exception e) {
             System.out.println("Error Create Ads: " + e.getMessage());
