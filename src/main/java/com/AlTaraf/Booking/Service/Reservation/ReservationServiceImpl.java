@@ -30,6 +30,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -249,6 +250,11 @@ public class ReservationServiceImpl implements ReservationService {
             reservation.setCommision(commission);
         }
         reservationRepository.saveAll(reservations);
+    }
+
+    @Override
+    public List<Reservations> findReservationsByDepartureDateBeforeAndUserIdAndNotEvaluating(LocalDate date, Long userId){
+        return reservationRepository.findReservationsByDepartureDateBeforeAndUserIdAndNotEvaluating(date, userId);
     }
 }
 

@@ -8,6 +8,7 @@ import com.AlTaraf.Booking.Exception.InsufficientFundsException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ReservationService {
@@ -38,4 +39,6 @@ public interface ReservationService {
     Page<Reservations> findByStatusNameAndUnitId(String statusName, Long unitId, Pageable pageable);
 
     void setCommissionForAllReservations(Double commission);
+
+    List<Reservations> findReservationsByDepartureDateBeforeAndUserIdAndNotEvaluating(LocalDate date, Long userId);
 }

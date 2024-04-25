@@ -14,6 +14,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -53,4 +54,7 @@ public interface ReservationRepository extends JpaRepository<Reservations, Long>
     @Modifying
     @Query("DELETE FROM Reservations r WHERE r.user = :user")
     void deleteByUser(@Param("user") User user);
+
+    @Query("SELECT r FROM Reservations r WHERE r.departureDate < :date AND r.user.id = :userId AND r.isEvaluating = null")
+    List<Reservations> findReservationsByDepartureDateBeforeAndUserIdAndNotEvaluating(@Param("date") LocalDate date, @Param("userId") Long userId);
 }

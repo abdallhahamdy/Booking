@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -161,6 +162,23 @@ public class ReservationController {
 
         if (!reservations.isEmpty()) {
             List<ReservationStatus> reservationRequestDtoList = reservationStatusMapper.toReservationStatusDtoList(reservations.getContent());
+            return new ResponseEntity<>(reservationRequestDtoList, HttpStatus.OK);
+        } else {
+            ApiResponse response = new ApiResponse(204, "No_content.message");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+        }
+    }
+
+    @GetMapping("/Insert-Evaluation-Reservation")
+    public ResponseEntity<?> getReservationForEvaluation(
+            @RequestParam(name = "USER_ID") Long userId
+    ) {
+        LocalDate currentDate = LocalDate.now();
+
+        List<Reservations> reservations = reservationService.findReservationsByDepartureDateBeforeAndUserIdAndNotEvaluating(currentDate, userId);
+
+        if (!reservations.isEmpty()) {
+            List<ReservationStatus> reservationRequestDtoList = reservationStatusMapper.toReservationStatusDtoList(reservations);
             return new ResponseEntity<>(reservationRequestDtoList, HttpStatus.OK);
         } else {
             ApiResponse response = new ApiResponse(204, "No_content.message");
