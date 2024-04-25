@@ -2,10 +2,6 @@ package com.AlTaraf.Booking.Controller.unit;
 
 import com.AlTaraf.Booking.Dto.Unit.UnitDto;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
-import com.AlTaraf.Booking.Entity.Ads.Ads;
-import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
-import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
-import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
@@ -22,7 +18,6 @@ import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
-import com.AlTaraf.Booking.Exception.InsufficientFundsException;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationStatusMapper;
 import com.AlTaraf.Booking.Mapper.Unit.*;
 import com.AlTaraf.Booking.Mapper.Unit.RoomDetails.RoomDetailsRequestMapper;
@@ -46,7 +41,6 @@ import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.unit.roomAvailable.RoomAvailableRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
-import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.unit.AvailablePeriods.AvailablePeriodsService;
 import com.AlTaraf.Booking.Service.unit.FeatureForHalls.FeatureForHallsService;
@@ -381,6 +375,10 @@ public class UnitController {
     public ResponseEntity<?> getUnitById(@PathVariable Long id) {
         Unit unit = unitService.getUnitById(id);
         if (unit != null) {
+//            List<RoomAvailable> roomAvailableList = new ArrayList<>(unit.getRoomAvailableSet());
+//            roomAvailableList.sort(Comparator.comparingLong(RoomAvailable::getId));
+//            unit.setRoomAvailableSet(new HashSet<>(roomAvailableList));
+
             UnitGeneralResponseDto responseDto = unitGeneralResponseMapper.toResponseDto(unit);
             return ResponseEntity.ok(responseDto);
         } else {
