@@ -3,6 +3,8 @@ package com.AlTaraf.Booking.Service.Ads;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
+import com.AlTaraf.Booking.Payload.response.CounterAds;
+import com.AlTaraf.Booking.Payload.response.CounterUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -26,4 +28,6 @@ public interface AdsService {
 //    Page<Ads> findAllAds(Pageable pageable);
 
     Page<Ads> findAllByStatusUnitId(Long statusUnitId, Pageable pageable);
+
+    CounterAds getCountAds();
 }

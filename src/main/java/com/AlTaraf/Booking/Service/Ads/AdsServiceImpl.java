@@ -6,8 +6,11 @@ import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Mapper.Ads.SliderMapper;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
+import com.AlTaraf.Booking.Payload.response.CounterAds;
+import com.AlTaraf.Booking.Payload.response.CounterUser;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
+import com.AlTaraf.Booking.Repository.Ads.counter.CounterAdsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
@@ -39,6 +42,9 @@ public class AdsServiceImpl implements AdsService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    CounterAdsRepository counterAdsRepository;
 
     @Override
     public List<adsForSliderResponseDto> getAdsByStatusUnitId(Long statusUnitId) {
@@ -106,14 +112,22 @@ public class AdsServiceImpl implements AdsService {
         return adsRepository.findByUnitId(unitId);
     }
 
-//    @Override
-//    public Page<Ads> findAllAds(Pageable pageable) {
-//        return adsRepository.findAll(pageable);
-//    }
-
     @Override
     public Page<Ads> findAllByStatusUnitId(Long statusUnitId, Pageable pageable) {
         return adsRepository.findAllByStatusUnitId(statusUnitId, pageable);
+    }
+
+    @Override
+    public CounterAds getCountAds() {
+        CounterAds counterAds = counterAdsRepository.findById(1L).orElse(null);
+
+        counterAds.setCounterAllAds(adsRepository.countAllAds());
+        counterAds.setCounterAcceptedAds(adsRepository.counterAcceptedAds());
+        counterAds.setCounterRejectedAds(adsRepository.counterRejectedAds());
+
+        counterAdsRepository.save(counterAds);
+
+        return counterAds;
     }
 }
 

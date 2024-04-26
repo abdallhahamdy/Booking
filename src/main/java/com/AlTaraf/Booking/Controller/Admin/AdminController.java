@@ -1,12 +1,18 @@
 package com.AlTaraf.Booking.Controller.Admin;
 
 
+import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequest;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
+import com.AlTaraf.Booking.Entity.Notifications.Notifications;
 import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupportForUnits;
 import com.AlTaraf.Booking.Mapper.Ads.AdsMapper;
 import com.AlTaraf.Booking.Mapper.Ads.AdsStatusMapper;
+import com.AlTaraf.Booking.Mapper.Notification.NotificationMapper;
 import com.AlTaraf.Booking.Mapper.TechnicalSupport.TechnicalSupportUnitsMapper;
 import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseStatusDto;
+import com.AlTaraf.Booking.Payload.response.CounterAds;
+import com.AlTaraf.Booking.Payload.response.CounterUnits;
+import com.AlTaraf.Booking.Payload.response.CounterUser;
 import com.AlTaraf.Booking.Payload.response.TechnicalSupport.TechnicalSupportResponse;
 import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
 import com.AlTaraf.Booking.Dto.User.UserDashboard;
@@ -26,6 +32,7 @@ import com.AlTaraf.Booking.Payload.response.TechnicalSupport.TechnicalSupportUni
 import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
+import com.AlTaraf.Booking.Repository.NotificationRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
@@ -41,6 +48,7 @@ import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.TechnicalSupport.TechnicalSupportService;
 import com.AlTaraf.Booking.Service.TechnicalSupport.TechnicalSupportUnitsService;
+import com.AlTaraf.Booking.Service.notification.NotificationService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.user.UserService;
 import jakarta.transaction.Transactional;
@@ -51,6 +59,7 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -147,6 +156,15 @@ public class AdminController {
     @Autowired
     AdsStatusMapper adsStatusMapper;
 
+    @Autowired
+    NotificationMapper notificationMapper;
+
+    @Autowired
+    NotificationRepository notificationRepository;
+
+    @Autowired
+    NotificationService notificationService;
+
     @GetMapping("/Technical-Support-Get-All")
     public Page<TechnicalSupportResponse> getAllTechnicalSupport(@RequestParam(defaultValue = "0") int page,
                                                                  @RequestParam(defaultValue = "5") int size) {
@@ -225,6 +243,27 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/Get-Units-For-Dashboard")
+    public Page<UnitDashboard> getUnitsForDashboard(
+            @RequestParam(required = false) String traderName,
+            @RequestParam(required = false) String traderPhone,
+            @RequestParam Long unitTypeId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        Page<Unit> unitsPage = Page.empty();
+
+        if (traderName == null && traderPhone == null && unitTypeId != null) {
+            unitsPage = unitService.getUnitsByUnitTypeIdForDashboard(unitTypeId, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id")));
+        }
+
+        else if (traderName != null && unitTypeId != null) {
+            unitsPage = unitService.filterUnitsByUserNameAndTypeId(traderName, unitTypeId, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id")));
+        }
+        else if (traderName == null && unitTypeId != null && traderPhone != null) {
+            unitsPage = unitService.filterUnitsByPhoneNumberAndTypeId(traderPhone, unitTypeId,PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id")));
+        }
+        return unitsPage.map(unit -> unitDashboard.toUnitDashboard(unit));
+    }
 
     @DeleteMapping("/delete/{id}/Technical-Support")
     public ResponseEntity<?> deleteTechnicalSupportById(@PathVariable Long id) {
@@ -268,29 +307,6 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ApiResponse(500, "Failed to delete all technical support Unit messages."));
         }
-    }
-
-
-    @GetMapping("/Get-Units-For-Dashboard")
-    public Page<UnitDashboard> getUnitsForDashboard(
-            @RequestParam(required = false) String traderName,
-            @RequestParam(required = false) String traderPhone,
-            @RequestParam Long unitTypeId,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
-        Page<Unit> unitsPage = Page.empty();
-
-        if (traderName == null && traderPhone == null && unitTypeId != null) {
-            unitsPage = unitService.getUnitsByUnitTypeIdForDashboard(unitTypeId, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id")));
-        }
-
-        else if (traderName != null && unitTypeId != null) {
-            unitsPage = unitService.filterUnitsByUserNameAndTypeId(traderName, unitTypeId, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id")));
-        }
-        else if (traderName == null && unitTypeId != null && traderPhone != null) {
-            unitsPage = unitService.filterUnitsByPhoneNumberAndTypeId(traderPhone, unitTypeId,PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id")));
-        }
-        return unitsPage.map(unit -> unitDashboard.toUnitDashboard(unit));
     }
 
     @GetMapping("By-Id-General/{id}")
@@ -340,8 +356,22 @@ public class AdminController {
         }
     }
 
+    public void sendNotification(PushNotificationRequest request) throws IOException, InterruptedException {
+        Notifications notification = notificationMapper.dtoToEntity(request);
+        notificationRepository.save(notification);
+        notificationService.sendPushMessage(request.getTitle(), request.getBody(), request.getUserId());
+    }
+
+
+
     @PutMapping("/{userId}/ban")
     public ResponseEntity<?> toggleBanStatus(@PathVariable Long userId) {
+
+        PushNotificationRequest banTrue = new PushNotificationRequest();
+        banTrue.setTitle("Notification.ban.title.message");
+        banTrue.setBody("Notification.ban.body.message");
+        banTrue.setUserId(userId);
+
         Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -350,13 +380,6 @@ public class AdminController {
         User user = optionalUser.get();
         if (user.getBan() == null) {
             user.setBan(true);
-//            // Invalidate user's session
-//            List<SessionInformation> sessions = sessionRegistry.getAllSessions(user, false);
-//            if (sessions != null) {
-//                for (SessionInformation session : sessions) {
-//                    session.expireNow();
-//                }
-//            }
         } else {
             user.setBan(!user.getBan());
         }
@@ -429,6 +452,7 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "Error When Delete User"));
         }
     }
+
     @PutMapping("/{userId}/warnings")
     public ResponseEntity<?> setWarnings(@PathVariable Long userId, @RequestBody List<Boolean> warnings) {
         try {
@@ -447,6 +471,7 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Warning Not Added");
         }
     }
+
     @GetMapping("Get-Ads-For-Dashboard")
     public ResponseEntity<?> getAllAdsByPageAndSize(
             @RequestParam(defaultValue = "0") int page,
@@ -489,5 +514,21 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/Get-Counter-Units")
+    public ResponseEntity<CounterUnits> getCounterUnit() {
+        CounterUnits counterUnits = unitService.getCounterForResidenciesUnits();
+        return new ResponseEntity<>(counterUnits, HttpStatus.OK);
+    }
 
+    @GetMapping("/Get-Counter-Users")
+    public ResponseEntity<CounterUser> getCounterUser() {
+        CounterUser counterUser = userService.getCountUser();
+        return new ResponseEntity<>(counterUser, HttpStatus.OK);
+    }
+
+    @GetMapping("/Get-Counter-Ads")
+    public ResponseEntity<CounterAds> getCounterAds() {
+        CounterAds counterAds = adsService.getCountAds();
+        return new ResponseEntity<>(counterAds, HttpStatus.OK);
+    }
 }
