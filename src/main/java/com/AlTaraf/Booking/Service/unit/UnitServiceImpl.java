@@ -15,6 +15,7 @@ import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Mapper.Unit.Dashboard.UnitDashboardMapper;
 import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
+import com.AlTaraf.Booking.Payload.response.CounterUnits;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Evaluation.EvaluationRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
@@ -28,6 +29,7 @@ import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportUnitRepos
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
+import com.AlTaraf.Booking.Repository.unit.counter.CounterUnitRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
@@ -108,6 +110,9 @@ public class UnitServiceImpl implements UnitService {
 
     @Autowired
     TechnicalSupportRepository technicalSupportRepository;
+
+    @Autowired
+    CounterUnitRepository counterUnitRepository;
 
     public Unit saveUnit(Unit unit) {
         try {
@@ -573,5 +578,21 @@ public class UnitServiceImpl implements UnitService {
             unit.setCommission(commission);
         }
         unitRepository.saveAll(units);
+    }
+
+    @Override
+    public CounterUnits getCounterForResidenciesUnits() {
+        CounterUnits counterUnits = counterUnitRepository.findById(1L).orElse(null);
+
+        counterUnits.setCounterAllResidencies(unitRepository.countByAccommodationTypeIdNull());
+        counterUnits.setCounterAllHotel(unitRepository.countByAccommodationTypeIdOne());
+        counterUnits.setCounterAllHotelPartment(unitRepository.countByAccommodationTypeIdTwo());
+        counterUnits.setCounterAllExternalPartment(unitRepository.countByAccommodationTypeIdThree());
+        counterUnits.setCounterResort(unitRepository.countByAccommodationTypeIdFour());
+        counterUnits.setCounterChalet(unitRepository.countByAccommodationTypeIdFive());
+        counterUnits.setCounterlounge(unitRepository.countByAccommodationTypeIdSix());
+        counterUnitRepository.save(counterUnits);
+
+        return counterUnits;
     }
 }

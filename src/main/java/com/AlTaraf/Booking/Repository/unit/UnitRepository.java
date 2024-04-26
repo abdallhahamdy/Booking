@@ -106,4 +106,20 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
     @Query("SELECT u FROM Unit u WHERE u.statusUnit.id = 2")
     Page<Unit> findAllByStatusUnitId(Pageable pageable);
+
+    @Query("SELECT COUNT(u) FROM Unit u WHERE u.unitType.id = 1")
+    long countByAccommodationTypeIdNull();
+
+    @Query("SELECT COUNT(u) FROM Unit u WHERE u.accommodationType.id = 1")
+    long countByAccommodationTypeIdOne();
+    @Query("SELECT COUNT(u) FROM Unit u WHERE u.accommodationType.id = 2")
+    long countByAccommodationTypeIdTwo();
+    @Query("SELECT COUNT(u) FROM Unit u WHERE u.accommodationType.id = 3")
+    long countByAccommodationTypeIdThree();
+    @Query("SELECT COUNT(u) FROM Unit u WHERE u.accommodationType.id = 4")
+    long countByAccommodationTypeIdFour();
+    @Query("SELECT COUNT(u) FROM Unit u WHERE u.accommodationType.id = 5")
+    long countByAccommodationTypeIdFive();
+    @Query("SELECT COUNT(u) FROM Unit u WHERE u.accommodationType.id = 6")
+    long countByAccommodationTypeIdSix();
 }
