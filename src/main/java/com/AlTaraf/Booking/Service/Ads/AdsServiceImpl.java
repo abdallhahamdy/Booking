@@ -10,7 +10,6 @@ import com.AlTaraf.Booking.Payload.response.CounterAds;
 import com.AlTaraf.Booking.Payload.response.CounterUser;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
-import com.AlTaraf.Booking.Repository.Ads.counter.CounterAdsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
@@ -42,9 +41,6 @@ public class AdsServiceImpl implements AdsService {
 
     @Autowired
     UserRepository userRepository;
-
-    @Autowired
-    CounterAdsRepository counterAdsRepository;
 
     @Override
     public List<adsForSliderResponseDto> getAdsByStatusUnitId(Long statusUnitId) {
@@ -119,13 +115,14 @@ public class AdsServiceImpl implements AdsService {
 
     @Override
     public CounterAds getCountAds() {
-        CounterAds counterAds = counterAdsRepository.findById(1L).orElse(null);
+//        CounterAds counterAds = counterAdsRepository.findById(1L).orElse(null);
+        CounterAds counterAds = new CounterAds();
 
         counterAds.setCounterAllAds(adsRepository.countAllAds());
         counterAds.setCounterAcceptedAds(adsRepository.counterAcceptedAds());
         counterAds.setCounterRejectedAds(adsRepository.counterRejectedAds());
 
-        counterAdsRepository.save(counterAds);
+//        counterAdsRepository.save(counterAds);
 
         return counterAds;
     }

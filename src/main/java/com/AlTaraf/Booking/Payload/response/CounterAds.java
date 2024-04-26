@@ -8,20 +8,20 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "COUNTER_Ads")
+//@Entity
+//@Table(name = "COUNTER_Ads")
 public class CounterAds {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
 
-    @Column(name = "COUNTER_ALL_ADS")
+//    @Column(name = "COUNTER_ALL_ADS")
     private Long counterAllAds;
 
-    @Column(name = "COUNTER_ACCEPTED_ADS")
+//    @Column(name = "COUNTER_ACCEPTED_ADS")
     private Long counterAcceptedAds;
 
-    @Column(name = "COUNTER_REJECTED_ADS")
+//    @Column(name = "COUNTER_REJECTED_ADS")
     private Long counterRejectedAds;
 }

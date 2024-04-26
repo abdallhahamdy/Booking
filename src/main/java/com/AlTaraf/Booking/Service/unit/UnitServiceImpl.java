@@ -29,7 +29,6 @@ import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportUnitRepos
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
-import com.AlTaraf.Booking.Repository.unit.counter.CounterUnitRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
@@ -110,9 +109,6 @@ public class UnitServiceImpl implements UnitService {
 
     @Autowired
     TechnicalSupportRepository technicalSupportRepository;
-
-    @Autowired
-    CounterUnitRepository counterUnitRepository;
 
     public Unit saveUnit(Unit unit) {
         try {
@@ -582,7 +578,8 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     public CounterUnits getCounterForResidenciesUnits() {
-        CounterUnits counterUnits = counterUnitRepository.findById(1L).orElse(null);
+//        CounterUnits counterUnits = counterUnitRepository.findById(1L).orElse(null);
+        CounterUnits counterUnits = new CounterUnits();
 
         counterUnits.setCounterAllResidencies(unitRepository.countByAccommodationTypeIdNull());
         counterUnits.setCounterAllHotel(unitRepository.countByAccommodationTypeIdOne());
@@ -591,7 +588,7 @@ public class UnitServiceImpl implements UnitService {
         counterUnits.setCounterResort(unitRepository.countByAccommodationTypeIdFour());
         counterUnits.setCounterChalet(unitRepository.countByAccommodationTypeIdFive());
         counterUnits.setCounterlounge(unitRepository.countByAccommodationTypeIdSix());
-        counterUnitRepository.save(counterUnits);
+//        counterUnitRepository.save(counterUnits);
 
         return counterUnits;
     }

@@ -2,17 +2,18 @@ package com.AlTaraf.Booking.Controller.Admin;
 
 
 import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequest;
+import com.AlTaraf.Booking.Dto.Transactions.TransactionDetailsDto;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Notifications.Notifications;
 import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupportForUnits;
+import com.AlTaraf.Booking.Entity.Transactions.TotalTransactions;
 import com.AlTaraf.Booking.Mapper.Ads.AdsMapper;
 import com.AlTaraf.Booking.Mapper.Ads.AdsStatusMapper;
 import com.AlTaraf.Booking.Mapper.Notification.NotificationMapper;
 import com.AlTaraf.Booking.Mapper.TechnicalSupport.TechnicalSupportUnitsMapper;
 import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseStatusDto;
-import com.AlTaraf.Booking.Payload.response.CounterAds;
-import com.AlTaraf.Booking.Payload.response.CounterUnits;
-import com.AlTaraf.Booking.Payload.response.CounterUser;
+import com.AlTaraf.Booking.Payload.request.LoginRequest;
+import com.AlTaraf.Booking.Payload.response.*;
 import com.AlTaraf.Booking.Payload.response.TechnicalSupport.TechnicalSupportResponse;
 import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
 import com.AlTaraf.Booking.Dto.User.UserDashboard;
@@ -27,7 +28,6 @@ import com.AlTaraf.Booking.Mapper.Unit.*;
 import com.AlTaraf.Booking.Mapper.Unit.Dashboard.UnitDashboardMapper;
 import com.AlTaraf.Booking.Mapper.Unit.Dashboard.UserDashboardMapper;
 import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseDto;
-import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Payload.response.TechnicalSupport.TechnicalSupportUnitsResponse;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
@@ -44,28 +44,36 @@ import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportUnitRepos
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
+import com.AlTaraf.Booking.Security.service.UserDetailsImpl;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.TechnicalSupport.TechnicalSupportService;
 import com.AlTaraf.Booking.Service.TechnicalSupport.TechnicalSupportUnitsService;
+import com.AlTaraf.Booking.Service.Transaction.TransactionService;
 import com.AlTaraf.Booking.Service.notification.NotificationService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.user.UserService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/Api/Admin")
+@RequestMapping("/api/admin")
 @CrossOrigin
 public class AdminController {
 
@@ -165,7 +173,11 @@ public class AdminController {
     @Autowired
     NotificationService notificationService;
 
-    @GetMapping("/Technical-Support-Get-All")
+    @Autowired
+    TransactionService transactionService;
+
+
+    @GetMapping("/technical-support-get-all")
     public Page<TechnicalSupportResponse> getAllTechnicalSupport(@RequestParam(defaultValue = "0") int page,
                                                                  @RequestParam(defaultValue = "5") int size) {
         Page<TechnicalSupport> technicalSupportPage = technicalSupportService.getAllTechnicalSupport(PageRequest.of(page, size));
@@ -175,7 +187,7 @@ public class AdminController {
         return new PageImpl<>(technicalSupportResponseList, PageRequest.of(page, size), technicalSupportPage.getTotalElements());
     }
 
-    @GetMapping("/Technical-Support-Unit-Get-All")
+    @GetMapping("/technical-support-unit-get-all")
     public Page<TechnicalSupportUnitsResponse> getAllTechnicalSupportUnit(@RequestParam(defaultValue = "0") int page,
                                                                  @RequestParam(defaultValue = "5") int size) {
         Page<TechnicalSupportForUnits> technicalSupportPage = technicalSupportUnitsService.getAllTechnicalSupport(PageRequest.of(page, size));
@@ -185,7 +197,7 @@ public class AdminController {
         return new PageImpl<>(technicalSupportResponseList, PageRequest.of(page, size), technicalSupportPage.getTotalElements());
     }
 
-    @PatchMapping("Technical-Support/{id}/mark-as-seen")
+    @PatchMapping("technical-support/{id}/mark-as-seen")
     public ResponseEntity<?> markAsSeen(@PathVariable Long id) {
         Optional<TechnicalSupport> optionalTechnicalSupport = technicalSupportRepository.findById(id);
         if (optionalTechnicalSupport.isPresent()) {
@@ -198,7 +210,7 @@ public class AdminController {
         }
     }
 
-    @PatchMapping("Technical-Support-Unit/{id}/mark-as-seen")
+    @PatchMapping("technical-support-unit/{id}/mark-as-seen")
     public ResponseEntity<?> markAsSeenUnit(@PathVariable Long id) {
         Optional<TechnicalSupportForUnits> optionalTechnicalSupport = technicalSupportUnitRepository.findById(id);
         if (optionalTechnicalSupport.isPresent()) {
@@ -211,7 +223,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/Technical-Support/{id}")
+    @GetMapping("/technical-support/{id}")
     public ResponseEntity<TechnicalSupportResponse> getByIdTechnicalSupport(@PathVariable Long id) {
         Optional<TechnicalSupport> optionalTechnicalSupport = technicalSupportRepository.findById(id);
         return optionalTechnicalSupport
@@ -219,7 +231,7 @@ public class AdminController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/Technical-Support-Units/{id}")
+    @GetMapping("/technical-support-units/{id}")
     public ResponseEntity<TechnicalSupportUnitsResponse> getByIdTechnicalSupportUnits(@PathVariable Long id) {
         Optional<TechnicalSupportForUnits> optionalTechnicalSupport = technicalSupportUnitRepository.findById(id);
         return optionalTechnicalSupport
@@ -227,7 +239,7 @@ public class AdminController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/Get-Units-By-Accommodation-Type")
+    @GetMapping("/get-units-by-accommodation-Type")
     public ResponseEntity<?> getUnitsByAccommodationType(
             @RequestParam Long accommodationTypeId,
             @RequestParam(defaultValue = "0") int page,
@@ -243,7 +255,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/Get-Units-For-Dashboard")
+    @GetMapping("/get-units-for-dashboard")
     public Page<UnitDashboard> getUnitsForDashboard(
             @RequestParam(required = false) String traderName,
             @RequestParam(required = false) String traderPhone,
@@ -265,7 +277,7 @@ public class AdminController {
         return unitsPage.map(unit -> unitDashboard.toUnitDashboard(unit));
     }
 
-    @DeleteMapping("/delete/{id}/Technical-Support")
+    @DeleteMapping("/delete/{id}/technical-support")
     public ResponseEntity<?> deleteTechnicalSupportById(@PathVariable Long id) {
         try {
             technicalSupportService.deleteTechnicalSupportById(id);
@@ -276,7 +288,7 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/deleteAll/Technical-Support")
+    @DeleteMapping("/deleteAll/technical-support")
     public ResponseEntity<?> deleteAllTechnicalSupport() {
         try {
             technicalSupportService.deleteAllTechnicalSupport();
@@ -287,7 +299,7 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/delete/{id}/Technical-Support-Units")
+    @DeleteMapping("/delete/{id}/technical-support-units")
     public ResponseEntity<?> deleteTechnicalSupportUnitsById(@PathVariable Long id) {
         try {
             technicalSupportUnitsService.deleteTechnicalSupportById(id);
@@ -298,7 +310,7 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/deleteAll/Technical-Support-Units")
+    @DeleteMapping("/deleteAll/technical-support-units")
     public ResponseEntity<?> deleteAllTechnicalSupportUnits() {
         try {
             technicalSupportUnitsService.deleteAllTechnicalSupport();
@@ -309,7 +321,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("By-Id-General/{id}")
+    @GetMapping("by-id-general/{id}")
     public ResponseEntity<?> getUnitById(@PathVariable Long id) {
         Unit unit = unitService.getUnitById(id);
         if (unit != null) {
@@ -321,7 +333,7 @@ public class AdminController {
     }
 
 
-    @PutMapping("Change/Status/Ads/{adsId}/{statusUnitId}")
+    @PutMapping("change/status/ads/{adsId}/{statusUnitId}")
     public ResponseEntity<?> updateStatusForAds(@PathVariable Long adsId, @PathVariable Long statusUnitId) {
         try {
             adsService.updateStatusForAds(adsId, statusUnitId);
@@ -331,7 +343,7 @@ public class AdminController {
         }
     }
 
-    @PutMapping("Change/Status/Units/{unitId}/{statusUnitId}")
+    @PutMapping("change/status/units/{unitId}/{statusUnitId}")
     public ResponseEntity<?> updateStatusForUnits(@PathVariable Long unitId, @PathVariable Long statusUnitId) {
         try {
             unitService.updateStatusForUser(unitId, statusUnitId);
@@ -342,7 +354,7 @@ public class AdminController {
     }
 
     @Transactional
-    @DeleteMapping("Delete/Unit/{id}")
+    @DeleteMapping("delete/unit/{id}")
     public ResponseEntity<?> deleteUnit(@PathVariable Long id) {
         try {
             unitService.deleteUnitWithDependencies(id);
@@ -388,7 +400,7 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200, "Ban for User are Changed"));
     }
 
-    @GetMapping("/Get-User-All-Or-ByRole")
+    @GetMapping("/get-user-all-or-byrole")
     public ResponseEntity<Page<?>> getUsersByRole(
             @RequestParam(required = false) ERole roleName,
             @RequestParam(required = false) String username,
@@ -419,7 +431,7 @@ public class AdminController {
         return ResponseEntity.ok(userDashboardPage);
     }
 
-    @PatchMapping("Edit-Package-Ads/{id}")
+    @PatchMapping("edit-package-ads/{id}")
     public ResponseEntity<?> editPackageAds(@PathVariable Long id, @RequestBody PackageAdsEditDTO packageAdsEditDTO) {
         Optional<PackageAds> optionalPackageAds = packageAdsRepository.findById(id);
         if (optionalPackageAds.isEmpty()) {
@@ -441,7 +453,7 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200, "Updated Package Ads successfully"));
     }
 
-    @DeleteMapping("/Delete-Users/{id}")
+    @DeleteMapping("/delete-users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
             userService.deleteUserAndAssociatedEntities(id);
@@ -472,7 +484,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("Get-Ads-For-Dashboard")
+    @GetMapping("get-ads-for-dashboard")
     public ResponseEntity<?> getAllAdsByPageAndSize(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
@@ -489,19 +501,19 @@ public class AdminController {
         return ResponseEntity.ok(adsResponseStatusDtos);
     }
 
-    @PutMapping("/Set-Commission-All-Units")
+    @PutMapping("/set-commission-all-units")
     public ResponseEntity<String> setCommissionForAllUnits(@RequestParam Double commission) {
         unitService.setCommissionForAllUnits(commission);
         return ResponseEntity.ok("Commission set successfully for all units.");
     }
 
-    @PutMapping("/Set-Commission-All-Reservations")
+    @PutMapping("/set-commission-all-reservations")
     public ResponseEntity<String> setCommissionForAllReservations(@RequestParam Double commission) {
         reservationService.setCommissionForAllReservations(commission);
         return ResponseEntity.ok("Commission set successfully for all reservations.");
     }
 
-    @DeleteMapping("Delete/Ads/{id}")
+    @DeleteMapping("delete/ads/{id}")
     public ResponseEntity<?> deleteAds(@PathVariable Long id) {
 
         try {
@@ -514,21 +526,61 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/Get-Counter-Units")
+    @GetMapping("/get-counter-units")
     public ResponseEntity<CounterUnits> getCounterUnit() {
         CounterUnits counterUnits = unitService.getCounterForResidenciesUnits();
         return new ResponseEntity<>(counterUnits, HttpStatus.OK);
     }
 
-    @GetMapping("/Get-Counter-Users")
+    @GetMapping("/get-counter-users")
     public ResponseEntity<CounterUser> getCounterUser() {
         CounterUser counterUser = userService.getCountUser();
         return new ResponseEntity<>(counterUser, HttpStatus.OK);
     }
 
-    @GetMapping("/Get-Counter-Ads")
+    @GetMapping("/get-counter-ads")
     public ResponseEntity<CounterAds> getCounterAds() {
         CounterAds counterAds = adsService.getCountAds();
         return new ResponseEntity<>(counterAds, HttpStatus.OK);
+    }
+
+    @GetMapping("/Package-Ads")
+    public ResponseEntity<?> getAllPackageAds() {
+        try {
+            List<PackageAds> allPackageAds = adsService.getAllPackageAds();
+            return new ResponseEntity<>(allPackageAds, HttpStatus.OK);
+        } catch (Exception e) {
+            // Handle the exception here
+            return  ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No_content.message"));
+        }
+    }
+
+    @GetMapping("/transactions/details")
+    public ResponseEntity<?> getAllTransactionDetails(
+            @RequestParam(required = false) String phone,
+            @RequestParam(required = false) Long transactionId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Page<TransactionDetailsDto> transactionDetailsDtoPage;
+        if (transactionId != null && phone != null){
+            transactionDetailsDtoPage = transactionService.findByTransactionIdAndPhone(transactionId, phone, pageable);
+        }
+        else if (phone != null && transactionId == null) {
+            transactionDetailsDtoPage = transactionService.findByPhone(phone, pageable);
+        } else if (transactionId != null && phone == null) {
+            transactionDetailsDtoPage = transactionService.findByTransactionId(transactionId, pageable);
+        } else {
+            transactionDetailsDtoPage = transactionService.getAllTransactionDetails(pageable);
+        }
+
+        return ResponseEntity.ok(transactionDetailsDtoPage);
+    }
+
+    @GetMapping("/transactions/total")
+    public ResponseEntity<List<TotalTransactions>> getAllTotalTransactions() {
+        List<TotalTransactions> totalTransactions = transactionService.getAllTotalTransactions();
+        return ResponseEntity.ok(totalTransactions);
     }
 }

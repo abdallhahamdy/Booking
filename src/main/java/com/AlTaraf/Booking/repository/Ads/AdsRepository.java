@@ -38,4 +38,13 @@ public interface AdsRepository extends JpaRepository<Ads, Long> {
 //    Page<Ads> findAll(Pageable pageable);
 
     Page<Ads> findAllByStatusUnitId(Long statusUnitId, Pageable pageable);
+
+    @Query("SELECT COUNT(a) FROM Ads a")
+    Long countAllAds();
+
+    @Query("SELECT COUNT(a) FROM Ads a JOIN a.statusUnit s WHERE s.id = 2")
+    Long counterAcceptedAds();
+
+    @Query("SELECT COUNT(a) FROM Ads a JOIN a.statusUnit s WHERE s.id = 3")
+    Long counterRejectedAds();
 }
