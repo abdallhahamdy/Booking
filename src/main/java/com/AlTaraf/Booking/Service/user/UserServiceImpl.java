@@ -15,6 +15,7 @@ import com.AlTaraf.Booking.Exception.InsufficientFundsException;
 import com.AlTaraf.Booking.Mapper.city.CityMapper;
 import com.AlTaraf.Booking.Mapper.UserMapper;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
+import com.AlTaraf.Booking.Payload.response.CounterUser;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
 import com.AlTaraf.Booking.Repository.NotificationRepository;
@@ -34,6 +35,7 @@ import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAr
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
+import com.AlTaraf.Booking.Repository.user.counter.CounterUserRepository;
 import com.AlTaraf.Booking.Security.jwt.JwtUtils;
 import com.AlTaraf.Booking.Service.cityAndRegion.CityService;
 import com.AlTaraf.Booking.Service.role.RoleService;
@@ -129,6 +131,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     TransactionsDetailRepository transactionsDetailRepository;
+
+    @Autowired
+    CounterUserRepository counterUserRepository;
+
 
     public String generateOtpForUser() {
         // For simplicity, let's assume a random 4-digit OTP
@@ -362,5 +368,18 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         return user;
+    }
+
+    @Override
+    public CounterUser getCountUser() {
+        CounterUser counterUser = counterUserRepository.findById(1L).orElse(null);
+
+        counterUser.setCounterAllUsers(userRepository.countAllUsers());
+        counterUser.setCounterUserGuest(userRepository.countUsersByRoleIdOne());
+        counterUser.setCounterUserLessor(userRepository.countUsersByRoleIdTwo());
+
+        counterUserRepository.save(counterUser);
+
+        return counterUser;
     }
 }
