@@ -12,4 +12,7 @@ public interface TechnicalSupportService {
 
     void deleteTechnicalSupportById(Long id);
     void deleteAllTechnicalSupport();
+
+    Page<TechnicalSupport> getTechnicalSupportBySeen(boolean seen, Pageable pageable);
+
 }

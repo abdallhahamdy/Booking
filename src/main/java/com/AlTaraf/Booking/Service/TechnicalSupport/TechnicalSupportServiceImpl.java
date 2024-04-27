@@ -33,5 +33,11 @@ public class TechnicalSupportServiceImpl implements TechnicalSupportService {
         technicalSupportRepository.deleteAll();
     }
 
+    @Override
+    public Page<TechnicalSupport> getTechnicalSupportBySeen(boolean seen, Pageable pageable) {
+        return technicalSupportRepository.findBySeen(seen, pageable);
+    }
+
+
 
 }
