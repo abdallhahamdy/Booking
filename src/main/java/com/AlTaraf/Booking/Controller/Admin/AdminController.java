@@ -179,13 +179,20 @@ public class AdminController {
 
     @GetMapping("/technical-support-get-all")
     public Page<TechnicalSupportResponse> getAllTechnicalSupport(@RequestParam(defaultValue = "0") int page,
-                                                                 @RequestParam(defaultValue = "5") int size) {
-        Page<TechnicalSupport> technicalSupportPage = technicalSupportService.getAllTechnicalSupport(PageRequest.of(page, size));
+                                                                 @RequestParam(defaultValue = "5") int size,
+                                                                 @RequestParam(required = false) Boolean seen) {
+        Page<TechnicalSupport> technicalSupportPage;
+        if (seen != null) {
+            technicalSupportPage = technicalSupportService.getTechnicalSupportBySeen(seen, PageRequest.of(page, size));
+        } else {
+            technicalSupportPage = technicalSupportService.getAllTechnicalSupport(PageRequest.of(page, size));
+        }
         List<TechnicalSupportResponse> technicalSupportResponseList = technicalSupportPage.getContent().stream()
                 .map(TechnicalSupportMapper.INSTANCE::toDto)
                 .collect(Collectors.toList());
         return new PageImpl<>(technicalSupportResponseList, PageRequest.of(page, size), technicalSupportPage.getTotalElements());
     }
+
 
     @GetMapping("/technical-support-unit-get-all")
     public Page<TechnicalSupportUnitsResponse> getAllTechnicalSupportUnit(@RequestParam(defaultValue = "0") int page,
