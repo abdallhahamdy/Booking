@@ -68,8 +68,8 @@ public class NotificationService {
                 + "}";
     }
 
-    public Page<Notifications> getNotificationsByUserId(Long roleId, Pageable pageable) {
-        return notificationRepository.findByRoleIdAndUserIdIsNull(roleId, pageable);
+    public Page<Notifications> getNotificationsByUserId(Long userId, Pageable pageable) {
+        return notificationRepository.findByUserIdAndRoleIdIsNull(userId, pageable);
     }
 
     public Page<Notifications> findAllByUserIdAndRoleId(Long userId, Long roleId, Pageable pageable) {
