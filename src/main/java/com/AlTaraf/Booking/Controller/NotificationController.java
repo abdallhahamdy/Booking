@@ -54,8 +54,17 @@ public class NotificationController {
     @PostMapping("/Send")
     public ResponseEntity<?> sendPushNotification(@RequestBody PushNotificationRequest request) {
         try {
-            Notifications notification = notificationMapper.dtoToEntity(request);
-            notificationRepository.save(notification);
+            User user = userRepository.findByUserId(request.getUserId());
+            for (Role role : user.getRoles()) {
+                Notifications notification = notificationMapper.dtoToEntity(request);
+                notification.setUser(user);
+                notification.setRole(role);
+                notificationRepository.save(notification);
+
+                notificationService.sendPushMessage(request.getTitle(), request.getBody(), user.getId());
+            }
+//            Notifications notification = notificationMapper.dtoToEntity(request);
+//            notificationRepository.save(notification);
 
             notificationService.sendPushMessage(request.getTitle(), request.getBody(), request.getUserId());
 
@@ -69,6 +78,27 @@ public class NotificationController {
 
     @PostMapping("/Send-For-Guest-One-User")
     public ResponseEntity<?> sendPushNotificationforGuest(@RequestBody PushNotificationRequest request) {
+//        try {
+//            Notifications notification = notificationMapper.dtoToEntity(request);
+//            Role role = roleRepository.findById(1L).orElse(null);
+//
+//            notification.setRole(role);
+//            notificationRepository.save(notification);
+//
+//            User user = userRepository.findByRolesNameAndUserId(ERole.ROLE_GUEST,request.getUserId());
+//            if (user != null ) {
+//                notificationService.sendPushMessage(request.getTitle(), request.getBody(), user.getId());
+//            }
+//            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200,"Push notification sent successfully to user with role Guest!"));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500,"Failed to send push notification."));
+//        }
+        return ResponseEntity.ok(null);
+    }
+
+    @PostMapping("/Send-For-Guest-One-User-test")
+    public ResponseEntity<?> sendPushNotificationforGuestTest(@RequestBody PushNotificationRequest request) {
         try {
             Notifications notification = notificationMapper.dtoToEntity(request);
             Role role = roleRepository.findById(1L).orElse(null);
@@ -89,6 +119,28 @@ public class NotificationController {
 
     @PostMapping("/Send-For-Lessor-One-User")
     public ResponseEntity<?> sendPushNotificationforLessor(@RequestBody PushNotificationRequest request) {
+//        try {
+//            Notifications notification = notificationMapper.dtoToEntity(request);
+//            Role role = roleRepository.findById(2L).orElse(null);
+//
+//            notification.setRole(role);
+//            notificationRepository.save(notification);
+//
+//            User user = userRepository.findByRolesNameAndUserId(ERole.ROLE_LESSOR,request.getUserId());
+//            if (user != null ) {
+//                notificationService.sendPushMessage(request.getTitle(), request.getBody(), user.getId());
+//            }
+//            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200,"Push notification sent successfully to user with role Lessor!"));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500,"Failed to send push notification."));
+//        }
+        return ResponseEntity.ok(null);
+
+    }
+
+    @PostMapping("/Send-For-Lessor-One-User-Test")
+    public ResponseEntity<?> sendPushNotificationforLessorTest(@RequestBody PushNotificationRequest request) {
         try {
             Notifications notification = notificationMapper.dtoToEntity(request);
             Role role = roleRepository.findById(2L).orElse(null);
@@ -113,11 +165,12 @@ public class NotificationController {
             List<User> users = userRepository.findAll();
 
             for (User user : users) {
-                Notifications notification = notificationForAllMapper.dtoToEntity(request);
-                notification.setUser(user);
+
 
                 // Set the role for the notification based on the user's roles
                 for (Role role : user.getRoles()) {
+                    Notifications notification = notificationForAllMapper.dtoToEntity(request);
+                    notification.setUser(user);
                     notification.setRole(role);
                     notificationRepository.save(notification);
 

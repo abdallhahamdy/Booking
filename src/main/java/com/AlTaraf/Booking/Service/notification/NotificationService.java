@@ -1,8 +1,12 @@
 package com.AlTaraf.Booking.Service.notification;
 
+import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequest;
+import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.enums.ERole;
+import com.AlTaraf.Booking.Mapper.Notification.NotificationMapper;
 import com.AlTaraf.Booking.Repository.NotificationRepository;
+import com.AlTaraf.Booking.Repository.role.RoleRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Entity.Notifications.Notifications;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +30,12 @@ public class NotificationService {
 
     @Autowired
     NotificationRepository notificationRepository;
+
+    @Autowired
+    NotificationMapper notificationMapper;
+
+    @Autowired
+    RoleRepository roleRepository;
 
     private final String SERVER_KEY = "AAAA22Rv9Jk:APA91bEcJoOKJXEr2-fdzu3aE9RbLFseLRhF4tWj1tLNpg-uqu5R6o1pjHfjMyMo888W9bFsGniaW59wpf1-X8MeUarL4tzwZF4nl-qi8xh2zgPn3RijNogAbFo00hoabzarS5Qwfsxe";
     private final String FCM_URL = "https://fcm.googleapis.com/fcm/send";
@@ -82,5 +92,31 @@ public class NotificationService {
 
     public Page<Notifications> findAllByRoleIdIsNullAndUserIdIsNull(Pageable pageable) {
         return notificationRepository.findAllByRoleIdIsNullAndUserIdIsNull(pageable);
+    }
+
+    public void processNotification(PushNotificationRequest request) throws IOException, InterruptedException {
+        Notifications notification = notificationMapper.dtoToEntity(request);
+        Role role = roleRepository.findById(2L).orElse(null);
+
+        notification.setRole(role);
+        notificationRepository.save(notification);
+
+//        User user = userRepository.findByRolesNameAndUserId(ERole.ROLE_GUEST, request.getUserId());
+        if (request.getUserId() != null) {
+            sendPushMessage(request.getTitle(), request.getBody(), request.getUserId());
+        }
+    }
+
+    public void processNotificationForGuest(PushNotificationRequest request) throws IOException, InterruptedException {
+        Notifications notification = notificationMapper.dtoToEntity(request);
+        Role role = roleRepository.findById(1L).orElse(null);
+
+        notification.setRole(role);
+        notificationRepository.save(notification);
+
+//        User user = userRepository.findByRolesNameAndUserId(ERole.ROLE_GUEST, request.getUserId());
+        if (request.getUserId() != null) {
+            sendPushMessage(request.getTitle(), request.getBody(), request.getUserId());
+        }
     }
 }
