@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Controller.Reservations;
 
+import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequest;
 import com.AlTaraf.Booking.Entity.Evaluation.Evaluation;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.unit.Unit;
@@ -17,6 +18,7 @@ import com.AlTaraf.Booking.Repository.Evaluation.EvaluationRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
+import com.AlTaraf.Booking.Service.notification.NotificationService;
 import com.AlTaraf.Booking.Service.unit.RoomDetails.RoomDetailsService;
 import com.AlTaraf.Booking.Service.unit.RoomDetailsForAvailableArea.RoomDetailsForAvailableAreaService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
@@ -71,6 +73,9 @@ public class ReservationController {
 
     @Autowired
     StatusRepository statusRepository;
+
+    @Autowired
+    NotificationService notificationService;
 
     private static final Logger logger = LoggerFactory.getLogger(ReservationController.class);
 
@@ -127,6 +132,10 @@ public class ReservationController {
 
             // Return the unitId in the response body
 //            return ResponseEntity.status(HttpStatus.CREATED).body("Reservation Process is successfully with id: " + saveReservation.getId() );
+
+            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من النظام","تم ارسال طلب حجز الوحدة",userId);
+            notificationService.processNotificationForGuest(notificationRequest);
+
             return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(200, "Successful_Reservation.message") );
         } catch (Exception e) {
 //            // Log the exception

@@ -55,6 +55,6 @@ public interface ReservationRepository extends JpaRepository<Reservations, Long>
     @Query("DELETE FROM Reservations r WHERE r.user = :user")
     void deleteByUser(@Param("user") User user);
 
-    @Query("SELECT r FROM Reservations r WHERE r.departureDate < :date AND r.user.id = :userId AND r.isEvaluating = null")
+    @Query("SELECT r FROM Reservations r WHERE r.departureDate <= :date AND r.user.id = :userId AND r.isEvaluating IS NULL")
     List<Reservations> findReservationsByDepartureDateBeforeAndUserIdAndNotEvaluating(@Param("date") LocalDate date, @Param("userId") Long userId);
 }
