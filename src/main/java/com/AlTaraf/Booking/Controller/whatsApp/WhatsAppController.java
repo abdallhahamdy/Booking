@@ -9,9 +9,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
@@ -28,37 +26,47 @@ public class WhatsAppController {
     UserRepository userRepository;
 
     @PostMapping("/sendDocument/{userId}")
-    public String sendDocument(@PathVariable Long userId) throws Exception {
+    public String sendDocument(@PathVariable Long userId) {
+        try {
+            Pdf pdf = pdfRepository.findByUserIdAndSentIsNull(userId);
 
-        Pdf pdf = pdfRepository.findByUserIdAndSentIsNull(userId);
+            if (pdf == null ) {
+                return "لا يوجد ملف جاهز للارسال" ;
+            }
 
-        System.out.println("pdf : " + pdf.getId());
+            System.out.println("pdf : " + pdf.getId());
 
-        User user = userRepository.findByUserId(userId);
+            User user = userRepository.findByUserId(userId);
 
-        String message = "Send_Invoice.message";
+            System.out.println("user.getPhone(): " + user.getPhone());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            String message = "Send_Invoice.message";
 
-        System.out.println("ImagePath: " + pdf.getImagePath());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
-        map.add("token", "v8551cd68z16gr2y");
-        map.add("to", user.getPhone());
-        map.add("filename", "Details_Reservation.message");
-        map.add("document", pdf.getImagePath());
-        map.add("caption", "Send_Invoice.message");
+            System.out.println("ImagePath: " + pdf.getImagePath());
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+            MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+            map.add("token", "v8551cd68z16gr2y");
+            map.add("to", "02"+user.getPhone());
+            map.add("filename", "Details_Reservation.message");
+            map.add("document", pdf.getImagePath());
+            map.add("caption", "Send_Invoice.message");
 
-        pdf.setSent(Boolean.TRUE);
-        pdfRepository.save(pdf);
+            HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
 
-        RestTemplate restTemplate = new RestTemplate();
-        String url = "https://api.ultramsg.com/instance82647/messages/document";
-        String response = restTemplate.postForObject(url, request, String.class);
+            pdf.setSent(Boolean.TRUE);
+            pdfRepository.save(pdf);
 
-        return response;
+            RestTemplate restTemplate = new RestTemplate();
+            String url = "https://api.ultramsg.com/instance82647/messages/document";
+            String response = restTemplate.postForObject(url, request, String.class);
+
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error sending document: " + e.getMessage();
+        }
     }
 }
