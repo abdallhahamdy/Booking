@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Controller.unit;
 
+import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequest;
 import com.AlTaraf.Booking.Dto.Unit.UnitDto;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
@@ -42,6 +43,7 @@ import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.unit.roomAvailable.RoomAvailableRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
+import com.AlTaraf.Booking.Service.notification.NotificationService;
 import com.AlTaraf.Booking.Service.unit.AvailablePeriods.AvailablePeriodsService;
 import com.AlTaraf.Booking.Service.unit.FeatureForHalls.FeatureForHallsService;
 import com.AlTaraf.Booking.Service.unit.RoomAvailable.RoomAvailableService;
@@ -157,6 +159,9 @@ public class UnitController {
     @Autowired
     StatusRepository statusUnitRepository;
 
+    @Autowired
+    NotificationService notificationService;
+
     private static final Logger logger = LoggerFactory.getLogger(UnitController.class);
 
 
@@ -205,8 +210,14 @@ public class UnitController {
 
             Unit savedUnit = unitService.saveUnit(unitToSave);
 
+            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من النظام","تم ارسال طلب اضافة وحدتك",unitRequestDto.getUserId());
+            notificationService.processNotification(notificationRequest);
+
             // Return the unitId in the response body
             return ResponseEntity.status(HttpStatus.CREATED).body("Successful_Add_Unit.message " + savedUnit.getId());
+
+
+
         } catch (IllegalArgumentException e) {
             // Return user-friendly error response
             ApiResponse response = new ApiResponse(400, e.getMessage());

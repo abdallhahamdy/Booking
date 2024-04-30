@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Service.unit;
 
+import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequest;
 import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
@@ -32,6 +33,7 @@ import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
+import com.AlTaraf.Booking.Service.notification.NotificationService;
 import com.AlTaraf.Booking.Specifications.UnitSpecifications;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -109,6 +112,9 @@ public class UnitServiceImpl implements UnitService {
 
     @Autowired
     TechnicalSupportRepository technicalSupportRepository;
+
+    @Autowired
+    NotificationService notificationService;
 
     public Unit saveUnit(Unit unit) {
         try {
@@ -454,7 +460,7 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public void updateStatusForUser(Long unitId, Long statusUnitId) {
+    public void updateStatusForUser(Long unitId, Long statusUnitId) throws IOException, InterruptedException {
         Unit unit = unitRepository.findById(unitId)
                 .orElseThrow(() -> new EntityNotFoundException("Unit not found with id: " + unitId));
 
@@ -463,18 +469,17 @@ public class UnitServiceImpl implements UnitService {
 
         unit.setStatusUnit(statusUnit);
 
-//        User user = unit.getUser();
-//        System.out.println("user: " + user.getId());
-
-//        if (user.getWallet() > 0) {
-//
-//            double currentWallentBalance = user.getWallet();
-//            currentWallentBalance -= unit.getCommission();
-//            user.setWallet(currentWallentBalance);
-//        }
-//        userRepository.save(user);
-
         unitRepository.save(unit);
+
+        if ( statusUnitId == 2) {
+            System.out.println("statusUnitId");
+            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من الادمن","تم قبول طلب اضافة وحدتك",unit.getUser().getId());
+            notificationService.processNotification(notificationRequest);
+        } else if ( statusUnitId == 3) {
+            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من الادمن","تم رفض طلب اضافة وحدتك",unit.getUser().getId());
+            notificationService.processNotification(notificationRequest);
+        }
+
     }
 
     @Override

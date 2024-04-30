@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -71,7 +72,7 @@ public interface UnitService {
 
     Page<Unit> findByNameUnitAndAvailableAreaNameContainingIgnoreCase(String nameUnit, String availableAreaName, Pageable pageable);
 
-    void updateStatusForUser(Long userId, Long statusUnitId);
+    void updateStatusForUser(Long userId, Long statusUnitId) throws IOException, InterruptedException;
 
     void calculateAndSetAverageEvaluation(Long unitId);
 
