@@ -8,6 +8,7 @@ import com.AlTaraf.Booking.Payload.response.CounterUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface AdsService {
@@ -21,7 +22,7 @@ public interface AdsService {
 
     List<adsForSliderResponseDto> getAdsByAcceptedStatus();
 
-    void updateStatusForAds(Long adsId, Long statusUnitId);
+    void updateStatusForAds(Long adsId, Long statusUnitId) throws IOException, InterruptedException;
 
     Ads findByUnitId(Long unitId);
 

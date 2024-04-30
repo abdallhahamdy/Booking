@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Service.Ads;
 
+import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequest;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.User.User;
@@ -7,18 +8,19 @@ import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Mapper.Ads.SliderMapper;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.Payload.response.CounterAds;
-import com.AlTaraf.Booking.Payload.response.CounterUser;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
+import com.AlTaraf.Booking.Service.notification.NotificationService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -41,6 +43,9 @@ public class AdsServiceImpl implements AdsService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    NotificationService notificationService;
 
     @Override
     public List<adsForSliderResponseDto> getAdsByStatusUnitId(Long statusUnitId) {
@@ -81,7 +86,7 @@ public class AdsServiceImpl implements AdsService {
     }
 
     @Override
-    public void updateStatusForAds(Long adsId, Long statusUnitId) {
+    public void updateStatusForAds(Long adsId, Long statusUnitId) throws IOException, InterruptedException {
         Ads ads = adsRepository.findById(adsId)
                 .orElseThrow(() -> new EntityNotFoundException("Ads not found with id: " + adsId));
 
@@ -89,9 +94,9 @@ public class AdsServiceImpl implements AdsService {
                 .orElseThrow(() -> new EntityNotFoundException("StatusUnit not found with id: " + statusUnitId));
 
         User user = ads.getUser();
-        System.out.println("user: " + ads.getUser().getId());
+//        System.out.println("user: " + ads.getUser().getId());
 
-        System.out.println("number ads for user: " + user.getNumberAds());
+//        System.out.println("number ads for user: " + user.getNumberAds());
 
         Integer numberAds = user.getNumberAds();
         numberAds--;
@@ -100,6 +105,14 @@ public class AdsServiceImpl implements AdsService {
 
         ads.setStatusUnit(statusUnit);
         adsRepository.save(ads);
+
+        if ( statusUnitId == 2) {
+            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من الادمن","تم قبول طلب اضافة وحدتك",ads.getUser().getId());
+            notificationService.processNotification(notificationRequest);
+        } else if ( statusUnitId == 3) {
+            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من الادمن","تم رفض طلب اضافة وحدتك",ads.getUser().getId());
+            notificationService.processNotification(notificationRequest);
+        }
     }
 
 

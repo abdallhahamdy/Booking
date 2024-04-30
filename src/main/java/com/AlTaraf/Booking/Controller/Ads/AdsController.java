@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Controller.Ads;
 
+import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequest;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
@@ -12,7 +13,6 @@ import com.AlTaraf.Booking.Mapper.Ads.AdsStatusMapper;
 import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.Mapper.Unit.UnitGeneralResponseMapper;
 import com.AlTaraf.Booking.Payload.request.Ads.AdsRequestDto;
-import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseDto;
 import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseStatusDto;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
@@ -22,8 +22,8 @@ import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
+import com.AlTaraf.Booking.Service.notification.NotificationService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
-import com.AlTaraf.Booking.Service.unit.statusUnit.StatusUnitService;
 import com.AlTaraf.Booking.Service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -76,6 +76,9 @@ public class AdsController {
     @Autowired
     PackageAdsRepository packageAdsRepository;
 
+    @Autowired
+    NotificationService notificationService;
+
     @GetMapping("/Package-Ads")
     public ResponseEntity<?> getAllPackageAds() {
         try {
@@ -122,7 +125,12 @@ public class AdsController {
             }
 
             userRepository.save(user);
+
+            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من النظام","تم ارسال طلب اضافة اعلان",user.getId());
+            notificationService.processNotification(notificationRequest);
+
             return ResponseEntity.status(HttpStatus.CREATED).body("Ads_created.message " + ads.getId());
+
         } catch (Exception e) {
             System.out.println("Error Create Ads: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed_create_ads.message ");
