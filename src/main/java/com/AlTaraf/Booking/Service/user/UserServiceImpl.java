@@ -29,6 +29,8 @@ import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepositor
 import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataProfileRepository;
 import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
+import com.AlTaraf.Booking.Repository.image.PdfRepository;
+import com.AlTaraf.Booking.Repository.payment.PayemntRepository;
 import com.AlTaraf.Booking.Repository.role.RoleRepository;
 import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
@@ -130,6 +132,13 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     TransactionsDetailRepository transactionsDetailRepository;
+
+    @Autowired
+    PdfRepository pdfRepository;
+
+    @Autowired
+    PayemntRepository payemntRepository;
+
 
     public String generateOtpForUser() {
         // For simplicity, let's assume a random 4-digit OTP
@@ -299,7 +308,12 @@ public class UserServiceImpl implements UserService {
 
             // Delete associated entities
             technicalSupportRepository.deleteByUser(user);
+            imageDataRepository.deleteByUser(user);
+            imageDataForAdsRepository.deleteByUser(user);
             imageDataProfileRepository.deleteByUser(user);
+            pdfRepository.deleteByUserId(userId);
+            payemntRepository.deleteByUserId(userId);
+            transactionsDetailRepository.deleteByUserId(userId);
             userFavoriteUnitRepository.deleteByUser(user);
             notificationRepository.deleteByUserId(userId);
 
