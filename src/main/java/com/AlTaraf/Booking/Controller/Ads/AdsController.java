@@ -16,7 +16,6 @@ import com.AlTaraf.Booking.Payload.request.Ads.AdsRequestDto;
 import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseStatusDto;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
-import com.AlTaraf.Booking.Payload.response.ApiResponseFlag;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
@@ -182,21 +181,6 @@ public class AdsController {
         } catch (Exception e) {
             System.out.println("Exception Accepted Ads: " + e);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No_content.message"));
-        }
-    }
-
-    @GetMapping("/{userId}/check-package-ads")
-    public ResponseEntity<?> checkUserPackageAds(@PathVariable Long userId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            if (user.getPackageAds() != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseFlag(200,"false", false));
-            } else {
-                return ResponseEntity.status(HttpStatus.OK).body(new ApiResponseFlag(204,"true", true));
-            }
-        } else {
-            return ResponseEntity.notFound().build();
         }
     }
 
