@@ -1,7 +1,7 @@
 package com.AlTaraf.Booking.Dto.User;
 
 
-import com.AlTaraf.Booking.Dto.Image.ImageDataProfileDTO;
+import com.AlTaraf.Booking.Dto.Image.FileForProfileDTO;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.Role.Role;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class UserDto {
     private Long id;
-    private List<ImageDataProfileDTO> imageDataProfileDTOS;
+    private List<FileForProfileDTO> fileForProfileDTOS;
     private String username;
     private String email;
     private String phone;

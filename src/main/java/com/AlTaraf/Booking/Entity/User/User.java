@@ -2,6 +2,7 @@ package com.AlTaraf.Booking.Entity.User;
 
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.Favorite.UserFavoriteUnit;
+import com.AlTaraf.Booking.Entity.File.FileForProfile;
 import com.AlTaraf.Booking.Entity.Image.ImageProfile;
 import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
@@ -68,7 +69,7 @@ public class User extends Auditable<String> {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<ImageProfile> imagesProfiles;
+    private List<FileForProfile> fileForProfiles;
 
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
@@ -106,12 +107,6 @@ public class User extends Auditable<String> {
     public User(Long id) {
         this.id = id;
     }
-
-//    public User() {
-//        if (wallet == null) {
-//            wallet = 0.0;
-//        }
-//    }
 
     public int getNumberAds() {
         return numberAds != null ? numberAds : 0;

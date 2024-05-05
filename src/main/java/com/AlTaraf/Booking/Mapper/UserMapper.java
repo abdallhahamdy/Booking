@@ -2,8 +2,10 @@ package com.AlTaraf.Booking.Mapper;
 
 
 
+import com.AlTaraf.Booking.Dto.Image.FileForProfileDTO;
 import com.AlTaraf.Booking.Dto.User.UserDto;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
+import com.AlTaraf.Booking.Entity.File.FileForProfile;
 import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.enums.ERole;
@@ -57,7 +59,7 @@ public interface UserMapper {
 
 
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "imagesProfiles", target = "imageDataProfileDTOS")
+    @Mapping(source = "fileForProfiles", target = "fileForProfileDTOS")
     @Mapping(source = "username", target = "username")
     @Mapping(source = "email", target = "email")
     @Mapping(source = "phone", target = "phone")
@@ -87,4 +89,11 @@ public interface UserMapper {
                 })
                 .collect(Collectors.toSet());
     }
+
+    default List<FileForProfileDTO> mapFileForProfiles(List<FileForProfile> fileForProfiles) {
+        return fileForProfiles.stream()
+                .map(file -> new FileForProfileDTO(file.getName(), file.getFileDownloadUri(), file.getImageBackgroundFlag()))
+                .collect(Collectors.toList());
+    }
+
 }
