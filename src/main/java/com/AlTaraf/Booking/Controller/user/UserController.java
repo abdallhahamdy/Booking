@@ -143,7 +143,15 @@ public class UserController {
             User userForDeviceToken = userRepository.findByPhoneForUser(loginRequest.getPhone());
             userForDeviceToken.setDeviceToken(loginRequest.getDeviceToken());
 
+            if (loginRequest.getIsClientFlag() != null) {
+                userForDeviceToken.setIsClientFlag(true);
+            } else {
+                userForDeviceToken.setIsClientFlag(null);
+            }
+
             userRepository.save(userForDeviceToken);
+
+
 
             if (!optionalUser.isPresent()) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

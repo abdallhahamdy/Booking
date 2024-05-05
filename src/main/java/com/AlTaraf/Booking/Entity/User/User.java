@@ -100,6 +100,9 @@ public class User extends Auditable<String> {
     @Column(name = "NUMBER_ADS")
     private Integer numberAds;
 
+    @Column(name = "IS_CLIENT_FLAG")
+    private Boolean isClientFlag;
+
     public Double getWallet() {
         return wallet != null ? wallet : 0.0;
     }

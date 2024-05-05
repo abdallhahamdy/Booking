@@ -18,4 +18,5 @@ public class LoginRequest {
     private boolean stayLoggedIn;
     private Set<String> roles;
     private String deviceToken;
+    private Boolean isClientFlag;
 }
