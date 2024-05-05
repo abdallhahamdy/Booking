@@ -15,7 +15,7 @@ public interface AdsStatusMapper {
     @Mapping(source = "unit.id", target = "unitId")
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "unit.unitType.id", target = "unitTypeId")
-    @Mapping(source = "images", target = "imageDataDTO")
+    @Mapping(source = "fileForAds", target = "fileForAdsDTOS")
     @Mapping(source = "unit.nameUnit", target = "unitName")
     @Mapping(source = "unit.city", target = "cityDto")
     @Mapping(source = "unit.region", target = "regionDto")

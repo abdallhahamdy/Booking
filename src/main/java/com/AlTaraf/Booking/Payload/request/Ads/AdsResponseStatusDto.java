@@ -1,6 +1,6 @@
 package com.AlTaraf.Booking.Payload.request.Ads;
 
-import com.AlTaraf.Booking.Dto.Image.ImageDataDTO;
+import com.AlTaraf.Booking.Dto.Image.FileForAdsDTO;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDtoSample;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.RegionDto;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
@@ -16,11 +16,11 @@ import java.util.List;
 @NoArgsConstructor
 public class AdsResponseStatusDto {
     private Long id;
-    private List<ImageDataDTO> imageDataDTO;
+    private List<FileForAdsDTO> fileForAdsDTOS;
     private Long unitId;
     private Long userId;
 
-        private Long unitTypeId;
+    private Long unitTypeId;
     private PackageAds packageAds;
     private String unitName;
     private CityDtoSample cityDto;

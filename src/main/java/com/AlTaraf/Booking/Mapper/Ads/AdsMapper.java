@@ -11,7 +11,7 @@ public interface AdsMapper {
 
     @Mapping(source = "id", target = "id")
     @Mapping(source = "unit.id", target = "unitId")
-    @Mapping(source = "images", target = "imageDataDTOs")
+    @Mapping(source = "fileForAds", target = "fileForAdsDTOS")
     @Mapping(source = "user.id", target = "userId")
 //    @Mapping(source = "packageAds", target = "packageAds")
 //    @Mapping(source = "statusUnit", target = "statusUnit")

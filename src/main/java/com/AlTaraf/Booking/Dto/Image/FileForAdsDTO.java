@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageDataDTO {
-    private Long id;
+public class FileForAdsDTO {
     private String name;
-    private String imagePath;
+
+    private String type;
+
+    private String fileDownloadUri;
 }

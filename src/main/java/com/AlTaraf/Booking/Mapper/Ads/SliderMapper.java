@@ -1,8 +1,7 @@
 package com.AlTaraf.Booking.Mapper.Ads;
 
 import com.AlTaraf.Booking.Entity.Ads.Ads;
-import com.AlTaraf.Booking.Entity.Image.ImageData;
-import com.AlTaraf.Booking.Entity.Image.ImageDataForAds;
+import com.AlTaraf.Booking.Entity.File.FileForAds;
 import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,7 +14,7 @@ public interface SliderMapper {
 
     @Mappings({
             @Mapping(source = "ads.id", target = "adsId"),
-            @Mapping(target = "imagePath", expression = "java(extractImagePath(ads.getImages()))"),
+            @Mapping(target = "imagePath", expression = "java(extractImagePath(ads.getFileForAds()))"),
 //            @Mapping(source = "ads.unit", target = "unitDtoFavorite"),
             @Mapping(source = "ads.unit.id", target = "unitId"),
             @Mapping(source = "ads.unit.nameUnit", target = "nameUnit"),
@@ -28,9 +27,9 @@ public interface SliderMapper {
     List<adsForSliderResponseDto> toSliderDtoList(List<Ads> adsList);
 
     // Define a method to extract the first image path from the list of ImageData entities
-    default String extractImagePath(List<ImageDataForAds> images) {
-        if (images != null && !images.isEmpty()) {
-            return images.get(0).getImagePath();
+    default String extractImagePath(List<FileForAds> fileForAds) {
+        if (fileForAds != null && !fileForAds.isEmpty()) {
+            return fileForAds.get(0).getFileDownloadUri();
         }
         return null; // or provide a default image path
     }
