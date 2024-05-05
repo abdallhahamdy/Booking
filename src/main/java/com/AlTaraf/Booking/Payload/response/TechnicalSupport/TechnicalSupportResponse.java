@@ -1,6 +1,6 @@
 package com.AlTaraf.Booking.Payload.response.TechnicalSupport;
 
-import com.AlTaraf.Booking.Dto.Image.ImageDataDTO;
+import com.AlTaraf.Booking.Dto.Image.FileForProfileDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class TechnicalSupportResponse {
     private Long id;
-    private List<ImageDataDTO> imageDataDTOs;
+    private List<FileForProfileDTO> fileForProfileDTOS;
     private String name;
     private String email;
     private String message;
