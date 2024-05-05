@@ -143,7 +143,7 @@ public class UserController {
             User userForDeviceToken = userRepository.findByPhoneForUser(loginRequest.getPhone());
             userForDeviceToken.setDeviceToken(loginRequest.getDeviceToken());
 
-            if (loginRequest.getIsClientFlag() != null) {
+            if (loginRequest.getRole().getId() == 1) {
                 userForDeviceToken.setIsClientFlag(true);
             } else {
                 userForDeviceToken.setIsClientFlag(null);
@@ -162,9 +162,9 @@ public class UserController {
             System.out.println("user.getRole" + user.getRoles());
 
             // Check if the user's roles match the roles in the request
-            Set<String> requestRoles = loginRequest.getRoles();
+//            Set<String> requestRoles = loginRequest.getRoles();
 
-            System.out.println("requestRoles: " + requestRoles);
+//            System.out.println("requestRoles: " + requestRoles);
 
             Set<String> userRoles = user.getRoles().stream()
                     .map(role -> role.getName().name())
@@ -172,10 +172,10 @@ public class UserController {
 
             System.out.println("userRoles: " + userRoles);
 
-            if (Collections.disjoint(userRoles, requestRoles)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ApiResponse(400, "role_is_not_correct.message"));
-            }
+//            if (Collections.disjoint(userRoles, requestRoles)) {
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                        .body(new ApiResponse(400, "role_is_not_correct.message"));
+//            }
 
             List<String> roles = userDetails.getAuthorities().stream()
                     .map(item -> item.getAuthority())
