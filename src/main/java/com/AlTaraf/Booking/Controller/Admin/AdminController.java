@@ -12,7 +12,6 @@ import com.AlTaraf.Booking.Mapper.Ads.AdsStatusMapper;
 import com.AlTaraf.Booking.Mapper.Notification.NotificationMapper;
 import com.AlTaraf.Booking.Mapper.TechnicalSupport.TechnicalSupportUnitsMapper;
 import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseStatusDto;
-import com.AlTaraf.Booking.Payload.request.LoginRequest;
 import com.AlTaraf.Booking.Payload.response.*;
 import com.AlTaraf.Booking.Payload.response.TechnicalSupport.TechnicalSupportResponse;
 import com.AlTaraf.Booking.Dto.Unit.UnitDashboard;
@@ -27,7 +26,6 @@ import com.AlTaraf.Booking.Mapper.TechnicalSupport.TechnicalSupportMapper;
 import com.AlTaraf.Booking.Mapper.Unit.*;
 import com.AlTaraf.Booking.Mapper.Unit.Dashboard.UnitDashboardMapper;
 import com.AlTaraf.Booking.Mapper.Unit.Dashboard.UserDashboardMapper;
-import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseDto;
 import com.AlTaraf.Booking.Payload.response.TechnicalSupport.TechnicalSupportUnitsResponse;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
@@ -37,14 +35,11 @@ import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
-import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
-import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportRepository;
 import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportUnitRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
-import com.AlTaraf.Booking.Security.service.UserDetailsImpl;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
 import com.AlTaraf.Booking.Service.TechnicalSupport.TechnicalSupportService;
@@ -54,22 +49,16 @@ import com.AlTaraf.Booking.Service.notification.NotificationService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.user.UserService;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -129,9 +118,6 @@ public class AdminController {
     private RoomDetailsForAvailableAreaRepository roomDetailsForAvailableAreaRepository;
 
     @Autowired
-    private ImageDataRepository imageDataRepository;
-
-    @Autowired
     private RoomDetailsRepository roomDetailsRepository;
 
     @Autowired
@@ -157,9 +143,6 @@ public class AdminController {
 
     @Autowired
     private TechnicalSupportUnitsMapper technicalSupportUnitsMapper;
-
-    @Autowired
-    private ImageDataForAdsRepository imageDataForAdsRepository;
 
     @Autowired
     AdsStatusMapper adsStatusMapper;
