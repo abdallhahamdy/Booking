@@ -18,6 +18,10 @@ import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
 import com.AlTaraf.Booking.Payload.response.CounterUser;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
+import com.AlTaraf.Booking.Repository.File.FileForAdsRepository;
+import com.AlTaraf.Booking.Repository.File.FileForPdfRepository;
+import com.AlTaraf.Booking.Repository.File.FileForProfileRepository;
+import com.AlTaraf.Booking.Repository.File.FileForUnitRepository;
 import com.AlTaraf.Booking.Repository.NotificationRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
@@ -26,10 +30,6 @@ import com.AlTaraf.Booking.Repository.Transactions.TotalTransactionsRepository;
 import com.AlTaraf.Booking.Repository.Transactions.TransactionsDetailRepository;
 import com.AlTaraf.Booking.Repository.Transactions.TransactionsRepository;
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
-import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
-import com.AlTaraf.Booking.Repository.image.ImageDataProfileRepository;
-import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
-import com.AlTaraf.Booking.Repository.image.PdfRepository;
 import com.AlTaraf.Booking.Repository.payment.PayemntRepository;
 import com.AlTaraf.Booking.Repository.role.RoleRepository;
 import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportRepository;
@@ -89,13 +89,13 @@ public class UserServiceImpl implements UserService {
     private UserFavoriteUnitRepository userFavoriteUnitRepository;
 
     @Autowired
-    private ImageDataForAdsRepository imageDataForAdsRepository;
+    private FileForAdsRepository fileForAdsRepository;
 
     @Autowired
-    private ImageDataRepository imageDataRepository;
+    private FileForUnitRepository fileForUnitRepository;
 
     @Autowired
-    private ImageDataProfileRepository imageDataProfileRepository;
+    private FileForProfileRepository fileForProfileRepository;
 
     @Autowired
     private UnitRepository unitRepository;
@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
     TransactionsDetailRepository transactionsDetailRepository;
 
     @Autowired
-    PdfRepository pdfRepository;
+    FileForPdfRepository fileForPdfRepository;
 
     @Autowired
     PayemntRepository payemntRepository;
@@ -308,10 +308,10 @@ public class UserServiceImpl implements UserService {
 
             // Delete associated entities
             technicalSupportRepository.deleteByUser(user);
-            imageDataRepository.deleteByUser(user);
-            imageDataForAdsRepository.deleteByUser(user);
-            imageDataProfileRepository.deleteByUser(user);
-            pdfRepository.deleteByUserId(userId);
+            fileForUnitRepository.deleteByUser(user);
+            fileForAdsRepository.deleteByUser(user);
+            fileForProfileRepository.deleteByUser(user);
+            fileForPdfRepository.deleteByUserId(userId);
             payemntRepository.deleteByUserId(userId);
             transactionsDetailRepository.deleteByUserId(userId);
             userFavoriteUnitRepository.deleteByUser(user);
