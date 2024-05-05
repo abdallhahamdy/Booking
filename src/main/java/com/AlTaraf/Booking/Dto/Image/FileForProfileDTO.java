@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageDataProfileDTO {
-    private Long id;
+public class FileForProfileDTO {
     private String name;
-    private String imagePath;
-    private Boolean image_background;
+    private String fileDownloadUri;
+    private Boolean imageBackgroundFlag;
 }
