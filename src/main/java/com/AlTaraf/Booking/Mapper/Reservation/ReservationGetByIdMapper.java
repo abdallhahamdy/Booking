@@ -1,19 +1,13 @@
 package com.AlTaraf.Booking.Mapper.Reservation;
 
-import com.AlTaraf.Booking.Dto.Unit.FeatureForHalls.FeatureForHallsDto;
-import com.AlTaraf.Booking.Dto.Unit.availablePeriodsHalls.AvailablePeriodsDto;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.unit.AvailablePeriods.AvailablePeriods;
-import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.feature.Feature;
-import com.AlTaraf.Booking.Entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.Entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
-import com.AlTaraf.Booking.Payload.request.Reservation.ReservationRequestDto;
 import com.AlTaraf.Booking.Payload.response.Reservation.ReservationResponseGetId;
-import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

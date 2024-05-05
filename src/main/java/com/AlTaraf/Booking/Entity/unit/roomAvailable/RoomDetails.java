@@ -20,7 +20,7 @@ public class RoomDetails {
     @Column(name = "ROOM_DETAILS_ID")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ROOM_AVAILABLE_ID")
     private RoomAvailable roomAvailable;
 

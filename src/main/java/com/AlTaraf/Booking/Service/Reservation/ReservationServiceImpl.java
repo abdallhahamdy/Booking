@@ -148,7 +148,7 @@ public class ReservationServiceImpl implements ReservationService {
         if ( statusUnitId.equals(2L) && getRoomAvailableByReservations(reservationId) != null ) {
 
             RoomAvailable roomAvailable = getRoomAvailableByReservations(reservationId);
-            RoomDetails roomDetails = roomDetailsRepository.findByUnitIdAndRoomAvailableId(unit.getId(), roomAvailable.getId());
+            RoomDetails roomDetails = roomDetailsRepository.findRoomDetailsByUnitIdAndRoomAvailableId(unit.getId(), roomAvailable.getId());
 
 //            List<ReserveDate> reserveDate = reserveDateRepository.findByRoomDetailsForAvailableAreaIdAndUnitId(roomDetailsForAvailableArea.getId(), unit.getId());
 

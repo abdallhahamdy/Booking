@@ -50,6 +50,6 @@ public class RoomDetailsServiceImpl implements RoomDetailsService{
 
     @Override
     public RoomDetails getRoomDetailsByUnitIdAndRoomAvailableId(Long unitId, Long roomAvailableId) {
-        return roomDetailsRepository.findByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
+        return roomDetailsRepository.findRoomDetailsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
     }
 }
