@@ -1,10 +1,8 @@
 package com.AlTaraf.Booking.Payload.response.Reservation;
 
-import com.AlTaraf.Booking.Dto.Image.ImageDataDTO;
-import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;
+import com.AlTaraf.Booking.Dto.Image.FileForUnitDTO;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDtoSample;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.RegionDto;
-import com.AlTaraf.Booking.Entity.Image.ImageData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ReservationStatus {
     private Long reservationId;
-    private List<ImageDataDTO> imageDataDTOS;
+    private List<FileForUnitDTO> fileForUnitDTOS;
     private Long unitId;
     private String unitName;
     private CityDtoSample cityDto;

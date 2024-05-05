@@ -12,7 +12,7 @@ import java.util.List;
 public interface ReservationStatusMapper {
     @Mapping(source = "id", target = "reservationId")
     @Mapping(source = "user.deviceToken", target = "deviceToken")
-    @Mapping(source = "unit.images", target = "imageDataDTOS")
+    @Mapping(source = "unit.fileForUnits", target = "fileForUnitDTOS")
     @Mapping(source = "unit.id", target = "unitId")
     @Mapping(source = "unit.nameUnit", target = "unitName")
     @Mapping(source = "unit.city", target = "cityDto")

@@ -1,10 +1,10 @@
 package com.AlTaraf.Booking.Mapper.Unit;
 
 
-import com.AlTaraf.Booking.Dto.Image.ImageDataDTO;
+import com.AlTaraf.Booking.Dto.Image.FileForUnitDTO;
 import com.AlTaraf.Booking.Dto.Unit.FeatureForHalls.FeatureForHallsDto;
 import com.AlTaraf.Booking.Dto.Unit.availablePeriodsHalls.AvailablePeriodsDto;
-import com.AlTaraf.Booking.Entity.Image.ImageData;
+import com.AlTaraf.Booking.Entity.File.FileForUnit;
 import com.AlTaraf.Booking.Entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.featureForHalls.FeatureForHalls;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface EventHallsMapper {
     @Mapping(source = "id", target = "unitId")
-    @Mapping(target = "imagePaths", expression = "java(extractFilePaths(unit.getImages()))")
+    @Mapping(target = "imagePaths", expression = "java(extractFilePaths(unit.getFileForUnits()))")
     @Mapping(source = "capacityHalls", target = "capacityHalls")
     @Mapping(source = "nameUnit", target = "nameUnit")
     @Mapping(source = "description", target = "description")
@@ -55,23 +55,22 @@ public interface EventHallsMapper {
 
     List<EventHallsResponse> toEventHallsList(List<Unit> unitList);
 
-    default List<ImageDataDTO> mapImages(List<ImageData> images) {
-        return images.stream()
+    default List<FileForUnitDTO> mapImages(List<FileForUnit> fileForUnits) {
+        return fileForUnits.stream()
                 .map(this::mapToImageDataDTO)
                 .collect(Collectors.toList());
     }
 
-    default ImageDataDTO mapToImageDataDTO(ImageData imageData) {
-        ImageDataDTO imageDataDTO = new ImageDataDTO();
-        imageDataDTO.setId(imageData.getId());
-        imageDataDTO.setName(imageData.getName());
-        imageDataDTO.setImagePath(imageData.getImagePath());
+    default FileForUnitDTO mapToImageDataDTO(FileForUnit fileForUnit) {
+        FileForUnitDTO imageDataDTO = new FileForUnitDTO();
+        imageDataDTO.setName(fileForUnit.getName());
+        imageDataDTO.setFileDownloadUri(fileForUnit.getFileDownloadUri());
         return imageDataDTO;
     }
 
-    default List<String> extractFilePaths(List<ImageData> images) {
-        return images.stream()
-                .map(ImageData::getImagePath)
+    default List<String> extractFilePaths(List<FileForUnit> fileForUnits) {
+        return fileForUnits.stream()
+                .map(FileForUnit::getFileDownloadUri)
                 .collect(Collectors.toList());
     }
 }
