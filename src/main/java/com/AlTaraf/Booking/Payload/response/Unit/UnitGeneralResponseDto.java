@@ -1,12 +1,9 @@
 package com.AlTaraf.Booking.Payload.response.Unit;
 
-import com.AlTaraf.Booking.Dto.Image.ImageDataDTO;
 import com.AlTaraf.Booking.Dto.Unit.FeatureForHalls.FeatureForHallsDto;
 import com.AlTaraf.Booking.Dto.Unit.availablePeriodsHalls.AvailablePeriodsDto;
-import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDtoSample;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.RegionDto;
-import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.unit.accommodationType.AccommodationType;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;

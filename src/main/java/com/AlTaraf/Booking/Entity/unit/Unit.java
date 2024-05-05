@@ -1,7 +1,7 @@
 package com.AlTaraf.Booking.Entity.unit;
 
 import com.AlTaraf.Booking.Entity.Evaluation.Evaluation;
-import com.AlTaraf.Booking.Entity.Image.ImageData;
+import com.AlTaraf.Booking.Entity.File.FileForUnit;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.cityAndregion.Region;
@@ -182,7 +182,7 @@ public class Unit extends Auditable<String> {
 
     @OneToMany(mappedBy = "unit", cascade = CascadeType.ALL)
     @JsonManagedReference
-    private List<ImageData> images;
+    private List<FileForUnit> fileForUnits;
 
     @Column(name = "DATE_OF_ARRIVAL")
     private LocalDate dateOfArrival;
