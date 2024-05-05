@@ -7,8 +7,8 @@ import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
 import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import com.AlTaraf.Booking.Entity.Evaluation.Evaluation;
-import com.AlTaraf.Booking.Entity.Image.ImageData;
-import com.AlTaraf.Booking.Entity.Image.ImageDataForAds;
+import com.AlTaraf.Booking.Entity.File.FileForAds;
+import com.AlTaraf.Booking.Entity.File.FileForUnit;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
@@ -19,12 +19,12 @@ import com.AlTaraf.Booking.Mapper.Unit.UnitFavoriteMapper;
 import com.AlTaraf.Booking.Payload.response.CounterUnits;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Evaluation.EvaluationRepository;
+import com.AlTaraf.Booking.Repository.File.FileForAdsRepository;
+import com.AlTaraf.Booking.Repository.File.FileForUnitRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
-import com.AlTaraf.Booking.Repository.image.ImageDataForAdsRepository;
-import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportRepository;
 import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportUnitRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
@@ -60,10 +60,10 @@ public class UnitServiceImpl implements UnitService {
     AdsRepository adsRepository;
 
     @Autowired
-    private ImageDataRepository imageDataRepository;
+    private FileForUnitRepository fileForUnitRepository;
 
     @Autowired
-    private ImageDataForAdsRepository imageDataForAdsRepository;
+    private FileForAdsRepository fileForAdsRepository;
 
     @Autowired
     private UnitFavoriteMapper unitFavoriteMapper;
@@ -214,12 +214,12 @@ public class UnitServiceImpl implements UnitService {
 
         if (unit != null) {
             // Retrieve associated ImageData entities
-            List<ImageData> imageDataList = imageDataRepository.findByUserIdAndUnitIsNull(userId);
+            List<FileForUnit> fileForUnitList = fileForUnitRepository.findByUserIdAndUnitIsNull(userId);
 
             // Update the unit for each ImageData entity
-            for (ImageData imageData : imageDataList) {
-                imageData.setUnit(unit);
-                imageDataRepository.save(imageData);
+            for (FileForUnit fileForUnit : fileForUnitList) {
+                fileForUnit.setUnit(unit);
+                fileForUnitRepository.save(fileForUnit);
             }
         }
         else {
@@ -238,14 +238,14 @@ public class UnitServiceImpl implements UnitService {
 
         if (ads != null) {
             // Retrieve associated ImageData entities
-            List<ImageDataForAds> imageDataList = imageDataForAdsRepository.findByUserIdAndAdsIsNull(userId);
+            List<FileForAds> fileForAdsList = fileForAdsRepository.findByUserIdAndAdsIsNull(userId);
 
             // Update the unit for each ImageData entity
-            for (ImageDataForAds imageData : imageDataList) {
-                System.out.println("Name Image: "+ imageData.getName());
-                imageData.setAds(ads);//                imageData.setUnit(unit);
+            for (FileForAds fileForAds : fileForAdsList) {
+                System.out.println("Name Image: "+ fileForAds.getName());
+                fileForAds.setAds(ads);//                imageData.setUnit(unit);
 
-                imageDataForAdsRepository.save(imageData);
+                fileForAdsRepository.save(fileForAds);
             }
         }
         else {
@@ -557,7 +557,7 @@ public class UnitServiceImpl implements UnitService {
         roomDetailsRepository.deleteByUnitId(id);
 
 
-        imageDataRepository.deleteByUnitId(id);
+        fileForUnitRepository.deleteByUnitId(id);
         reservationRepository.deleteByUnitId(id);
 
         technicalSupportUnitRepository.deleteByUnitId(id);
