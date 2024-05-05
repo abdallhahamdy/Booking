@@ -36,7 +36,6 @@ import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
-import com.AlTaraf.Booking.Repository.image.ImageDataRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
@@ -149,9 +148,6 @@ public class UnitController {
 
     @Autowired
     private ReserveDateHallsRepository reserveDateHallsRepository;
-
-    @Autowired
-    private ImageDataRepository imageDataRepository;
 
     @Autowired
     private UserFavoriteUnitRepository userFavoriteUnitRepository;
