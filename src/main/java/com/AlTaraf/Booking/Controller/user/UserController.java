@@ -143,15 +143,6 @@ public class UserController {
             User userForDeviceToken = userRepository.findByPhoneForUser(loginRequest.getPhone());
             userForDeviceToken.setDeviceToken(loginRequest.getDeviceToken());
 
-            if (loginRequest.getRole().getId() == 1) {
-                userForDeviceToken.setIsClientFlag(true);
-            } else {
-                userForDeviceToken.setIsClientFlag(null);
-            }
-
-            userRepository.save(userForDeviceToken);
-
-
 
             if (!optionalUser.isPresent()) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -172,10 +163,19 @@ public class UserController {
 
             System.out.println("userRoles: " + userRoles);
 
+            Set<String> requestRoles = loginRequest.getRoles();
+
+            System.out.println("requestRoles: " + requestRoles);
+
 //            if (Collections.disjoint(userRoles, requestRoles)) {
 //                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 //                        .body(new ApiResponse(400, "role_is_not_correct.message"));
 //            }
+
+            if (Collections.disjoint(userRoles, requestRoles)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ApiResponse(400, "role_is_not_correct.message"));
+            }
 
             List<String> roles = userDetails.getAuthorities().stream()
                     .map(item -> item.getAuthority())

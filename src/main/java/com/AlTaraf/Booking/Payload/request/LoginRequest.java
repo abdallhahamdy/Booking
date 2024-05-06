@@ -17,8 +17,9 @@ public class LoginRequest {
     @NotBlank
     private String password;
     private boolean stayLoggedIn;
-//    private Set<String> roles;
-    private Role role;
+//    private Role role;
+    private Set<String> roles;
+
     private String deviceToken;
 //    private Boolean isClientFlag;
 }
