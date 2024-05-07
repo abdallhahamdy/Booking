@@ -25,7 +25,7 @@ public class AvailableAreaController {
         if (!availableAreaList.isEmpty()) {
             return new ResponseEntity<>(availableAreaList, HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No_content.message"));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "no_content.message"));
         }
     }
 }

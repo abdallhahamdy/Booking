@@ -339,7 +339,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new IllegalArgumentException("PackageAds not found with id: " + packageAdsId));
 
         if (user.getWallet() < packageAds.getPrice()) {
-            throw new InsufficientFundsException("Fail_package_ads_wallet.message");
+            throw new InsufficientFundsException("fail_package_ads_wallet.message");
         }
 
         user.setPackageAds(packageAds);

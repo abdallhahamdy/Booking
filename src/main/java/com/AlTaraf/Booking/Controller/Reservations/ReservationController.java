@@ -173,7 +173,7 @@ public class ReservationController {
             List<ReservationStatus> reservationRequestDtoList = reservationStatusMapper.toReservationStatusDtoList(reservations.getContent());
             return new ResponseEntity<>(reservationRequestDtoList, HttpStatus.OK);
         } else {
-            ApiResponse response = new ApiResponse(204, "No_content.message");
+            ApiResponse response = new ApiResponse(204, "no_content.message");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
@@ -190,7 +190,7 @@ public class ReservationController {
             List<ReservationStatus> reservationRequestDtoList = reservationStatusMapper.toReservationStatusDtoList(reservations);
             return new ResponseEntity<>(reservationRequestDtoList, HttpStatus.OK);
         } else {
-            ApiResponse response = new ApiResponse(204, "No_content.message");
+            ApiResponse response = new ApiResponse(204, "no_content.message");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }

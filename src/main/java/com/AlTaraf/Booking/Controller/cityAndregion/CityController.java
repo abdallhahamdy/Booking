@@ -74,7 +74,7 @@ public class CityController {
     public ResponseEntity<?> getAllCities() {
         List<CityDto> cities = cityService.getAllCities();
         if (cities.isEmpty()) {
-            ApiResponse response = new ApiResponse(204, "No_content.message");
+            ApiResponse response = new ApiResponse(204, "no_content.message");
 
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         } else {

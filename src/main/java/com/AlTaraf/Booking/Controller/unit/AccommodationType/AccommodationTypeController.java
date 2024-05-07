@@ -26,7 +26,7 @@ public class AccommodationTypeController {
         if (!accommodationTypeList.isEmpty()) {
             return new ResponseEntity<>(accommodationTypeList, HttpStatus.OK);
         } else {
-            ApiResponse response = new ApiResponse(204, "No_content.message");
+            ApiResponse response = new ApiResponse(204, "no_content.message");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
 //            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
