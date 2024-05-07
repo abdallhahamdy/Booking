@@ -36,6 +36,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -112,8 +113,7 @@ public class AdsController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createAds(@RequestBody AdsRequestDto adsRequestDto) {
-        try {
+    public ResponseEntity<?> createAds(@RequestBody AdsRequestDto adsRequestDto) throws IOException, InterruptedException {
             User user = userRepository.findByUserId(adsRequestDto.getUserId());
             PackageAds packageAds = packageAdsRepository.findById(0L).orElse(null);
             Ads ads = adsService.createAds(adsMapper.toEntity(adsRequestDto));
@@ -126,6 +126,7 @@ public class AdsController {
 
             if (numberAds == 0) {
                 user.setPackageAds(packageAds);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage("package_ads_null.message" + ads.getId(), null, LocaleContextHolder.getLocale()));
             }
 
             userRepository.save(user);
@@ -135,10 +136,9 @@ public class AdsController {
 
             return ResponseEntity.status(HttpStatus.CREATED).body(messageSource.getMessage("ads_created.message" + ads.getId(), null, LocaleContextHolder.getLocale()));
 
-        } catch (Exception e) {
-            System.out.println("Error Create Ads: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(messageSource.getMessage("failed_create_ads.message", null, LocaleContextHolder.getLocale()));
-        }
+//            System.out.println("Error Create Ads: " + e.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(messageSource.getMessage("failed_create_ads.message", null, LocaleContextHolder.getLocale()));
+
     }
 
     @GetMapping("/status-unit/ads")
