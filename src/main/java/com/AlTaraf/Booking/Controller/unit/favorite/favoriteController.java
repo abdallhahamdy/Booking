@@ -82,7 +82,7 @@ public class favoriteController {
             userFavoriteUnitService.deleteUserFavoriteUnit(userId, unitId);
             return ResponseEntity.ok().body(new ApiResponse(201, "Deleted_Favorite_List.message"));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, "Not_found.message"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, "not_found.message"));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "no_content.message"));
         }

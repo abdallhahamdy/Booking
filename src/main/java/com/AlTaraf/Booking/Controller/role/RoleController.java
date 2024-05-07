@@ -6,6 +6,8 @@ import com.AlTaraf.Booking.Mapper.RoleMapper;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Service.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,8 @@ public class RoleController {
     @Autowired
     RoleService roleService;
 
+    @Autowired
+    MessageSource messageSource;
 
     // Get a role by ID
     @GetMapping("/{id}")
@@ -28,7 +32,7 @@ public class RoleController {
             RoleDto roleDto = RoleMapper.INSTANCE.roleToRoleDto(role);
             return ResponseEntity.ok(roleDto);
         } else {
-            ApiResponse response = new ApiResponse(404, "Not_found.message");
+            ApiResponse response = new ApiResponse(404,  messageSource.getMessage("not_found.messagee", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
@@ -41,7 +45,7 @@ public class RoleController {
             List<RoleDto> roleDtos = RoleMapper.INSTANCE.rolesToRoleDtos(roles);
             return ResponseEntity.ok(roleDtos);
         } else {
-            ApiResponse response = new ApiResponse(204, "no_content.message");
+            ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
 
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }

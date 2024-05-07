@@ -5,6 +5,8 @@ import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Service.Evaluation.EvaluationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,13 +22,16 @@ public class EvaluationController {
     @Autowired
     EvaluationService evaluationService;
 
+    @Autowired
+    MessageSource messageSource;
+
     @GetMapping()
     public ResponseEntity<?> getAllEvaluation() {
         List<Evaluation> evaluationList = evaluationService.getAllEvaluation();
         if (!evaluationList.isEmpty()) {
             return new ResponseEntity<>(evaluationList, HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "no_content.message"));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
         }
     }
 

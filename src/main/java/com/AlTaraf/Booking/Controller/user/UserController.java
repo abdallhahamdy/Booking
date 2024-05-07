@@ -22,6 +22,8 @@ import com.AlTaraf.Booking.Service.user.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,10 +34,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+
 import org.slf4j.Logger;
 import java.util.stream.Collectors;
 
@@ -69,6 +69,9 @@ public class UserController {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    MessageSource messageSource;
+
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -78,10 +81,10 @@ public class UserController {
         // Generate and send OTP (you need to implement this logic)
         String otp = userService.generateOtpForUser();
         if (otp != null ) {
-            AuthenticationResponse response = new AuthenticationResponse(200, "Otp.message", otp);
+            AuthenticationResponse response = new AuthenticationResponse(200, messageSource.getMessage("otp.message", null, LocaleContextHolder.getLocale()), otp);
             return ResponseEntity.ok(response);
         } else {
-            ApiResponse response = new ApiResponse(404, "Not_found.message");
+            ApiResponse response = new ApiResponse(404, messageSource.getMessage("not_found.message", null, LocaleContextHolder.getLocale()));
 
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
@@ -96,7 +99,7 @@ public class UserController {
 
 
         if (existsByEmailAndRolesOrPhoneNumberAndRoles) {
-            CheckApiResponse response = new CheckApiResponse(409, "Authentication.message", false);
+            CheckApiResponse response = new CheckApiResponse(409, messageSource.getMessage("authentication.message", null, LocaleContextHolder.getLocale()), false);
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(response);
         }
@@ -111,7 +114,7 @@ public class UserController {
         // Perform user registration
         userService.registerUser(userRegisterDto);
 
-        ApiResponse response = new ApiResponse(200, "Registration.message");
+        ApiResponse response = new ApiResponse(200, messageSource.getMessage("registration.message", null, LocaleContextHolder.getLocale()));
 
         return ResponseEntity.ok(response);
     }
@@ -120,12 +123,9 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
 
-        try {
-
             // Check if the phone number exists in the database
             if (!userService.existsByPhone(loginRequest.getPhone())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ApiResponse(400, "Duplicate_phone.message"));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400, messageSource.getMessage("duplicate_phone.message", null, LocaleContextHolder.getLocale())));
             }
 
             Authentication authentication = authenticationManager.authenticate(
@@ -145,36 +145,19 @@ public class UserController {
 
 
             if (!optionalUser.isPresent()) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(new ApiResponse(500, "User_not_found.message"));
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, messageSource.getMessage("user_not_found.message", null, LocaleContextHolder.getLocale())));
             }
             User user = optionalUser.get();
-
-            System.out.println("user.getRole" + user.getRoles());
-
-            // Check if the user's roles match the roles in the request
-//            Set<String> requestRoles = loginRequest.getRoles();
-
-//            System.out.println("requestRoles: " + requestRoles);
 
             Set<String> userRoles = user.getRoles().stream()
                     .map(role -> role.getName().name())
                     .collect(Collectors.toSet());
 
-            System.out.println("userRoles: " + userRoles);
-
             Set<String> requestRoles = loginRequest.getRoles();
-
-            System.out.println("requestRoles: " + requestRoles);
-
-//            if (Collections.disjoint(userRoles, requestRoles)) {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                        .body(new ApiResponse(400, "role_is_not_correct.message"));
-//            }
 
             if (Collections.disjoint(userRoles, requestRoles)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ApiResponse(400, "role_is_not_correct.message"));
+                        .body(new ApiResponse(400, messageSource.getMessage("role_is_not_correct.message", null, LocaleContextHolder.getLocale())));
             }
 
             List<String> roles = userDetails.getAuthorities().stream()
@@ -189,11 +172,7 @@ public class UserController {
                     userDetails.getPhone(),
                     userDetails.getCity(),
                     roles));
-        } catch (Exception e) {
-            // Log the exception for debugging
-            logger.error("Error during login:", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "error_login.message"));
-        }
+
     }
 
     @PutMapping("/forget-password/{phone}")
@@ -204,11 +183,10 @@ public class UserController {
         // Perform password reset
         try {
             userService.resetPasswordByPhone(phone, passwordResetDto);
-            return ResponseEntity.ok(new ApiResponse(200, "Password_reset.message"));
+            return ResponseEntity.ok(new ApiResponse(200, messageSource.getMessage("password_reset.message", null, LocaleContextHolder.getLocale())));
         } catch (Exception e) {
             System.out.println("Failed to reset password: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ApiResponse(400, "Failed_reset_password.message " ));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400, messageSource.getMessage("failed_reset_password.message", null, LocaleContextHolder.getLocale()) ));
         }
 
     }
@@ -221,7 +199,7 @@ public class UserController {
             UserDto userDto = userMapper.INSTANCE.userToUserDto(user);
             return ResponseEntity.ok(userDto);
         } else {
-            ApiResponse response = new ApiResponse(404, "Not_found.message");
+            ApiResponse response = new ApiResponse(404, messageSource.getMessage("not_found.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
@@ -244,7 +222,7 @@ public class UserController {
 
             if (userEditDto.getEmail() != null) {
                 if (isEmailAvailable){
-                    CheckApiResponse response = new CheckApiResponse(204, "Email_taken.message", false);
+                    CheckApiResponse response = new CheckApiResponse(204, messageSource.getMessage("email_taken.message", null, LocaleContextHolder.getLocale()), false);
                     return ResponseEntity.status(HttpStatus.CONFLICT)
                             .body(response);
                 } else {
@@ -254,7 +232,7 @@ public class UserController {
 
             if (userEditDto.getPhone() != null ) {
                 if (isPhoneAvailable){
-                    CheckApiResponse response = new CheckApiResponse(204, "Phone_taken.message", false);
+                    CheckApiResponse response = new CheckApiResponse(204,  messageSource.getMessage("phone_taken.message", null, LocaleContextHolder.getLocale()), false);
                     return ResponseEntity.status(HttpStatus.CONFLICT)
                             .body(response);
                 } else {
@@ -284,10 +262,10 @@ public class UserController {
             // Save the updated user
             userService.updateUser(existingUser);
 
-            ApiResponse response = new ApiResponse(200, "User_updated.message");
+            ApiResponse response = new ApiResponse(200, messageSource.getMessage("user_updated.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "Error_updating_user.message"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, messageSource.getMessage("error_updating_user.message", null, LocaleContextHolder.getLocale())));
         }
     }
 
@@ -299,8 +277,6 @@ public class UserController {
         if (user != null && user.getPhone() != null) {
             OauthRequest oauthRequest = new OauthRequest();
             oauthRequest.setPhone(user.getPhone());
-            System.out.println("user.getEmail: " + user.getEmail());
-            System.out.println("user.getPassword " + oauthRequest.getPassword());
 
             try {
                 Authentication authentication = authenticationManager.authenticate(
@@ -330,11 +306,11 @@ public class UserController {
                         roles));
             } catch (AuthenticationException e) {
                 System.out.println(e);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication_failed.message");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(messageSource.getMessage("authentication_failed.message", null, LocaleContextHolder.getLocale()));
             }
         }
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404,"Not_found.message"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404,"not_found.messagee"));
     }
 
     @PostMapping("/create-for-oauth")
@@ -353,7 +329,7 @@ public class UserController {
 
         // Check if the phone number is unique
         if (userRepository.existsByPhone(phone)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Phone_taken.message");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(messageSource.getMessage("phone_taken.message", null, LocaleContextHolder.getLocale()));
         }
 
         User userOauth = new User();
@@ -366,7 +342,7 @@ public class UserController {
 
         userRepository.save(userOauth);
 
-        return ResponseEntity.ok(new ApiResponse(200, "User_successful_created"));
+        return ResponseEntity.ok(new ApiResponse(200, messageSource.getMessage("user_successful_created", null, LocaleContextHolder.getLocale())));
     }
 
-    }
+}
