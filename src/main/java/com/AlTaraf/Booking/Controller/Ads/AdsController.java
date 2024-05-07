@@ -25,6 +25,8 @@ import com.AlTaraf.Booking.Service.notification.NotificationService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import com.AlTaraf.Booking.Service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +41,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/Ads")
+@RequestMapping("/api/ads")
 public class AdsController {
 
     @Autowired
@@ -67,6 +69,9 @@ public class AdsController {
     private UserRepository userRepository;
 
     @Autowired
+    private MessageSource messageSource;
+
+    @Autowired
     AdsRepository adsRepository;
 
     @Autowired
@@ -78,26 +83,26 @@ public class AdsController {
     @Autowired
     NotificationService notificationService;
 
-    @GetMapping("/Package-Ads")
+    @GetMapping("/package-ads")
     public ResponseEntity<?> getAllPackageAds() {
         try {
             List<PackageAds> allPackageAds = adsService.getAllPackageAds();
             return new ResponseEntity<>(allPackageAds, HttpStatus.OK);
         } catch (Exception e) {
             // Handle the exception here
-            return  ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No_content.message"));
+            return  ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
         }
     }
 
 
-    @GetMapping("units/byUserId/{userId}")
+    @GetMapping("units/by-user-id/{userId}")
     public ResponseEntity<?> getUnitsByUserId(@PathVariable Long userId,
                                               @RequestParam(defaultValue = "0") int page,
                                               @RequestParam(defaultValue = "10") int size) {
         Page<Unit> unitsPage = unitService.getUnitsByUserId(userId, PageRequest.of(page, size));
 
         if (unitsPage.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No_unit_for_user.message:  " + userId));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_unit_for_user.message: " + userId, null, LocaleContextHolder.getLocale())+ userId));
         } else {
             List<UnitDtoFavorite> unitGeneralResponseDtos = unitsPage.getContent().stream()
                     .map(unitFavoriteMapper::toUnitFavoriteDto)
@@ -125,20 +130,20 @@ public class AdsController {
 
             userRepository.save(user);
 
-            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من النظام","تم ارسال طلب اضافة اعلان",user.getId());
+            PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_ads.message", null, LocaleContextHolder.getLocale()),user.getId());
             notificationService.processNotification(notificationRequest);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body("Ads_created.message " + ads.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(messageSource.getMessage("ads_created.message" + ads.getId(), null, LocaleContextHolder.getLocale()));
 
         } catch (Exception e) {
             System.out.println("Error Create Ads: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed_create_ads.message ");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(messageSource.getMessage("failed_create_ads.message", null, LocaleContextHolder.getLocale()));
         }
     }
 
-    @GetMapping("/Status-Unit/Ads")
+    @GetMapping("/status-unit/ads")
     public ResponseEntity<?> getAdsByUserAndStatus(
-            @RequestParam(name = "USER_ID") Long userId,
+            @RequestParam(name = "userId") Long userId,
             @RequestParam(name = "statusUnitId") Long statusUnitId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -151,12 +156,12 @@ public class AdsController {
             List<AdsResponseStatusDto> adsDtoList = adsStatusMapper.toAdsDtoList(ads);
             return new ResponseEntity<>(adsDtoList, HttpStatus.OK);
         } else {
-            ApiResponse response = new ApiResponse(200, "No_content.message");
+            ApiResponse response = new ApiResponse(200, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
 
-    @DeleteMapping("Delete/Ads/{id}")
+    @DeleteMapping("delete/ads/{id}")
     public ResponseEntity<?> deleteAds(@PathVariable Long id) {
 
         Ads ads = adsRepository.findById(id).orElse(null);
@@ -167,37 +172,34 @@ public class AdsController {
 
         adsRepository.save(ads);
 
-        ApiResponse response = new ApiResponse(200, "Ads_deleted.message");
+
+        ApiResponse response = new ApiResponse(200, messageSource.getMessage("ads_deleted.message", null, LocaleContextHolder.getLocale()));
         return ResponseEntity.status(HttpStatus.OK).body(response);
 
     }
 
 
-    @GetMapping("/Accepted/Status")
+    @GetMapping("/accepted/status")
     public ResponseEntity<?> getAdsByAcceptedStatus() {
         try {
             List<adsForSliderResponseDto> ads = adsService.getAdsByAcceptedStatus();
             return ResponseEntity.ok(ads);
         } catch (Exception e) {
             System.out.println("Exception Accepted Ads: " + e);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No_content.message"));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
         }
     }
 
-    @PostMapping("/{userId}/packageAds/{packageAdsId}")
+    @PostMapping("/{user-id}/package-ads/{package-ads-id}")
     public ResponseEntity<?> setPackageAdsForUser(@PathVariable Long userId, @PathVariable Long packageAdsId) {
         try {
             User user = userService.setPackageAdsForUser(userId, packageAdsId);
 
-//            return ResponseEntity.ok("PackageAds set successfully for user. User's wallet balance is now: " + user.getWallet());
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200,"Successful_package_ads.message" + user.getWallet()));
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200,messageSource.getMessage("successful_package_ads.message", null, LocaleContextHolder.getLocale()) + user.getWallet()));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"Fail_package_ads.message"));
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body()
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,messageSource.getMessage("fail_package_ads.message", null, LocaleContextHolder.getLocale())));
         } catch (InsufficientFundsException e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"Fail_package_ads.message"));
-            return ResponseEntity.badRequest().body("Fail_package_ads_wallet.message");
+            return ResponseEntity.badRequest().body(messageSource.getMessage("fail_package_ads_wallet.message", null, LocaleContextHolder.getLocale()));
         }
     }
 
