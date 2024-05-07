@@ -508,7 +508,7 @@ public class AdminController {
 
         try {
             adsService.deleteAds(id);
-            ApiResponse response = new ApiResponse(200, "Ads_deleted.message");
+            ApiResponse response = new ApiResponse(200, "ads_deleted.message");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             ApiResponse response = new ApiResponse(404, "Not_found.message");
@@ -541,7 +541,7 @@ public class AdminController {
             return new ResponseEntity<>(allPackageAds, HttpStatus.OK);
         } catch (Exception e) {
             // Handle the exception here
-            return  ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No_content.message"));
+            return  ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "no_content.message"));
         }
     }
 
