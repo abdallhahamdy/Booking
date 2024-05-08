@@ -17,7 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class UserDto {
     private Long id;
-    private List<FileForProfileDTO> fileForProfileDTOS;
+    private List<String> imagePaths;
     private String username;
     private String email;
     private String phone;

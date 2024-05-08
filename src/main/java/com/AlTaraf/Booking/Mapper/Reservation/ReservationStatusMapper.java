@@ -1,18 +1,20 @@
 package com.AlTaraf.Booking.Mapper.Reservation;
 
 
+import com.AlTaraf.Booking.Entity.File.FileForUnit;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Payload.response.Reservation.ReservationStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface ReservationStatusMapper {
     @Mapping(source = "id", target = "reservationId")
     @Mapping(source = "user.deviceToken", target = "deviceToken")
-    @Mapping(source = "unit.fileForUnits", target = "fileForUnitDTOS")
+    @Mapping(target = "imagePaths", expression = "java(extractFilePaths(reservation.getUnit().getFileForUnits()))")
     @Mapping(source = "unit.id", target = "unitId")
     @Mapping(source = "unit.nameUnit", target = "unitName")
     @Mapping(source = "unit.city", target = "cityDto")
@@ -24,4 +26,11 @@ public interface ReservationStatusMapper {
     ReservationStatus toReservationStatusDto(Reservations reservation);
 
     List<ReservationStatus> toReservationStatusDtoList(List<Reservations> reservationsList);
+
+    public default List<String> extractFilePaths(List<FileForUnit> fileForUnits) {
+        return fileForUnits.stream()
+                .map(FileForUnit::getFileDownloadUri)
+                .collect(Collectors.toList());
+    }
+
 }

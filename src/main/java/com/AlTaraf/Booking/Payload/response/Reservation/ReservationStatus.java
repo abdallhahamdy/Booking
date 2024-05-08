@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ReservationStatus {
     private Long reservationId;
-    private List<FileForUnitDTO> fileForUnitDTOS;
+    private List<String> imagePaths;
     private Long unitId;
     private String unitName;
     private CityDtoSample cityDto;

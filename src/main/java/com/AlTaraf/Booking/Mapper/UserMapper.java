@@ -59,7 +59,8 @@ public interface UserMapper {
 
 
     @Mapping(source = "id", target = "id")
-    @Mapping(source = "fileForProfiles", target = "fileForProfileDTOS")
+    @Mapping(target = "imagePaths", expression = "java(extractFilePaths(user.getFileForProfiles()))")
+
     @Mapping(source = "username", target = "username")
     @Mapping(source = "email", target = "email")
     @Mapping(source = "phone", target = "phone")
@@ -93,6 +94,12 @@ public interface UserMapper {
     default List<FileForProfileDTO> mapFileForProfiles(List<FileForProfile> fileForProfiles) {
         return fileForProfiles.stream()
                 .map(file -> new FileForProfileDTO(file.getName(), file.getFileDownloadUri(), file.getImageBackgroundFlag()))
+                .collect(Collectors.toList());
+    }
+
+    default List<String> extractFilePaths(List<FileForProfile> fileForProfiles) {
+        return fileForProfiles.stream()
+                .map(FileForProfile::getFileDownloadUri)
                 .collect(Collectors.toList());
     }
 
