@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class TechnicalSupportUnitsResponse {
     private Long id;
-    private List<FileForProfileDTO> fileForProfileDTOS;
+    private FileForProfileDTO fileForProfileDTO;
     private String name;
     private String email;
     private String message;

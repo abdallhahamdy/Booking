@@ -23,7 +23,7 @@ public interface TechnicalSupportMapper {
     @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "id", source = "id")
     @Mapping(target = "email", source = "email")
-    @Mapping(source = "user.fileForProfiles", target = "fileForProfileDTOS")
+    @Mapping(source = "user.fileForProfile", target = "fileForProfileDTO")
     @Mapping(target = "message", source = "message")
     @Mapping(target = "name", source = "name")
     @Mapping(target = "seen", source = "seen")
