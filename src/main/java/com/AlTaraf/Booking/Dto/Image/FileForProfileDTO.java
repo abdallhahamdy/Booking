@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class FileForProfileDTO {
     private String name;
     private String fileDownloadUri;
-    private Boolean imageBackgroundFlag;
 }
