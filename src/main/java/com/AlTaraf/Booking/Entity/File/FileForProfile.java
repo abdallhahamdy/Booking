@@ -32,14 +32,6 @@ public class FileForProfile {
 
     private String fileDownloadUri;
 
-    @ManyToOne
-    @JoinColumn(name = "USER_ID")
-    @JsonBackReference
-    private User user;
-
-    @Column(name = "BACKGROUND_IMAGE_FLAG")
-    private Boolean imageBackgroundFlag;
-
     public FileForProfile(String name, String type, byte[] data) {
         this.name = name;
         this.type = type;
