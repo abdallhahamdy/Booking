@@ -116,7 +116,13 @@ public class AdsController {
     public ResponseEntity<?> createAds(@RequestBody AdsRequestDto adsRequestDto) throws IOException, InterruptedException {
             User user = userRepository.findByUserId(adsRequestDto.getUserId());
             PackageAds packageAds = packageAdsRepository.findById(0L).orElse(null);
-            Ads ads = adsService.createAds(adsMapper.toEntity(adsRequestDto));
+
+            Ads existAds = null;
+            existAds = adsService.getByUserIdAndUnitId(adsRequestDto.getUserId(), adsRequestDto.getUnitId());
+
+            if (existAds != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage("exist_ads.message", null, LocaleContextHolder.getLocale()));
+            }
 
             int numberAds = user.getNumberAds();
             if (numberAds > 0) {
@@ -126,15 +132,16 @@ public class AdsController {
 
             if (numberAds == 0) {
                 user.setPackageAds(packageAds);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage("package_ads_null.message" + ads.getId(), null, LocaleContextHolder.getLocale()));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage("package_ads_null.message", null, LocaleContextHolder.getLocale()));
             }
 
             userRepository.save(user);
 
             PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_ads.message", null, LocaleContextHolder.getLocale()),user.getId());
             notificationService.processNotification(notificationRequest);
+            Ads ads = adsService.createAds(adsMapper.toEntity(adsRequestDto));
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(messageSource.getMessage("ads_created.message" + ads.getId(), null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.CREATED).body(messageSource.getMessage("ads_created.message", null, LocaleContextHolder.getLocale()));
 
 //            System.out.println("Error Create Ads: " + e.getMessage());
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(messageSource.getMessage("failed_create_ads.message", null, LocaleContextHolder.getLocale()));
@@ -190,18 +197,38 @@ public class AdsController {
         }
     }
 
-    @PostMapping("/{user-id}/package-ads/{package-ads-id}")
-    public ResponseEntity<?> setPackageAdsForUser(@PathVariable Long userId, @PathVariable Long packageAdsId) {
-        try {
-            User user = userService.setPackageAdsForUser(userId, packageAdsId);
+//    @PostMapping("/{userId}/package-ads/{packageAdsId}")
+//    public ResponseEntity<?> setPackageAdsForUser(@PathVariable Long userId, @PathVariable Long packageAdsId) {
+//        try {
+//            User user = userService.setPackageAdsForUser(userId, packageAdsId);
+//
+//            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200,messageSource.getMessage("successful_package_ads.message", null, LocaleContextHolder.getLocale()) + " " + user.getWallet()));
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,messageSource.getMessage("fail_package_ads.message", null, LocaleContextHolder.getLocale())));
+//        } catch (InsufficientFundsException e) {
+//            return ResponseEntity.badRequest().body(messageSource.getMessage("fail_package_ads_wallet.message", null, LocaleContextHolder.getLocale()));
+//        }
+//    }
 
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200,messageSource.getMessage("successful_package_ads.message", null, LocaleContextHolder.getLocale()) + user.getWallet()));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,messageSource.getMessage("fail_package_ads.message", null, LocaleContextHolder.getLocale())));
-        } catch (InsufficientFundsException e) {
-            return ResponseEntity.badRequest().body(messageSource.getMessage("fail_package_ads_wallet.message", null, LocaleContextHolder.getLocale()));
+    @PostMapping("/{userId}/package-ads/{packageAdsId}")
+    public ResponseEntity<?> setPackageAdsForUser(@PathVariable Long userId, @PathVariable Long packageAdsId) throws InsufficientFundsException {
+
+
+            User user = userRepository.findByUserId(userId);
+
+            PackageAds packageAds = packageAdsRepository.findById(packageAdsId).orElse(null);
+
+            if (user.getPackageAds() != null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(402,messageSource.getMessage("fail_package_ads_exist.message", null, LocaleContextHolder.getLocale()) + ": " + user.getNumberAds()));
+            }
+
+            if(user.getWallet() < packageAds.getPrice()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage("fail_package_ads_wallet.message", null, LocaleContextHolder.getLocale()));
+            }
+
+             user = userService.setPackageAdsForUser(userId, packageAdsId);
+
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200,messageSource.getMessage("successful_package_ads.message", null, LocaleContextHolder.getLocale()) + " " + user.getWallet()));
         }
-    }
-
 
 }

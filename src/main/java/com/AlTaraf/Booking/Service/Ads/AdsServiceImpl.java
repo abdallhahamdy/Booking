@@ -139,5 +139,10 @@ public class AdsServiceImpl implements AdsService {
 
         return counterAds;
     }
+
+    @Override
+    public Ads getByUserIdAndUnitId(Long userId, Long unitId) {
+        return adsRepository.findByUserIdAndUnitId(userId, unitId);
+    }
 }
 

@@ -31,4 +31,6 @@ public interface AdsService {
     Page<Ads> findAllByStatusUnitId(Long statusUnitId, Pageable pageable);
 
     CounterAds getCountAds();
+
+    Ads getByUserIdAndUnitId(Long userId, Long unitId);
 }
