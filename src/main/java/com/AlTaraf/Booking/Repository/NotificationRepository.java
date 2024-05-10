@@ -44,4 +44,6 @@ public interface NotificationRepository extends JpaRepository<Notifications, Lon
     @Query("UPDATE Notifications n SET n.seen = true WHERE n.user.id = :userId AND n.role.id = :roleId")
     void setNotificationsSeenByUserIdAndRoleId(@Param("userId") Long userId, @Param("roleId") Long roleId);
 
+    @Query("SELECT COUNT(n) FROM Notifications n WHERE n.user.id = :userId AND n.role.id = :roleId AND n.seen IS NULL")
+    Long countByUserIdAndRoleIdAndSeenIsNull(@Param("userId") Long userId, @Param("roleId") Long roleId);
 }

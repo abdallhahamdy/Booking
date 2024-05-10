@@ -23,10 +23,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/Notification")
@@ -50,6 +50,8 @@ public class NotificationController {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @PostMapping("/Send")
     public ResponseEntity<?> sendPushNotification(@RequestBody PushNotificationRequest request) {
@@ -266,6 +268,13 @@ public class NotificationController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "Failed to mark notifications as seen."));
         }
+    }
+
+    @GetMapping("/count-unseen")
+    public Long getCountOfUnseenNotifications(@RequestParam Long userId, @RequestParam Long roleId) {
+        Long count = notificationRepository.countByUserIdAndRoleIdAndSeenIsNull(userId, roleId);
+        messagingTemplate.convertAndSend("/topic/notifications", count.toString());
+        return count;
     }
 
 }
