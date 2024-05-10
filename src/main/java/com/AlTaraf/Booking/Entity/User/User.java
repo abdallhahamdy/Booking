@@ -3,7 +3,6 @@ package com.AlTaraf.Booking.Entity.User;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.Favorite.UserFavoriteUnit;
 import com.AlTaraf.Booking.Entity.File.FileForProfile;
-import com.AlTaraf.Booking.Entity.Image.ImageProfile;
 import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.common.Auditable;
@@ -67,9 +66,9 @@ public class User extends Auditable<String> {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<FileForProfile> fileForProfiles;
+    @OneToOne
+    @JoinColumn(name = "FILE_FOR_PROFILE_ID")
+    private FileForProfile fileForProfile;
 
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
