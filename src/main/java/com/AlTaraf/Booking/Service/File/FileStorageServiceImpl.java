@@ -115,13 +115,13 @@ public class FileStorageServiceImpl implements FileStorageService{
     }
 
     @Override
-    public FileForProfile storeForProfile(MultipartFile file, Long userId, Boolean image_background) throws IOException {
+    public FileForProfile storeForProfile(MultipartFile file, Long userId) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         FileForProfile fileForProfile = new FileForProfile(fileName, file.getContentType(), file.getBytes());
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
-        fileForProfile.setUser(user);
-        fileForProfile.setImageBackgroundFlag(image_background);
+
+        user.setFileForProfile(fileForProfile);
         fileForProfileRepository.save(fileForProfile);
 
         String fileDownloadUri = ServletUriComponentsBuilder
@@ -181,15 +181,15 @@ public class FileStorageServiceImpl implements FileStorageService{
         fileForAdsRepository.deleteByAdsId(adsId);
     }
 
-    @Override
-    public void deleteByUserIdAndImageBackgroundTrue(Long userId) {
-        fileForProfileRepository.deleteByUserIdAndImageBackgroundTrue(userId);
-    }
-
-    @Override
-    public void deleteByUserIdAndImageBackgroundIsNull(Long userId) {
-        fileForProfileRepository.deleteByUserIdAndImageBackgroundIsNull(userId);
-    }
+//    @Override
+//    public void deleteByUserIdAndImageBackgroundTrue(Long userId) {
+//        fileForProfileRepository.deleteByUserIdAndImageBackgroundTrue(userId);
+//    }
+//
+//    @Override
+//    public void deleteByUserIdAndImageBackgroundIsNull(Long userId) {
+//        fileForProfileRepository.deleteByUserIdAndImageBackgroundIsNull(userId);
+//    }
 
     @Override
     public FileForUnit getFileForUnit(String id) {
