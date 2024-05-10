@@ -88,14 +88,13 @@ public class FileController {
 
 
     @PostMapping("/upload-file-for-profile")
-    public ResponseEntity<?> uploadImagesForProfile(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("userId") Long userId,
-            @RequestParam(value = "image_background", required = false) Boolean image_background) {
+        public ResponseEntity<?> uploadImagesForProfile(
+                @RequestParam("file") MultipartFile file,
+                @RequestParam("userId") Long userId) {
         List<ImageUploadResponse> responses = new ArrayList<>();
 
         try {
-            storageService.storeForProfile(file, userId, image_background);
+            storageService.storeForProfile(file, userId);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(201,"Successful_Upload.message " + responses));
         } catch (IOException e) {
@@ -182,22 +181,4 @@ public class FileController {
         return ResponseEntity.ok("Delete_Image.message");
     }
 
-    @Transactional
-    @DeleteMapping("/delete-profile-user")
-    public ResponseEntity<?> deleteImagesProfile(
-            @RequestParam("userId") Long userId,
-            @RequestParam(value = "image_background", required = false) Boolean image_background) throws IOException {
-        List<ImageUploadResponse> responses = new ArrayList<>();
-
-        if (userId != null) {
-            storageService.deleteByUserIdAndImageBackgroundIsNull(userId);
-        }
-
-        if (image_background != null) {
-            storageService.deleteByUserIdAndImageBackgroundTrue(userId);
-        }
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ApiResponse(200,"Delete_Image.message"));
-    }
 }
