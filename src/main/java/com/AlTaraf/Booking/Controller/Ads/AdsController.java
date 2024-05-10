@@ -139,12 +139,9 @@ public class AdsController {
 
             PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_ads.message", null, LocaleContextHolder.getLocale()),user.getId());
             notificationService.processNotification(notificationRequest);
-            Ads ads = adsService.createAds(adsMapper.toEntity(adsRequestDto));
+            adsService.createAds(adsMapper.toEntity(adsRequestDto));
 
             return ResponseEntity.status(HttpStatus.CREATED).body(messageSource.getMessage("ads_created.message", null, LocaleContextHolder.getLocale()));
-
-//            System.out.println("Error Create Ads: " + e.getMessage());
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(messageSource.getMessage("failed_create_ads.message", null, LocaleContextHolder.getLocale()));
 
     }
 
