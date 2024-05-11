@@ -241,33 +241,46 @@ public class NotificationController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+//        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+        Pageable pageable = PageRequest.of(page, size);
         Page<PushNotificationResponse> response;
 
-        if (roleId == null) {
-            Page<Notifications> notifications = notificationService.getNotificationsByUserId(userId, pageable);
-            response = notifications.map(NotificationMapper.INSTANCE::entityToDto);
-        } else if (userId == null) {
-            Page<Notifications> notifications = notificationService.findAllByRoleIdAndUserIdIsNull( roleId, pageable);
-            response = notifications.map(NotificationMapper.INSTANCE::entityToDto);
-        }
-        else {
+//        if (roleId == null) {
+//            Page<Notifications> notifications = notificationService.getNotificationsByUserId(userId, pageable);
+//            response = notifications.map(NotificationMapper.INSTANCE::entityToDto);
+//        } else if (userId == null) {
+//            Page<Notifications> notifications = notificationService.findAllByRoleIdAndUserIdIsNull( roleId, pageable);
+//            response = notifications.map(NotificationMapper.INSTANCE::entityToDto);
+//        }
+//        else {
+//            notificationRepository.setNotificationsSeenByUserIdAndRoleId(userId, roleId);
             Page<Notifications> notifications = notificationService.findAllByUserIdAndRoleId(userId, roleId, pageable);
-            response = notifications.map(NotificationMapper.INSTANCE::entityToDto);
+        for (Notifications notification : notifications) {
+            // Perform operations on each notification, if needed
+            // For example, you can set the notification as seen
+            notification.setSeen(true);
+            // Save the updated notification back to the database
+            notificationRepository.save(notification);
         }
+
+            response = notifications.map(NotificationMapper.INSTANCE::entityToDto);
+
+//        }
 
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/setSeen")
     public ResponseEntity<?> setNotificationsSeen(@RequestParam Long userId, @RequestParam Long roleId) {
-        try {
-            notificationRepository.setNotificationsSeenByUserIdAndRoleId(userId, roleId);
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200, "Notifications marked as seen successfully!"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "Failed to mark notifications as seen."));
-        }
+//        try {
+//            notificationRepository.setNotificationsSeenByUserIdAndRoleId(userId, roleId);
+//            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200, "Notifications marked as seen successfully!"));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "Failed to mark notifications as seen."));
+//        }
+        return ResponseEntity.ok(null);
+
     }
 
     @GetMapping("/count-unseen")
