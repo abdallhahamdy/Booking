@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UnitServiceImpl implements UnitService {
@@ -153,22 +154,23 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public Page<UnitDtoFavorite> getUnitsAddedLastMonth(int page, int size, Sort sort) {
+    public List<UnitDtoFavorite> getUnitsAddedLastMonth() {
         LocalDateTime startOfLastMonth = LocalDateTime.now().minusDays(30);
         LocalDateTime endOfLastMonth = LocalDateTime.now();
 
         Date startDate = Date.from(startOfLastMonth.atZone(ZoneId.systemDefault()).toInstant());
         Date endDate = Date.from(endOfLastMonth.atZone(ZoneId.systemDefault()).toInstant());
 
-        PageRequest pageRequest = PageRequest.of(page, size, sort);
 
-        Page<Unit> unitsPage = unitRepository.findByCreatedDateBetween(startDate, endDate, pageRequest);
+        List<Unit> units = unitRepository.findByCreatedDateBetween();
 
-        if (unitsPage.isEmpty()) {
-            return Page.empty();
-        }
+//        if (unitsPage.isEmpty()) {
+//            return Page.empty();
+//        }
 
-        return unitsPage.map(unitFavoriteMapper::toUnitFavoriteDto);
+        return units.stream()
+                .map(unitFavoriteMapper::toUnitFavoriteDto)
+                .collect(Collectors.toList());
     }
 
     public Unit getUnitById(Long id) {

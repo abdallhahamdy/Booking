@@ -29,8 +29,9 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
     @Query("SELECT u FROM Unit u JOIN u.evaluation e WHERE u.statusUnit.id = 2 ORDER BY e.score DESC")
     Page<Unit> findByEvaluationInOrderByEvaluationScoreDesc(Pageable pageable);
 
-    @Query("SELECT u FROM Unit u WHERE u.statusUnit.id = 2 AND u.createdDate BETWEEN :startOfDay AND :endOfDay")
-    Page<Unit> findByCreatedDateBetween(Date startOfDay, Date endOfDay, Pageable pageable);
+//    @Query("SELECT u FROM Unit u WHERE u.statusUnit.id = 2 AND u.createdDate BETWEEN :startOfDay AND :endOfDay")
+    @Query(value = "SELECT * FROM UNIT ORDER BY UNIT_ID DESC LIMIT 5", nativeQuery = true)
+    List<Unit> findByCreatedDateBetween();
 
     Page<Unit> findByStatusUnit_Name(String name, Pageable pageable);
 

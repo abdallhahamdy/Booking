@@ -327,12 +327,10 @@ public class UnitController {
     }
 
     @GetMapping("/By-Last-Month")
-    public ResponseEntity<?> getUnitsAddedLastMonth(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "2") int size) {
+    public ResponseEntity<?> getUnitsAddedLastMonth() {
 
-        Sort sort = Sort.by("id").ascending();
-        Page<UnitDtoFavorite> units = unitService.getUnitsAddedLastMonth(page, size, sort);
+//        Sort sort = Sort.by("id").descending();
+        List<UnitDtoFavorite> units = unitService.getUnitsAddedLastMonth();
 
         if (!units.isEmpty()) {
             return new ResponseEntity<>(units, HttpStatus.OK);
@@ -348,7 +346,7 @@ public class UnitController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
 
-        Sort sort = Sort.by("id").ascending(); // Sort by unit ID in ascending order
+        Sort sort = Sort.by("id").descending(); // Sort by unit ID in ascending order
 
         Page<UnitDtoFavorite> units = unitService.getUnitsByAccommodationTypeName(accommodationTypeId, page, size, sort);
 
@@ -366,7 +364,7 @@ public class UnitController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
 
-        Sort sort = Sort.by("id").ascending(); // Sort by unit ID in ascending order
+        Sort sort = Sort.by("id").descending(); // Sort by unit ID in ascending order
 
         Page<UnitDtoFavorite> units = unitService.getUnitsByUserCity(userId, PageRequest.of(page, size), sort);
 
@@ -718,7 +716,7 @@ public class UnitController {
     public ResponseEntity<?> getReservationByStatus(@RequestParam(name = "USER_ID") Long userId,
                                                     @RequestParam(name = "statusUnitName") String statusUnitName,
                                                     @RequestParam(defaultValue = "0") int page,
-                                                    @RequestParam(defaultValue = "2") int size) {
+                                                    @RequestParam(defaultValue = "20") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         Page<Unit> unitsPage = unitService.getUnitsByUserId(userId, pageable);
 
