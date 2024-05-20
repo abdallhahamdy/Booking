@@ -132,7 +132,7 @@ public class UserController {
                     new UsernamePasswordAuthenticationToken(loginRequest.getPhone(), loginRequest.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-//            String jwt = jwtUtils.generateJwtToken(authentication);
+//          String jwt = jwtUtils.generateJwtToken(authentication);
 
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
@@ -143,6 +143,7 @@ public class UserController {
             User userForDeviceToken = userRepository.findByPhoneForUser(loginRequest.getPhone());
             userForDeviceToken.setDeviceToken(loginRequest.getDeviceToken());
 
+            userRepository.save(userForDeviceToken);
 
             if (!optionalUser.isPresent()) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, messageSource.getMessage("user_not_found.message", null, LocaleContextHolder.getLocale())));
