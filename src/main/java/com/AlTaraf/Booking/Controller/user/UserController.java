@@ -208,20 +208,18 @@ public class UserController {
 
     @PatchMapping("/edit/{userId}")
     public ResponseEntity<?> editUser(@PathVariable Long userId, @Valid @RequestBody UserEditDto userEditDto) {
-        boolean isPhoneAvailable = userService.existsByPhone(userEditDto.getPhone());
-        boolean isEmailAvailable = userService.existsByEmail(userEditDto.getEmail());
-
-
         try {
             // Retrieve the user by ID
             User existingUser = userService.getUserById(userId);
-
+            boolean isPhoneAvailable = userService.existsByPhone(userEditDto.getPhone());
+            boolean isEmailAvailable = userService.existsByEmail(userEditDto.getEmail());
             // Update the user information conditionally based on non-null values in the UserEditDto
             if (userEditDto.getUsername() != null) {
                 existingUser.setUsername(userEditDto.getUsername());
             }
 
-            if (userEditDto.getEmail() != null) {
+            if (userEditDto.getEmail() != null && !Objects.equals(existingUser.getEmail(), userEditDto.getEmail())) {
+                System.out.println("yo");
                 if (isEmailAvailable){
                     CheckApiResponse response = new CheckApiResponse(204, messageSource.getMessage("email_taken.message", null, LocaleContextHolder.getLocale()), false);
                     return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -231,7 +229,7 @@ public class UserController {
                 }
             }
 
-            if (userEditDto.getPhone() != null ) {
+            if (userEditDto.getPhone() != null && !Objects.equals(existingUser.getPhone(), userEditDto.getPhone())) {
                 if (isPhoneAvailable){
                     CheckApiResponse response = new CheckApiResponse(204,  messageSource.getMessage("phone_taken.message", null, LocaleContextHolder.getLocale()), false);
                     return ResponseEntity.status(HttpStatus.CONFLICT)
