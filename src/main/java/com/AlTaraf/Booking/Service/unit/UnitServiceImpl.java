@@ -154,19 +154,12 @@ public class UnitServiceImpl implements UnitService {
     }
 
     @Override
-    public List<UnitDtoFavorite> getUnitsAddedLastMonth() {
-        LocalDateTime startOfLastMonth = LocalDateTime.now().minusDays(30);
-        LocalDateTime endOfLastMonth = LocalDateTime.now();
-
-        Date startDate = Date.from(startOfLastMonth.atZone(ZoneId.systemDefault()).toInstant());
-        Date endDate = Date.from(endOfLastMonth.atZone(ZoneId.systemDefault()).toInstant());
+    public List<UnitDtoFavorite> getNewlyAdded() {
 
 
-        List<Unit> units = unitRepository.findByCreatedDateBetween();
 
-//        if (unitsPage.isEmpty()) {
-//            return Page.empty();
-//        }
+        List<Unit> units = unitRepository.findByNewlyAdded();
+
 
         return units.stream()
                 .map(unitFavoriteMapper::toUnitFavoriteDto)

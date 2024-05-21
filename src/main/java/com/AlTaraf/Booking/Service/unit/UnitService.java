@@ -23,7 +23,7 @@ public interface UnitService {
     Page<UnitDtoFavorite> getFavoriteUnitsForUser(Long userId, int page, int size);
     Unit getUnitById(Long id);
 
-    List<UnitDtoFavorite> getUnitsAddedLastMonth();
+    List<UnitDtoFavorite> getNewlyAdded();
 
     Page<UnitDtoFavorite> getUnitsByAccommodationTypeName(Long accommodationTypeId, int page, int size, Sort sort);
     Page<UnitDashboard> getUnitsByAccommodationTypeNameDashboard(Long accommodationTypeId, int page, int size);
