@@ -15,6 +15,8 @@ public interface SliderMapper {
     @Mappings({
             @Mapping(source = "ads.id", target = "adsId"),
             @Mapping(target = "imagePath", expression = "java(extractImagePath(ads.getFileForAds()))"),
+//            @Mapping(target = "imagePaths", expression = "java(extractFilePaths(unit.getFileForUnits()))"),
+
 //            @Mapping(source = "ads.unit", target = "unitDtoFavorite"),
             @Mapping(source = "ads.unit.id", target = "unitId"),
             @Mapping(source = "ads.unit.nameUnit", target = "nameUnit"),
