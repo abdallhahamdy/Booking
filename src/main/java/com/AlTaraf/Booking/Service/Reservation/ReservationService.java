@@ -36,7 +36,7 @@ public interface ReservationService {
 
     Page<Reservations> findByUnitId(Long unitId, Pageable pageable);
 
-    Page<Reservations> findByStatusNameAndUnitId(String statusName, Long unitId, Pageable pageable);
+    Page<Reservations> getByStatusIdAndUnitId(Long statusId, Long unitId, Pageable pageable);
 
     void setCommissionForAllReservations(Double commission);
 

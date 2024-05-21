@@ -239,8 +239,8 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Page<Reservations> findByStatusNameAndUnitId(String statusName, Long unitId, Pageable pageable) {
-        return reservationRepository.findByStatusNameAndUnitId(statusName, unitId, pageable);
+    public Page<Reservations> getByStatusIdAndUnitId(Long statusId, Long unitId, Pageable pageable) {
+        return reservationRepository.findByStatusIdAndUnitId(statusId, unitId, pageable);
     }
 
     @Override
