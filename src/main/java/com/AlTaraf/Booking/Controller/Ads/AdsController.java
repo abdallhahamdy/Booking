@@ -120,11 +120,20 @@ public class AdsController {
             Ads existAds = null;
             existAds = adsService.getByUserIdAndUnitId(adsRequestDto.getUserId(), adsRequestDto.getUnitId());
 
+
             if (existAds != null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage("exist_ads.message", null, LocaleContextHolder.getLocale()));
             }
 
             int numberAds = user.getNumberAds();
+            System.out.println("numberAds: " + numberAds);
+
+        if (numberAds == 0) {
+            user.setPackageAds(packageAds);
+            userRepository.save(user);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage("package_ads_null.message", null, LocaleContextHolder.getLocale()));
+        }
+
             if (numberAds > 0) {
                 numberAds--;
                 user.setNumberAds(numberAds);
@@ -132,16 +141,16 @@ public class AdsController {
 
             if (numberAds == 0) {
                 user.setPackageAds(packageAds);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage("package_ads_null.message", null, LocaleContextHolder.getLocale()));
             }
 
             userRepository.save(user);
 
             PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_ads.message", null, LocaleContextHolder.getLocale()),user.getId());
             notificationService.processNotification(notificationRequest);
-            adsService.createAds(adsMapper.toEntity(adsRequestDto));
+            Ads createdAds = adsService.createAds(adsMapper.toEntity(adsRequestDto));
+            Long createdAdsId = createdAds.getId();
 
-            return ResponseEntity.status(HttpStatus.CREATED).body(messageSource.getMessage("ads_created.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage("ads_created.message" , null, LocaleContextHolder.getLocale()) + " id: " + createdAdsId );
 
     }
 
@@ -158,6 +167,7 @@ public class AdsController {
 
         if (!ads.isEmpty()) {
             List<AdsResponseStatusDto> adsDtoList = adsStatusMapper.toAdsDtoList(ads);
+//            List<adsForSliderResponseDto> ads = adsService.getAdsByAcceptedStatus();
             return new ResponseEntity<>(adsDtoList, HttpStatus.OK);
         } else {
             ApiResponse response = new ApiResponse(200, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
