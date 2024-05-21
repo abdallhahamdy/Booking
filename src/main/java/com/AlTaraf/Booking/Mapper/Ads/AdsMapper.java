@@ -1,10 +1,14 @@
 package com.AlTaraf.Booking.Mapper.Ads;
 
 import com.AlTaraf.Booking.Entity.Ads.Ads;
+import com.AlTaraf.Booking.Entity.File.FileForUnit;
 import com.AlTaraf.Booking.Payload.request.Ads.AdsRequestDto;
 import com.AlTaraf.Booking.Payload.request.Ads.AdsResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface AdsMapper {
@@ -23,4 +27,10 @@ public interface AdsMapper {
 //    @Mapping(source = "packageAdsId", target = "packageAds.id")
 //    @Mapping(source = "statusUnitId", target = "statusUnit.id")
     Ads toEntity(AdsRequestDto adsDto);
+
+    default List<String> extractFilePaths(List<FileForUnit> fileForUnits) {
+        return fileForUnits.stream()
+                .map(FileForUnit::getFileDownloadUri)
+                .collect(Collectors.toList());
+    }
 }

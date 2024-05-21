@@ -16,7 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 public class AdsResponseStatusDto {
     private Long id;
-    private List<FileForAdsDTO> fileForAdsDTOS;
+//    private List<FileForAdsDTO> fileForAdsDTOS;
+    private String imagePath;
     private Long unitId;
     private Long userId;
 
