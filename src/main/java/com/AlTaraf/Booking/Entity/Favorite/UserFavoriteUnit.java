@@ -27,4 +27,7 @@ public class UserFavoriteUnit {
     @ManyToOne
     @JoinColumn(name = "unit_id")
     private Unit unit;
+
+    @Column(name = "FAVORITE")
+    private Boolean favorite;
 }

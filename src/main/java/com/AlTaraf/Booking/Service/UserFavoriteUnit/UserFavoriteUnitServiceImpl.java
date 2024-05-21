@@ -36,6 +36,7 @@ public class UserFavoriteUnitServiceImpl implements UserFavoriteUnitService {
         UserFavoriteUnit userFavoriteUnit = new UserFavoriteUnit();
         userFavoriteUnit.setUser(user);
         userFavoriteUnit.setUnit(unit);
+        userFavoriteUnit.setFavorite(true);
         userFavoriteUnitRepository.save(userFavoriteUnit);
     }
 

@@ -653,17 +653,20 @@ public class UnitController {
                     basicFeaturesIds, subFeaturesIds, foodOptionsIds, evaluationId, capacityHalls, adultsAllowed, childrenAllowed,
                     priceMin, priceMax);
 
-            List<UnitDtoFavorite>  unitFavoriteDtoList = unitFavoriteMapper.toUnitFavoriteDtoList(units);
+//            List<UnitDtoFavorite>  unitFavoriteDtoList = unitFavoriteMapper.toUnitFavoriteDtoList(units);
 
             User user = userRepository.findById(userId).orElse(null);
 
             for (Unit unit: units){
                 Unit unitForFavorite = unitRepository.findById(unit.getId()).orElse(null);
 
-                if (userFavoriteUnitService.existsByUserAndUnit(user,  unitForFavorite)){
+                if (userFavoriteUnitService.existsByUserAndUnit(user,  unit)){
                     unitForFavorite.setFavorite(true);
                 }
             }
+
+            List<UnitDtoFavorite>  unitFavoriteDtoList = unitFavoriteMapper.toUnitFavoriteDtoList(units);
+
 
             return ResponseEntity.ok(unitFavoriteDtoList);
 
