@@ -41,7 +41,9 @@ import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.unit.roomAvailable.RoomAvailableRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
+import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
+import com.AlTaraf.Booking.Service.UserFavoriteUnit.UserFavoriteUnitService;
 import com.AlTaraf.Booking.Service.notification.NotificationService;
 import com.AlTaraf.Booking.Service.unit.AvailablePeriods.AvailablePeriodsService;
 import com.AlTaraf.Booking.Service.unit.FeatureForHalls.FeatureForHallsService;
@@ -55,6 +57,8 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -153,13 +157,21 @@ public class UnitController {
     private UserFavoriteUnitRepository userFavoriteUnitRepository;
 
     @Autowired
+    private UserFavoriteUnitService userFavoriteUnitService;
+
+    @Autowired
     StatusRepository statusUnitRepository;
 
     @Autowired
     NotificationService notificationService;
 
+    @Autowired
+    UserRepository userRepository;
+
     private static final Logger logger = LoggerFactory.getLogger(UnitController.class);
 
+    @Autowired
+    private MessageSource messageSource;
 
     @PostMapping("/Create-Unit")
     public ResponseEntity<?> createUnit(@RequestBody UnitRequestDto unitRequestDto) {
@@ -206,17 +218,19 @@ public class UnitController {
 
             Unit savedUnit = unitService.saveUnit(unitToSave);
 
-            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من النظام","تم ارسال طلب اضافة وحدتك",unitRequestDto.getUserId());
+            PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_units.message", null, LocaleContextHolder.getLocale()),unitRequestDto.getUserId());
             notificationService.processNotification(notificationRequest);
 
             // Return the unitId in the response body
-            return ResponseEntity.status(HttpStatus.CREATED).body("Successful_Add_Unit.message " + savedUnit.getId());
+//            return ResponseEntity.status(HttpStatus.CREATED).body("Successful_Add_Unit.message " + savedUnit.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(messageSource.getMessage("Successful_Add_Unit.message", null, LocaleContextHolder.getLocale()) + savedUnit.getId());
 
 
 
         } catch (IllegalArgumentException e) {
             // Return user-friendly error response
-            ApiResponse response = new ApiResponse(400, e.getMessage());
+//            ApiResponse response = new ApiResponse(400, e.getMessage());
+            ApiResponse response = new ApiResponse(400,  messageSource.getMessage("Failed_Add_Unit.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
@@ -224,7 +238,8 @@ public class UnitController {
             // Log the exception
             e.printStackTrace();
             // Return generic error response
-            ApiResponse response = new ApiResponse(400, "Failed_Add_Unit.message");
+//            ApiResponse response = new ApiResponse(400, "Failed_Add_Unit.message");
+            ApiResponse response = new ApiResponse(400, messageSource.getMessage("Failed_Add_Unit.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
@@ -326,11 +341,11 @@ public class UnitController {
         }
     }
 
-    @GetMapping("/By-Last-Month")
+    @GetMapping("/newly-added")
     public ResponseEntity<?> getUnitsAddedLastMonth() {
 
 //        Sort sort = Sort.by("id").descending();
-        List<UnitDtoFavorite> units = unitService.getUnitsAddedLastMonth();
+        List<UnitDtoFavorite> units = unitService.getNewlyAdded();
 
         if (!units.isEmpty()) {
             return new ResponseEntity<>(units, HttpStatus.OK);
@@ -406,7 +421,8 @@ public class UnitController {
     public ResponseEntity<?> getEventHallsById(@PathVariable Long unitId) {
         Unit unit = unitService.getUnitById(unitId);
         if (unit == null) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content for Available Periods !"));
+            ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
 
         EventHallsResponse eventHallsResponse = eventHallsMapper.toEventHallsResponse(unit);
@@ -466,7 +482,8 @@ public class UnitController {
             // Return the response
             return ResponseEntity.ok(roomDetailsResponseDto);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
 
@@ -484,7 +501,8 @@ public class UnitController {
             // Return the response
             return ResponseEntity.ok(roomDetailsResponseDto);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
 
@@ -502,7 +520,7 @@ public class UnitController {
             List<UnitDto> unitDtos = unitMapper.toUnitDtoList(unitPage.getContent());
             return new ResponseEntity<>(unitDtos, HttpStatus.OK);
         } else {
-            ApiResponse response = new ApiResponse(204, "No Content");
+            ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
         }
     }
@@ -523,34 +541,29 @@ public class UnitController {
 
     }
 
-
-    private Sort getDefaultSort() {
-        return Sort.by("price").ascending();
-    }
-
     private Sort getSortByPrice(String sortDirection) {
         return sortDirection.equalsIgnoreCase("desc") ? Sort.by("price").descending() : Sort.by("price").ascending();
     }
 
-    private List<UnitDtoFavorite> sortByLocation(List<UnitDtoFavorite> units, Double userLat, Double userLong, String sortDirection) {
-        units.sort(Comparator.comparingDouble(unit -> {
-            double latDiff = userLat - unit.getLatForMapping();
-            double longDiff = userLong - unit.getLongForMapping();
-            return Math.sqrt(latDiff * latDiff + longDiff * longDiff);
-        }));
-
-        if (sortDirection.equalsIgnoreCase("desc")) {
-            Collections.reverse(units);
-        }
-
-        return units;
-    }
+//    private List<UnitDtoFavorite> sortByLocation(List<UnitDtoFavorite> units, Double userLat, Double userLong, String sortDirection) {
+//        units.sort(Comparator.comparingDouble(unit -> {
+//            double latDiff = userLat - unit.getLatForMapping();
+//            double longDiff = userLong - unit.getLongForMapping();
+//            return Math.sqrt(latDiff * latDiff + longDiff * longDiff);
+//        }));
+//
+//        if (sortDirection.equalsIgnoreCase("desc")) {
+//            Collections.reverse(units);
+//        }
+//
+//        return units;
+//    }
 
     private Sort getSortByEvaluationId(String sortDirection) {
         return sortDirection.equalsIgnoreCase("desc") ? Sort.by("evaluation.id").descending() : Sort.by("evaluation.id").ascending();
     }
 
-    @GetMapping("/Get-Units")
+    @GetMapping("/Get-Units/{userId}")
     public Page<UnitDtoFavorite> getUnits(
             @RequestParam(required = false) String nameUnit,
             @RequestParam(required = false) String roomAvailableName,
@@ -561,8 +574,10 @@ public class UnitController {
             @RequestParam(required = false) String sortDirectionByPrice,
             @RequestParam(required = false) String sortDirectionByEvaluationId,
             @RequestParam(required = false) Double userLat,
-            @RequestParam(required = false) Double userLng
+            @RequestParam(required = false) Double userLng,
+            @PathVariable Long userId
     ) {
+
         Sort sort = Sort.unsorted();
 
         if (sortDirectionByPrice != null) {
@@ -601,7 +616,63 @@ public class UnitController {
             return new PageImpl<>(sortedUnits, unitsPage.getPageable(), unitsPage.getTotalElements());
         }
 
-        return unitsPage.map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit));
+        User user = userRepository.findById(userId).orElse(null);
+
+        for (Unit unit: unitsPage.getContent()){
+            Unit unitForFavorite = unitRepository.findById(unit.getId()).orElse(null);
+
+            if (userFavoriteUnitService.existsByUserAndUnit(user,  unitForFavorite)){
+                unitForFavorite.setFavorite(true);
+            }
+    }
+            return unitsPage.map(unit -> unitFavoriteMapper.toUnitFavoriteDto(unit));
+    }
+
+    @GetMapping("/Filtering/{userId}")
+    public ResponseEntity<?> filterUnits(
+            @RequestParam(required = false) Long cityId,
+            @RequestParam(required = false) Long regionId,
+            @RequestParam(required = false) Long availablePeriodsId,
+            @RequestParam(required = false) Long unitTypeId,
+            @RequestParam(required = false) Long accommodationTypeId,
+            @RequestParam(required = false) Set<Long> hotelClassificationIds,
+            @RequestParam(required = false) Set<Long> basicFeaturesIds,
+            @RequestParam(required = false) Set<Long> subFeaturesIds,
+            @RequestParam(required = false) Set<Long> foodOptionsIds,
+            @RequestParam(required = false) Set<Long> evaluationId,
+            @RequestParam(required = false, defaultValue = "0") int capacityHalls,
+            @RequestParam(required = false, defaultValue = "0") int adultsAllowed,
+            @RequestParam(required = false, defaultValue = "0") int childrenAllowed,
+            @RequestParam(required = false, defaultValue = "0") int priceMin,
+            @RequestParam(required = false, defaultValue = "0") int priceMax,
+            @PathVariable Long userId) {
+
+        try {
+            List<Unit> units = unitService.findUnitsByFilters(cityId, regionId, availablePeriodsId,
+                    unitTypeId, accommodationTypeId, hotelClassificationIds,
+                    basicFeaturesIds, subFeaturesIds, foodOptionsIds, evaluationId, capacityHalls, adultsAllowed, childrenAllowed,
+                    priceMin, priceMax);
+
+            List<UnitDtoFavorite>  unitFavoriteDtoList = unitFavoriteMapper.toUnitFavoriteDtoList(units);
+
+            User user = userRepository.findById(userId).orElse(null);
+
+            for (Unit unit: units){
+                Unit unitForFavorite = unitRepository.findById(unit.getId()).orElse(null);
+
+                if (userFavoriteUnitService.existsByUserAndUnit(user,  unitForFavorite)){
+                    unitForFavorite.setFavorite(true);
+                }
+            }
+
+            return ResponseEntity.ok(unitFavoriteDtoList);
+
+        } catch (Exception e) {
+            // Log the exception
+            e.printStackTrace();
+            // You can throw a custom exception or return an error response here if needed
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
+        }
     }
 
     private double calculateDistance(double userLat, double userLng, double unitLat, double unitLng) {
@@ -651,7 +722,7 @@ public class UnitController {
         if (!featureForHalls.isEmpty()) {
             return new ResponseEntity<>(featureForHalls, HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content for Available Periods !"));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
         }
     }
 
@@ -662,42 +733,7 @@ public class UnitController {
         if (!availablePeriods.isEmpty()) {
             return new ResponseEntity<>(availablePeriods, HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content for Available Periods !"));
-        }
-    }
-
-    @GetMapping("/Filtering")
-    public ResponseEntity<?> filterUnits(
-            @RequestParam(required = false) Long cityId,
-            @RequestParam(required = false) Long regionId,
-            @RequestParam(required = false) Long availablePeriodsId,
-            @RequestParam(required = false) Long unitTypeId,
-            @RequestParam(required = false) Long accommodationTypeId,
-            @RequestParam(required = false) Set<Long> hotelClassificationIds,
-            @RequestParam(required = false) Set<Long> basicFeaturesIds,
-            @RequestParam(required = false) Set<Long> subFeaturesIds,
-            @RequestParam(required = false) Set<Long> foodOptionsIds,
-            @RequestParam(required = false) Set<Long> evaluationId,
-            @RequestParam(required = false, defaultValue = "0") int capacityHalls,
-            @RequestParam(required = false, defaultValue = "0") int adultsAllowed,
-            @RequestParam(required = false, defaultValue = "0") int childrenAllowed,
-            @RequestParam(required = false, defaultValue = "0") int priceMin,
-            @RequestParam(required = false, defaultValue = "0") int priceMax) {
-
-        try {
-            List<Unit> units = unitService.findUnitsByFilters(cityId, regionId, availablePeriodsId,
-                    unitTypeId, accommodationTypeId, hotelClassificationIds,
-                    basicFeaturesIds, subFeaturesIds, foodOptionsIds, evaluationId, capacityHalls, adultsAllowed, childrenAllowed,
-                    priceMin, priceMax);
-
-            List<UnitDtoFavorite>  unitFavoriteDtoList = unitFavoriteMapper.toUnitFavoriteDtoList(units);
-            return ResponseEntity.ok(unitFavoriteDtoList);
-
-        } catch (Exception e) {
-            // Log the exception
-            e.printStackTrace();
-            // You can throw a custom exception or return an error response here if needed
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(204, "No Content for Event Halls!"));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
         }
     }
 
@@ -714,26 +750,25 @@ public class UnitController {
 
     @GetMapping("/Get-Reservation-By-Status")
     public ResponseEntity<?> getReservationByStatus(@RequestParam(name = "USER_ID") Long userId,
-                                                    @RequestParam(name = "statusUnitName") String statusUnitName,
+                                                    @RequestParam(name = "statusId") Long statusId,
                                                     @RequestParam(defaultValue = "0") int page,
                                                     @RequestParam(defaultValue = "20") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         Page<Unit> unitsPage = unitService.getUnitsByUserId(userId, pageable);
 
         if (unitsPage == null || unitsPage.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content"));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
         }
 
         List<ReservationStatus> reservationRequestDtoList = new ArrayList<>();
 
         for (Unit unit : unitsPage.getContent()) {
-            System.out.println("unit: " + unit.getId());
-            Page<Reservations> reservationsPage = reservationService.findByStatusNameAndUnitId(statusUnitName, unit.getId(), pageable);
+            Page<Reservations> reservationsPage = reservationService.getByStatusIdAndUnitId(statusId, unit.getId(), pageable);
             reservationRequestDtoList.addAll(reservationStatusMapper.toReservationStatusDtoList(reservationsPage.getContent()));
         }
 
         if (reservationRequestDtoList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "No Content"));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
         }
 
         return new ResponseEntity<>(reservationRequestDtoList, HttpStatus.OK);
