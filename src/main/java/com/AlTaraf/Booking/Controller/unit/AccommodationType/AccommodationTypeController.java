@@ -4,6 +4,8 @@ import com.AlTaraf.Booking.Entity.unit.accommodationType.AccommodationType;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Service.unit.AccommodationType.AccommodationTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,9 @@ public class AccommodationTypeController {
     @Autowired
     AccommodationTypeService accommodationTypeService;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @GetMapping("/get-Accommodation-Type")
     public ResponseEntity<?> getAccommodationType() {
         List<AccommodationType> accommodationTypeList = accommodationTypeService.getAllAccommodationType();
@@ -26,8 +31,7 @@ public class AccommodationTypeController {
         if (!accommodationTypeList.isEmpty()) {
             return new ResponseEntity<>(accommodationTypeList, HttpStatus.OK);
         } else {
-            ApiResponse response = new ApiResponse(204, "no_content.message");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
 //            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }

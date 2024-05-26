@@ -14,10 +14,12 @@ import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea
 import com.AlTaraf.Booking.Entity.unit.feature.Feature;
 import com.AlTaraf.Booking.Entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.Entity.unit.Unit;
+import com.AlTaraf.Booking.Entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.Entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
+import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationStatusMapper;
 import com.AlTaraf.Booking.Mapper.Unit.*;
@@ -188,13 +190,13 @@ public class UnitController {
                 unitToSave.setOldPriceHall(0); // Set oldPriceHall to 0 if it's null
             }
 
-            if (unitToSave.getResortNewPrice() == null) {
-                unitToSave.setResortNewPrice(0); // Or set it to some default value
-            }
-
-            if (unitToSave.getResortOldPrice() == null) {
-                unitToSave.setResortOldPrice(0); // Set oldPriceHall to 0 if it's null
-            }
+//            if (unitToSave.getResortNewPrice() == null) {
+//                unitToSave.setResortNewPrice(0); // Or set it to some default value
+//            }
+//
+//            if (unitToSave.getResortOldPrice() == null) {
+//                unitToSave.setResortOldPrice(0); // Set oldPriceHall to 0 if it's null
+//            }
 
             if (unitToSave.getChaletNewPrice() == null) {
                 unitToSave.setChaletNewPrice(0); // Or set it to some default value
@@ -223,7 +225,7 @@ public class UnitController {
 
             // Return the unitId in the response body
 //            return ResponseEntity.status(HttpStatus.CREATED).body("Successful_Add_Unit.message " + savedUnit.getId());
-            return ResponseEntity.status(HttpStatus.CREATED).body(messageSource.getMessage("Successful_Add_Unit.message", null, LocaleContextHolder.getLocale()) + savedUnit.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(messageSource.getMessage("Successful_Add_Unit.message", null, LocaleContextHolder.getLocale()) + " " + savedUnit.getId());
 
 
 
@@ -284,21 +286,93 @@ public class UnitController {
             if (unitRequestDto.getHotelClassificationId() != null) {
                 unitToUpdate.setHotelClassification(new HotelClassification(unitRequestDto.getHotelClassificationId()));
             }
+
             if (unitRequestDto.getRoomAvailableIds() != null) {
                 unitToUpdate.setRoomAvailableSet(unitRequestDto.getRoomAvailableIds().stream()
                         .map(id -> new RoomAvailable(id))
                         .collect(Collectors.toSet()));
             }
+
             if (unitRequestDto.getAvailableAreaIds() != null) {
                 unitToUpdate.setAvailableAreaSet(unitRequestDto.getAvailableAreaIds().stream()
                         .map(id -> new AvailableArea(id))
                         .collect(Collectors.toSet()));
             }
+
             if (unitRequestDto.getBasicFeaturesIds() != null) {
                 unitToUpdate.setBasicFeaturesSet(unitRequestDto.getBasicFeaturesIds().stream()
                         .map(id -> new Feature(id))
                         .collect(Collectors.toSet()));
             }
+
+            if (unitRequestDto.getSubFeaturesIds() != null) {
+                unitToUpdate.setSubFeaturesSet(unitRequestDto.getSubFeaturesIds().stream()
+                        .map(id -> new SubFeature(id))
+                        .collect(Collectors.toSet()));
+            }
+
+            if (unitRequestDto.getFoodOptionsIds() != null) {
+                unitToUpdate.setFoodOptionsSet(unitRequestDto.getFoodOptionsIds().stream()
+                        .map(id -> new FoodOption(id))
+                        .collect(Collectors.toSet()));
+            }
+
+            if (unitRequestDto.getCapacityHalls() != null) {
+                unitToUpdate.setCapacityHalls(unitRequestDto.getCapacityHalls());
+            }
+
+            if (unitRequestDto.getFeaturesHallsIds() != null) {
+                unitToUpdate.setFeaturesHallsSet(unitRequestDto.getFeaturesHallsIds().stream()
+                        .map(id -> new FeatureForHalls(id))
+                        .collect(Collectors.toSet()));
+            }
+
+            if (unitRequestDto.getAvailablePeriodsHallsIds() != null) {
+                unitToUpdate.setAvailablePeriodsHallsSet(unitRequestDto.getAvailablePeriodsHallsIds().stream()
+                        .map(id -> new AvailablePeriods(id))
+                        .collect(Collectors.toSet()));
+            }
+
+            if (unitRequestDto.getOldPriceHall() != null) {
+                unitToUpdate.setOldPriceHall(unitRequestDto.getOldPriceHall());
+            }
+
+            if (unitRequestDto.getNewPriceHall() != null) {
+                unitToUpdate.setNewPriceHall(unitRequestDto.getNewPriceHall());
+            }
+
+            if (unitRequestDto.getLatForMapping() != null) {
+                unitToUpdate.setLatForMapping(unitRequestDto.getLatForMapping());
+            }
+
+            if (unitRequestDto.getLongForMapping() != null) {
+                unitToUpdate.setLongForMapping(unitRequestDto.getLongForMapping());
+            }
+
+            if (unitRequestDto.getChaletNewPrice() != null) {
+                unitToUpdate.setChaletNewPrice(unitRequestDto.getChaletNewPrice());
+            }
+
+            if (unitRequestDto.getChaletOldPrice() != null) {
+                unitToUpdate.setChaletOldPrice(unitRequestDto.getChaletOldPrice());
+            }
+
+            if (unitRequestDto.getChildrenAllowed() != null) {
+                unitToUpdate.setChildrenAllowed(unitRequestDto.getChildrenAllowed());
+            }
+
+            if (unitRequestDto.getAdultsAllowed() != null) {
+                unitToUpdate.setAdultsAllowed(unitRequestDto.getAdultsAllowed());
+            }
+
+            if (unitRequestDto.getLoungeNewPrice() != null) {
+                unitToUpdate.setLoungeNewPrice(unitRequestDto.getLoungeNewPrice());
+            }
+
+            if (unitRequestDto.getLoungeOldPrice() != null) {
+                unitToUpdate.setLoungeOldPrice(unitRequestDto.getLoungeOldPrice());
+            }
+
 
             // Update other fields similarly...
 
@@ -306,7 +380,9 @@ public class UnitController {
             Unit updatedUnit = unitService.saveUnit(unitToUpdate);
 
             // Return a success response with the updated unitId in the body
-            return ResponseEntity.ok("Unit updated successfully with id: " + updatedUnit.getId());
+            return ResponseEntity.ok( messageSource.getMessage("unit_updated.message", null, LocaleContextHolder.getLocale())
+                    + " " + updatedUnit.getId());
+//            return ResponseEntity.ok("Unit updated successfully with id: " + updatedUnit.getId());
         } catch (Exception e) {
             // Log the exception
             // logger.error("Error occurred while processing update-unit request", e);
@@ -314,7 +390,7 @@ public class UnitController {
             System.out.println("Exception for Update Unit: " + e);
 
             // Return user-friendly error response
-            ApiResponse response = new ApiResponse(400, "Failed to update unit. Please check your input and try again.");
+            ApiResponse response = new ApiResponse(400, messageSource.getMessage("failed.updated.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
     }
@@ -330,13 +406,15 @@ public class UnitController {
             if (!units.isEmpty()) {
                 return new ResponseEntity<>(units, HttpStatus.OK);
             } else {
-                ApiResponse response = new ApiResponse(204, "No Content for Units have high evaluation!");
+//                ApiResponse response = new ApiResponse(204, "No Content for Units have high evaluation!");
+                ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
             }
         } catch (Exception e) {
             logger.error("Error occurred while processing get-units-by-evaluation request", e);
             System.out.println("Error Message : " + e);
-            ApiResponse response = new ApiResponse(500, "Internal Server Error");
+//            ApiResponse response = new ApiResponse(500, "Internal Server Error");
+            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
@@ -345,13 +423,22 @@ public class UnitController {
     public ResponseEntity<?> getUnitsAddedLastMonth() {
 
 //        Sort sort = Sort.by("id").descending();
-        List<UnitDtoFavorite> units = unitService.getNewlyAdded();
+        try {
+            List<UnitDtoFavorite> units = unitService.getNewlyAdded();
 
-        if (!units.isEmpty()) {
-            return new ResponseEntity<>(units, HttpStatus.OK);
-        } else {
-            ApiResponse response = new ApiResponse(204, "No Content");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            if (!units.isEmpty()) {
+                return new ResponseEntity<>(units, HttpStatus.OK);
+            } else {
+                ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            }
+        }  catch (Exception e) {
+//            logger.error("Error occurred while processing get-units-by-evaluation request", e);
+            System.out.println("Error occurred while processing get-units-by-evaluation request: " + e);
+            System.out.println("Error Message : " + e);
+//            ApiResponse response = new ApiResponse(500, "Internal Server Error");
+            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
@@ -361,15 +448,23 @@ public class UnitController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "6") int size) {
 
-        Sort sort = Sort.by("id").descending(); // Sort by unit ID in ascending order
+        try {
+            Sort sort = Sort.by("id").descending(); // Sort by unit ID in ascending order
 
-        Page<UnitDtoFavorite> units = unitService.getUnitsByAccommodationTypeName(accommodationTypeId, page, size, sort);
+            Page<UnitDtoFavorite> units = unitService.getUnitsByAccommodationTypeName(accommodationTypeId, page, size, sort);
 
-        if (!units.isEmpty()) {
-            return new ResponseEntity<>(units, HttpStatus.OK);
-        } else {
-            ApiResponse response = new ApiResponse(204, "No Content for Units By Accommodation Type!");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            if (!units.isEmpty()) {
+                return new ResponseEntity<>(units, HttpStatus.OK);
+            } else {
+                ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            }
+        } catch (Exception e) {
+//            logger.error("Error occurred while processing get-units-by-evaluation request", e);
+            System.out.println("Error Message : " + e);
+//            ApiResponse response = new ApiResponse(500, "Internal Server Error");
+            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
@@ -379,41 +474,65 @@ public class UnitController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
 
-        Sort sort = Sort.by("id").descending(); // Sort by unit ID in ascending order
+        try {
+            Sort sort = Sort.by("id").descending(); // Sort by unit ID in ascending order
 
-        Page<UnitDtoFavorite> units = unitService.getUnitsByUserCity(userId, PageRequest.of(page, size), sort);
+            Page<UnitDtoFavorite> units = unitService.getUnitsByUserCity(userId, PageRequest.of(page, size), sort);
 
-        if (units.hasContent()) {
-            return new ResponseEntity<>(units, HttpStatus.OK);
-        } else {
-            ApiResponse response = new ApiResponse(204, "No Content for Units By User City!");
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            if (units.hasContent()) {
+                return new ResponseEntity<>(units, HttpStatus.OK);
+            } else {
+                ApiResponse response = new ApiResponse(404, messageSource.getMessage("not_found.message", null, LocaleContextHolder.getLocale()));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            }
+        } catch (Exception e) {
+//            logger.error("Error occurred while processing get-units-by-evaluation request", e);
+            System.out.println("Error Message : " + e);
+//            ApiResponse response = new ApiResponse(500, "Internal Server Error");
+            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
     @GetMapping("By-Id-General/{id}")
     public ResponseEntity<?> getUnitById(@PathVariable Long id) {
-        Unit unit = unitService.getUnitById(id);
-        if (unit != null) {
+        try {
+            Unit unit = unitService.getUnitById(id);
+            if (unit != null) {
 //            List<RoomAvailable> roomAvailableList = new ArrayList<>(unit.getRoomAvailableSet());
 //            roomAvailableList.sort(Comparator.comparingLong(RoomAvailable::getId));
 //            unit.setRoomAvailableSet(new HashSet<>(roomAvailableList));
 
-            UnitGeneralResponseDto responseDto = unitGeneralResponseMapper.toResponseDto(unit);
-            return ResponseEntity.ok(responseDto);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, "Not Found!"));
+                UnitGeneralResponseDto responseDto = unitGeneralResponseMapper.toResponseDto(unit);
+                return ResponseEntity.ok(responseDto);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, messageSource.getMessage("not_found.message", null, LocaleContextHolder.getLocale())));
+            }
+        } catch (Exception e) {
+//            logger.error("Error occurred while processing get-units-by-evaluation request", e);
+            System.out.println("Error Message : " + e);
+//            ApiResponse response = new ApiResponse(500, "Internal Server Error");
+            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
     @GetMapping("By-Id-For-Residencies/{id}")
     public ResponseEntity<?> getResidenciesUnitById(@PathVariable Long id) {
-        Unit unit = unitService.getUnitById(id);
-        if (unit != null) {
-            UnitResidenciesResponseDto responseDto = unitResidenciesResponseMapper.toResponseDto(unit);
-            return ResponseEntity.ok(responseDto);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, "Not Found!"));
+        try {
+            Unit unit = unitService.getUnitById(id);
+            if (unit != null) {
+                UnitResidenciesResponseDto responseDto = unitResidenciesResponseMapper.toResponseDto(unit);
+                return ResponseEntity.ok(responseDto);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, messageSource.getMessage("not_found.message", null, LocaleContextHolder.getLocale())));
+            }
+        } catch (Exception e) {
+//            logger.error("Error occurred while processing get-units-by-evaluation request", e);
+            System.out.println("Error Message : " + e);
+//            ApiResponse response = new ApiResponse(500, "Internal Server Error");
+            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
@@ -436,17 +555,22 @@ public class UnitController {
             // Check if RoomDetails already exists for the given unitId and roomAvailableId
             boolean roomDetailsExists = roomDetailsRepository.existsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
             if (roomDetailsExists) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"RoomDetails already exists for unitId: " + unitId + " and roomAvailableId: " + roomAvailableId));
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"RoomDetails already exists for unitId: " + unitId + " and roomAvailableId: " + roomAvailableId));
+
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,messageSource.getMessage("room_details_already_exists.message", null, LocaleContextHolder.getLocale()) + " " + unitId + "  " + roomAvailableId));
             }
 
 
             RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsRequestDto);
             roomDetailsService.addRoomDetails(unitId, roomAvailableId, roomDetails);
-            return ResponseEntity.ok("RoomDetails added successfully " + roomDetails.getId());
+//            return ResponseEntity.ok("RoomDetails added successfully " + roomDetails.getId());
+            return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetails.getId());
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetails: " + e.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetails: " + e.getMessage());
+            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
@@ -457,14 +581,18 @@ public class UnitController {
             // Check if RoomDetailsForAvailableArea already exists for the given unitId and availableAreaId
             boolean roomDetailsExists = roomDetailsForAvailableAreaRepository.existsByUnitIdAndAvailableAreaId(unitId, availableAreaId);
             if (roomDetailsExists) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"RoomDetailsForAvailableArea already exists for unitId: " + unitId + " and availableAreaId: " + availableAreaId));
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"RoomDetailsForAvailableArea already exists for unitId: " + unitId + " and availableAreaId: " + availableAreaId));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,messageSource.getMessage("room_details_already_exists.message", null, LocaleContextHolder.getLocale()) + " " + unitId + "  " + availableAreaId));
             }
 
             RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsRequestMapper.toEntityAvailableArea(roomDetailsRequestDto);
             roomDetailsForAvailableAreaService.addRoomDetails(unitId, availableAreaId, roomDetailsForAvailableArea);
-            return ResponseEntity.ok("RoomDetailsForAvailableArea added successfully " + roomDetailsForAvailableArea.getId());
+//            return ResponseEntity.ok("RoomDetailsForAvailableArea added successfully " + roomDetailsForAvailableArea.getId());
+            return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetailsForAvailableArea.getId());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetailsForAvailableArea: " + e.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetailsForAvailableArea: " + e.getMessage());
+            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
@@ -476,14 +604,20 @@ public class UnitController {
             // Retrieve RoomDetails entity from the service layer
             RoomDetails roomDetails = roomDetailsService.getRoomDetailsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
 
-            // Map RoomDetails entity to RoomDetailsResponseDto
-            RoomDetailsResponseDto roomDetailsResponseDto = roomDetailsResponseMapper.toDto(roomDetails);
+            if ( roomDetails != null ) {
+                // Map RoomDetails entity to RoomDetailsResponseDto
+                RoomDetailsResponseDto roomDetailsResponseDto = roomDetailsResponseMapper.toDto(roomDetails);
 
-            // Return the response
-            return ResponseEntity.ok(roomDetailsResponseDto);
+                // Return the response
+                return ResponseEntity.ok(roomDetailsResponseDto);
+            } else {
+                ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            }
+
         } catch (Exception e) {
-            ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
@@ -495,14 +629,17 @@ public class UnitController {
             // Retrieve RoomDetails entity from the service layer
             RoomDetailsForAvailableArea availableArea = roomDetailsForAvailableAreaService.getRoomDetailsByUnitIdAndAvailableAreaId(unitId, availableAreaId);
 
-            // Map RoomDetails entity to RoomDetailsResponseDto
-            RoomDetailsResponseDto roomDetailsResponseDto = roomDetailsResponseMapper.toDtoForAvailableArea(availableArea);
-
-            // Return the response
-            return ResponseEntity.ok(roomDetailsResponseDto);
+            if (availableArea != null) {
+                // Map RoomDetails entity to RoomDetailsResponseDto
+                RoomDetailsResponseDto roomDetailsResponseDto = roomDetailsResponseMapper.toDtoForAvailableArea(availableArea);
+                return ResponseEntity.ok(roomDetailsResponseDto);
+            } else {
+                ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            }
         } catch (Exception e) {
-            ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
@@ -513,31 +650,51 @@ public class UnitController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-        Page<Unit> unitPage = unitService.getUnitsForUserAndStatus(userId, statusUnitId, pageable);
+        try {
+            Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+            Page<Unit> unitPage = unitService.getUnitsForUserAndStatus(userId, statusUnitId, pageable);
 
-        if (unitPage.hasContent()) {
-            List<UnitDto> unitDtos = unitMapper.toUnitDtoList(unitPage.getContent());
-            return new ResponseEntity<>(unitDtos, HttpStatus.OK);
-        } else {
-            ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            if (unitPage.hasContent()) {
+                List<UnitDto> unitDtos = unitMapper.toUnitDtoList(unitPage.getContent());
+                return new ResponseEntity<>(unitDtos, HttpStatus.OK);
+            } else {
+                ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            }
+        } catch (Exception e) {
+//            logger.error("Error occurred while processing get-units-by-evaluation request", e);
+//            System.out.println("Error occurred while processing get-units-by-evaluation request: " + e);
+            System.out.println("Error Message : " + e);
+//            ApiResponse response = new ApiResponse(500, "Internal Server Error");
+            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
     @DeleteMapping("Delete/Unit/{id}")
     public ResponseEntity<?> deleteUnit(@PathVariable Long id) {
 
-        Unit unit = unitRepository.findById(id).orElse(null);
+        try {
+            Unit unit = unitRepository.findById(id).orElse(null);
 
-        StatusUnit statusUnit = statusUnitRepository.findById(4L).orElse(null);
+            StatusUnit statusUnit = statusUnitRepository.findById(4L).orElse(null);
 
-        unit.setStatusUnit(statusUnit);
+            unit.setStatusUnit(statusUnit);
 
-        unitRepository.save(unit);
+            unitRepository.save(unit);
 
-        ApiResponse response = new ApiResponse(200, "Unit_deleted.message");
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+//        ApiResponse response = new ApiResponse(200, "Unit_deleted.message");
+            ApiResponse response = new ApiResponse(200, messageSource.getMessage("Unit_deleted.message", null, LocaleContextHolder.getLocale()));
+
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (Exception e) {
+//            logger.error("Error occurred while processing get-units-by-evaluation request", e);
+//            System.out.println("Error occurred while processing get-units-by-evaluation request: " + e);
+            System.out.println("Error Message : " + e);
+//            ApiResponse response = new ApiResponse(500, "Internal Server Error");
+            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
 
     }
 
@@ -634,7 +791,7 @@ public class UnitController {
             @RequestParam(required = false) Long regionId,
             @RequestParam(required = false) Long availablePeriodsId,
             @RequestParam(required = false) Long unitTypeId,
-            @RequestParam(required = false) Long accommodationTypeId,
+            @RequestParam(required = false) Set<Long> accommodationTypeIds,
             @RequestParam(required = false) Set<Long> hotelClassificationIds,
             @RequestParam(required = false) Set<Long> basicFeaturesIds,
             @RequestParam(required = false) Set<Long> subFeaturesIds,
@@ -649,7 +806,7 @@ public class UnitController {
 
         try {
             List<Unit> units = unitService.findUnitsByFilters(cityId, regionId, availablePeriodsId,
-                    unitTypeId, accommodationTypeId, hotelClassificationIds,
+                    unitTypeId, accommodationTypeIds, hotelClassificationIds,
                     basicFeaturesIds, subFeaturesIds, foodOptionsIds, evaluationId, capacityHalls, adultsAllowed, childrenAllowed,
                     priceMin, priceMax);
 
@@ -745,9 +902,12 @@ public class UnitController {
         try {
 
              reservationService.updateStatusForReservation(reservationId, statusUnitId);
-            return ResponseEntity.ok(new ApiResponse(200,"Status changed successfully"));
+//            return ResponseEntity.ok(new ApiResponse(200,"Status changed successfully"));
+            return ResponseEntity.ok(new ApiResponse(200,messageSource.getMessage("status_reservation_changed_successful.message", null, LocaleContextHolder.getLocale())));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update status: " + e.getMessage());
+
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update reservation status : " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(messageSource.getMessage("failed_updated_status_reservation.message", null, LocaleContextHolder.getLocale()) + " " + e.getMessage());
         }
     }
 
@@ -756,25 +916,30 @@ public class UnitController {
                                                     @RequestParam(name = "statusId") Long statusId,
                                                     @RequestParam(defaultValue = "0") int page,
                                                     @RequestParam(defaultValue = "20") int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-        Page<Unit> unitsPage = unitService.getUnitsByUserId(userId, pageable);
+        try {
+            Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+            Page<Unit> unitsPage = unitService.getUnitsByUserId(userId, pageable);
 
-        if (unitsPage == null || unitsPage.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
+            if (unitsPage == null || unitsPage.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
+            }
+
+            List<ReservationStatus> reservationRequestDtoList = new ArrayList<>();
+
+            for (Unit unit : unitsPage.getContent()) {
+                Page<Reservations> reservationsPage = reservationService.getByStatusIdAndUnitId(statusId, unit.getId(), pageable);
+                reservationRequestDtoList.addAll(reservationStatusMapper.toReservationStatusDtoList(reservationsPage.getContent()));
+            }
+
+            if (reservationRequestDtoList.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
+            }
+
+            return new ResponseEntity<>(reservationRequestDtoList, HttpStatus.OK);
+        } catch (Exception e) {
+            ApiResponse response = new ApiResponse(404, messageSource.getMessage("not_found.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
-
-        List<ReservationStatus> reservationRequestDtoList = new ArrayList<>();
-
-        for (Unit unit : unitsPage.getContent()) {
-            Page<Reservations> reservationsPage = reservationService.getByStatusIdAndUnitId(statusId, unit.getId(), pageable);
-            reservationRequestDtoList.addAll(reservationStatusMapper.toReservationStatusDtoList(reservationsPage.getContent()));
-        }
-
-        if (reservationRequestDtoList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
-        }
-
-        return new ResponseEntity<>(reservationRequestDtoList, HttpStatus.OK);
     }
 
     @DeleteMapping("Delete/Reservation/{id}")
@@ -783,10 +948,10 @@ public class UnitController {
         try {
             reservationService.updateStatusForReservation(id, 4L);
             reservationService.deleteUnit(id);
-            ApiResponse response = new ApiResponse(200, "Reservation deleted successfully!");
+            ApiResponse response = new ApiResponse(200,messageSource.getMessage("reservation_deleted_unit.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            ApiResponse response = new ApiResponse(404, "Not Found!");
+            ApiResponse response = new ApiResponse(404, messageSource.getMessage("not_found.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }

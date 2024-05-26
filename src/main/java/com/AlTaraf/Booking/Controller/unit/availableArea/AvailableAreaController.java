@@ -4,6 +4,8 @@ import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Service.unit.availableArea.AvailableAreaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,9 @@ public class AvailableAreaController {
     @Autowired
     AvailableAreaService availableAreaService;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @GetMapping("/get-Available-Area")
     public ResponseEntity<?> getAllAvailableArea() {
         List<AvailableArea> availableAreaList = availableAreaService.getAllAvailableArea();
@@ -25,7 +30,7 @@ public class AvailableAreaController {
         if (!availableAreaList.isEmpty()) {
             return new ResponseEntity<>(availableAreaList, HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, "no_content.message"));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
         }
     }
 }

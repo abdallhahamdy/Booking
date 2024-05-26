@@ -11,6 +11,8 @@ import com.AlTaraf.Booking.Service.UserFavoriteUnit.UserFavoriteUnitService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +40,9 @@ public class favoriteController {
     @Autowired
     private UnitRepository unitRepository;
 
+    @Autowired
+    private MessageSource messageSource;
+
 
     @PostMapping("/user/{userId}/favoriteUnit/{unitId}")
     public ResponseEntity<?> addFavoriteUnit(@PathVariable Long userId, @PathVariable Long unitId) {
@@ -53,15 +58,18 @@ public class favoriteController {
             // Check if the user already has the unit in their favorites
             boolean alreadyExists = userFavoriteUnitService.existsByUserAndUnit(user, unit);
             if (alreadyExists) {
-                return ResponseEntity.badRequest().body(new ApiResponse(400, "Unit_Already_In_Favorite.message"));
+                //                return ResponseEntity.badRequest().body(new ApiResponse(400, "Unit_Already_In_Favorite.message"));
+                return ResponseEntity.badRequest().body(new ApiResponse(400, messageSource.getMessage("unit_Already_In_Favorite.message", null, LocaleContextHolder.getLocale())));
             }
 
             // Save the favorite unit for the user
             userFavoriteUnitService.saveUserFavoriteUnit(user, unit);
 
-            return ResponseEntity.ok(new ApiResponse(201, "Added_Favorite_List.message"));
+//            return ResponseEntity.ok(new ApiResponse(201, "Added_Favorite_List.message"));
+            return ResponseEntity.ok(new ApiResponse(201, messageSource.getMessage("added_Favorite_List.message", null, LocaleContextHolder.getLocale())));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400, "Failed_Added_Favorite_List.message"));
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400, "Failed_Added_Favorite_List.message"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400, messageSource.getMessage("failed_Added_Favorite_List.message", null, LocaleContextHolder.getLocale())));
         }
     }
 
@@ -80,11 +88,13 @@ public class favoriteController {
     public ResponseEntity<?> deleteUserFavoriteUnit(@PathVariable Long userId, @PathVariable Long unitId) {
         try {
             userFavoriteUnitService.deleteUserFavoriteUnit(userId, unitId);
-            return ResponseEntity.ok().body(new ApiResponse(201, "Deleted_Favorite_List.message"));
+//            return ResponseEntity.ok().body(new ApiResponse(201, "Deleted_Favorite_List.message"));
+            return ResponseEntity.ok().body(new ApiResponse(201, messageSource.getMessage("deleted_Favorite_List.message", null, LocaleContextHolder.getLocale())));
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, "not_found.message"));
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, "not_found.message"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, messageSource.getMessage("not_found.message", null, LocaleContextHolder.getLocale())));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, "no_content.message"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500,  messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale())));
         }
     }
 
