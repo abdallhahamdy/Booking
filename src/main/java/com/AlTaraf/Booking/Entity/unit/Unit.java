@@ -154,9 +154,9 @@ public class Unit extends Auditable<String> {
 
     private Integer ChaletOldPrice = 0;
 
-    private Integer resortOldPrice = 0;
-
-    private Integer resortNewPrice = 0;
+//    private Integer resortOldPrice = 0;
+//
+//    private Integer resortNewPrice = 0;
 
     private Integer loungeOldPrice = 0;
 
@@ -235,13 +235,17 @@ public class Unit extends Auditable<String> {
                 } else {
                     price = getChaletNewPrice();
                 }
-            } else if (accommodationType.getId() == 5) {
-                if (getResortNewPrice() == null || getResortNewPrice().intValue() == 0) {
-                    price = getResortOldPrice();
-                } else {
-                    price = getResortNewPrice();
-                }
-            } else if (accommodationType.getId() == 6) {
+            }
+
+//            else if (accommodationType.getId() == 5) {
+//                if (getResortNewPrice() == null || getResortNewPrice().intValue() == 0) {
+//                    price = getResortOldPrice();
+//                } else {
+//                    price = getResortNewPrice();
+//                }
+//            }
+
+            else if (accommodationType.getId() == 6) {
                 if (getLoungeNewPrice() == null || getLoungeNewPrice().intValue() == 0) {
                     price = getLoungeOldPrice();
                 } else {
@@ -267,13 +271,17 @@ public class Unit extends Auditable<String> {
                 } else {
                     price = getChaletNewPrice();
                 }
-            } else if (accommodationType.getId() == 5) {
-                if (getResortNewPrice() == null || getResortNewPrice() == 0) {
-                    price = getResortOldPrice() != null ? getResortOldPrice() : 0; // Set a default value if resortOldPrice is null
-                } else {
-                    price = getResortNewPrice();
-                }
-            } else if (accommodationType.getId() == 6) {
+            }
+
+//            else if (accommodationType.getId() == 5) {
+//                if (getResortNewPrice() == null || getResortNewPrice() == 0) {
+//                    price = getResortOldPrice() != null ? getResortOldPrice() : 0; // Set a default value if resortOldPrice is null
+//                } else {
+//                    price = getResortNewPrice();
+//                }
+//            }
+
+            else if (accommodationType.getId() == 6) {
                 if (getLoungeNewPrice() == null || getLoungeNewPrice() == 0) {
                     price = getLoungeOldPrice() != null ? getLoungeOldPrice() : 0; // Set a default value if resortOldPrice is null
                 } else {

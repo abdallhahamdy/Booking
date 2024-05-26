@@ -5,6 +5,7 @@ import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.User.User;
+import com.AlTaraf.Booking.Entity.Wallet.Wallet;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Exception.InsufficientFundsException;
@@ -18,6 +19,7 @@ import com.AlTaraf.Booking.Payload.response.Ads.adsForSliderResponseDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
+import com.AlTaraf.Booking.Repository.Wallet.WalletRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.Ads.AdsService;
@@ -83,6 +85,9 @@ public class AdsController {
 
     @Autowired
     NotificationService notificationService;
+
+    @Autowired
+    WalletRepository walletRepository;
 
     @GetMapping("/package-ads")
     public ResponseEntity<?> getAllPackageAds() {
@@ -234,6 +239,9 @@ public class AdsController {
             }
 
              user = userService.setPackageAdsForUser(userId, packageAdsId);
+
+        Wallet wallet = new Wallet("اشتراك في باقة اعلان", "Subscribe Package Ads", packageAds.getPrice(),user);
+        walletRepository.save(wallet);
 
             return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200,messageSource.getMessage("successful_package_ads.message", null, LocaleContextHolder.getLocale()) + " " + user.getWallet()));
         }

@@ -45,8 +45,6 @@ public interface UnitRequestMapper {
     @Mapping(source = "longForMapping", target = "longForMapping")
     @Mapping(source = "chaletOldPrice", target = "chaletOldPrice")
     @Mapping(source = "chaletNewPrice", target = "chaletNewPrice")
-    @Mapping(source = "resortOldPrice", target = "resortOldPrice")
-    @Mapping(source = "resortNewPrice", target = "resortNewPrice")
 
     @Mapping(source = "loungeOldPrice", target = "loungeOldPrice")
     @Mapping(source = "loungeNewPrice", target = "loungeNewPrice")
