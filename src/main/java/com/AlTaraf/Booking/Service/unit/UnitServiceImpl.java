@@ -337,7 +337,7 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     public List<Unit> findUnitsByFilters(Long cityId, Long regionId, Long availablePeriodsId,
-                                         Long unitTypeId, Long accommodationTypeId, Set<Long> hotelClassificationIds,
+                                         Long unitTypeId, Set<Long> accommodationTypeIds, Set<Long> hotelClassificationIds,
                                          Set<Long> basicFeaturesIds, Set<Long> subFeaturesIds, Set<Long> foodOptionsIds,
                                          Set<Long> evaluationIds, int capacityHalls, int adultsAllowed, int childrenAllowed, int priceMin, int priceMax) {
         Specification<Unit> spec = Specification.where(null);
@@ -350,9 +350,9 @@ public class UnitServiceImpl implements UnitService {
             spec = spec.and(UnitSpecifications.byRegion(regionId));
         }
 
-        if (basicFeaturesIds != null && !basicFeaturesIds.isEmpty()) {
-            spec = spec.and(UnitSpecifications.byBasicFeaturesIds(basicFeaturesIds));
-        }
+//        if (basicFeaturesIds != null && !basicFeaturesIds.isEmpty()) {
+//            spec = spec.and(UnitSpecifications.byBasicFeaturesIds(basicFeaturesIds));
+//        }
 
         if (availablePeriodsId != null) {
             spec = spec.and(UnitSpecifications.byAvailablePeriod(availablePeriodsId));
@@ -363,8 +363,8 @@ public class UnitServiceImpl implements UnitService {
             spec = spec.and(UnitSpecifications.byUnitTypeId(unitTypeId));
         }
 
-        if (accommodationTypeId != null) {
-            spec = spec.and(UnitSpecifications.byAccommodationTypeId(accommodationTypeId));
+        if (accommodationTypeIds != null) {
+            spec = spec.and(UnitSpecifications.byAccommodationTypeIds(accommodationTypeIds));
         }
 
         if (hotelClassificationIds != null) {
