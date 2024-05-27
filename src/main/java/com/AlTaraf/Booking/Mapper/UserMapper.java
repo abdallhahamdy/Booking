@@ -70,6 +70,7 @@ public interface UserMapper {
     @Mapping(source = "deviceToken", target = "deviceToken")
     @Mapping(source = "wallet", target = "wallet")
     @Mapping(source = "packageAds", target = "packageAds")
+    @Mapping(source = "ban", target = "ban")
     UserDto userToUserDto(User user);
 
     @Named("roleToRoleDtoList")
@@ -90,14 +91,16 @@ public interface UserMapper {
                 .collect(Collectors.toSet());
     }
 
-    default List<FileForProfileDTO> mapFileForProfiles(List<FileForProfile> fileForProfiles) {
-        return fileForProfiles.stream()
-                .map(file -> new FileForProfileDTO(file.getName(), file.getFileDownloadUri()))
-                .collect(Collectors.toList());
-    }
+//    default List<FileForProfileDTO> mapFileForProfiles(List<FileForProfile> fileForProfiles) {
+//        return fileForProfiles.stream()
+//                .map(file -> new FileForProfileDTO(file.getName(), file.getFileDownloadUri()))
+//                .collect(Collectors.toList());
+//    }
 
-     default String extractFilePath(FileForProfile fileForProfile) {
-        return fileForProfile.getFileDownloadUri();
+    default String extractFilePath(FileForProfile fileForProfile) {
+        if (fileForProfile != null) {
+            return fileForProfile.getFileDownloadUri() + " " + fileForProfile.getName();
+        }
+        return null;
     }
-
 }

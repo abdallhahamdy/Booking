@@ -17,6 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 public class UserDto {
     private Long id;
+    private Boolean ban;
     private String imagePaths;
     private String username;
     private String email;
