@@ -4,6 +4,7 @@ import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.Favorite.UserFavoriteUnit;
 import com.AlTaraf.Booking.Entity.File.FileForProfile;
 import com.AlTaraf.Booking.Entity.Role.Role;
+import com.AlTaraf.Booking.Entity.Wallet.Wallet;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.common.Auditable;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -101,6 +102,10 @@ public class User extends Auditable<String> {
 
     @Column(name = "IS_CLIENT_FLAG")
     private Boolean isClientFlag;
+
+    @OneToMany(mappedBy = "user")
+    @JsonManagedReference
+    private List<Wallet> wallets;
 
     public Double getWallet() {
         return wallet != null ? wallet : 0.0;
