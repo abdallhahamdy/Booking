@@ -17,8 +17,8 @@ public class UnitRequestDto {
     private String description;
     private Long cityId;
     private Long regionId;
-    private Long accommodationTypeId;
 
+    private Long accommodationTypeId;
     private Long hotelClassificationId;
 
     private Set<Long> roomAvailableIds;
@@ -28,7 +28,7 @@ public class UnitRequestDto {
     private Set<Long> subFeaturesIds;
     private Set<Long> foodOptionsIds;
 
-    private int capacityHalls;
+    private Integer capacityHalls;
     private Set<Long> featuresHallsIds;
     private Set<Long> availablePeriodsHallsIds;
     private Integer oldPriceHall;
@@ -40,8 +40,8 @@ public class UnitRequestDto {
     private Integer ChaletNewPrice;
     private Integer ChaletOldPrice;
 
-    private Integer resortOldPrice;
-    private Integer resortNewPrice;
+//    private Integer resortOldPrice;
+//    private Integer resortNewPrice;
 
     private Integer adultsAllowed;
     private Integer childrenAllowed;
