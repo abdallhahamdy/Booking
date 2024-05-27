@@ -161,6 +161,11 @@ public class UserController {
                         .body(new ApiResponse(400, messageSource.getMessage("role_is_not_correct.message", null, LocaleContextHolder.getLocale())));
             }
 
+            if (userForDeviceToken.getBan()) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ApiResponse(200, messageSource.getMessage("user_ban.message", null, LocaleContextHolder.getLocale())));
+            }
+
             List<String> roles = userDetails.getAuthorities().stream()
                     .map(item -> item.getAuthority())
                     .collect(Collectors.toList());
