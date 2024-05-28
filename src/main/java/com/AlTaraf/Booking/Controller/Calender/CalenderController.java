@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -53,7 +54,8 @@ public class CalenderController {
     private MessageSource messageSource;
 
     @PostMapping("/reserve-date-halls")
-    public ResponseEntity<?> createReserveDateForHalls(@RequestBody ReserveDateHallsDto reserveDateHallsDto) {
+    public ResponseEntity<?> createReserveDateForHalls(@RequestBody ReserveDateHallsDto reserveDateHallsDto,
+                                                       @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         try {
             ReserveDateHalls reserveDateHalls = ReserveDateHallsMapper.INSTANCE.toEntity(reserveDateHallsDto);
             ReserveDateHalls savedReserveDate = reserveDateHallsRepository.save(reserveDateHalls);
@@ -65,7 +67,8 @@ public class CalenderController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createReserveDate(@RequestBody ReserveDateDto reserveDateRequest) {
+    public ResponseEntity<?> createReserveDate(@RequestBody ReserveDateDto reserveDateRequest,
+                                               @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         try {
             // Fetch or create the roomDetailsForAvailableArea entity
             RoomDetailsForAvailableArea roomDetails = null;
@@ -100,7 +103,9 @@ public class CalenderController {
     }
 
     @GetMapping("/{roomDetailsForAvailableAreaId}/{unitId}")
-    public ResponseEntity<?> getReserveDatesByRoomDetailsForAvailableAreaIdAndUnitId(@PathVariable Long roomDetailsForAvailableAreaId, @PathVariable Long unitId) {
+    public ResponseEntity<?> getReserveDatesByRoomDetailsForAvailableAreaIdAndUnitId(@PathVariable Long roomDetailsForAvailableAreaId,
+                                                                                     @PathVariable Long unitId,
+                                                                                     @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
 
         try {
 
@@ -123,7 +128,9 @@ public class CalenderController {
     }
 
     @GetMapping("/For-Add-Unit/{roomDetailsForAvailableAreaId}/{unitId}")
-    public ResponseEntity<?> getReserveDatesByRoomDetailsForAvailableAreaIdAndUnitIdForUnit(@PathVariable Long roomDetailsForAvailableAreaId, @PathVariable Long unitId) {
+    public ResponseEntity<?> getReserveDatesByRoomDetailsForAvailableAreaIdAndUnitIdForUnit(@PathVariable Long roomDetailsForAvailableAreaId,
+                                                                                            @PathVariable Long unitId,
+                                                                                            @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
 
         try {
 
@@ -140,7 +147,8 @@ public class CalenderController {
     }
 
     @GetMapping("/get-reserve-date-halls/{unitId}")
-    public ResponseEntity<?> getReserveDateHallsByUnitId(@PathVariable Long unitId) {
+    public ResponseEntity<?> getReserveDateHallsByUnitId(@PathVariable Long unitId,
+                                                         @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         try {
             List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitIdAndReserveIsTrue(unitId);
             List<ReserveDateHallsDto> reserveDateHallsDtoList = reserveDateHallsList.stream()
@@ -153,7 +161,8 @@ public class CalenderController {
     }
 
     @GetMapping("/For-Add-Unit/get-reserve-date-halls/{unitId}")
-    public ResponseEntity<?> getReserveDateHallsByUnitIdForUnit(@PathVariable Long unitId) {
+    public ResponseEntity<?> getReserveDateHallsByUnitIdForUnit(@PathVariable Long unitId,
+                                                                @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         try {
             List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitIdAndReserve(unitId);
             List<ReserveDateHallsDto> reserveDateHallsDtoList = reserveDateHallsList.stream()
