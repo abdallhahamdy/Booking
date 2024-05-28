@@ -76,7 +76,7 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/Send-OTP")
-    public ResponseEntity<?> sendOTP() {
+    public ResponseEntity<?> sendOTP(@RequestHeader(name = "Accept-Language", required = false) Locale locale) {
 
         // Generate and send OTP (you need to implement this logic)
         String otp = userService.generateOtpForUser();
@@ -93,7 +93,8 @@ public class UserController {
     @GetMapping("/check-availability")
     public ResponseEntity<?> checkAvailability(@RequestParam(value = "email", required = false) String email,
                                                @RequestParam(value = "phone") String phone,
-                                               @RequestParam(value = "roleName") ERole roleName) {
+                                               @RequestParam(value = "roleName") ERole roleName,
+                                               @RequestHeader(name = "Accept-Language", required = false) Locale locale){
 
         boolean existsByEmailAndRolesOrPhoneNumberAndRoles = userService.existsByEmailAndRolesOrPhoneNumberAndRoles(email, phone, roleName);
 
@@ -109,7 +110,8 @@ public class UserController {
     }
 
     @PostMapping("/Register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDto userRegisterDto) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDto userRegisterDto,
+                                          @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
 
         // Perform user registration
         userService.registerUser(userRegisterDto);
@@ -121,7 +123,8 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest,
+                                   @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
 
             // Check if the phone number exists in the database
             if (!userService.existsByPhone(loginRequest.getPhone())) {
@@ -184,7 +187,8 @@ public class UserController {
     @PutMapping("/forget-password/{phone}")
     public ResponseEntity<?> resetPassword(
             @PathVariable String phone,
-            @RequestBody PasswordResetDto passwordResetDto) {
+            @RequestBody PasswordResetDto passwordResetDto,
+            @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
 
         // Perform password reset
         try {
@@ -198,7 +202,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+    public ResponseEntity<?> getUserById(@PathVariable Long id,
+                                         @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         User user = userService.getUserById(id);
 
         if (user != null) {
@@ -212,7 +217,9 @@ public class UserController {
 
 
     @PatchMapping("/edit/{userId}")
-    public ResponseEntity<?> editUser(@PathVariable Long userId, @Valid @RequestBody UserEditDto userEditDto) {
+    public ResponseEntity<?> editUser(@PathVariable Long userId,
+                                      @Valid @RequestBody UserEditDto userEditDto,
+                                      @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         try {
             // Retrieve the user by ID
             User existingUser = userService.getUserById(userId);
@@ -274,7 +281,9 @@ public class UserController {
     }
 
     @GetMapping("/checkPhoneNull")
-    public ResponseEntity<?> checkUserPhoneNullByEmail(@RequestParam String email, @RequestParam String deviceToken) {
+    public ResponseEntity<?> checkUserPhoneNullByEmail(@RequestParam String email,
+                                                       @RequestParam String deviceToken,
+                                                       @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         User user = userRepository.findByEmail(email);
 
 
@@ -323,7 +332,8 @@ public class UserController {
             @RequestParam String email,
             @RequestParam String phone,
             @RequestParam Long cityId,
-            @RequestParam ERole role) {
+            @RequestParam ERole role,
+            @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
 
         City city = cityRepository.findById(cityId)
                 .orElseThrow(() -> new IllegalArgumentException("City not found with id: " + cityId));
