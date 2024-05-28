@@ -10,10 +10,12 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/api/Evaluation")
@@ -26,7 +28,7 @@ public class EvaluationController {
     MessageSource messageSource;
 
     @GetMapping()
-    public ResponseEntity<?> getAllEvaluation() {
+    public ResponseEntity<?> getAllEvaluation(@RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         List<Evaluation> evaluationList = evaluationService.getAllEvaluation();
         if (!evaluationList.isEmpty()) {
             return new ResponseEntity<>(evaluationList, HttpStatus.OK);
