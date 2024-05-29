@@ -6,6 +6,7 @@ import com.AlTaraf.Booking.Entity.Transactions.TotalTransactions;
 import com.AlTaraf.Booking.Entity.Transactions.Transactions;
 import com.AlTaraf.Booking.Entity.Transactions.TransactionsDetail;
 import com.AlTaraf.Booking.Entity.User.User;
+import com.AlTaraf.Booking.Entity.Wallet.Wallet;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
@@ -20,6 +21,7 @@ import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepositor
 import com.AlTaraf.Booking.Repository.Transactions.TotalTransactionsRepository;
 import com.AlTaraf.Booking.Repository.Transactions.TransactionsDetailRepository;
 import com.AlTaraf.Booking.Repository.Transactions.TransactionsRepository;
+import com.AlTaraf.Booking.Repository.Wallet.WalletRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
@@ -69,6 +71,9 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Autowired
     TransactionsDetailRepository transactionsDetailRepository;
+
+    @Autowired
+    WalletRepository walletRepository;
 
 //    @Autowired
 //    TotalTransactionsDto totalTransactionsDto;
@@ -202,6 +207,9 @@ public class ReservationServiceImpl implements ReservationService {
             transactionsDetail.setUser(user);
 
             transactionsDetailRepository.save(transactionsDetail);
+
+            Wallet wallet = new Wallet("تم حجز وحدة", "A unit has been reserved", reservations.getCommision() ,user, reservations.getUnit().getNameUnit(), "", "", false);
+            walletRepository.save(wallet);
         }
         userRepository.save(user);
 
