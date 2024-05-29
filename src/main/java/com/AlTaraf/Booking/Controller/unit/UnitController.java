@@ -3,6 +3,7 @@ package com.AlTaraf.Booking.Controller.unit;
 import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequest;
 import com.AlTaraf.Booking.Dto.Unit.UnitDto;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
+import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
@@ -64,6 +65,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -437,7 +439,7 @@ public class UnitController {
             System.out.println("Error occurred while processing get-units-by-evaluation request: " + e);
             System.out.println("Error Message : " + e);
 //            ApiResponse response = new ApiResponse(500, "Internal Server Error");
-            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
+            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()) + " " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
@@ -574,6 +576,46 @@ public class UnitController {
         }
     }
 
+
+    @PostMapping("update/{unitId}/{roomAvailableId}/Room-Details/Add")
+    @Transactional(rollbackOn = Exception.class) // Add this annotation to enable transaction management
+    public ResponseEntity<?> updateAddRoomDetails(@PathVariable Long unitId, @PathVariable Long roomAvailableId, @RequestBody RoomDetailsRequestDto roomDetailsRequestDto) {
+        try {
+            // Check if RoomDetails already exists for the given unitId and roomAvailableId
+            boolean roomDetailsExists = roomDetailsRepository.existsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
+            if (roomDetailsExists) {
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"RoomDetails already exists for unitId: " + unitId + " and roomAvailableId: " + roomAvailableId));
+
+                RoomDetails roomDetailsDeleted = roomDetailsRepository.findRoomDetailsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
+                roomDetailsRepository.delete(roomDetailsDeleted);
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,messageSource.getMessage("room_details_already_exists.message", null, LocaleContextHolder.getLocale()) + " " + unitId + "  " + roomAvailableId));
+            }
+
+            List<ReserveDate> reserveDateList = reserveDateRepository.findByUnitId(unitId);
+
+            for (ReserveDate reserveDate : reserveDateList) {
+                reserveDateRepository.deleteDateInfoByReserveDateId(reserveDate.getId());
+            }
+
+            reserveDateRepository.deleteByUnitId(unitId);
+            roomDetailsForAvailableAreaRepository.deleteByUnitId(unitId);
+
+            RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsRequestDto);
+            roomDetailsService.addRoomDetails(unitId, roomAvailableId, roomDetails);
+//            return ResponseEntity.ok("RoomDetails added successfully " + roomDetails.getId());
+            return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetails.getId());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            System.out.println("error: " + e );
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetails: " + e.getMessage());
+            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()) + " " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+
     @PostMapping("{unitId}/{availableAreaId}/Room-Details-For-Available-Area/Add")
     @Transactional // Add this annotation to enable transaction management
     public ResponseEntity<?> addRoomDetailsForAvailableArea(@PathVariable Long unitId, @PathVariable Long availableAreaId, @RequestBody RoomDetailsRequestDto roomDetailsRequestDto) {
@@ -592,6 +634,32 @@ public class UnitController {
         } catch (Exception e) {
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetailsForAvailableArea: " + e.getMessage());
             ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @PostMapping("update/{unitId}/{availableAreaId}/Room-Details-For-Available-Area/Add")
+    @Transactional // Add this annotation to enable transaction management
+    public ResponseEntity<?> updateAddRoomDetailsForAvailableArea(@PathVariable Long unitId, @PathVariable Long availableAreaId, @RequestBody RoomDetailsRequestDto roomDetailsRequestDto) {
+        try {
+            // Check if RoomDetailsForAvailableArea already exists for the given unitId and availableAreaId
+            boolean roomDetailsExists = roomDetailsForAvailableAreaRepository.existsByUnitIdAndAvailableAreaId(unitId, availableAreaId);
+            if (roomDetailsExists) {
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"RoomDetailsForAvailableArea already exists for unitId: " + unitId + " and availableAreaId: " + availableAreaId));
+                RoomDetailsForAvailableArea RoomDetailsForAvailableAreaDeleted = roomDetailsForAvailableAreaRepository.findByUnitIdAndAvailableAreaId(unitId, availableAreaId);
+                roomDetailsForAvailableAreaRepository.delete(RoomDetailsForAvailableAreaDeleted);
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,messageSource.getMessage("room_details_already_exists.message", null, LocaleContextHolder.getLocale()) + " " + unitId + "  " + availableAreaId));
+            }
+
+            roomDetailsRepository.deleteByUnitId(unitId);
+            RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsRequestMapper.toEntityAvailableArea(roomDetailsRequestDto);
+            roomDetailsForAvailableAreaService.addRoomDetails(unitId, availableAreaId, roomDetailsForAvailableArea);
+//            return ResponseEntity.ok("RoomDetailsForAvailableArea added successfully " + roomDetailsForAvailableArea.getId());
+            return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetailsForAvailableArea.getId());
+        } catch (Exception e) {
+            System.out.println("Eror: " + e);
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetailsForAvailableArea: " + e.getMessage());
+            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()) + " " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
@@ -907,7 +975,8 @@ public class UnitController {
         } catch (Exception e) {
 
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update reservation status : " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(messageSource.getMessage("failed_updated_status_reservation.message", null, LocaleContextHolder.getLocale()) + " " + e.getMessage());
+            System.out.println("error message: " + e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(messageSource.getMessage("failed_updated_status_reservation.message", null, LocaleContextHolder.getLocale()));
         }
     }
 
