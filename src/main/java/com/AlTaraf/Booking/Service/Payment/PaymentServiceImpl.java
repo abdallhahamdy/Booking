@@ -4,8 +4,10 @@ import com.AlTaraf.Booking.Dto.TransactionResponseDTO;
 import com.AlTaraf.Booking.Entity.Transactions.Transactions;
 import com.AlTaraf.Booking.Entity.Transactions.TransactionsDetail;
 import com.AlTaraf.Booking.Entity.User.User;
+import com.AlTaraf.Booking.Entity.Wallet.Wallet;
 import com.AlTaraf.Booking.Repository.Transactions.TransactionsDetailRepository;
 import com.AlTaraf.Booking.Repository.Transactions.TransactionsRepository;
+import com.AlTaraf.Booking.Repository.Wallet.WalletRepository;
 import com.AlTaraf.Booking.Repository.payment.PayemntRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import com.AlTaraf.Booking.Entity.Payment;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
@@ -23,7 +24,6 @@ import org.springframework.web.client.RestTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -36,6 +36,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     TransactionsDetailRepository transactionsDetailRepository;
+
+    @Autowired
+    WalletRepository walletRepository;
 
     @Override
     public ResponseEntity<?> sendTransactionRequest(Long userId, String customRef, String apiShopToken, UserRepository userRepository, String apiShopTransaction) {
@@ -101,6 +104,9 @@ public class PaymentServiceImpl implements PaymentService {
                 paymentEntityToActive.setIsActive(true);
 
                 payemntRepository.save(paymentEntityToActive);
+
+                Wallet wallet = new Wallet("شحن رصيد", "Charge Account", amount ,user, "" , "", paymentEntityToActive.getCustom_ref(), true);
+                walletRepository.save(wallet);
 
                 System.out.println("payment: " + paymentEntityToActive.getCustom_ref() + " Payment Active: " + paymentEntityToActive.getIsActive());
 
