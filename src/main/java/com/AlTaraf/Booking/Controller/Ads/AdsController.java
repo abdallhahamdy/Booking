@@ -40,7 +40,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @RestController
@@ -90,7 +90,7 @@ public class AdsController {
     WalletRepository walletRepository;
 
     @GetMapping("/package-ads")
-    public ResponseEntity<?> getAllPackageAds() {
+    public ResponseEntity<?> getAllPackageAds(@RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         try {
             List<PackageAds> allPackageAds = adsService.getAllPackageAds();
             return new ResponseEntity<>(allPackageAds, HttpStatus.OK);
@@ -104,7 +104,8 @@ public class AdsController {
     @GetMapping("units/by-user-id/{userId}")
     public ResponseEntity<?> getUnitsByUserId(@PathVariable Long userId,
                                               @RequestParam(defaultValue = "0") int page,
-                                              @RequestParam(defaultValue = "10") int size) {
+                                              @RequestParam(defaultValue = "10") int size,
+                                              @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         Page<Unit> unitsPage = unitService.getUnitsByUserId(userId, PageRequest.of(page, size));
 
         if (unitsPage.isEmpty()) {
@@ -118,7 +119,8 @@ public class AdsController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createAds(@RequestBody AdsRequestDto adsRequestDto) throws IOException, InterruptedException {
+    public ResponseEntity<?> createAds(@RequestBody AdsRequestDto adsRequestDto,
+                                       @RequestHeader(name = "Accept-Language", required = false) Locale locale) throws IOException, InterruptedException {
             User user = userRepository.findByUserId(adsRequestDto.getUserId());
             PackageAds packageAds = packageAdsRepository.findById(0L).orElse(null);
 
@@ -164,7 +166,8 @@ public class AdsController {
             @RequestParam(name = "userId") Long userId,
             @RequestParam(name = "statusUnitId") Long statusUnitId,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
 
@@ -181,7 +184,8 @@ public class AdsController {
     }
 
     @DeleteMapping("delete/ads/{id}")
-    public ResponseEntity<?> deleteAds(@PathVariable Long id) {
+    public ResponseEntity<?> deleteAds(@PathVariable Long id,
+                                       @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
 
         Ads ads = adsRepository.findById(id).orElse(null);
 
@@ -199,7 +203,7 @@ public class AdsController {
 
 
     @GetMapping("/accepted/status")
-    public ResponseEntity<?> getAdsByAcceptedStatus() {
+    public ResponseEntity<?> getAdsByAcceptedStatus(@RequestHeader(name = "Accept-Language", required = false) Locale locale) {
         try {
             List<adsForSliderResponseDto> ads = adsService.getAdsByAcceptedStatus();
             return ResponseEntity.ok(ads);
@@ -223,7 +227,9 @@ public class AdsController {
 //    }
 
     @PostMapping("/{userId}/package-ads/{packageAdsId}")
-    public ResponseEntity<?> setPackageAdsForUser(@PathVariable Long userId, @PathVariable Long packageAdsId) throws InsufficientFundsException {
+    public ResponseEntity<?> setPackageAdsForUser(@PathVariable Long userId,
+                                                  @PathVariable Long packageAdsId,
+                                                  @RequestHeader(name = "Accept-Language", required = false) Locale locale) throws InsufficientFundsException {
 
 
             User user = userRepository.findByUserId(userId);
@@ -240,7 +246,7 @@ public class AdsController {
 
              user = userService.setPackageAdsForUser(userId, packageAdsId);
 
-        Wallet wallet = new Wallet("اشتراك في باقة اعلان", "Subscribe Package Ads", packageAds.getPrice(),user);
+        Wallet wallet = new Wallet("اشتراك في باقة اعلان", "Subscribe Package Ads", packageAds.getPrice(),user, "", packageAds.getArabicName(), "", false);
         walletRepository.save(wallet);
 
             return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200,messageSource.getMessage("successful_package_ads.message", null, LocaleContextHolder.getLocale()) + " " + user.getWallet()));
