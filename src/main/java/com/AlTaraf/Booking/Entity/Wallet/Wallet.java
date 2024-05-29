@@ -36,10 +36,33 @@ public class Wallet extends Auditable<String> {
     @Column(name = "VALUE")
     private Double value;
 
-    public Wallet(String processName, String processEnglishName, Double value ,User user) {
+    @Column(name = "NAME_UNIT")
+    private String nameUnit;
+
+    @Column(name = "PACKAGE_NAME")
+    private String packageName;
+
+    @Column(name = "PAYMENT_GATE")
+    private String paymentGate;
+
+    @Column(name = "FLAG")
+    private Boolean flag;
+
+    public Wallet(String processName,
+                  String processEnglishName,
+                  Double value ,
+                  User user,
+                  String nameUnit,
+                  String packageName,
+                  String paymentGate,
+                  Boolean flag) {
         this.processName = processName;
         this.processEnglishName = processEnglishName;
         this.value = value;
         this.user = user;
+        this.nameUnit = nameUnit;
+        this.packageName = packageName;
+        this.paymentGate = paymentGate;
+        this.flag = flag;
     }
 }
