@@ -30,6 +30,7 @@ import com.AlTaraf.Booking.Repository.Transactions.TotalTransactionsRepository;
 import com.AlTaraf.Booking.Repository.Transactions.TransactionsDetailRepository;
 import com.AlTaraf.Booking.Repository.Transactions.TransactionsRepository;
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
+import com.AlTaraf.Booking.Repository.Wallet.WalletRepository;
 import com.AlTaraf.Booking.Repository.payment.PayemntRepository;
 import com.AlTaraf.Booking.Repository.role.RoleRepository;
 import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportRepository;
@@ -139,6 +140,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     PayemntRepository payemntRepository;
 
+    @Autowired
+    WalletRepository walletRepository;
 
     public String generateOtpForUser() {
         // For simplicity, let's assume a random 4-digit OTP
@@ -316,6 +319,7 @@ public class UserServiceImpl implements UserService {
             transactionsDetailRepository.deleteByUserId(userId);
             userFavoriteUnitRepository.deleteByUser(user);
             notificationRepository.deleteByUserId(userId);
+            walletRepository.deleteByUserId(userId);
 
             // Delete the units after deleting associated entities
             List<Unit> unitList = unitRepository.findByUser(user);
