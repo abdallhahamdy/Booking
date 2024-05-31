@@ -12,8 +12,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class RoomDetailsRequestDto {
     private int roomNumber;
-    private BigDecimal newPrice;
-    private BigDecimal oldPrice;
+    private Double newPrice;
+    private Double oldPrice;
     private int adultsAllowed;
     private int childrenAllowed;
 }
