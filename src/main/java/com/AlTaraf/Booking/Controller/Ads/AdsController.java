@@ -90,7 +90,22 @@ public class AdsController {
     WalletRepository walletRepository;
 
     @GetMapping("/package-ads")
-    public ResponseEntity<?> getAllPackageAds(@RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+    public ResponseEntity<?> getAllPackageAds(@RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
+
+        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+            try {
+                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                if (!languageRanges.isEmpty()) {
+                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                }
+            } catch (IllegalArgumentException e) {
+                // Handle the exception if needed
+                System.out.println("IllegalArgumentException: " + e);
+            }
+        }
+
         try {
             List<PackageAds> allPackageAds = adsService.getAllPackageAds();
             return new ResponseEntity<>(allPackageAds, HttpStatus.OK);
@@ -105,7 +120,23 @@ public class AdsController {
     public ResponseEntity<?> getUnitsByUserId(@PathVariable Long userId,
                                               @RequestParam(defaultValue = "0") int page,
                                               @RequestParam(defaultValue = "10") int size,
-                                              @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                              @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
+
+
+        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+            try {
+                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                if (!languageRanges.isEmpty()) {
+                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                }
+            } catch (IllegalArgumentException e) {
+                // Handle the exception if needed
+                System.out.println("IllegalArgumentException: " + e);
+            }
+        }
+
         Page<Unit> unitsPage = unitService.getUnitsByUserId(userId, PageRequest.of(page, size));
 
         if (unitsPage.isEmpty()) {
@@ -120,7 +151,23 @@ public class AdsController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createAds(@RequestBody AdsRequestDto adsRequestDto,
-                                       @RequestHeader(name = "Accept-Language", required = false) Locale locale) throws IOException, InterruptedException {
+                                       @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) throws IOException, InterruptedException {
+
+
+            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+            if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+                try {
+                    List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                    if (!languageRanges.isEmpty()) {
+                        locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Handle the exception if needed
+                    System.out.println("IllegalArgumentException: " + e);
+                }
+            }
+
             User user = userRepository.findByUserId(adsRequestDto.getUserId());
             PackageAds packageAds = packageAdsRepository.findById(0L).orElse(null);
 
@@ -167,7 +214,23 @@ public class AdsController {
             @RequestParam(name = "statusUnitId") Long statusUnitId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+            @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
+
+
+        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+            try {
+                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                if (!languageRanges.isEmpty()) {
+                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                }
+            } catch (IllegalArgumentException e) {
+                // Handle the exception if needed
+                System.out.println("IllegalArgumentException: " + e);
+            }
+        }
+
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
 
 
@@ -185,7 +248,22 @@ public class AdsController {
 
     @DeleteMapping("delete/ads/{id}")
     public ResponseEntity<?> deleteAds(@PathVariable Long id,
-                                       @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                       @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
+
+
+        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+            try {
+                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                if (!languageRanges.isEmpty()) {
+                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                }
+            } catch (IllegalArgumentException e) {
+                // Handle the exception if needed
+                System.out.println("IllegalArgumentException: " + e);
+            }
+        }
 
         Ads ads = adsRepository.findById(id).orElse(null);
 
@@ -203,8 +281,23 @@ public class AdsController {
 
 
     @GetMapping("/accepted/status")
-    public ResponseEntity<?> getAdsByAcceptedStatus(@RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+    public ResponseEntity<?> getAdsByAcceptedStatus(@RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
+
+            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+            if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+                try {
+                    List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                    if (!languageRanges.isEmpty()) {
+                        locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Handle the exception if needed
+                    System.out.println("IllegalArgumentException: " + e);
+                }
+            }
+
             List<adsForSliderResponseDto> ads = adsService.getAdsByAcceptedStatus();
             return ResponseEntity.ok(ads);
         } catch (Exception e) {
@@ -229,8 +322,22 @@ public class AdsController {
     @PostMapping("/{userId}/package-ads/{packageAdsId}")
     public ResponseEntity<?> setPackageAdsForUser(@PathVariable Long userId,
                                                   @PathVariable Long packageAdsId,
-                                                  @RequestHeader(name = "Accept-Language", required = false) Locale locale) throws InsufficientFundsException {
+                                                  @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) throws InsufficientFundsException {
 
+
+            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+            if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+                try {
+                    List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                    if (!languageRanges.isEmpty()) {
+                        locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Handle the exception if needed
+                    System.out.println("IllegalArgumentException: " + e);
+                }
+            }
 
             User user = userRepository.findByUserId(userId);
 

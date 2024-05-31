@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/api/roles")
@@ -26,7 +27,23 @@ public class RoleController {
 
     // Get a role by ID
     @GetMapping("/{id}")
-    public ResponseEntity<?> getRoleById(@PathVariable Long id) {
+    public ResponseEntity<?> getRoleById(@PathVariable Long id,
+                                         @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
+
+        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+            try {
+                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                if (!languageRanges.isEmpty()) {
+                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                }
+            } catch (IllegalArgumentException e) {
+                // Handle the exception if needed
+                System.out.println("IllegalArgumentException: " + e);
+            }
+        }
+
         Role role = roleService.getRoleById(id);
         if (role != null) {
             RoleDto roleDto = RoleMapper.INSTANCE.roleToRoleDto(role);
@@ -39,7 +56,22 @@ public class RoleController {
 
     // Get all roles
     @GetMapping("/all")
-    public ResponseEntity<?> getAllRoles() {
+    public ResponseEntity<?> getAllRoles(@RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
+
+        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+            try {
+                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                if (!languageRanges.isEmpty()) {
+                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                }
+            } catch (IllegalArgumentException e) {
+                // Handle the exception if needed
+                System.out.println("IllegalArgumentException: " + e);
+            }
+        }
+
         List<Role> roles = roleService.getAllRoles();
         if (!roles.isEmpty()) {
             List<RoleDto> roleDtos = RoleMapper.INSTANCE.rolesToRoleDtos(roles);

@@ -28,7 +28,22 @@ public class EvaluationController {
     MessageSource messageSource;
 
     @GetMapping()
-    public ResponseEntity<?> getAllEvaluation(@RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+    public ResponseEntity<?> getAllEvaluation(@RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
+
+        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+            try {
+                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                if (!languageRanges.isEmpty()) {
+                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                }
+            } catch (IllegalArgumentException e) {
+                // Handle the exception if needed
+                System.out.println("IllegalArgumentException: " + e);
+            }
+        }
+
         List<Evaluation> evaluationList = evaluationService.getAllEvaluation();
         if (!evaluationList.isEmpty()) {
             return new ResponseEntity<>(evaluationList, HttpStatus.OK);

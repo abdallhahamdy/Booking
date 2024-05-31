@@ -20,6 +20,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Locale;
+
 @RestController
 @RequestMapping("/api")
 public class favoriteController {
@@ -45,8 +48,25 @@ public class favoriteController {
 
 
     @PostMapping("/user/{userId}/favoriteUnit/{unitId}")
-    public ResponseEntity<?> addFavoriteUnit(@PathVariable Long userId, @PathVariable Long unitId) {
+    public ResponseEntity<?> addFavoriteUnit(@PathVariable Long userId,
+                                             @PathVariable Long unitId,
+                                             @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
+
+            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+            if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+                try {
+                    List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                    if (!languageRanges.isEmpty()) {
+                        locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Handle the exception if needed
+                    System.out.println("IllegalArgumentException: " + e);
+                }
+            }
+
             // Retrieve user and unit from the database
             User user = userRepository.findById(userId).orElse(null);
             Unit unit = unitRepository.findById(unitId).orElse(null);
@@ -65,10 +85,8 @@ public class favoriteController {
             // Save the favorite unit for the user
             userFavoriteUnitService.saveUserFavoriteUnit(user, unit);
 
-//            return ResponseEntity.ok(new ApiResponse(201, "Added_Favorite_List.message"));
             return ResponseEntity.ok(new ApiResponse(201, messageSource.getMessage("added_Favorite_List.message", null, LocaleContextHolder.getLocale())));
         } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400, "Failed_Added_Favorite_List.message"));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400, messageSource.getMessage("failed_Added_Favorite_List.message", null, LocaleContextHolder.getLocale())));
         }
     }
@@ -85,13 +103,28 @@ public class favoriteController {
     }
 
     @DeleteMapping("/{userId}/{unitId}")
-    public ResponseEntity<?> deleteUserFavoriteUnit(@PathVariable Long userId, @PathVariable Long unitId) {
+    public ResponseEntity<?> deleteUserFavoriteUnit(@PathVariable Long userId,
+                                                    @PathVariable Long unitId,
+                                                    @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
+
+            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+            if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+                try {
+                    List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                    if (!languageRanges.isEmpty()) {
+                        locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Handle the exception if needed
+                    System.out.println("IllegalArgumentException: " + e);
+                }
+            }
+
             userFavoriteUnitService.deleteUserFavoriteUnit(userId, unitId);
-//            return ResponseEntity.ok().body(new ApiResponse(201, "Deleted_Favorite_List.message"));
             return ResponseEntity.ok().body(new ApiResponse(201, messageSource.getMessage("deleted_Favorite_List.message", null, LocaleContextHolder.getLocale())));
         } catch (EntityNotFoundException e) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, "not_found.message"));
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, messageSource.getMessage("not_found.message", null, LocaleContextHolder.getLocale())));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500,  messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale())));

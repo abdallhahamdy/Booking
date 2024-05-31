@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("api/get-All-Status-Unit")
@@ -27,14 +28,28 @@ public class StatusUnitController {
     UnitService unitService;
 
     @GetMapping
-    public ResponseEntity<?> getAllStatusUnit() {
+    public ResponseEntity<?> getAllStatusUnit(@RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
+
+        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+            try {
+                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                if (!languageRanges.isEmpty()) {
+                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                }
+            } catch (IllegalArgumentException e) {
+                // Handle the exception if needed
+                System.out.println("IllegalArgumentException: " + e);
+            }
+        }
+
         List<StatusUnit> statusUnitList = statusUnitService.getAllStatusUnit();
 
         if (!statusUnitList.isEmpty()) {
             return new ResponseEntity<>(statusUnitList, HttpStatus.OK);
         } else {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
