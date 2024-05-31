@@ -80,7 +80,7 @@ public class User extends Auditable<String> {
     private Double longForMapping;
 
     @Column(name = "BAN")
-    private Boolean ban;
+    private Boolean ban = false;
 
     @Column(name = "DEVICE_TOKEN")
     private String deviceToken;
