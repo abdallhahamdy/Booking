@@ -76,7 +76,21 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/Send-OTP")
-    public ResponseEntity<?> sendOTP(@RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+    public ResponseEntity<?> sendOTP(@RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
+
+        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+            try {
+                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                if (!languageRanges.isEmpty()) {
+                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                }
+            } catch (IllegalArgumentException e) {
+                // Handle the exception if needed
+                System.out.println("IllegalArgumentException: " + e);
+            }
+        }
 
         // Generate and send OTP (you need to implement this logic)
         String otp = userService.generateOtpForUser();
@@ -94,7 +108,22 @@ public class UserController {
     public ResponseEntity<?> checkAvailability(@RequestParam(value = "email", required = false) String email,
                                                @RequestParam(value = "phone") String phone,
                                                @RequestParam(value = "roleName") ERole roleName,
-                                               @RequestHeader(name = "Accept-Language", required = false) Locale locale){
+                                               @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader){
+
+        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+            try {
+                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                if (!languageRanges.isEmpty()) {
+                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                }
+            } catch (IllegalArgumentException e) {
+                // Handle the exception if needed
+                System.out.println("IllegalArgumentException: " + e);
+            }
+        }
+
 
         boolean existsByEmailAndRolesOrPhoneNumberAndRoles = userService.existsByEmailAndRolesOrPhoneNumberAndRoles(email, phone, roleName);
 
@@ -111,7 +140,21 @@ public class UserController {
 
     @PostMapping("/Register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDto userRegisterDto,
-                                          @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                          @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
+
+        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+            try {
+                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                if (!languageRanges.isEmpty()) {
+                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                }
+            } catch (IllegalArgumentException e) {
+                // Handle the exception if needed
+                System.out.println("IllegalArgumentException: " + e);
+            }
+        }
 
         // Perform user registration
         userService.registerUser(userRegisterDto);
@@ -124,9 +167,23 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest,
-                                   @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                   @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
-            // Check if the phone number exists in the database
+        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+            try {
+                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                if (!languageRanges.isEmpty()) {
+                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                }
+            } catch (IllegalArgumentException e) {
+                // Handle the exception if needed
+                System.out.println("IllegalArgumentException: " + e);
+            }
+        }
+
+        // Check if the phone number exists in the database
             if (!userService.existsByPhone(loginRequest.getPhone())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400, messageSource.getMessage("duplicate_phone.message", null, LocaleContextHolder.getLocale())));
             }
@@ -188,10 +245,23 @@ public class UserController {
     public ResponseEntity<?> resetPassword(
             @PathVariable String phone,
             @RequestBody PasswordResetDto passwordResetDto,
-            @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+            @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
         // Perform password reset
         try {
+            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+            if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+                try {
+                    List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                    if (!languageRanges.isEmpty()) {
+                        locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Handle the exception if needed
+                    System.out.println("IllegalArgumentException: " + e);
+                }
+            }
             userService.resetPasswordByPhone(phone, passwordResetDto);
             return ResponseEntity.ok(new ApiResponse(200, messageSource.getMessage("password_reset.message", null, LocaleContextHolder.getLocale())));
         } catch (Exception e) {
@@ -203,7 +273,21 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id,
-                                         @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                         @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
+
+        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+            try {
+                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                if (!languageRanges.isEmpty()) {
+                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                }
+            } catch (IllegalArgumentException e) {
+                // Handle the exception if needed
+                System.out.println("IllegalArgumentException: " + e);
+            }
+        }
         User user = userService.getUserById(id);
 
         if (user != null) {
@@ -219,8 +303,22 @@ public class UserController {
     @PatchMapping("/edit/{userId}")
     public ResponseEntity<?> editUser(@PathVariable Long userId,
                                       @Valid @RequestBody UserEditDto userEditDto,
-                                      @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                      @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
+            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+            if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+                try {
+                    List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                    if (!languageRanges.isEmpty()) {
+                        locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Handle the exception if needed
+                    System.out.println("IllegalArgumentException: " + e);
+                }
+            }
+
             // Retrieve the user by ID
             User existingUser = userService.getUserById(userId);
             boolean isPhoneAvailable = userService.existsByPhone(userEditDto.getPhone());
@@ -283,7 +381,22 @@ public class UserController {
     @GetMapping("/checkPhoneNull")
     public ResponseEntity<?> checkUserPhoneNullByEmail(@RequestParam String email,
                                                        @RequestParam String deviceToken,
-                                                       @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                                       @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
+
+        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+            try {
+                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                if (!languageRanges.isEmpty()) {
+                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                }
+            } catch (IllegalArgumentException e) {
+                // Handle the exception if needed
+                System.out.println("IllegalArgumentException: " + e);
+            }
+        }
+
         User user = userRepository.findByEmail(email);
 
 
@@ -333,7 +446,21 @@ public class UserController {
             @RequestParam String phone,
             @RequestParam Long cityId,
             @RequestParam ERole role,
-            @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+            @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
+
+        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+            try {
+                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                if (!languageRanges.isEmpty()) {
+                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                }
+            } catch (IllegalArgumentException e) {
+                // Handle the exception if needed
+                System.out.println("IllegalArgumentException: " + e);
+            }
+        }
 
         City city = cityRepository.findById(cityId)
                 .orElseThrow(() -> new IllegalArgumentException("City not found with id: " + cityId));
