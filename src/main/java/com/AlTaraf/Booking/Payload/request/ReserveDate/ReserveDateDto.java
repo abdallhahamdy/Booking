@@ -14,6 +14,6 @@ public class ReserveDateDto {
     private List<DateInfoDto> dateInfoList;
     private Long roomDetailsForAvailableAreaId;
     private Long unitId;
-    private Long accommodationTypeId;
-    private Long unitTypeId;
+//    private Long accommodationTypeId;
+//    private Long unitTypeId;
 }
