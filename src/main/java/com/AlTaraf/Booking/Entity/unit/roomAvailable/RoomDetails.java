@@ -28,10 +28,10 @@ public class RoomDetails {
     private int roomNumber;
 
    @Column(name = "NEW_PRICE")
-   private int newPrice;
+   private Integer newPrice;
 
    @Column(name = "OLD_PRICE")
-   private int oldPrice;
+   private Integer oldPrice;
 
     @Column(name = "ADULTS_ALLOWED")
     private int adultsAllowed;
