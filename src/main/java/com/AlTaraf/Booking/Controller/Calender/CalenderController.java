@@ -55,8 +55,23 @@ public class CalenderController {
 
     @PostMapping("/reserve-date-halls")
     public ResponseEntity<?> createReserveDateForHalls(@RequestBody ReserveDateHallsDto reserveDateHallsDto,
-                                                       @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                                       @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
+
+            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+            if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+                try {
+                    List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                    if (!languageRanges.isEmpty()) {
+                        locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Handle the exception if needed
+                    System.out.println("IllegalArgumentException: " + e);
+                }
+            }
+
             ReserveDateHalls reserveDateHalls = ReserveDateHallsMapper.INSTANCE.toEntity(reserveDateHallsDto);
             ReserveDateHalls savedReserveDate = reserveDateHallsRepository.save(reserveDateHalls);
             return ResponseEntity.ok(new ApiResponse(201, messageSource.getMessage("reserve_date_success.message", null, LocaleContextHolder.getLocale())));
@@ -68,9 +83,23 @@ public class CalenderController {
 
     @PostMapping
     public ResponseEntity<?> createReserveDate(@RequestBody ReserveDateDto reserveDateRequest,
-                                               @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                               @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
             // Fetch or create the roomDetailsForAvailableArea entity
+            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+            if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+                try {
+                    List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                    if (!languageRanges.isEmpty()) {
+                        locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Handle the exception if needed
+                    System.out.println("IllegalArgumentException: " + e);
+                }
+            }
+
             RoomDetailsForAvailableArea roomDetails = null;
             if (reserveDateRequest.getRoomDetailsForAvailableAreaId() != null) {
                 Optional<RoomDetailsForAvailableArea> roomDetailsOptional = roomDetailsForAvailableAreaRepository.findById(reserveDateRequest.getRoomDetailsForAvailableAreaId());
@@ -105,9 +134,24 @@ public class CalenderController {
     @GetMapping("/{roomDetailsForAvailableAreaId}/{unitId}")
     public ResponseEntity<?> getReserveDatesByRoomDetailsForAvailableAreaIdAndUnitId(@PathVariable Long roomDetailsForAvailableAreaId,
                                                                                      @PathVariable Long unitId,
-                                                                                     @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                                                                     @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
         try {
+
+            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+            if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+                try {
+                    List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                    if (!languageRanges.isEmpty()) {
+                        locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Handle the exception if needed
+                    System.out.println("IllegalArgumentException: " + e);
+                }
+            }
+
 
             boolean roomNumberZeroExists = roomDetailsForAvailableAreaRepository.existsByRoomNumberZero();
 
@@ -130,9 +174,23 @@ public class CalenderController {
     @GetMapping("/For-Add-Unit/{roomDetailsForAvailableAreaId}/{unitId}")
     public ResponseEntity<?> getReserveDatesByRoomDetailsForAvailableAreaIdAndUnitIdForUnit(@PathVariable Long roomDetailsForAvailableAreaId,
                                                                                             @PathVariable Long unitId,
-                                                                                            @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                                                                            @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
         try {
+
+            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+            if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+                try {
+                    List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                    if (!languageRanges.isEmpty()) {
+                        locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Handle the exception if needed
+                    System.out.println("IllegalArgumentException: " + e);
+                }
+            }
 
         List<ReserveDate> reserveDates = reserveDateRepository.findByRoomDetailsForAvailableAreaIdAndUnitId(roomDetailsForAvailableAreaId, unitId);
         List<ReserveDateDto> reserveDateRequests = reserveDates.stream()
@@ -148,8 +206,23 @@ public class CalenderController {
 
     @GetMapping("/get-reserve-date-halls/{unitId}")
     public ResponseEntity<?> getReserveDateHallsByUnitId(@PathVariable Long unitId,
-                                                         @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                                         @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
+
+            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+            if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+                try {
+                    List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                    if (!languageRanges.isEmpty()) {
+                        locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Handle the exception if needed
+                    System.out.println("IllegalArgumentException: " + e);
+                }
+            }
+
             List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitIdAndReserveIsTrue(unitId);
             List<ReserveDateHallsDto> reserveDateHallsDtoList = reserveDateHallsList.stream()
                     .map(ReserveDateHallsMapper.INSTANCE::toDto)
@@ -162,8 +235,23 @@ public class CalenderController {
 
     @GetMapping("/For-Add-Unit/get-reserve-date-halls/{unitId}")
     public ResponseEntity<?> getReserveDateHallsByUnitIdForUnit(@PathVariable Long unitId,
-                                                                @RequestHeader(name = "Accept-Language", required = false) Locale locale) {
+                                                                @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
+
+            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+            if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
+                try {
+                    List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
+                    if (!languageRanges.isEmpty()) {
+                        locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
+                    }
+                } catch (IllegalArgumentException e) {
+                    // Handle the exception if needed
+                    System.out.println("IllegalArgumentException: " + e);
+                }
+            }
+
             List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitIdAndReserve(unitId);
             List<ReserveDateHallsDto> reserveDateHallsDtoList = reserveDateHallsList.stream()
                     .map(ReserveDateHallsMapper.INSTANCE::toDto)
