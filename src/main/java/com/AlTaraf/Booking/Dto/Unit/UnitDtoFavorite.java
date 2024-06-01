@@ -1,9 +1,7 @@
 package com.AlTaraf.Booking.Dto.Unit;
 
-import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -14,7 +12,7 @@ public class UnitDtoFavorite {
 
     private Long unitId;
     private Long unitTypeId;
-    private List<String> imagePaths; // List of image file paths
+    private String imagePath; // Single image file path
     private String nameUnit;
     private String cityName;
     private String regionName;
