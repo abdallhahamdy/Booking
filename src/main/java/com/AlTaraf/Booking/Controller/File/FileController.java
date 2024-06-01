@@ -58,19 +58,19 @@ public class FileController {
         String message = "";
 
         // Check if the number of files exceeds the limit
-        if (files.size() >= 2) {
-            message = messageSource.getMessage("error_upload_file.message", null, LocaleContextHolder.getLocale());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new FileResponseMessage(message));
-        }
+//        if (files.size() >= 2) {
+//            message = messageSource.getMessage("error_upload_file.message", null, LocaleContextHolder.getLocale());
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                    .body(new FileResponseMessage(message));
+//        }
 
         try {
             for (MultipartFile file : files) {
-                if (files.size() >= 2) {
-                    message = messageSource.getMessage("error_upload_file.message", null, LocaleContextHolder.getLocale());
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(new FileResponseMessage(message));
-                }
+//                if (files.size() >= 2) {
+//                    message = messageSource.getMessage("error_upload_file.message", null, LocaleContextHolder.getLocale());
+//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                            .body(new FileResponseMessage(message));
+//                }
                 storageService.storeForUnit(file, userId);
                 System.out.println("I'm here");
             }
