@@ -2,7 +2,6 @@ package com.AlTaraf.Booking.Mapper.Unit;
 
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.File.FileForUnit;
-import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,7 +16,7 @@ public interface UnitFavoriteMapper {
     @Mappings({
             @Mapping(source = "unit.id", target = "unitId"),
             @Mapping(source = "unitType.id", target = "unitTypeId"),
-            @Mapping(target = "imagePaths", expression = "java(extractFilePaths(unit.getFileForUnits()))"),
+            @Mapping(target = "imagePath", expression = "java(extractFirstFilePath(unit.getFileForUnits()))"),
             @Mapping(source = "unit.nameUnit", target = "nameUnit"),
             @Mapping(source = "unit.favorite", target = "favorite"),
             @Mapping(source = "unit.city.cityName", target = "cityName"),
@@ -37,10 +36,12 @@ public interface UnitFavoriteMapper {
 
     // Define a method to extract file paths from ImageData entities
 
-    default List<String> extractFilePaths(List<FileForUnit> fileForUnits) {
-        return fileForUnits.stream()
-                .map(FileForUnit::getFileDownloadUri)
-                .collect(Collectors.toList());
+    // Define a method to extract the first file path from FileForUnit entities
+    default String extractFirstFilePath(List<FileForUnit> fileForUnits) {
+        if (fileForUnits == null || fileForUnits.isEmpty()) {
+            return null; // or return a default value if preferred
+        }
+        return fileForUnits.get(0).getFileDownloadUri();
     }
 
 }
