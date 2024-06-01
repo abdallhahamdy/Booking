@@ -746,7 +746,7 @@ public class UnitController {
 
             if ( unit.getUnitType().getId() == 1) {
 
-                RoomDetails roomDetailsForUpdate = roomDetailsRepository.findRoomDetailsByUnitIdAndRoomAvailableId(24L, 1L);
+                RoomDetails roomDetailsForUpdate = roomDetailsRepository.findRoomDetailsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
                 roomDetailsForUpdate.setRoomNumber(roomDetailsRequestDto.getRoomNumber());
                 roomDetailsForUpdate.setNewPrice(roomDetailsRequestDto.getNewPrice().intValue());
                 roomDetailsForUpdate.setOldPrice(roomDetailsRequestDto.getOldPrice().intValue());
