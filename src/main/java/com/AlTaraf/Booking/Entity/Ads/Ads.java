@@ -4,12 +4,10 @@ import com.AlTaraf.Booking.Entity.File.FileForAds;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.List;
 
 @Entity
 @Table(name = "ADS")
@@ -22,17 +20,13 @@ public class Ads {
     @Column(name = "ADS_ID")
     private Long id;
 
-    @OneToMany(mappedBy = "ads", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<FileForAds> fileForAds;
+    @OneToOne(mappedBy = "ads", cascade = CascadeType.ALL,  orphanRemoval = true)
+    @JoinColumn(name = "FILE_FOR_ADS_ID")
+    private FileForAds fileForAds;
 
     @OneToOne
     @JoinColumn(name = "UNIT_ID")
     private Unit unit;
-
-//    @ManyToOne
-//    @JoinColumn(name = "PACKAGE_ADS_ID")
-//    private PackageAds packageAds;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
@@ -45,5 +39,10 @@ public class Ads {
     public Ads() {
         this.statusUnit = new StatusUnit();
         this.statusUnit.setId(1L);
+    }
+
+    public void setFileForAds(FileForAds fileForAds) {
+        this.fileForAds = fileForAds;
+        fileForAds.setAds(this);
     }
 }
