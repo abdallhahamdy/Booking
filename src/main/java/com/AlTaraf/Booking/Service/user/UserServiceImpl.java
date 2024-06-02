@@ -313,7 +313,9 @@ public class UserServiceImpl implements UserService {
             technicalSupportRepository.deleteByUser(user);
             fileForUnitRepository.deleteByUser(user);
             fileForAdsRepository.deleteByUser(user);
-//            fileForProfileRepository.deleteByUser(user);
+            fileForProfileRepository.disassociateByUserId(userId);
+            fileForProfileRepository.deleteByUserId(userId);
+
             fileForPdfRepository.deleteByUserId(userId);
             payemntRepository.deleteByUserId(userId);
             transactionsDetailRepository.deleteByUserId(userId);
