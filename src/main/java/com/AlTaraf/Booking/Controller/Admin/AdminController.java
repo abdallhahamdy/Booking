@@ -7,7 +7,6 @@ import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Notifications.Notifications;
 import com.AlTaraf.Booking.Entity.TechnicalSupport.TechnicalSupportForUnits;
 import com.AlTaraf.Booking.Entity.Transactions.TotalTransactions;
-import com.AlTaraf.Booking.Mapper.Ads.AdsMapper;
 import com.AlTaraf.Booking.Mapper.Ads.AdsStatusMapper;
 import com.AlTaraf.Booking.Mapper.Notification.NotificationMapper;
 import com.AlTaraf.Booking.Mapper.TechnicalSupport.TechnicalSupportUnitsMapper;
@@ -119,9 +118,6 @@ public class AdminController {
 
     @Autowired
     private RoomDetailsRepository roomDetailsRepository;
-
-    @Autowired
-    AdsMapper adsMapper;
 
     @Autowired
     private UserRepository userRepository;
@@ -511,7 +507,7 @@ public class AdminController {
             ApiResponse response = new ApiResponse(200, "ads_deleted.message");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
-            ApiResponse response = new ApiResponse(404, "Not_found.message");
+            ApiResponse response = new ApiResponse(404, "not_found.message");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
         }
     }
