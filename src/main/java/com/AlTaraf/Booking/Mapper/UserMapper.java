@@ -1,8 +1,5 @@
 package com.AlTaraf.Booking.Mapper;
 
-
-
-import com.AlTaraf.Booking.Dto.Image.FileForProfileDTO;
 import com.AlTaraf.Booking.Dto.User.UserDto;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
 import com.AlTaraf.Booking.Entity.File.FileForProfile;
@@ -91,16 +88,7 @@ public interface UserMapper {
                 .collect(Collectors.toSet());
     }
 
-//    default List<FileForProfileDTO> mapFileForProfiles(List<FileForProfile> fileForProfiles) {
-//        return fileForProfiles.stream()
-//                .map(file -> new FileForProfileDTO(file.getName(), file.getFileDownloadUri()))
-//                .collect(Collectors.toList());
-//    }
-
     default String extractFilePath(FileForProfile fileForProfile) {
-        if (fileForProfile != null) {
-            return fileForProfile.getFileDownloadUri() + " " + fileForProfile.getName();
-        }
-        return null;
+        return fileForProfile.getFileDownloadUri();
     }
 }
