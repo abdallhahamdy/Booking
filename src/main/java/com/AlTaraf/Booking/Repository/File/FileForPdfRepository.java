@@ -16,6 +16,6 @@ public interface FileForPdfRepository extends JpaRepository<FileForPdf, String> 
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM Pdf p WHERE p.user.id = :userId")
+    @Query("DELETE FROM FileForPdf p WHERE p.user.id = :userId")
     void deleteByUserId(@Param("userId") Long userId);
 }

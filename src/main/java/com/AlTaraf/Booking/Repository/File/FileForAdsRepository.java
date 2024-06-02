@@ -27,6 +27,6 @@ public interface FileForAdsRepository extends JpaRepository<FileForAds, String> 
     FileForAds findByUnitId(Long unitId);
 
     @Modifying
-    @Query("DELETE FROM ImageDataForAds i WHERE i.unit.id = :unitId")
+    @Query("DELETE FROM FileForAds i WHERE i.unit.id = :unitId")
     void deleteByUnitId(@Param("unitId") Long unitId);
 }
