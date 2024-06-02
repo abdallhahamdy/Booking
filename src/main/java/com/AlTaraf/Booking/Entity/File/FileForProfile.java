@@ -32,6 +32,11 @@ public class FileForProfile {
 
     private String fileDownloadUri;
 
+    @OneToOne
+    @JoinColumn(name = "USER_ID")
+    @JsonBackReference
+    private User user;
+
     public FileForProfile(String name, String type, byte[] data) {
         this.name = name;
         this.type = type;

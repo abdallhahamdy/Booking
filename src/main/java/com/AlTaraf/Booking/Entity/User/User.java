@@ -67,7 +67,7 @@ public class User extends Auditable<String> {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @OneToOne
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,  orphanRemoval = true)
     @JoinColumn(name = "FILE_FOR_PROFILE_ID")
     private FileForProfile fileForProfile;
 
@@ -117,5 +117,10 @@ public class User extends Auditable<String> {
 
     public int getNumberAds() {
         return numberAds != null ? numberAds : 0;
+    }
+
+    public void setFileForProfile(FileForProfile fileForProfile) {
+        this.fileForProfile = fileForProfile;
+        fileForProfile.setUser(this);
     }
 }
