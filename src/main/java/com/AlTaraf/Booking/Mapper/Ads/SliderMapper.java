@@ -15,9 +15,7 @@ public interface SliderMapper {
     @Mappings({
             @Mapping(source = "ads.id", target = "adsId"),
             @Mapping(target = "imagePath", expression = "java(extractImagePath(ads.getFileForAds()))"),
-//            @Mapping(target = "imagePaths", expression = "java(extractFilePaths(unit.getFileForUnits()))"),
 
-//            @Mapping(source = "ads.unit", target = "unitDtoFavorite"),
             @Mapping(source = "ads.unit.id", target = "unitId"),
             @Mapping(source = "ads.unit.nameUnit", target = "nameUnit"),
             @Mapping(source = "ads.unit.city", target = "city"),
@@ -29,10 +27,9 @@ public interface SliderMapper {
     List<adsForSliderResponseDto> toSliderDtoList(List<Ads> adsList);
 
     // Define a method to extract the first image path from the list of ImageData entities
-    default String extractImagePath(List<FileForAds> fileForAds) {
-        if (fileForAds != null && !fileForAds.isEmpty()) {
-            return fileForAds.get(0).getFileDownloadUri();
-        }
-        return null; // or provide a default image path
+
+    default String extractImagePath(FileForAds fileForAds) {
+        return fileForAds.getFileDownloadUri();
     }
+
 }
