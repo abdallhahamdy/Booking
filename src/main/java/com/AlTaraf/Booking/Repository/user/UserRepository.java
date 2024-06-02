@@ -5,6 +5,7 @@ import com.AlTaraf.Booking.Entity.enums.ERole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -21,8 +22,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
 
-    Boolean existsByUsername(String username);
-
     Boolean existsByEmail(String email);
 
     Boolean existsByPhone(String phone);
@@ -37,12 +36,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT COUNT(u) > 1 FROM User u WHERE u.email = :email")
     boolean isDuplicateEmail(@Param("email") String email);
-
-    @Query("SELECT CASE WHEN COUNT(u.id) > 0 THEN TRUE ELSE FALSE END " +
-            "FROM User u " +
-            "JOIN u.roles r " +
-            "WHERE u.phone = :phone AND u.id <> :userId")
-    boolean existsByPhoneForDifferentUser(@Param("phone") String phone, @Param("userId") Long userId);
 
     @Query("SELECT u FROM User u WHERE u.phone = :phone")
     User findByPhoneForUser(@Param("phone") String phone);
@@ -71,16 +64,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findAllByPhoneAndRolesName(String phone, ERole roleName, Pageable pageable);
 
-//    @Query("SELECT u FROM User u WHERE u.id NOT IN " +
-//            "(SELECT ur.user.id FROM UserRole ur WHERE ur.role.name = 'ROLE_ADMIN' OR ur.role.name = 'ROLE_SERVICE')")
-//    Page<User> findAllExceptAdminAndService(Pageable pageable);
-
-    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.name = :roleName")
-    List<User> findByRolesName(@Param("roleName") ERole roleName);
-
     @Query("SELECT u FROM User u JOIN u.roles r WHERE r.name = :roleName AND u.id = :userId")
     User findByRolesNameAndUserId(@Param("roleName") ERole roleName, @Param("userId") Long userId);
-
 
     @Query("SELECT COUNT(u) FROM User u")
     Long countAllUsers();
