@@ -2,7 +2,6 @@ package com.AlTaraf.Booking.Mapper.Unit;
 
 import com.AlTaraf.Booking.Dto.Unit.UnitDto;
 import com.AlTaraf.Booking.Entity.File.FileForUnit;
-import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

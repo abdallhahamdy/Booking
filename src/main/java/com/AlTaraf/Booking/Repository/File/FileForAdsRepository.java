@@ -1,7 +1,6 @@
 package com.AlTaraf.Booking.Repository.File;
 
 import com.AlTaraf.Booking.Entity.File.FileForAds;
-import com.AlTaraf.Booking.Entity.Image.ImageDataForAds;
 import com.AlTaraf.Booking.Entity.User.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,7 +13,7 @@ import java.util.List;
 @Repository
 public interface FileForAdsRepository extends JpaRepository<FileForAds, String> {
 
-    List<ImageDataForAds> findByUserId(Long userId);
+    List<FileForAds> findByUserId(Long userId);
 
     @Query("SELECT fa FROM FileForAds fa WHERE fa.user.id = :userId AND fa.ads IS NULL")
     List<FileForAds> findByUserIdAndAdsIsNull(@Param("userId") Long userId);
@@ -25,7 +24,7 @@ public interface FileForAdsRepository extends JpaRepository<FileForAds, String> 
 
     void deleteByUser(User user);
 
-    ImageDataForAds findByUnitId(Long unitId);
+    FileForAds findByUnitId(Long unitId);
 
     @Modifying
     @Query("DELETE FROM ImageDataForAds i WHERE i.unit.id = :unitId")

@@ -1,7 +1,6 @@
 package com.AlTaraf.Booking.Repository.File;
 
 import com.AlTaraf.Booking.Entity.File.FileForUnit;
-import com.AlTaraf.Booking.Entity.Image.ImageData;
 import com.AlTaraf.Booking.Entity.User.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,9 +13,9 @@ import java.util.List;
 @Repository
 public interface FileForUnitRepository extends JpaRepository<FileForUnit, String> {
 
-    List<ImageData> findByUnitId(Long unitId);
+    List<FileForUnit> findByUnitId(Long unitId);
 
-    List<ImageData> findByUserId(Long userId);
+    List<FileForUnit> findByUserId(Long userId);
 
     @Query("SELECT fu FROM FileForUnit fu WHERE fu.user.id = :userId AND fu.unit IS NULL")
     List<FileForUnit> findByUserIdAndUnitIsNull(@Param("userId") Long userId);
