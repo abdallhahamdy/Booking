@@ -89,6 +89,6 @@ public interface UserMapper {
     }
 
     default String extractFilePath(FileForProfile fileForProfile) {
-        return fileForProfile.getFileDownloadUri();
+        return fileForProfile != null ? fileForProfile.getFileDownloadUri() : null;
     }
 }

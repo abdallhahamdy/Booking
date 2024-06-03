@@ -29,7 +29,7 @@ public interface SliderMapper {
     // Define a method to extract the first image path from the list of ImageData entities
 
     default String extractImagePath(FileForAds fileForAds) {
-        return fileForAds.getFileDownloadUri();
+        return fileForAds != null ? fileForAds.getFileDownloadUri() : null;
     }
 
 }

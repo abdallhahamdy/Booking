@@ -30,6 +30,5 @@ public interface AdsStatusMapper {
     Ads toEntity(AdsRequestDto adsDto);
 
     default String extractImagePath(FileForAds fileForAds) {
-        return fileForAds.getFileDownloadUri();
-    }
-}
+        return fileForAds != null ? fileForAds.getFileDownloadUri() : null;
+    }}
