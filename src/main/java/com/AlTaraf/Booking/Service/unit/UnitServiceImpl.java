@@ -37,6 +37,8 @@ import com.AlTaraf.Booking.Service.notification.NotificationService;
 import com.AlTaraf.Booking.Specifications.UnitSpecifications;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -116,6 +118,9 @@ public class UnitServiceImpl implements UnitService {
 
     @Autowired
     NotificationService notificationService;
+
+    @Autowired
+    MessageSource messageSource;
 
     public Unit saveUnit(Unit unit) {
         try {
@@ -232,7 +237,7 @@ public class UnitServiceImpl implements UnitService {
 //        Unit unit = unitRepository.findById(unitId).orElse(null);
 
         if (ads != null) {
-            // Retrieve associated ImageData entities
+            // Retrieve associated FileForAds entities
             List<FileForAds> fileForAdsList = fileForAdsRepository.findByUserIdAndAdsIsNull(userId);
 
             // Update the unit for each ImageData entity
@@ -468,10 +473,11 @@ public class UnitServiceImpl implements UnitService {
 
         if ( statusUnitId == 2) {
             System.out.println("statusUnitId");
-            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من الادمن","تم قبول طلب اضافة وحدتك",unit.getUser().getId());
+//            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من الادمن",  unit.getNameUnit()+ "تم قبول طلب اضافة وحدة ",unit.getUser().getId());
+            PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_accepted_units.message", null, LocaleContextHolder.getLocale()) + " " + unit.getNameUnit(), unit.getUser().getId());
             notificationService.processNotification(notificationRequest);
         } else if ( statusUnitId == 3) {
-            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من الادمن","تم رفض طلب اضافة وحدتك",unit.getUser().getId());
+            PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_rejected_units.message", null, LocaleContextHolder.getLocale()) + " " + unit.getNameUnit(), unit.getUser().getId());
             notificationService.processNotification(notificationRequest);
         }
 
@@ -578,7 +584,6 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     public CounterUnits getCounterForResidenciesUnits() {
-//        CounterUnits counterUnits = counterUnitRepository.findById(1L).orElse(null);
         CounterUnits counterUnits = new CounterUnits();
 
         counterUnits.setCounterAllResidencies(unitRepository.countByAccommodationTypeIdNull());
@@ -588,7 +593,6 @@ public class UnitServiceImpl implements UnitService {
         counterUnits.setCounterResort(unitRepository.countByAccommodationTypeIdFour());
         counterUnits.setCounterChalet(unitRepository.countByAccommodationTypeIdFive());
         counterUnits.setCounterlounge(unitRepository.countByAccommodationTypeIdSix());
-//        counterUnitRepository.save(counterUnits);
 
         return counterUnits;
     }

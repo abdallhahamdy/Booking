@@ -229,7 +229,7 @@ public class UnitController {
 
             Unit savedUnit = unitService.saveUnit(unitToSave);
 
-            PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_units.message", null, LocaleContextHolder.getLocale()),unitRequestDto.getUserId());
+            PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_units.message", null, LocaleContextHolder.getLocale()) + " " + savedUnit.getNameUnit(),unitRequestDto.getUserId());
             notificationService.processNotification(notificationRequest);
 
             // Return the unitId in the response body
@@ -978,8 +978,8 @@ public class UnitController {
                 List<UnitDto> unitDtos = unitMapper.toUnitDtoList(unitPage.getContent());
                 return new ResponseEntity<>(unitDtos, HttpStatus.OK);
             } else {
-                ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+                ApiResponse response = new ApiResponse(200, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
+                return ResponseEntity.status(HttpStatus.OK).body(response);
             }
         } catch (Exception e) {
             System.out.println("Error Message : " + e);
@@ -1291,14 +1291,23 @@ public class UnitController {
                 }
             }
 
+            Reservations reservations = reservationRepository.findById(reservationId).orElse(null);
              reservationService.updateStatusForReservation(reservationId, statusUnitId);
 //            return ResponseEntity.ok(new ApiResponse(200,"Status changed successfully"));
+            if (reservations.getStatusUnit().getId() == 2) {
+                PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()), messageSource.getMessage("notification_body_accepted_reservation_successful.message", null, LocaleContextHolder.getLocale()) + " " + reservations.getUnit().getNameUnit(), reservations.getUser().getId());
+                notificationService.processNotification(notificationRequest);
+            } else if (reservations.getStatusUnit().getId() == 3) {
+                PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()), messageSource.getMessage("notification_body_rejected_updated_reservation.message", null, LocaleContextHolder.getLocale()) + " " + reservations.getUnit().getNameUnit(), reservations.getUser().getId());
+                notificationService.processNotification(notificationRequest);
+            }
+//            return ResponseEntity.ok(new ApiResponse(200,messageSource.getMessage("status_reservation_changed_successful.message", null, LocaleContextHolder.getLocale())));
             return ResponseEntity.ok(new ApiResponse(200,messageSource.getMessage("status_reservation_changed_successful.message", null, LocaleContextHolder.getLocale())));
         } catch (Exception e) {
 
 //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update reservation status : " + e.getMessage());
             System.out.println("error message: " + e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(messageSource.getMessage("failed_updated_status_reservation.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage("failed_updated_status_reservation.message", null, LocaleContextHolder.getLocale()));
         }
     }
 
@@ -1328,7 +1337,7 @@ public class UnitController {
             Page<Unit> unitsPage = unitService.getUnitsByUserId(userId, pageable);
 
             if (unitsPage == null || unitsPage.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
+                return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
             }
 
             List<ReservationStatus> reservationRequestDtoList = new ArrayList<>();
@@ -1339,13 +1348,13 @@ public class UnitController {
             }
 
             if (reservationRequestDtoList.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
+                return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(200, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
             }
 
             return new ResponseEntity<>(reservationRequestDtoList, HttpStatus.OK);
         } catch (Exception e) {
             ApiResponse response = new ApiResponse(404, messageSource.getMessage("not_found.message", null, LocaleContextHolder.getLocale()));
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
 

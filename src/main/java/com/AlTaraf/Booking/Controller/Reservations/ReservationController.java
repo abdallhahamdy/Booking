@@ -145,7 +145,9 @@ public class ReservationController {
 
             // Check if the reservation has room available or available area
 
-            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من النظام","تم ارسال طلب حجز الوحدة",userId);
+//            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من النظام","تم ارسال طلب حجز الوحدة: " + reservationsToSave.getUnit().getNameUnit(),userId);
+//            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من النظام",LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_units.message", null, LocaleContextHolder.getLocale()) + " " + savedUnit.getNameUnit()"تم قبول طلب اضافة وحدة ",userId);
+            PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_reservation.message", null, LocaleContextHolder.getLocale()) + " " + reservationsToSave.getUnit().getNameUnit(),userId);
             notificationService.processNotificationForGuest(notificationRequest);
 
             return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse(200, messageSource.getMessage("Successful_Reservation.message", null, LocaleContextHolder.getLocale())) );
@@ -202,8 +204,8 @@ public class ReservationController {
             List<ReservationStatus> reservationRequestDtoList = reservationStatusMapper.toReservationStatusDtoList(reservations.getContent());
             return new ResponseEntity<>(reservationRequestDtoList, HttpStatus.OK);
         } else {
-            ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            ApiResponse response = new ApiResponse(200, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
 
