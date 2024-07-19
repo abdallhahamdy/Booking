@@ -16,6 +16,8 @@ import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.notification.NotificationService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,9 @@ public class AdsServiceImpl implements AdsService {
 
     @Autowired
     NotificationService notificationService;
+
+    @Autowired
+    MessageSource messageSource;
 
     @Override
     public List<adsForSliderResponseDto> getAdsByStatusUnitId(Long statusUnitId) {
@@ -107,10 +112,11 @@ public class AdsServiceImpl implements AdsService {
         adsRepository.save(ads);
 
         if ( statusUnitId == 2) {
-            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من الادمن","تم قبول طلب اضافة وحدتك",ads.getUser().getId());
+//            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من الادمن","تم قبول طلب اضافة وحدتك",ads.getUser().getId());
+            PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_accepted_ads.message", null, LocaleContextHolder.getLocale()) + " " + ads.getUnit().getNameUnit(), ads.getUser().getId());
             notificationService.processNotification(notificationRequest);
         } else if ( statusUnitId == 3) {
-            PushNotificationRequest notificationRequest = new PushNotificationRequest("رسالة من الادمن","تم رفض طلب اضافة وحدتك",ads.getUser().getId());
+            PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_rejected_ads.message", null, LocaleContextHolder.getLocale()) + " " + ads.getUnit().getNameUnit(), ads.getUser().getId());
             notificationService.processNotification(notificationRequest);
         }
     }

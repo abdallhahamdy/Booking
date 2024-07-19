@@ -185,6 +185,7 @@ public class AdsController {
         if (numberAds == 0) {
             user.setPackageAds(packageAds);
             userRepository.save(user);
+            System.out.println("Number Ads is Zero");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage("package_ads_null.message", null, LocaleContextHolder.getLocale()));
         }
 
@@ -199,7 +200,7 @@ public class AdsController {
 
             userRepository.save(user);
 
-            PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_ads.message", null, LocaleContextHolder.getLocale()),user.getId());
+            PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_ads.message", null, LocaleContextHolder.getLocale()) +  " لوحدة " + existAds.getUnit().getNameUnit(),user.getId());
             notificationService.processNotification(notificationRequest);
             Ads createdAds = adsService.createAds(adsMapper.toEntity(adsRequestDto));
             Long createdAdsId = createdAds.getId();
@@ -242,7 +243,7 @@ public class AdsController {
             return new ResponseEntity<>(adsDtoList, HttpStatus.OK);
         } else {
             ApiResponse response = new ApiResponse(200, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
 
