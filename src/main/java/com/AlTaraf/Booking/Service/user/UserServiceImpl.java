@@ -1,6 +1,5 @@
 package com.AlTaraf.Booking.Service.user;
 
-import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDtoSample;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
@@ -14,19 +13,14 @@ import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Exception.InsufficientFundsException;
 import com.AlTaraf.Booking.Mapper.city.CityMapper;
-import com.AlTaraf.Booking.Mapper.UserMapper;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
 import com.AlTaraf.Booking.Payload.response.CounterUser;
-import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
 import com.AlTaraf.Booking.Repository.File.FileForAdsRepository;
 import com.AlTaraf.Booking.Repository.File.FileForPdfRepository;
 import com.AlTaraf.Booking.Repository.File.FileForProfileRepository;
 import com.AlTaraf.Booking.Repository.File.FileForUnitRepository;
 import com.AlTaraf.Booking.Repository.NotificationRepository;
-import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
-import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
-import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
 import com.AlTaraf.Booking.Repository.Transactions.TotalTransactionsRepository;
 import com.AlTaraf.Booking.Repository.Transactions.TransactionsDetailRepository;
 import com.AlTaraf.Booking.Repository.Transactions.TransactionsRepository;
@@ -35,17 +29,11 @@ import com.AlTaraf.Booking.Repository.Wallet.WalletRepository;
 import com.AlTaraf.Booking.Repository.payment.PayemntRepository;
 import com.AlTaraf.Booking.Repository.role.RoleRepository;
 import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportRepository;
-import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
-import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
-import com.AlTaraf.Booking.Security.jwt.JwtUtils;
-import com.AlTaraf.Booking.Service.cityAndRegion.CityService;
-import com.AlTaraf.Booking.Service.role.RoleService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -58,19 +46,7 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Autowired
-    RoleService roleService;
-
-    @Autowired
-    CityService cityService;
-
-    @Autowired
     CityMapper cityMapper;
-
-    @Autowired
-    UserMapper userMapper;
-
-    @Autowired
-    AuthenticationManager authenticationManager;
 
     @Autowired
     RoleRepository roleRepository;
@@ -79,46 +55,25 @@ public class UserServiceImpl implements UserService {
     PasswordEncoder encoder;
 
     @Autowired
-    JwtUtils jwtUtils;
+    TechnicalSupportRepository technicalSupportRepository;
 
     @Autowired
-    private TechnicalSupportRepository technicalSupportRepository;
+    UserFavoriteUnitRepository userFavoriteUnitRepository;
 
     @Autowired
-    private AdsRepository adsRepository;
+    FileForAdsRepository fileForAdsRepository;
 
     @Autowired
-    private UserFavoriteUnitRepository userFavoriteUnitRepository;
+    FileForUnitRepository fileForUnitRepository;
 
     @Autowired
-    private FileForAdsRepository fileForAdsRepository;
+    FileForProfileRepository fileForProfileRepository;
 
     @Autowired
-    private FileForUnitRepository fileForUnitRepository;
+    UnitRepository unitRepository;
 
     @Autowired
-    private FileForProfileRepository fileForProfileRepository;
-
-    @Autowired
-    private UnitRepository unitRepository;
-
-    @Autowired
-    private ReservationRepository reservationRepository;
-
-    @Autowired
-    private ReserveDateRepository reserveDateRepository;
-
-    @Autowired
-    private ReserveDateHallsRepository reserveDateHallsRepository;
-
-    @Autowired
-    private RoomDetailsForAvailableAreaRepository roomDetailsForAvailableAreaRepository;
-
-    @Autowired
-    private RoomDetailsRepository roomDetailsRepository;
-
-    @Autowired
-    private UnitService unitService;
+    UnitService unitService;
 
     @Autowired
     NotificationRepository notificationRepository;
@@ -367,7 +322,6 @@ public class UserServiceImpl implements UserService {
 
             totalTransactions.setTotalSubscriptionsTransactions(totalSubscriptions);
             totalTransactions.setTotalTransactions(totalTransactionsNumber);
-//            totalTransactionsMapper.toEntity(totalTransactionsDto);
             totalTransactionsRepository.save(totalTransactions);
 
             Transactions transactions = transactionsRepository.findById(2L).orElse(null);
@@ -388,14 +342,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CounterUser getCountUser() {
-//        CounterUser counterUser = counterUserRepository.findById(1L).orElse(null);
         CounterUser counterUser = new CounterUser();
 
         counterUser.setCounterAllUsers(userRepository.countAllUsers());
         counterUser.setCounterUserGuest(userRepository.countUsersByRoleIdOne());
         counterUser.setCounterUserLessor(userRepository.countUsersByRoleIdTwo());
-
-//        counterUserRepository.save(counterUser);
 
         return counterUser;
     }
