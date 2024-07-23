@@ -45,7 +45,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT COUNT(u.id) > 0 FROM User u " +
             "JOIN u.roles r " +
-            "WHERE (u.phone = :phone) AND r.name IN :roleNames")
+            "WHERE (u.phone = :phone) " +
+            "AND r.name IN :roleNames "+
+            "AND u.isActive = true")
     boolean existsByEmailAndPhoneNumberAndRoles(
 //            @Param("email") String email,
             @Param("phone") String phone,
