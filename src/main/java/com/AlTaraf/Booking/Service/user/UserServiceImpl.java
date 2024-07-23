@@ -99,11 +99,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     WalletRepository walletRepository;
 
-    public String generateOtpForUser() {
-        // For simplicity, let's assume a random 4-digit OTP
-        return String.valueOf((int) (Math.random() * 9000) + 1000);
-    }
-
     @Override
     public Boolean existsByEmail(String email) {
         if (email == null || email.trim().isEmpty()) {

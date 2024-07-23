@@ -13,11 +13,7 @@ import java.util.Set;
 
 public interface UserService {
 
-    String generateOtpForUser ();
-
-
     Boolean existsByEmailAndRolesOrPhoneNumberAndRoles(String phone, Set<ERole> roleNames);
-
 
     Boolean existsByEmail(String email);
 
@@ -34,7 +30,6 @@ public interface UserService {
     void updateUser(User user);
 
     Optional<User> findByPhone(String phone);
-
 
     void deleteUserAndAssociatedEntities(Long userId);
 
