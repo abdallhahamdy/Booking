@@ -3,22 +3,19 @@ package com.AlTaraf.Booking.Controller.user;
 import com.AlTaraf.Booking.Dto.User.UserDto;
 import com.AlTaraf.Booking.Dto.User.UserEditDto;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
-import com.AlTaraf.Booking.Entity.Role.Role;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Mapper.UserMapper;
 import com.AlTaraf.Booking.Payload.request.LoginRequest;
-import com.AlTaraf.Booking.Payload.request.OauthRequest;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
 import com.AlTaraf.Booking.Payload.response.*;
-import com.AlTaraf.Booking.Repository.cityAndregion.CityRepository;
-import com.AlTaraf.Booking.Repository.role.RoleRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Security.jwt.JwtUtils;
 import com.AlTaraf.Booking.Security.service.UserDetailsImpl;
 import com.AlTaraf.Booking.Service.cityAndRegion.CityService;
 import com.AlTaraf.Booking.Service.user.UserService;
+import com.AlTaraf.Booking.Service.user.otp.OtpService;
 import jakarta.validation.Valid;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +26,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -65,78 +61,29 @@ public class UserController {
     UserRepository userRepository;
 
     @Autowired
-    CityRepository cityRepository;
-
-    @Autowired
-    RoleRepository roleRepository;
-
-    @Autowired
     MessageSource messageSource;
 
+    @Autowired
+    OtpService otpService;
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @PostMapping("/Send-OTP")
-    public ResponseEntity<?> sendOTP(@RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
-
-        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
-
-        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
-            try {
-                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
-                if (!languageRanges.isEmpty()) {
-                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
-                }
-            } catch (IllegalArgumentException e) {
-                // Handle the exception if needed
-                System.out.println("IllegalArgumentException: " + e);
-            }
-        }
-
-        // Generate and send OTP (you need to implement this logic)
-        String otp = userService.generateOtpForUser();
-        if (otp != null ) {
-            AuthenticationResponse response = new AuthenticationResponse(200, messageSource.getMessage("otp.message", null, LocaleContextHolder.getLocale()), otp);
-            return ResponseEntity.ok(response);
-        } else {
-            ApiResponse response = new ApiResponse(404, messageSource.getMessage("not_found.message", null, LocaleContextHolder.getLocale()));
-
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-        }
+    @PostMapping("/sendOtpWhats")
+    public ResponseEntity<?> sendOtpWhats(@RequestParam String recipient, @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
+        return otpService.sendOtpViaWhatsApp(recipient, acceptLanguageHeader);
     }
 
-    @GetMapping("/check-availability")
-    public ResponseEntity<?> checkAvailability(@RequestParam(value = "email", required = false) String email,
-                                               @RequestParam(value = "phone") String phone,
-                                               @RequestParam(value = "roleName") ERole roleName,
-                                               @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader){
+    @PostMapping("/sendOtp")
+    public ResponseEntity<?> sendOtp(@RequestParam String recipient, @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
+        return otpService.sendOtp(recipient, acceptLanguageHeader);
+    }
 
-        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
-
-        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
-            try {
-                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
-                if (!languageRanges.isEmpty()) {
-                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
-                }
-            } catch (IllegalArgumentException e) {
-                // Handle the exception if needed
-                System.out.println("IllegalArgumentException: " + e);
-            }
-        }
+    @PostMapping("/validateOtp")
+    public ResponseEntity<?> validateOtp(@RequestParam String recipient, @RequestParam int otp,
+                                         @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
 
-        boolean existsByEmailAndRolesOrPhoneNumberAndRoles = userService.existsByEmailAndRolesOrPhoneNumberAndRoles(email, phone, roleName);
-
-
-        if (existsByEmailAndRolesOrPhoneNumberAndRoles) {
-            CheckApiResponse response = new CheckApiResponse(409, messageSource.getMessage("authentication.message", null, LocaleContextHolder.getLocale()), false);
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(response);
-        }
-
-        CheckApiResponse response = new CheckApiResponse(200, "", true);
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return otpService.validateOtp(recipient, otp, acceptLanguageHeader);
     }
 
     @PostMapping("/Register")
@@ -155,6 +102,20 @@ public class UserController {
                 // Handle the exception if needed
                 System.out.println("IllegalArgumentException: " + e);
             }
+        }
+
+        Set<ERole> roles = userRegisterDto.getRoles().stream()
+                .map(ERole::valueOf)
+                .collect(Collectors.toSet());
+
+
+        boolean existsByEmailAndRolesOrPhoneNumberAndRoles = userService.existsByEmailAndRolesOrPhoneNumberAndRoles(userRegisterDto.getPhoneNumber(), roles);
+
+
+        if (existsByEmailAndRolesOrPhoneNumberAndRoles) {
+            CheckApiResponse response = new CheckApiResponse(409, messageSource.getMessage("authentication.message", null, LocaleContextHolder.getLocale()), false);
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(response);
         }
 
         // Perform user registration
@@ -193,8 +154,6 @@ public class UserController {
                     new UsernamePasswordAuthenticationToken(loginRequest.getPhone(), loginRequest.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-//          String jwt = jwtUtils.generateJwtToken(authentication);
-
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
             userDetails.setStayLoggedIn(loginRequest.isStayLoggedIn());
@@ -377,114 +336,6 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, messageSource.getMessage("error_updating_user.message", null, LocaleContextHolder.getLocale())));
         }
-    }
-
-    @GetMapping("/checkPhoneNull")
-    public ResponseEntity<?> checkUserPhoneNullByEmail(@RequestParam String email,
-                                                       @RequestParam String deviceToken,
-                                                       @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
-
-        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
-
-        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
-            try {
-                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
-                if (!languageRanges.isEmpty()) {
-                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
-                }
-            } catch (IllegalArgumentException e) {
-                // Handle the exception if needed
-                System.out.println("IllegalArgumentException: " + e);
-            }
-        }
-
-        User user = userRepository.findByEmail(email);
-
-
-        if (user != null && user.getPhone() != null) {
-            OauthRequest oauthRequest = new OauthRequest();
-            oauthRequest.setPhone(user.getPhone());
-
-            try {
-                Authentication authentication = authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(user.getPhone(), oauthRequest.getPassword()));
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-
-                UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-                userDetails.setStayLoggedIn(user.isStayLoggedIn());
-
-                user.setDeviceToken(deviceToken);
-
-                userRepository.save(user);
-
-                List<String> roles = userDetails.getAuthorities().stream()
-                        .map(item -> item.getAuthority())
-                        .collect(Collectors.toList());
-
-                return ResponseEntity.ok(new JwtResponse(
-                        jwtUtils.generateJwtToken(authentication, userDetails.isStayLoggedIn()),
-                        userDetails.getId(),
-                        userDetails.getUsername(),
-                        userDetails.getEmail(),
-                        userDetails.getPhone(),
-                        userDetails.getCity(),
-                        roles));
-            } catch (AuthenticationException e) {
-                System.out.println(e);
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(messageSource.getMessage("authentication_failed.message", null, LocaleContextHolder.getLocale()));
-            }
-        }
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404,"not_found.messagee"));
-    }
-
-    @PostMapping("/create-for-oauth")
-    public ResponseEntity<?> createUser(
-            @RequestParam String username,
-            @RequestParam String email,
-            @RequestParam String phone,
-            @RequestParam Long cityId,
-            @RequestParam ERole role,
-            @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
-
-        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
-
-        if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
-            try {
-                List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
-                if (!languageRanges.isEmpty()) {
-                    locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
-                }
-            } catch (IllegalArgumentException e) {
-                // Handle the exception if needed
-                System.out.println("IllegalArgumentException: " + e);
-            }
-        }
-
-        City city = cityRepository.findById(cityId)
-                .orElseThrow(() -> new IllegalArgumentException("City not found with id: " + cityId));
-
-        Role userRole = roleRepository.findByName(role)
-                .orElseThrow(() -> new IllegalArgumentException("Role not found: " + role));
-
-        // Check if the phone number is unique
-        if (userRepository.existsByPhone(phone)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(messageSource.getMessage("phone_taken.message", null, LocaleContextHolder.getLocale()));
-        }
-
-        User userOauth = new User();
-        userOauth.setUsername(username);
-        userOauth.setEmail(email);
-        userOauth.setPhone(phone);
-        userOauth.setCity(city);
-        userOauth.setPassword(encoder.encode("defaultPassword"));
-        userOauth.setRoles(Collections.singleton(userRole));
-
-        userRepository.save(userOauth);
-
-        return ResponseEntity.ok(new ApiResponse(200, messageSource.getMessage("user_successful_created", null, LocaleContextHolder.getLocale())));
     }
 
 }
