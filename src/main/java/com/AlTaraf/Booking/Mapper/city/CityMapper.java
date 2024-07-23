@@ -1,5 +1,6 @@
 package com.AlTaraf.Booking.Mapper.city;
 
+import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDtoSample;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;
 import org.mapstruct.Mapper;
@@ -24,6 +25,16 @@ CityMapper INSTANCE = Mappers.getMapper(CityMapper.class);
     @Mapping(source = "arabicCityName", target = "arabicCityName")
     City cityDTOToCity(CityDto cityDto);
 
+
+    @Mapping(source = "cityName", target = "cityName")
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "arabicCityName", target = "arabicCityName")
+    CityDtoSample cityToCityDTOSample(City city);
+
+    @Mapping(source = "cityName", target = "cityName")
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "arabicCityName", target = "arabicCityName")
+    City cityDTOSampleToCity(CityDtoSample cityDto);
 
     @Mapping(source = "cityName", target = "cityName")
     @Mapping(source = "id", target = "id")

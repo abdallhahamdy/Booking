@@ -2,7 +2,7 @@ package com.AlTaraf.Booking.Dto.User;
 
 
 
-import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;
+import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDtoSample;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +17,6 @@ public class UserRegisterDto {
     private String email;
     private String phoneNumber;
     private String password;
-    private CityDto city;
+    private CityDtoSample city;
     private Set<String> roles;
 }
