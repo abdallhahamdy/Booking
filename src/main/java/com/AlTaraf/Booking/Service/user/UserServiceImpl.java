@@ -2,6 +2,7 @@ package com.AlTaraf.Booking.Service.user;
 
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
+import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDtoSample;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.Transactions.TotalTransactions;
 import com.AlTaraf.Booking.Entity.Transactions.Transactions;
@@ -168,8 +169,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean existsByEmailAndRolesOrPhoneNumberAndRoles(String email, String phone, ERole roleNames) {
-        return userRepository.existsByEmailAndPhoneNumberAndRole( phone, roleNames);
+    public Boolean existsByEmailAndRolesOrPhoneNumberAndRoles(String phone, Set<ERole> roleNames) {
+        return userRepository.existsByEmailAndPhoneNumberAndRoles( phone, roleNames);
     }
 
     @Override
@@ -248,10 +249,10 @@ public class UserServiceImpl implements UserService {
             }
 
             // Check if the city exists
-            CityDto cityDto = userRegisterDto.getCity();
-            City city = cityMapper.cityDTOToCity(cityDto);
+            CityDtoSample DtoSample = userRegisterDto.getCity();
+            City city = cityMapper.cityDTOSampleToCity(DtoSample);
             if (city == null) {
-                throw new RuntimeException("City " + cityDto.getCityName() + " not found");
+                throw new RuntimeException("City " + DtoSample.getCityName() + " not found");
             }
 
             // Map UserRegisterDto to User entity
@@ -397,5 +398,15 @@ public class UserServiceImpl implements UserService {
 //        counterUserRepository.save(counterUser);
 
         return counterUser;
+    }
+
+    @Override
+    public List<User> getAllUser() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public List<User> getAllByRolesName(ERole roleName) {
+        return userRepository.findAllByRoles_Name(roleName);
     }
 }

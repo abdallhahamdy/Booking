@@ -7,13 +7,17 @@ import com.AlTaraf.Booking.Exception.InsufficientFundsException;
 import com.AlTaraf.Booking.Payload.request.PasswordResetDto;
 import com.AlTaraf.Booking.Payload.response.CounterUser;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface UserService {
 
     String generateOtpForUser ();
 
-    Boolean existsByEmailAndRolesOrPhoneNumberAndRoles(String email, String phone, ERole roleNames);
+
+    Boolean existsByEmailAndRolesOrPhoneNumberAndRoles(String phone, Set<ERole> roleNames);
+
 
     Boolean existsByEmail(String email);
 
@@ -37,5 +41,9 @@ public interface UserService {
     User setPackageAdsForUser(Long userId, Long packageAdsId) throws InsufficientFundsException;
 
     CounterUser getCountUser();
+
+    List<User> getAllUser();
+
+    List<User> getAllByRolesName(ERole roleName);
 }
 
