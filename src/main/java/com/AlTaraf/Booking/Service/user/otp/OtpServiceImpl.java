@@ -1,9 +1,11 @@
 package com.AlTaraf.Booking.Service.user.otp;
 
+import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
+import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -35,6 +37,9 @@ public class OtpServiceImpl implements OtpService {
     private final Map<String, Integer> otpStore = new ConcurrentHashMap<>();
     private final MessageSource messageSource;
 
+    @Autowired
+    UserRepository userRepository;
+
     private final OkHttpClient client = new OkHttpClient();
 
     public OtpServiceImpl(MessageSource messageSource) {
@@ -59,6 +64,14 @@ public class OtpServiceImpl implements OtpService {
 
         Integer storedOtp = otpStore.get(recipient);
         if (storedOtp != null && storedOtp.equals(otp)) {
+
+            Optional<User> user = userRepository.findByPhone(recipient);
+
+            user.get().setIsActive(true);
+
+            // userService.sav
+            userRepository.save(user.get());
+
             ApiResponse response = new ApiResponse(200, messageSource.getMessage("otp_valid.message", null, locale));
             return ResponseEntity.ok(response);
         } else {
