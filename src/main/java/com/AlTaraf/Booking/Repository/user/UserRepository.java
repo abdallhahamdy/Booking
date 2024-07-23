@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -43,13 +44,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
 
 
-    @Query("SELECT COUNT(u.id) = 1 FROM User u " +
+    @Query("SELECT COUNT(u.id) > 0 FROM User u " +
             "JOIN u.roles r " +
-            "WHERE (u.phone = :phone) AND r.name = :roleName")
-    boolean existsByEmailAndPhoneNumberAndRole(
+            "WHERE (u.phone = :phone) AND r.name IN :roleNames")
+    boolean existsByEmailAndPhoneNumberAndRoles(
 //            @Param("email") String email,
             @Param("phone") String phone,
-            @Param("roleName") ERole roleName);
+            @Param("roleNames") Set<ERole> roleNames);
 
     Page<User> findAllByRolesName(ERole roleName, Pageable pageable);
 
@@ -75,6 +76,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT COUNT(u) FROM User u JOIN u.roles r WHERE r.id = 2")
     Long countUsersByRoleIdTwo();
+
+    @Query("SELECT u FROM User u JOIN u.roles r WHERE r.name = :roleName")
+    List<User> findAllByRoles_Name(@Param("roleName") ERole roleName);
 
 }
 
