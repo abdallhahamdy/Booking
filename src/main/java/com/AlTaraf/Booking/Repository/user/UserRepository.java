@@ -81,5 +81,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u JOIN u.roles r WHERE r.name = :roleName")
     List<User> findAllByRoles_Name(@Param("roleName") ERole roleName);
 
+    @Query("SELECT u FROM User u WHERE u.isActive IS NULL")
+    List<User> findAllUserIsNotActive();
 }
 
