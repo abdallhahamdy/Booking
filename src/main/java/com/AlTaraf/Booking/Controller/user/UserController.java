@@ -48,6 +48,7 @@ public class UserController {
     @Autowired
     CityService cityService;
 
+
     @Autowired
     AuthenticationManager authenticationManager;
 
