@@ -40,5 +40,7 @@ public interface UserService {
     List<User> getAllUser();
 
     List<User> getAllByRolesName(ERole roleName);
+
+    void deleteUsersWithIsActiveNull();
 }
 

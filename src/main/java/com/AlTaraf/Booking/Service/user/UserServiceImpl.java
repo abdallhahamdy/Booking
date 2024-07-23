@@ -355,4 +355,16 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllByRolesName(ERole roleName) {
         return userRepository.findAllByRoles_Name(roleName);
     }
+
+    @Override
+    @Transactional
+    public void deleteUsersWithIsActiveNull() {
+
+        List<User> users = userRepository.findAllUserIsNotActive();
+
+        for (User user : users) {
+            deleteUserAndAssociatedEntities(user.getId());
+        }
+//        userRepository.deleteUsersWithIsActiveNull();
+    }
 }
