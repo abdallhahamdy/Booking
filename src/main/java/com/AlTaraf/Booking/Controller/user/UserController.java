@@ -214,10 +214,10 @@ public class UserController {
     public ResponseEntity<?> resetPassword(
             @PathVariable String phone,
             @RequestBody PasswordResetDto passwordResetDto,
+            @RequestParam int otp,
             @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
         // Perform password reset
-        try {
             Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
@@ -232,15 +232,16 @@ public class UserController {
                 }
             }
 
-            otpService.sendOtp(phone, acceptLanguageHeader);
-            userService.resetPasswordByPhone(phone, passwordResetDto);
-            return ResponseEntity.ok(new ApiResponse(200, messageSource.getMessage("password_reset.message", null, LocaleContextHolder.getLocale())));
-        } catch (Exception e) {
-            System.out.println("Failed to reset password: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400, messageSource.getMessage("failed_reset_password.message", null, LocaleContextHolder.getLocale()) ));
-        }
+//            otpService.sendOtp(phone, acceptLanguageHeader);
 
+            if (otpService.checkValidateOtp(phone, otp)) {
+                userService.resetPasswordByPhone(phone, passwordResetDto);
+                return ResponseEntity.ok(new ApiResponse(200, messageSource.getMessage("password_reset.message", null, LocaleContextHolder.getLocale())));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400, messageSource.getMessage("otp_not_valid.message", null, LocaleContextHolder.getLocale()) ));
+            }
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id,

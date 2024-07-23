@@ -80,6 +80,13 @@ public class OtpServiceImpl implements OtpService {
         }
     }
 
+    @Override
+    public Boolean checkValidateOtp(String recipient, int otp) {
+
+        Integer storedOtp = otpStore.get(recipient);
+        return storedOtp != null && storedOtp.equals(otp);
+    }
+
     private int generateOtp() {
         Random random = new Random();
         return 1000 + random.nextInt(9000);
