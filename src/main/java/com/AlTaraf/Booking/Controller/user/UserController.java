@@ -68,17 +68,17 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @PostMapping("/sendOtpWhats")
+    @PostMapping("/send-otp-whats")
     public ResponseEntity<?> sendOtpWhats(@RequestParam String recipient, @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         return otpService.sendOtpViaWhatsApp(recipient, acceptLanguageHeader);
     }
 
-    @PostMapping("/sendOtp")
+    @PostMapping("/send-otp")
     public ResponseEntity<?> sendOtp(@RequestParam String recipient, @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         return otpService.sendOtp(recipient, acceptLanguageHeader);
     }
 
-    @PostMapping("/validateOtp")
+    @PostMapping("/validate-otp")
     public ResponseEntity<?> validateOtp(@RequestParam String recipient, @RequestParam int otp,
                                          @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
@@ -86,7 +86,7 @@ public class UserController {
         return otpService.validateOtp(recipient, otp, acceptLanguageHeader);
     }
 
-    @PostMapping("/Register")
+    @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegisterDto userRegisterDto,
                                           @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
@@ -231,6 +231,8 @@ public class UserController {
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
+
+            otpService.sendOtp(phone, acceptLanguageHeader);
             userService.resetPasswordByPhone(phone, passwordResetDto);
             return ResponseEntity.ok(new ApiResponse(200, messageSource.getMessage("password_reset.message", null, LocaleContextHolder.getLocale())));
         } catch (Exception e) {
