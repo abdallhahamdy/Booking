@@ -61,7 +61,7 @@ public class WhatsAppController {
 
             MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
             map.add("token", "v8551cd68z16gr2y");
-            map.add("to", "0201110495598");
+            map.add("to", "218"+user.getPhone());
             map.add("filename", "Details_Reservation.message");
             map.add("document", pdf.getFileDownloadUri());
             map.add("caption", "Send_Invoice.message");
