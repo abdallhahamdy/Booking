@@ -150,6 +150,15 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400, messageSource.getMessage("duplicate_phone.message", null, LocaleContextHolder.getLocale())));
             }
 
+        Optional<User> userForCheckActive = userService.findByPhone(loginRequest.getPhone());
+
+        if (userForCheckActive.isPresent()) {
+            Boolean isActive = userForCheckActive.get().getIsActive();
+            if (isActive == null || !isActive) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400, messageSource.getMessage("account_not_valid.message", null, LocaleContextHolder.getLocale())));
+            }
+        }
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getPhone(), loginRequest.getPassword()));
 
