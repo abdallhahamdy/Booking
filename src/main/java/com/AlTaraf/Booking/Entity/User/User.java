@@ -107,6 +107,9 @@ public class User extends Auditable<String> {
     @JsonManagedReference
     private List<Wallet> wallets;
 
+    @Column(name = "IS_ACTIVE")
+    private Boolean isActive;
+
     public Double getWallet() {
         return wallet != null ? wallet : 0.0;
     }
