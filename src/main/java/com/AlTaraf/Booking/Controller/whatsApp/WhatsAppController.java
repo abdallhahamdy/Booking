@@ -3,9 +3,11 @@ package com.AlTaraf.Booking.Controller.whatsApp;
 import com.AlTaraf.Booking.Entity.File.FileForPdf;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.User.User;
+import com.AlTaraf.Booking.Payload.request.MessageWhats;
 import com.AlTaraf.Booking.Repository.File.FileForPdfRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
+import com.AlTaraf.Booking.Service.message.MessageService;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -16,6 +18,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/WhatsApp")
@@ -29,6 +33,9 @@ public class WhatsAppController {
 
     @Autowired
     ReservationRepository reservationRepository;
+
+    @Autowired
+    MessageService messageService;
 
     @PostMapping("/sendDocument/{userId}")
     public String sendDocument(@PathVariable Long userId, @RequestParam Long reservationId) {
@@ -54,7 +61,7 @@ public class WhatsAppController {
 
             MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
             map.add("token", "v8551cd68z16gr2y");
-            map.add("to", "218"+user.getPhone());
+            map.add("to", "0201110495598");
             map.add("filename", "Details_Reservation.message");
             map.add("document", pdf.getFileDownloadUri());
             map.add("caption", "Send_Invoice.message");
@@ -98,4 +105,29 @@ public class WhatsAppController {
             return "Error sending document: " + e.getMessage();
         }
     }
+
+    @PostMapping("/send-message")
+    public String sendMessage(@RequestParam(value = "phone", required = false) String phone,
+                              @RequestParam(value = "allUsers", required = false) Boolean allUsers,
+                              @RequestParam(value = "allGuest", required = false) Boolean allGuest,
+                              @RequestParam(value = "allTrades", required = false) Boolean allTrades,
+                              @RequestBody MessageWhats messageWhats) throws IOException {
+        if (phone != null && !phone.isEmpty()) {
+            return messageService.sendMessage(phone, messageWhats);
+        } else {
+            if (allUsers != null && allUsers) {
+                System.out.println("allUsers != null && allUsers");
+                return messageService.sendMessageAllUser(messageWhats);
+            }
+            if (allTrades != null && allTrades) {
+                return messageService.sendMessageAllTraders(messageWhats);
+            }
+            if (allGuest != null && allGuest) {
+                return messageService.sendMessageAllGuests(messageWhats);
+            }
+        }
+        return "تم الارسال بنجاح";
+    }
+
+
 }
