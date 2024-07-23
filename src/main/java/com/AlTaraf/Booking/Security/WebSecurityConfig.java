@@ -14,9 +14,11 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -69,9 +71,23 @@ public class WebSecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable()) // Disabling CSRF
-                .authorizeRequests(authz -> authz
-                        .anyRequest().permitAll()
-                );
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeRequests((authz) -> {
+                    authz.requestMatchers("api/users/login").permitAll()
+                            .requestMatchers("api/users/register").permitAll()
+                            .requestMatchers("api/users/send-otp").permitAll()
+                            .requestMatchers("api/users/send-otp-whats").permitAll()
+                            .requestMatchers("api/users/validate-otp").permitAll()
+                            .requestMatchers("api/users/forget-password/{phone}").permitAll()
+                            .requestMatchers("/swagger-ui/**").permitAll()
+                            .requestMatchers("/bezkoder-api-docs/**").permitAll()
+
+                            .anyRequest().authenticated();
+                });
+
+        http.authenticationProvider(authenticationProvider());
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
 
 
