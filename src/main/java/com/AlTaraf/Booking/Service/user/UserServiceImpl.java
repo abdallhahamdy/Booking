@@ -201,9 +201,9 @@ public class UserServiceImpl implements UserService {
             // Check if the city exists
             CityDtoSample DtoSample = userRegisterDto.getCity();
             City city = cityMapper.cityDTOSampleToCity(DtoSample);
-            if (city == null) {
-                throw new RuntimeException("City " + DtoSample.getCityName() + " not found");
-            }
+//            if (city == null) {
+//                throw new RuntimeException("City " + DtoSample.getCityName() + " not found");
+//            }
 
             // Map UserRegisterDto to User entity
             User user = new User();
