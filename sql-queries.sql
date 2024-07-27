@@ -54,22 +54,38 @@ insert into room_available (room_available_name_arabic, room_available_name) val
 insert into room_available (room_available_name_arabic, room_available_name) values ("جناح","Suite");
 
 -- insert feature المميزات 
-
-insert into feature (feature_arabic_name, feature_name) values ("حمام سباحة","Swimming Pool");
 insert into feature (feature_arabic_name, feature_name) values ("اطلالة علي البحر","Sea View");
-insert into feature (feature_arabic_name, feature_name) values ("موقف سيارات","Parking");
+insert into feature (feature_arabic_name, feature_name) values ("اطلالة علي الجبل","Mountain view");
+insert into feature (feature_arabic_name, feature_name) values ("اطلالة علي الحديقة","Garden view");
+insert into feature (feature_arabic_name, feature_name) values ("مصعد","elevator");
+insert into feature (feature_arabic_name, feature_name) values ("انترنت","Internet");
+insert into feature (feature_arabic_name, feature_name) values ("افطار صباحي","Morning breakfast");
+insert into feature (feature_arabic_name, feature_name) values ("شاطئ خاص","Private beach");
+insert into feature (feature_arabic_name, feature_name) values ("شاطئ خاص","Private beach");
+insert into feature (feature_arabic_name, feature_name) values ("موقف سيارة","Parking");
+insert into feature (feature_arabic_name, feature_name) values ("مكتب أمن","Security office");
+
 
 -- insert sub_feature مميزات فرعية 
-insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("واي فاي","Wi-Fi");
-insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("تكيف","air conditioning");
-insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("غسالة صحون","dishwasher");
-insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("مطبخ","kitchen");
-insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("غسالة ملابس","washing machine");
+insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("ألعاب اطفال","toys");
 insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("تدفئة","heating");
-insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("شاشة","screen");
-insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("مصعد","elevator");
+insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("غسالة صحون","dishwasher");
+insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("غسالة ملابس","washing machine");
 insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("توصيل واستقبال من المطار","airport pick-up and drop-off");
+insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("ركن شواء","Grill corner");
+insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("شاشة","screen");
+insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("كرسي مساج","chair massage");
 insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("مكان مناسب لذوي الاحتياجات الخاصة","suitable place for people with special needs");
+insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("تكيف","air conditioning");
+insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("حمام سباحة","Swimming Pool");
+insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("بلاي ستيشن","Play Station");
+insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("أواني طبخ","Cooking utensils");
+insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("مايكرويف","Microwave");
+insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("ثلاجة","refrigerator");
+insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("فرن","oven");
+insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("جاكوزي","Jacuzzi");
+insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("ساونا","sauna");
+
 
 -- insert food_option امكانيات الطعام المتاحة 
 insert into food_option (food_option_arabic_name, food_option_name) values ("افطار","Breakfast");
