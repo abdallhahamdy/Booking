@@ -80,6 +80,8 @@ public class WebSecurityConfig {
                             .requestMatchers("api/users/send-otp-whats").permitAll()
                             .requestMatchers("api/users/validate-otp").permitAll()
                             .requestMatchers("api/users/forget-password/{phone}").permitAll()
+                            .requestMatchers("api/cities/all").permitAll()
+                            .requestMatchers("api/roles/all").permitAll()
                             .requestMatchers("/swagger-ui/**").permitAll()
                             .requestMatchers("/bezkoder-api-docs/**").permitAll()
 
