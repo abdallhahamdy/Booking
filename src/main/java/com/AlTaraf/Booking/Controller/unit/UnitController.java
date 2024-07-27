@@ -3,6 +3,7 @@ package com.AlTaraf.Booking.Controller.unit;
 import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequest;
 import com.AlTaraf.Booking.Dto.Unit.UnitDto;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
+import com.AlTaraf.Booking.Dto.Unit.UnitResponse;
 import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.User.User;
@@ -232,9 +233,11 @@ public class UnitController {
             PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_units.message", null, LocaleContextHolder.getLocale()) + " " + savedUnit.getNameUnit(),unitRequestDto.getUserId());
             notificationService.processNotification(notificationRequest);
 
+
             // Return the unitId in the response body
 //            return ResponseEntity.status(HttpStatus.CREATED).body("Successful_Add_Unit.message " + savedUnit.getId());
-            return ResponseEntity.status(HttpStatus.CREATED).body(messageSource.getMessage("Successful_Add_Unit.message", null, LocaleContextHolder.getLocale()) + " " + savedUnit.getId());
+            UnitResponse unitResponse = new UnitResponse(savedUnit.getId(), messageSource.getMessage("Successful_Add_Unit.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.CREATED).body(unitResponse);
 
         } catch (IllegalArgumentException e) {
             // Return user-friendly error response
