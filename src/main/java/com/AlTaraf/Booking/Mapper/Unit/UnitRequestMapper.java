@@ -6,7 +6,6 @@ import com.AlTaraf.Booking.Entity.unit.accommodationType.AccommodationType;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.feature.Feature;
 import com.AlTaraf.Booking.Entity.unit.featureForHalls.FeatureForHalls;
-import com.AlTaraf.Booking.Entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.Entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
@@ -35,7 +34,6 @@ public interface UnitRequestMapper {
     @Mapping(source = "availableAreaIds", target = "availableAreaSet", qualifiedByName = "availableAreaIdsToEntities")
     @Mapping(source = "basicFeaturesIds", target = "basicFeaturesSet", qualifiedByName = "basicFeaturesIdsToEntities")
     @Mapping(source = "subFeaturesIds", target = "subFeaturesSet", qualifiedByName = "subFeaturesIdsToEntities")
-    @Mapping(source = "foodOptionsIds", target = "foodOptionsSet", qualifiedByName = "foodOptionsIdsToEntities")
     @Mapping(source = "capacityHalls", target = "capacityHalls")
     @Mapping(source = "featuresHallsIds", target = "featuresHallsSet", qualifiedByName = "featuresHallsIdsToEntities")
     @Mapping(source = "availablePeriodsHallsIds", target = "availablePeriodsHallsSet", qualifiedByName = "availablePeriodsHallsIdsToEntities")
@@ -127,20 +125,6 @@ public interface UnitRequestMapper {
                     SubFeature subFeature = new SubFeature();
                     subFeature.setId(id);
                     return subFeature;
-                })
-                .collect(Collectors.toSet());
-    }
-
-    @Named("foodOptionsIdsToEntities")
-    static Set<FoodOption> foodOptionsIdsToEntities(Set<Long> foodOptionsIds) {
-        if (foodOptionsIds == null) {
-            return Collections.emptySet();
-        }
-        return foodOptionsIds.stream()
-                .map(id -> {
-                    FoodOption foodOption = new FoodOption();
-                    foodOption.setId(id);
-                    return foodOption;
                 })
                 .collect(Collectors.toSet());
     }

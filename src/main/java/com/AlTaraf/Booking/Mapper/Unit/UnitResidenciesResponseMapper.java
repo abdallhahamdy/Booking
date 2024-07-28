@@ -26,7 +26,6 @@ public interface UnitResidenciesResponseMapper {
     @Mapping(source = "roomAvailableSet", target = "roomAvailables")
     @Mapping(source = "basicFeaturesSet", target = "features")
     @Mapping(source = "subFeaturesSet", target = "subFeatures")
-    @Mapping(source = "foodOptionsSet", target = "foodOptions")
     @Mapping(source = "availableAreaSet", target = "availableAreas")
     @Mapping(source = "latForMapping", target = "latForMapping")
     @Mapping(source = "longForMapping", target = "longForMapping")

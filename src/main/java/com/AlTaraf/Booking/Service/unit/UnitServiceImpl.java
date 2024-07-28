@@ -388,10 +388,6 @@ public class UnitServiceImpl implements UnitService {
             spec = spec.and(UnitSpecifications.bySubFeaturesIds(subFeaturesIds));
         }
 
-        if (foodOptionsIds != null && !foodOptionsIds.isEmpty()) {
-            spec = spec.and(UnitSpecifications.byFoodOptionsIds(foodOptionsIds));
-        }
-
         if (capacityHalls != 0) {
             spec = spec.and(UnitSpecifications.byCapacityHalls(capacityHalls));
         }

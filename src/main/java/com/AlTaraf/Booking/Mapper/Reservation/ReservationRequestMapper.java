@@ -5,7 +5,6 @@ import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.feature.Feature;
-import com.AlTaraf.Booking.Entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.Payload.request.Reservation.ReservationRequestDto;
@@ -30,7 +29,6 @@ public interface ReservationRequestMapper {
     @Mapping(source = "availableAreaId", target = "availableArea", qualifiedByName = "mapToAvailableArea")
     @Mapping(source = "basicFeaturesIds", target = "basicFeaturesSet", qualifiedByName = "basicFeaturesIdsToEntities")
     @Mapping(source = "subFeaturesIds", target = "subFeaturesSet", qualifiedByName = "subFeaturesIdsToEntities")
-    @Mapping(source = "foodOptionsIds", target = "foodOptionsSet", qualifiedByName = "foodOptionsIdsToEntities")
     @Mapping(source = "capacityHalls", target = "capacityHalls")
     @Mapping(source = "availablePeriodsHallsIds", target = "availablePeriodsHallsSet", qualifiedByName = "availablePeriodsHallsIdsToEntities")
     @Mapping(source = "adultsAllowed", target = "adultsAllowed")
@@ -75,20 +73,6 @@ public interface ReservationRequestMapper {
                     SubFeature subFeature = new SubFeature();
                     subFeature.setId(id);
                     return subFeature;
-                })
-                .collect(Collectors.toSet());
-    }
-
-    @Named("foodOptionsIdsToEntities")
-    static Set<FoodOption> foodOptionsIdsToEntities(Set<Long> foodOptionsIds) {
-        if (foodOptionsIds == null) {
-            return Collections.emptySet();
-        }
-        return foodOptionsIds.stream()
-                .map(id -> {
-                    FoodOption foodOption = new FoodOption();
-                    foodOption.setId(id);
-                    return foodOption;
                 })
                 .collect(Collectors.toSet());
     }

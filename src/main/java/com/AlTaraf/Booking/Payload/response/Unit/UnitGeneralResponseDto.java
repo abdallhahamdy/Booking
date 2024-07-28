@@ -8,7 +8,6 @@ import com.AlTaraf.Booking.Entity.unit.accommodationType.AccommodationType;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
 import com.AlTaraf.Booking.Entity.unit.feature.Feature;
-import com.AlTaraf.Booking.Entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.Entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
@@ -48,8 +47,6 @@ public class UnitGeneralResponseDto {
     private Set<Feature> features;
 
     private Set<SubFeature> subFeatures;
-
-    private Set<FoodOption> foodOptions;
 
     private int capacityHalls;
 

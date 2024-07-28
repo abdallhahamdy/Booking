@@ -16,7 +16,6 @@ import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea
 import com.AlTaraf.Booking.Entity.unit.feature.Feature;
 import com.AlTaraf.Booking.Entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.Entity.unit.Unit;
-import com.AlTaraf.Booking.Entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.Entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
@@ -330,12 +329,6 @@ public class UnitController {
             if (unitRequestDto.getSubFeaturesIds() != null) {
                 unitToUpdate.setSubFeaturesSet(unitRequestDto.getSubFeaturesIds().stream()
                         .map(id -> new SubFeature(id))
-                        .collect(Collectors.toSet()));
-            }
-
-            if (unitRequestDto.getFoodOptionsIds() != null) {
-                unitToUpdate.setFoodOptionsSet(unitRequestDto.getFoodOptionsIds().stream()
-                        .map(id -> new FoodOption(id))
                         .collect(Collectors.toSet()));
             }
 

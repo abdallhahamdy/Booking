@@ -26,8 +26,6 @@ public class UnitRequestDto {
 
     private Set<Long> basicFeaturesIds;
     private Set<Long> subFeaturesIds;
-    private Set<Long> foodOptionsIds;
-
     private Integer capacityHalls;
     private Set<Long> featuresHallsIds;
     private Set<Long> availablePeriodsHallsIds;

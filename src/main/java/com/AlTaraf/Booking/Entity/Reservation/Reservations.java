@@ -9,7 +9,6 @@ import com.AlTaraf.Booking.Entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.feature.Feature;
-import com.AlTaraf.Booking.Entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
@@ -91,13 +90,6 @@ public class Reservations extends Auditable<String> {
             joinColumns = @JoinColumn(name = "RESERVATION_ID"),
             inverseJoinColumns = @JoinColumn(name = "sub_feature_id"))
     private Set<SubFeature> subFeaturesSet = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "reservation_food_options",
-            joinColumns = @JoinColumn(name = "RESERVATION_ID"),
-            inverseJoinColumns = @JoinColumn(name = "food_option_id"))
-    private Set<FoodOption> foodOptionsSet = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "STATUS_ID")

@@ -4,7 +4,6 @@ import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.unit.AvailablePeriods.AvailablePeriods;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.feature.Feature;
-import com.AlTaraf.Booking.Entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.Payload.response.Reservation.ReservationResponseGetId;
@@ -33,7 +32,6 @@ public interface ReservationGetByIdMapper {
     @Mapping(source = "availableArea", target = "availableArea")
     @Mapping(source = "basicFeaturesSet", target = "basicFeatures")
     @Mapping(source = "subFeaturesSet", target = "subFeatures")
-    @Mapping(source = "foodOptionsSet", target = "foodOptions")
     @Mapping(source = "capacityHalls", target = "capacityHalls")
     @Mapping(source = "availablePeriodsHallsSet", target = "availablePeriodsHalls")
     @Mapping(source = "adultsAllowed", target = "adultsAllowed")
@@ -70,20 +68,6 @@ public interface ReservationGetByIdMapper {
                     SubFeature subFeature = new SubFeature();
                     subFeature.setId(id);
                     return subFeature;
-                })
-                .collect(Collectors.toSet());
-    }
-
-    @Named("foodOptionsIdsToEntities")
-    static Set<FoodOption> foodOptionsIdsToEntities(Set<Long> foodOptionsIds) {
-        if (foodOptionsIds == null) {
-            return Collections.emptySet();
-        }
-        return foodOptionsIds.stream()
-                .map(id -> {
-                    FoodOption foodOption = new FoodOption();
-                    foodOption.setId(id);
-                    return foodOption;
                 })
                 .collect(Collectors.toSet());
     }

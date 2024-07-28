@@ -1,11 +1,9 @@
 package com.AlTaraf.Booking.Payload.response.Reservation;
 
 import com.AlTaraf.Booking.Entity.unit.AvailablePeriods.AvailablePeriods;
-import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Entity.unit.accommodationType.AccommodationType;
 import com.AlTaraf.Booking.Entity.unit.availableArea.AvailableArea;
 import com.AlTaraf.Booking.Entity.unit.feature.Feature;
-import com.AlTaraf.Booking.Entity.unit.foodOption.FoodOption;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
@@ -32,7 +30,6 @@ public class ReservationResponseGetId {
     private AvailableArea availableArea;
     private Set<Feature> basicFeatures;
     private Set<SubFeature> subFeatures;
-    private Set<FoodOption> foodOptions;
     private int capacityHalls;
     private Set<AvailablePeriods> availablePeriodsHalls;
     private int adultsAllowed;
