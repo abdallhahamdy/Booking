@@ -10,7 +10,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UnitRequestDto {
-//    private Long id;
     private Long unitTypeId;
     private Long userId;
     private String nameUnit;
@@ -20,6 +19,7 @@ public class UnitRequestDto {
 
     private Long accommodationTypeId;
     private Long hotelClassificationId;
+    private Long typeOfApartmentId;
 
     private Set<Long> roomAvailableIds;
     private Set<Long> availableAreaIds;
@@ -38,12 +38,11 @@ public class UnitRequestDto {
     private Integer ChaletNewPrice;
     private Integer ChaletOldPrice;
 
-//    private Integer resortOldPrice;
-//    private Integer resortNewPrice;
+    private Integer apartmentNewPrice;
+    private Integer apartmentOldPrice;
 
     private Integer adultsAllowed;
     private Integer childrenAllowed;
     private Integer loungeOldPrice;
     private Integer loungeNewPrice;
-//    private Integer price;
 }

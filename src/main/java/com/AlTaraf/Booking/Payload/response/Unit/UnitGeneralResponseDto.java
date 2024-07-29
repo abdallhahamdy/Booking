@@ -12,6 +12,7 @@ import com.AlTaraf.Booking.Entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
+import com.AlTaraf.Booking.Entity.unit.typesOfApartments.TypeOfApartment;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,6 +40,7 @@ public class UnitGeneralResponseDto {
 //    private List<ImageDataDTO> images;
 
     private HotelClassification hotelClassification;
+    private TypeOfApartment typeOfApartment;
 
     private Set<RoomAvailable> roomAvailables;
 
@@ -69,8 +71,8 @@ public class UnitGeneralResponseDto {
     private int ChaletOldPrice;
     private int ChaletNewPrice;
 
-    private int resortOldPrice;
-    private int resortNewPrice;
+    private int apartmentOldPrice;
+    private int apartmentNewPrice;
 
     private int loungeOldPrice;
     private int loungeNewPrice;

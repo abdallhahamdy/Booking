@@ -17,6 +17,7 @@ import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
+import com.AlTaraf.Booking.Entity.unit.typesOfApartments.TypeOfApartment;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
@@ -74,10 +75,13 @@ public class Unit extends Auditable<String> {
     @JoinColumn(name = "REGION_ID", nullable = false)
     private Region region;
 
+    @ManyToOne
+    @JoinColumn(name = "HOTEL_CLASSIFICATION_ID")
+    private HotelClassification hotelClassification;
 
     @ManyToOne
-    @JoinColumn(name = "HOTEL_CLASSIFICATION_ID", nullable = true)
-    private HotelClassification hotelClassification;
+    @JoinColumn(name = "TYPES_APARTMENT_ID")
+    private TypeOfApartment typeOfApartment;
 
     // الغرف المتاحة فنادق بداية
     @ManyToMany(fetch = FetchType.LAZY)
@@ -146,9 +150,9 @@ public class Unit extends Auditable<String> {
 
     private Integer ChaletOldPrice = 0;
 
-//    private Integer resortOldPrice = 0;
-//
-//    private Integer resortNewPrice = 0;
+    private Integer apartmentNewPrice = 0;
+
+    private Integer apartmentOldPrice = 0;
 
     private Integer loungeOldPrice = 0;
 
@@ -214,13 +218,17 @@ public class Unit extends Auditable<String> {
 
 
     public void setPrice(Integer price) {
+
         if (unitType != null && unitType.getId() == 2) {
             if (getNewPriceHall() == null || getNewPriceHall().intValue() == 0) {
                 price = getOldPriceHall();
             } else {
                 price = getNewPriceHall();
             }
-        } else if (unitType != null && unitType.getId() == 1 && accommodationType != null) {
+        }
+
+        else if (unitType != null && unitType.getId() == 1 && accommodationType != null) {
+
             if (accommodationType.getId() == 4) {
                 if (getChaletNewPrice() == null || getChaletNewPrice().intValue() == 0) {
                     price = getChaletOldPrice();
@@ -229,13 +237,13 @@ public class Unit extends Auditable<String> {
                 }
             }
 
-//            else if (accommodationType.getId() == 5) {
-//                if (getResortNewPrice() == null || getResortNewPrice().intValue() == 0) {
-//                    price = getResortOldPrice();
-//                } else {
-//                    price = getResortNewPrice();
-//                }
-//            }
+            if (accommodationType.getId() == 3) {
+                if (getApartmentNewPrice() == null || getApartmentNewPrice().intValue() == 0) {
+                    price = getApartmentOldPrice();
+                } else {
+                    price = getApartmentNewPrice();
+                }
+            }
 
             else if (accommodationType.getId() == 6) {
                 if (getLoungeNewPrice() == null || getLoungeNewPrice().intValue() == 0) {
@@ -250,14 +258,26 @@ public class Unit extends Auditable<String> {
 
 
     public void calculatePrice() {
+
         if (unitType != null && unitType.getId() == 2) {
             if (getNewPriceHall() == null || getNewPriceHall() == 0) {
                 price = getOldPriceHall() != null ? getOldPriceHall() : 0; // Set a default value if oldPriceHall is null
             } else {
                 price = getNewPriceHall();
             }
-        } else if (unitType != null && unitType.getId() == 1 && accommodationType != null) {
-            if (accommodationType.getId() == 4) {
+        }
+
+        else if (unitType != null && unitType.getId() == 1 && accommodationType != null) {
+
+            if (accommodationType.getId() == 3) {
+                if (getApartmentNewPrice() == null || getApartmentNewPrice() == 0) {
+                    price = getApartmentOldPrice() != null ? getApartmentOldPrice() : 0; // Set a default value if chaletOldPrice is null
+                } else {
+                    price = getApartmentNewPrice();
+                }
+            }
+
+            else if (accommodationType.getId() == 4) {
                 if (getChaletNewPrice() == null || getChaletNewPrice() == 0) {
                     price = getChaletOldPrice() != null ? getChaletOldPrice() : 0; // Set a default value if chaletOldPrice is null
                 } else {
@@ -265,13 +285,6 @@ public class Unit extends Auditable<String> {
                 }
             }
 
-//            else if (accommodationType.getId() == 5) {
-//                if (getResortNewPrice() == null || getResortNewPrice() == 0) {
-//                    price = getResortOldPrice() != null ? getResortOldPrice() : 0; // Set a default value if resortOldPrice is null
-//                } else {
-//                    price = getResortNewPrice();
-//                }
-//            }
 
             else if (accommodationType.getId() == 6) {
                 if (getLoungeNewPrice() == null || getLoungeNewPrice() == 0) {
@@ -299,7 +312,7 @@ public class Unit extends Auditable<String> {
 
     public void incrementTotalEvaluation() {
         if (this.totalEvaluation == null) {
-            this.totalEvaluation = 0; // Initialize to 0 if null
+            this.totalEvaluation = 0;
         }
         this.totalEvaluation++;
     }

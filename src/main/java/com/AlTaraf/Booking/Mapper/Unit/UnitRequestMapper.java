@@ -9,6 +9,7 @@ import com.AlTaraf.Booking.Entity.unit.featureForHalls.FeatureForHalls;
 import com.AlTaraf.Booking.Entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
+import com.AlTaraf.Booking.Entity.unit.typesOfApartments.TypeOfApartment;
 import com.AlTaraf.Booking.Payload.request.UnitRequestDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -21,7 +22,6 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface UnitRequestMapper {
-//    @Mapping(source = "id", target = "id")
     @Mapping(source = "unitTypeId", target = "unitType.id")
     @Mapping(source = "userId", target = "user.id")
     @Mapping(source = "nameUnit", target = "nameUnit")
@@ -30,6 +30,7 @@ public interface UnitRequestMapper {
     @Mapping(source = "regionId", target = "region.id")
     @Mapping(source = "accommodationTypeId", target = "accommodationType", qualifiedByName = "mapAccommodationTypeIdToEntity")
     @Mapping(source = "hotelClassificationId", target = "hotelClassification", qualifiedByName = "mapHotelClassificationIdToEntity")
+    @Mapping(source = "typeOfApartmentId", target = "typeOfApartment", qualifiedByName = "mapTypeOfApartmentIdToEntity")
     @Mapping(source = "roomAvailableIds", target = "roomAvailableSet", qualifiedByName = "roomAvailableIdsToEntities")
     @Mapping(source = "availableAreaIds", target = "availableAreaSet", qualifiedByName = "availableAreaIdsToEntities")
     @Mapping(source = "basicFeaturesIds", target = "basicFeaturesSet", qualifiedByName = "basicFeaturesIdsToEntities")
@@ -43,6 +44,9 @@ public interface UnitRequestMapper {
     @Mapping(source = "longForMapping", target = "longForMapping")
     @Mapping(source = "chaletOldPrice", target = "chaletOldPrice")
     @Mapping(source = "chaletNewPrice", target = "chaletNewPrice")
+
+    @Mapping(source = "apartmentOldPrice", target = "apartmentOldPrice")
+    @Mapping(source = "apartmentNewPrice", target = "apartmentNewPrice")
 
     @Mapping(source = "loungeOldPrice", target = "loungeOldPrice")
     @Mapping(source = "loungeNewPrice", target = "loungeNewPrice")
@@ -71,6 +75,16 @@ public interface UnitRequestMapper {
         HotelClassification hotelClassification = new HotelClassification();
         hotelClassification.setId(hotelClassificationId);
         return hotelClassification;
+    }
+
+    @Named("mapTypeOfApartmentIdToEntity")
+    static TypeOfApartment mapTypeOfApartmentIdToEntity(Long typeOfApartmentId) {
+        if (typeOfApartmentId == null) {
+            return null;
+        }
+        TypeOfApartment typeOfApartment = new TypeOfApartment();
+        typeOfApartment.setId(typeOfApartmentId);
+        return typeOfApartment;
     }
 
     @Named("roomAvailableIdsToEntities")

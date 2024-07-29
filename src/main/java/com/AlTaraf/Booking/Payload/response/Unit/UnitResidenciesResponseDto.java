@@ -9,6 +9,7 @@ import com.AlTaraf.Booking.Entity.unit.feature.Feature;
 import com.AlTaraf.Booking.Entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
+import com.AlTaraf.Booking.Entity.unit.typesOfApartments.TypeOfApartment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,7 @@ public class UnitResidenciesResponseDto {
 
     private List<FileForUnit> images;
     private HotelClassification hotelClassification;
+    private TypeOfApartment typeOfApartment;
     private Set<RoomAvailable> roomAvailables;
     private Set<Feature> features;
     private Set<SubFeature> subFeatures;

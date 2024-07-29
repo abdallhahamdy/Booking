@@ -23,6 +23,7 @@ public interface UnitResidenciesResponseMapper {
     @Mapping(source = "accommodationType", target = "accommodationType")
 //    @Mapping(source = "images", target = "images")
     @Mapping(source = "hotelClassification", target = "hotelClassification")
+    @Mapping(source = "typeOfApartment", target = "typeOfApartment")
     @Mapping(source = "roomAvailableSet", target = "roomAvailables")
     @Mapping(source = "basicFeaturesSet", target = "features")
     @Mapping(source = "subFeaturesSet", target = "subFeatures")

@@ -107,61 +107,49 @@ public class UnitController {
     UnitResidenciesResponseMapper unitResidenciesResponseMapper;
 
     @Autowired
-    private RoomDetailsRequestMapper roomDetailsRequestMapper;
+    RoomDetailsRequestMapper roomDetailsRequestMapper;
 
     @Autowired
-    private RoomDetailsResponseMapper roomDetailsResponseMapper;
+    RoomDetailsResponseMapper roomDetailsResponseMapper;
 
     @Autowired
-    private RoomDetailsService roomDetailsService;
+    RoomDetailsService roomDetailsService;
 
     @Autowired
-    private RoomDetailsForAvailableAreaService roomDetailsForAvailableAreaService;
+    RoomDetailsForAvailableAreaService roomDetailsForAvailableAreaService;
 
     @Autowired
-    private UnitGeneralResponseMapper unitGeneralResponseMapper;
+    UnitGeneralResponseMapper unitGeneralResponseMapper;
 
     @Autowired
-    private UnitFavoriteMapper unitFavoriteMapper;
+    UnitFavoriteMapper unitFavoriteMapper;
 
     @Autowired
-    private RoomAvailableService roomAvailableService;
+    RoomAvailableService roomAvailableService;
 
     @Autowired
-    private ReservationService reservationService;
-
-    @Autowired
-    private AdsRepository adsRepository;
+    ReservationService reservationService;
 
     @Autowired
     ReservationStatusMapper reservationStatusMapper;
 
     @Autowired
-    private ReservationRepository reservationRepository;
+    ReservationRepository reservationRepository;
 
     @Autowired
-    private UnitRepository unitRepository;
+    UnitRepository unitRepository;
 
     @Autowired
-    private RoomAvailableRepository roomAvailableRepository;
+    RoomDetailsRepository roomDetailsRepository;
 
     @Autowired
-    private RoomDetailsRepository roomDetailsRepository;
+    RoomDetailsForAvailableAreaRepository roomDetailsForAvailableAreaRepository;
 
     @Autowired
-    private RoomDetailsForAvailableAreaRepository roomDetailsForAvailableAreaRepository;
+    ReserveDateRepository reserveDateRepository;
 
     @Autowired
-    private ReserveDateRepository reserveDateRepository;
-
-    @Autowired
-    private ReserveDateHallsRepository reserveDateHallsRepository;
-
-    @Autowired
-    private UserFavoriteUnitRepository userFavoriteUnitRepository;
-
-    @Autowired
-    private UserFavoriteUnitService userFavoriteUnitService;
+    UserFavoriteUnitService userFavoriteUnitService;
 
     @Autowired
     StatusRepository statusUnitRepository;
@@ -175,14 +163,14 @@ public class UnitController {
     private static final Logger logger = LoggerFactory.getLogger(UnitController.class);
 
     @Autowired
-    private MessageSource messageSource;
+    MessageSource messageSource;
 
     @PostMapping("/Create-Unit")
     public ResponseEntity<?> createUnit(@RequestBody UnitRequestDto unitRequestDto,
                                         @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
 
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -191,40 +179,36 @@ public class UnitController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
 
-            // Convert UnitRequestDto to Unit
             Unit unitToSave = unitRequestMapper.toUnit(unitRequestDto);
 
-            // Set default value for newPriceHall if it's null
             if (unitToSave.getNewPriceHall() == null) {
-                unitToSave.setNewPriceHall(0); // Or set it to some default value
+                unitToSave.setNewPriceHall(0);
             }
 
             if (unitToSave.getOldPriceHall() == null) {
-                unitToSave.setOldPriceHall(0); // Set oldPriceHall to 0 if it's null
+                unitToSave.setOldPriceHall(0);
             }
 
             if (unitToSave.getChaletNewPrice() == null) {
-                unitToSave.setChaletNewPrice(0); // Or set it to some default value
+                unitToSave.setChaletNewPrice(0);
             }
 
             if (unitToSave.getChaletOldPrice() == null) {
-                unitToSave.setChaletOldPrice(0); // Set oldPriceHall to 0 if it's null
+                unitToSave.setChaletOldPrice(0);
             }
 
             if (unitToSave.getLoungeNewPrice() == null) {
-                unitToSave.setLoungeNewPrice(0); // Or set it to some default value
+                unitToSave.setLoungeNewPrice(0);
             }
 
             if (unitToSave.getLoungeOldPrice() == null) {
-                unitToSave.setLoungeOldPrice(0); // Set oldPriceHall to 0 if it's null
+                unitToSave.setLoungeOldPrice(0);
             }
 
-            // Calculate the price based on the unitType
             unitToSave.calculatePrice();
 
             Unit savedUnit = unitService.saveUnit(unitToSave);
@@ -233,23 +217,16 @@ public class UnitController {
             notificationService.processNotification(notificationRequest);
 
 
-            // Return the unitId in the response body
-//            return ResponseEntity.status(HttpStatus.CREATED).body("Successful_Add_Unit.message " + savedUnit.getId());
             UnitResponse unitResponse = new UnitResponse(savedUnit.getId(), messageSource.getMessage("Successful_Add_Unit.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.CREATED).body(unitResponse);
 
         } catch (IllegalArgumentException e) {
-            // Return user-friendly error response
-//            ApiResponse response = new ApiResponse(400, e.getMessage());
             ApiResponse response = new ApiResponse(400,  messageSource.getMessage("Failed_Add_Unit.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
 
         catch (Exception e) {
-            // Log the exception
             e.printStackTrace();
-            // Return generic error response
-//            ApiResponse response = new ApiResponse(400, "Failed_Add_Unit.message");
             ApiResponse response = new ApiResponse(400, messageSource.getMessage("Failed_Add_Unit.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
@@ -259,7 +236,8 @@ public class UnitController {
     public ResponseEntity<?> updateUnit(@PathVariable Long unitId, @RequestBody UnitRequestDto unitRequestDto,
                                         @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -273,7 +251,6 @@ public class UnitController {
                 }
             }
 
-            // Find the unit to update
             Unit unitToUpdate = unitService.getUnitById(unitId);
             if (unitToUpdate == null) {
                 // Return a 404 Not Found response if the unit does not exist
@@ -372,6 +349,14 @@ public class UnitController {
                 unitToUpdate.setChaletOldPrice(unitRequestDto.getChaletOldPrice());
             }
 
+            if (unitRequestDto.getApartmentNewPrice() != null) {
+                unitToUpdate.setApartmentNewPrice(unitRequestDto.getApartmentNewPrice());
+            }
+
+            if (unitRequestDto.getApartmentOldPrice() != null) {
+                unitToUpdate.setApartmentOldPrice(unitRequestDto.getApartmentOldPrice());
+            }
+
             if (unitRequestDto.getChildrenAllowed() != null) {
                 unitToUpdate.setChildrenAllowed(unitRequestDto.getChildrenAllowed());
             }
@@ -396,14 +381,10 @@ public class UnitController {
             // Return a success response with the updated unitId in the body
             return ResponseEntity.ok( messageSource.getMessage("unit_updated.message", null, LocaleContextHolder.getLocale())
                     + " " + updatedUnit.getId());
-//            return ResponseEntity.ok("Unit updated successfully with id: " + updatedUnit.getId());
         } catch (Exception e) {
-            // Log the exception
-            // logger.error("Error occurred while processing update-unit request", e);
 
             System.out.println("Exception for Update Unit: " + e);
 
-            // Return user-friendly error response
             ApiResponse response = new ApiResponse(400, messageSource.getMessage("failed.updated.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         }
@@ -436,14 +417,12 @@ public class UnitController {
             if (!units.isEmpty()) {
                 return new ResponseEntity<>(units, HttpStatus.OK);
             } else {
-//                ApiResponse response = new ApiResponse(204, "No Content for Units have high evaluation!");
                 ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
             }
         } catch (Exception e) {
             logger.error("Error occurred while processing get-units-by-evaluation request", e);
             System.out.println("Error Message : " + e);
-//            ApiResponse response = new ApiResponse(500, "Internal Server Error");
             ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
@@ -452,7 +431,6 @@ public class UnitController {
     @GetMapping("/newly-added")
     public ResponseEntity<?> getUnitsAddedLastMonth(@RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
-//        Sort sort = Sort.by("id").descending();
         try {
 
             Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
@@ -478,10 +456,8 @@ public class UnitController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
             }
         }  catch (Exception e) {
-//            logger.error("Error occurred while processing get-units-by-evaluation request", e);
             System.out.println("Error occurred while processing get-units-by-evaluation request: " + e);
             System.out.println("Error Message : " + e);
-//            ApiResponse response = new ApiResponse(500, "Internal Server Error");
             ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()) + " " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
@@ -496,7 +472,7 @@ public class UnitController {
 
         try {
 
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -505,12 +481,11 @@ public class UnitController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
 
-            Sort sort = Sort.by("id").descending(); // Sort by unit ID in ascending order
+            Sort sort = Sort.by("id").descending();
 
             Page<UnitDtoFavorite> units = unitService.getUnitsByAccommodationTypeName(accommodationTypeId, page, size, sort);
 
@@ -521,9 +496,7 @@ public class UnitController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
             }
         } catch (Exception e) {
-//            logger.error("Error occurred while processing get-units-by-evaluation request", e);
             System.out.println("Error Message : " + e);
-//            ApiResponse response = new ApiResponse(500, "Internal Server Error");
             ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
@@ -538,7 +511,7 @@ public class UnitController {
 
         try {
 
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -547,12 +520,11 @@ public class UnitController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
 
-            Sort sort = Sort.by("id").descending(); // Sort by unit ID in ascending order
+            Sort sort = Sort.by("id").descending();
 
             Page<UnitDtoFavorite> units = unitService.getUnitsByUserCity(userId, PageRequest.of(page, size), sort);
 
@@ -563,9 +535,7 @@ public class UnitController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
         } catch (Exception e) {
-//            logger.error("Error occurred while processing get-units-by-evaluation request", e);
             System.out.println("Error Message : " + e);
-//            ApiResponse response = new ApiResponse(500, "Internal Server Error");
             ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
@@ -576,7 +546,7 @@ public class UnitController {
                                          @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
 
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -585,26 +555,19 @@ public class UnitController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
 
             Unit unit = unitService.getUnitById(id);
             if (unit != null) {
-//            List<RoomAvailable> roomAvailableList = new ArrayList<>(unit.getRoomAvailableSet());
-//            roomAvailableList.sort(Comparator.comparingLong(RoomAvailable::getId));
-//            unit.setRoomAvailableSet(new HashSet<>(roomAvailableList));
-
                 UnitGeneralResponseDto responseDto = unitGeneralResponseMapper.toResponseDto(unit);
                 return ResponseEntity.ok(responseDto);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, messageSource.getMessage("not_found.message", null, LocaleContextHolder.getLocale())));
             }
         } catch (Exception e) {
-//            logger.error("Error occurred while processing get-units-by-evaluation request", e);
             System.out.println("Error Message : " + e);
-//            ApiResponse response = new ApiResponse(500, "Internal Server Error");
             ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
@@ -615,7 +578,7 @@ public class UnitController {
                                                     @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
 
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -637,9 +600,7 @@ public class UnitController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(404, messageSource.getMessage("not_found.message", null, LocaleContextHolder.getLocale())));
             }
         } catch (Exception e) {
-//            logger.error("Error occurred while processing get-units-by-evaluation request", e);
             System.out.println("Error Message : " + e);
-//            ApiResponse response = new ApiResponse(500, "Internal Server Error");
             ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
@@ -649,7 +610,7 @@ public class UnitController {
     public ResponseEntity<?> getEventHallsById(@PathVariable Long unitId,
                                                @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
-        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+        Locale locale = LocaleContextHolder.getLocale();
 
         if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
             try {
@@ -658,7 +619,6 @@ public class UnitController {
                     locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                 }
             } catch (IllegalArgumentException e) {
-                // Handle the exception if needed
                 System.out.println("IllegalArgumentException: " + e);
             }
         }
@@ -674,12 +634,12 @@ public class UnitController {
     }
 
     @PostMapping("{unitId}/{roomAvailableId}/Room-Details/Add")
-    @Transactional // Add this annotation to enable transaction management
+    @Transactional
     public ResponseEntity<?> addRoomDetails(@PathVariable Long unitId, @PathVariable Long roomAvailableId, @RequestBody RoomDetailsRequestDto roomDetailsRequestDto,
                                             @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
 
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -688,28 +648,21 @@ public class UnitController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
 
-            // Check if RoomDetails already exists for the given unitId and roomAvailableId
             boolean roomDetailsExists = roomDetailsRepository.existsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
             if (roomDetailsExists) {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,"RoomDetails already exists for unitId: " + unitId + " and roomAvailableId: " + roomAvailableId));
-
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,messageSource.getMessage("room_details_already_exists.message", null, LocaleContextHolder.getLocale()) + " " + unitId + "  " + roomAvailableId));
             }
 
-
             RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsRequestDto);
             roomDetailsService.addRoomDetails(unitId, roomAvailableId, roomDetails);
-//            return ResponseEntity.ok("RoomDetails added successfully " + roomDetails.getId());
             return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetails.getId());
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetails: " + e.getMessage());
             ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
@@ -717,14 +670,14 @@ public class UnitController {
 
 
     @PostMapping("update/{unitId}/{roomAvailableId}/Room-Details/Add")
-    @Transactional(rollbackOn = Exception.class) // Add this annotation to enable transaction management
+    @Transactional(rollbackOn = Exception.class)
     public ResponseEntity<?> updateAddRoomDetails(@PathVariable Long unitId,
                                                   @PathVariable Long roomAvailableId,
                                                   @RequestBody RoomDetailsRequestDto roomDetailsRequestDto,
                                                   @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
 
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -733,7 +686,6 @@ public class UnitController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
@@ -753,19 +705,14 @@ public class UnitController {
                 return ResponseEntity.ok(messageSource.getMessage("room_details_edited_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetailsForUpdate.getId());
 
             } else {
-
                 RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsRequestDto);
                 roomDetailsService.addRoomDetails(unitId, roomAvailableId, roomDetails);
-
                 List<ReserveDate> reserveDateList = reserveDateRepository.findByUnitId(unitId);
-
                 for (ReserveDate reserveDate : reserveDateList) {
                     reserveDateRepository.deleteDateInfoByReserveDateId(reserveDate.getId());
                 }
-
                 reserveDateRepository.deleteByUnitId(unitId);
                 roomDetailsForAvailableAreaRepository.deleteByUnitId(unitId);
-
                 return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetails.getId());
             }
         } catch (RuntimeException et) {
@@ -774,7 +721,6 @@ public class UnitController {
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             System.out.println("error: " + e );
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to add RoomDetails: " + e.getMessage());
             ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()) + " " + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
@@ -782,13 +728,13 @@ public class UnitController {
 
 
     @PostMapping("{unitId}/{availableAreaId}/Room-Details-For-Available-Area/Add")
-    @Transactional // Add this annotation to enable transaction management
+    @Transactional
     public ResponseEntity<?> addRoomDetailsForAvailableArea(@PathVariable Long unitId, @PathVariable Long availableAreaId,
                                                             @RequestBody RoomDetailsRequestDto roomDetailsRequestDto,
                                                             @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
 
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -797,17 +743,14 @@ public class UnitController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
 
-            // Check if RoomDetailsForAvailableArea already exists for the given unitId and availableAreaId
             boolean roomDetailsExists = roomDetailsForAvailableAreaRepository.existsByUnitIdAndAvailableAreaId(unitId, availableAreaId);
             if (roomDetailsExists) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,messageSource.getMessage("room_details_already_exists.message", null, LocaleContextHolder.getLocale()) + " " + unitId + "  " + availableAreaId));
             }
-
             RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsRequestMapper.toEntityAvailableArea(roomDetailsRequestDto);
             roomDetailsForAvailableAreaService.addRoomDetails(unitId, availableAreaId, roomDetailsForAvailableArea);
             return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetailsForAvailableArea.getId());
@@ -818,14 +761,14 @@ public class UnitController {
     }
 
     @PostMapping("update/{unitId}/{availableAreaId}/Room-Details-For-Available-Area/Add")
-    @Transactional // Add this annotation to enable transaction management
+    @Transactional
     public ResponseEntity<?> updateAddRoomDetailsForAvailableArea(@PathVariable Long unitId,
                                                                   @PathVariable Long availableAreaId,
                                                                   @RequestBody RoomDetailsRequestDto roomDetailsRequestDto,
                                                                   @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
 
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -834,7 +777,6 @@ public class UnitController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
@@ -842,7 +784,6 @@ public class UnitController {
             Unit unit = unitRepository.findById(unitId).orElse(null);
 
             if (unit.getUnitType().getId() != 1) {
-
                 RoomDetailsForAvailableArea roomDetailsForAvailableAreaForUpdate = roomDetailsForAvailableAreaRepository.findByUnitIdAndAvailableAreaId(unitId, availableAreaId);
                 roomDetailsForAvailableAreaForUpdate.setRoomNumber(roomDetailsRequestDto.getRoomNumber());
                 roomDetailsForAvailableAreaForUpdate.setNewPrice(roomDetailsRequestDto.getNewPrice().intValue());
@@ -871,7 +812,7 @@ public class UnitController {
             @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
 
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -880,25 +821,19 @@ public class UnitController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
 
-            // Retrieve RoomDetails entity from the service layer
             RoomDetails roomDetails = roomDetailsService.getRoomDetailsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
 
             if ( roomDetails != null ) {
-                // Map RoomDetails entity to RoomDetailsResponseDto
                 RoomDetailsResponseDto roomDetailsResponseDto = roomDetailsResponseMapper.toDto(roomDetails);
-
-                // Return the response
                 return ResponseEntity.ok(roomDetailsResponseDto);
             } else {
                 ApiResponse response = new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale()));
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(response);
             }
-
         } catch (Exception e) {
             ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
@@ -911,9 +846,7 @@ public class UnitController {
             @RequestParam Long availableAreaId,
             @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
-
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
-
+            Locale locale = LocaleContextHolder.getLocale();
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
                     List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
@@ -921,16 +854,13 @@ public class UnitController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
 
-            // Retrieve RoomDetails entity from the service layer
             RoomDetailsForAvailableArea availableArea = roomDetailsForAvailableAreaService.getRoomDetailsByUnitIdAndAvailableAreaId(unitId, availableAreaId);
 
             if (availableArea != null) {
-                // Map RoomDetails entity to RoomDetailsResponseDto
                 RoomDetailsResponseDto roomDetailsResponseDto = roomDetailsResponseMapper.toDtoForAvailableArea(availableArea);
                 return ResponseEntity.ok(roomDetailsResponseDto);
             } else {
@@ -953,7 +883,7 @@ public class UnitController {
 
         try {
 
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -962,7 +892,6 @@ public class UnitController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
@@ -990,7 +919,7 @@ public class UnitController {
 
         try {
 
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -999,28 +928,20 @@ public class UnitController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
-
             Unit unit = unitRepository.findById(id).orElse(null);
-
             StatusUnit statusUnit = statusUnitRepository.findById(4L).orElse(null);
-
             unit.setStatusUnit(statusUnit);
-
             unitRepository.save(unit);
-
             ApiResponse response = new ApiResponse(200, messageSource.getMessage("Unit_deleted.message", null, LocaleContextHolder.getLocale()));
-
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             System.out.println("Error Message : " + e);
             ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-
     }
 
     private Sort getSortByPrice(String sortDirection) {
@@ -1131,7 +1052,7 @@ public class UnitController {
             @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
         try {
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -1140,7 +1061,6 @@ public class UnitController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
@@ -1150,7 +1070,6 @@ public class UnitController {
                     basicFeaturesIds, subFeaturesIds, foodOptionsIds, evaluationId, capacityHalls, adultsAllowed, childrenAllowed,
                     priceMin, priceMax);
 
-//            List<UnitDtoFavorite>  unitFavoriteDtoList = unitFavoriteMapper.toUnitFavoriteDtoList(units);
 
             User user = userRepository.findById(userId).orElse(null);
 
@@ -1161,16 +1080,11 @@ public class UnitController {
                     unitForFavorite.setFavorite(true);
                 }
             }
-
             List<UnitDtoFavorite>  unitFavoriteDtoList = unitFavoriteMapper.toUnitFavoriteDtoList(units);
-
-
             return ResponseEntity.ok(unitFavoriteDtoList);
 
         } catch (Exception e) {
-            // Log the exception
             e.printStackTrace();
-            // You can throw a custom exception or return an error response here if needed
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("no_content.message", null, LocaleContextHolder.getLocale())));
         }
     }
@@ -1218,7 +1132,7 @@ public class UnitController {
     @GetMapping("/Get-All-Feature-For-Halls")
     public ResponseEntity<?> getAllFeatureForHalls(@RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
-        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+        Locale locale = LocaleContextHolder.getLocale();
 
         if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
             try {
@@ -1227,7 +1141,6 @@ public class UnitController {
                     locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                 }
             } catch (IllegalArgumentException e) {
-                // Handle the exception if needed
                 System.out.println("IllegalArgumentException: " + e);
             }
         }
@@ -1244,7 +1157,7 @@ public class UnitController {
     @GetMapping("/Get-Available-Periods")
     public ResponseEntity<?> getAllAvailablePeriods(@RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
-        Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+        Locale locale = LocaleContextHolder.getLocale();
 
         if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
             try {
@@ -1253,7 +1166,6 @@ public class UnitController {
                     locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                 }
             } catch (IllegalArgumentException e) {
-                // Handle the exception if needed
                 System.out.println("IllegalArgumentException: " + e);
             }
         }
@@ -1273,7 +1185,7 @@ public class UnitController {
                                                          @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
 
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -1282,14 +1194,12 @@ public class UnitController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
 
             Reservations reservations = reservationRepository.findById(reservationId).orElse(null);
              reservationService.updateStatusForReservation(reservationId, statusUnitId);
-//            return ResponseEntity.ok(new ApiResponse(200,"Status changed successfully"));
             if (reservations.getStatusUnit().getId() == 2) {
                 PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()), messageSource.getMessage("notification_body_accepted_reservation_successful.message", null, LocaleContextHolder.getLocale()) + " " + reservations.getUnit().getNameUnit(), reservations.getUser().getId());
                 notificationService.processNotification(notificationRequest);
@@ -1297,11 +1207,8 @@ public class UnitController {
                 PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()), messageSource.getMessage("notification_body_rejected_updated_reservation.message", null, LocaleContextHolder.getLocale()) + " " + reservations.getUnit().getNameUnit(), reservations.getUser().getId());
                 notificationService.processNotification(notificationRequest);
             }
-//            return ResponseEntity.ok(new ApiResponse(200,messageSource.getMessage("status_reservation_changed_successful.message", null, LocaleContextHolder.getLocale())));
             return ResponseEntity.ok(new ApiResponse(200,messageSource.getMessage("status_reservation_changed_successful.message", null, LocaleContextHolder.getLocale())));
         } catch (Exception e) {
-
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update reservation status : " + e.getMessage());
             System.out.println("error message: " + e);
             return ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage("failed_updated_status_reservation.message", null, LocaleContextHolder.getLocale()));
         }
@@ -1315,7 +1222,7 @@ public class UnitController {
                                                     @RequestParam(defaultValue = "20") int size) {
         try {
 
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -1324,7 +1231,6 @@ public class UnitController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
@@ -1360,7 +1266,7 @@ public class UnitController {
 
         try {
 
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
+            Locale locale = LocaleContextHolder.getLocale();
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
@@ -1369,7 +1275,6 @@ public class UnitController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
