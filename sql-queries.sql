@@ -126,6 +126,9 @@ insert into available_area (available_area_name_arabic, available_area_name) val
 insert into available_area (available_area_name_arabic, available_area_name) values ("غرفتين","two rooms");
 insert into available_area (available_area_name_arabic, available_area_name) values ("ثلاث غرف","three rooms");
 
+insert into types_apartment (types_apartment_arabic_name, types_apartment_name) values ("استوديو","studio");
+insert into types_apartment (types_apartment_arabic_name, types_apartment_name) values ("غرفتين","two rooms");
+insert into types_apartment (types_apartment_arabic_name, types_apartment_name) values ("ثلاث غرف","three rooms");
 
 insert into evaluation (evaluation_arabic_name, evaluation_name, score) values ("+ممتاز: 9", "Excellent: 9+", 9);
 insert into evaluation (evaluation_arabic_name, evaluation_name, score) values ("+جيد جدا: 8", "Very Good: 8+", 8);
