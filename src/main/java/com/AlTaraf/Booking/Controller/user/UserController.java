@@ -293,7 +293,6 @@ public class UserController {
 
             // Retrieve the user by ID
             User existingUser = userService.getUserById(userId);
-            boolean isPhoneAvailable = userService.existsByPhone(userEditDto.getPhone());
             boolean isEmailAvailable = userService.existsByEmail(userEditDto.getEmail());
             // Update the user information conditionally based on non-null values in the UserEditDto
             if (userEditDto.getUsername() != null) {
@@ -308,35 +307,6 @@ public class UserController {
                             .body(response);
                 } else {
                     existingUser.setEmail(userEditDto.getEmail());
-                }
-            }
-
-            if (userEditDto.getPhone() != null && !Objects.equals(existingUser.getPhone(), userEditDto.getPhone())) {
-                if (isPhoneAvailable){
-                    CheckApiResponse response = new CheckApiResponse(204,  messageSource.getMessage("phone_taken.message", null, LocaleContextHolder.getLocale()), false);
-                    return ResponseEntity.status(HttpStatus.CONFLICT)
-                            .body(response);
-                } else {
-                    existingUser.setPhone(userEditDto.getPhone());
-
-                }
-            }
-
-
-            if (userEditDto.getPassword() != null) {
-                existingUser.setPassword(encoder.encode(userEditDto.getPassword()));
-            }
-
-            // Retrieve and set the city based on the provided cityId
-            if (userEditDto.getCityId() != null) {
-                Optional<City> optionalCity = cityService.getCityById(userEditDto.getCityId());
-
-                if (optionalCity.isPresent()) {
-                    // If the City is present, set it to the existing user
-                    existingUser.setCity(optionalCity.get());
-                } else {
-                    // Handle the case where the City is not found
-                    throw new RuntimeException("City not found for id: " + userEditDto.getCityId());
                 }
             }
 
