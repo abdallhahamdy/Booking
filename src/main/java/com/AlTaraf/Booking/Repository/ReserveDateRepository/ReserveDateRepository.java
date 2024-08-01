@@ -21,8 +21,10 @@ public interface ReserveDateRepository extends JpaRepository<ReserveDate, Long> 
 //    List<ReserveDate> findByRoomDetailsForAvailableAreaIdAndUnitIdAndReserveTrue(@Param("roomDetailsForAvailableAreaId") Long roomDetailsForAvailableAreaId, @Param("unitId") Long unitId);
 
     @Query("SELECT rd FROM ReserveDate rd WHERE rd.unit.id = :unitId")
-    List<ReserveDate> findByUnitId(@Param("unitId") Long unitId);
+    List<ReserveDate> findListByUnitId(@Param("unitId") Long unitId);
 
+    @Query("SELECT rd FROM ReserveDate rd WHERE rd.unit.id = :unitId")
+    ReserveDate findByUnitId(@Param("unitId") Long unitId);
 
     @Modifying
     @Transactional

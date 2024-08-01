@@ -5,6 +5,7 @@ import com.AlTaraf.Booking.Entity.Calender.DateInfo;
 import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
 import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateDto;
+import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateUnitDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -30,6 +31,10 @@ public interface ReserveDateMapper {
     @Mapping(source = "roomDetailsForAvailableArea.id", target = "roomDetailsForAvailableAreaId")
     @Mapping(source = "unit.id", target = "unitId")
     ReserveDateDto reserveDateToReserveDateRequest(ReserveDate reserveDate);
+
+    @Mapping(source = "dateInfoList", target = "dateInfoList")
+    @Mapping(source = "unit.id", target = "unitId")
+    ReserveDateUnitDto reserveDateToReserveDateUnitRequest(ReserveDate reserveDate);
 
     @Named("toDateList")
     default List<Date> toDateList(List<Date> dates) {

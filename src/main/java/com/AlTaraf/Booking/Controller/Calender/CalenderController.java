@@ -8,6 +8,7 @@ import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea
 import com.AlTaraf.Booking.Mapper.Calender.ReserveDateHallsMapper;
 import com.AlTaraf.Booking.Mapper.Calender.ReserveDateMapper;
 import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateDto;
+import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateUnitDto;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
@@ -73,7 +74,7 @@ public class CalenderController {
             }
 
             ReserveDateHalls reserveDateHalls = ReserveDateHallsMapper.INSTANCE.toEntity(reserveDateHallsDto);
-            ReserveDateHalls savedReserveDate = reserveDateHallsRepository.save(reserveDateHalls);
+            reserveDateHallsRepository.save(reserveDateHalls);
             return ResponseEntity.ok(new ApiResponse(201, messageSource.getMessage("reserve_date_success.message", null, LocaleContextHolder.getLocale())));
         } catch (Exception e) {
             System.out.println("Failed Reserve Date Halls: " + e.getMessage());
@@ -123,7 +124,7 @@ public class CalenderController {
             reserveDate.setRoomDetailsForAvailableArea(roomDetails);
 
             // Save the ReserveDate entity
-            ReserveDate savedReserveDate = reserveDateRepository.save(reserveDate);
+           reserveDateRepository.save(reserveDate);
             return ResponseEntity.ok(new ApiResponse(201, messageSource.getMessage("reserve_date_success.message", null, LocaleContextHolder.getLocale())));
         } catch (Exception e) {
             System.out.println("Failed Reserve Date: " + e.getMessage());
@@ -131,8 +132,10 @@ public class CalenderController {
         }
     }
 
-    @GetMapping("/{roomDetailsForAvailableAreaId}/{unitId}")
-    public ResponseEntity<?> getReserveDatesByRoomDetailsForAvailableAreaIdAndUnitId(@PathVariable Long roomDetailsForAvailableAreaId,
+
+
+    @GetMapping("/{unitId}")
+    public ResponseEntity<?> getReserveDatesByRoomDetailsForAvailableAreaIdAndUnitId(@RequestParam(name = "roomDetailsForAvailableAreaId", required = false) Long roomDetailsForAvailableAreaId,
                                                                                      @PathVariable Long unitId,
                                                                                      @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
@@ -152,27 +155,38 @@ public class CalenderController {
                 }
             }
 
+            List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitIdAndReserveIsTrue(unitId);
 
-            boolean roomNumberZeroExists = roomDetailsForAvailableAreaRepository.existsByRoomNumberZero();
+            if (roomDetailsForAvailableAreaId != null) {
+                boolean roomNumberZeroExists = roomDetailsForAvailableAreaRepository.existsByRoomNumberZero();
 
-            if (roomNumberZeroExists) {
-                List<ReserveDate> reserveDates = reserveDateRepository.findByRoomDetailsForAvailableAreaIdAndUnitId(roomDetailsForAvailableAreaId, unitId);
-                List<ReserveDateDto> reserveDateRequests = reserveDates.stream()
-                        .map(ReserveDateMapper.INSTANCE::reserveDateToReserveDateRequest)
+                if (roomNumberZeroExists) {
+                    List<ReserveDate> reserveDates = reserveDateRepository.findByRoomDetailsForAvailableAreaIdAndUnitId(roomDetailsForAvailableAreaId, unitId);
+                    List<ReserveDateDto> reserveDateRequests = reserveDates.stream()
+                            .map(ReserveDateMapper.INSTANCE::reserveDateToReserveDateRequest)
+                            .collect(Collectors.toList());
+                    return ResponseEntity.ok(reserveDateRequests);
+                }
+
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(205, messageSource.getMessage("Room_Still_Available.message", null, LocaleContextHolder.getLocale())));
+            } else if (!reserveDateHallsList.isEmpty()) {
+                List<ReserveDateHallsDto> reserveDateHallsDtoList = reserveDateHallsList.stream()
+                        .map(ReserveDateHallsMapper.INSTANCE::toDto)
                         .collect(Collectors.toList());
-                return ResponseEntity.ok(reserveDateRequests);
+                return ResponseEntity.ok(reserveDateHallsDtoList);
+            } else {
+                // Return an empty list or appropriate response when no data is found
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("No_Reserve_Dates_Found.message", null, LocaleContextHolder.getLocale())));
             }
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(205, messageSource.getMessage("Room_Still_Available.message", null, LocaleContextHolder.getLocale())));
-
         } catch (Exception e) {
             System.out.println("Failed to get Reserve Dates: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(500, messageSource.getMessage("Failed_Get_Reserve_Date.message", null, LocaleContextHolder.getLocale())));
         }
     }
 
-    @GetMapping("/For-Add-Unit/{roomDetailsForAvailableAreaId}/{unitId}")
-    public ResponseEntity<?> getReserveDatesByRoomDetailsForAvailableAreaIdAndUnitIdForUnit(@PathVariable Long roomDetailsForAvailableAreaId,
+
+    @GetMapping("/For-Add-Unit/{unitId}")
+    public ResponseEntity<?> getReserveDatesByRoomDetailsForAvailableAreaIdAndUnitIdForUnit(@RequestParam(name = "roomDetailsForAvailableAreaId", required = false) Long roomDetailsForAvailableAreaId,
                                                                                             @PathVariable Long unitId,
                                                                                             @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
@@ -191,12 +205,26 @@ public class CalenderController {
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
+            List<ReserveDate> reserveDates = reserveDateRepository.findListByUnitId(unitId);
 
-        List<ReserveDate> reserveDates = reserveDateRepository.findByRoomDetailsForAvailableAreaIdAndUnitId(roomDetailsForAvailableAreaId, unitId);
-        List<ReserveDateDto> reserveDateRequests = reserveDates.stream()
-                .map(ReserveDateMapper.INSTANCE::reserveDateToReserveDateRequest)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(reserveDateRequests);
+            if (roomDetailsForAvailableAreaId != null) {
+                List<ReserveDate> reserveDates1 = reserveDateRepository.findByRoomDetailsForAvailableAreaIdAndUnitId(roomDetailsForAvailableAreaId, unitId);
+                List<ReserveDateDto> reserveDateRequests = reserveDates1.stream()
+                        .map(ReserveDateMapper.INSTANCE::reserveDateToReserveDateRequest)
+                        .collect(Collectors.toList());
+                return ResponseEntity.ok(reserveDateRequests);
+            } else if (reserveDates.isEmpty()) {
+                List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitIdAndReserve(unitId);
+                List<ReserveDateHallsDto> reserveDateHallsDtoList = reserveDateHallsList.stream()
+                        .map(ReserveDateHallsMapper.INSTANCE::toDto)
+                        .collect(Collectors.toList());
+                return ResponseEntity.ok(reserveDateHallsDtoList);
+            } else {
+                List<ReserveDateUnitDto> reserveDateRequests = reserveDates.stream()
+                        .map(ReserveDateMapper.INSTANCE::reserveDateToReserveDateUnitRequest)
+                        .collect(Collectors.toList());
+                return ResponseEntity.ok(reserveDateRequests);
+            }
 
         } catch (Exception e) {
             System.out.println("Failed to get Reserve Dates: " + e.getMessage());
@@ -233,33 +261,5 @@ public class CalenderController {
         }
     }
 
-    @GetMapping("/For-Add-Unit/get-reserve-date-halls/{unitId}")
-    public ResponseEntity<?> getReserveDateHallsByUnitIdForUnit(@PathVariable Long unitId,
-                                                                @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
-        try {
-
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
-
-            if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
-                try {
-                    List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
-                    if (!languageRanges.isEmpty()) {
-                        locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
-                    }
-                } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
-                    System.out.println("IllegalArgumentException: " + e);
-                }
-            }
-
-            List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitIdAndReserve(unitId);
-            List<ReserveDateHallsDto> reserveDateHallsDtoList = reserveDateHallsList.stream()
-                    .map(ReserveDateHallsMapper.INSTANCE::toDto)
-                    .collect(Collectors.toList());
-            return ResponseEntity.ok(reserveDateHallsDtoList);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ApiResponse(204, messageSource.getMessage("No_Reserve_Date.message", null, LocaleContextHolder.getLocale())));
-        }
-    }
 
 }

@@ -13,7 +13,7 @@ import java.util.List;
 public class ReserveDateHallsDto {
     private List<DateInfoHallsDto> dateInfoList;
     private Long unitId;
-    private Long accommodationTypeId;
-    private Long unitTypeId;
+//    private Long accommodationTypeId;
+//    private Long unitTypeId;
 
 }

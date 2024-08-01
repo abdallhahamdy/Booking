@@ -10,8 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReserveDateDto {
+public class ReserveDateUnitDto {
     private List<DateInfoDto> dateInfoList;
-    private Long roomDetailsForAvailableAreaId;
     private Long unitId;
 }

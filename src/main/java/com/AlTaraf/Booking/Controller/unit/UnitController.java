@@ -707,7 +707,7 @@ public class UnitController {
             } else {
                 RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsRequestDto);
                 roomDetailsService.addRoomDetails(unitId, roomAvailableId, roomDetails);
-                List<ReserveDate> reserveDateList = reserveDateRepository.findByUnitId(unitId);
+                List<ReserveDate> reserveDateList = reserveDateRepository.findListByUnitId(unitId);
                 for (ReserveDate reserveDate : reserveDateList) {
                     reserveDateRepository.deleteDateInfoByReserveDateId(reserveDate.getId());
                 }

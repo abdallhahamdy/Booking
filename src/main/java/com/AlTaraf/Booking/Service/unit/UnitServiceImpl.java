@@ -533,7 +533,7 @@ public class UnitServiceImpl implements UnitService {
 
     @Transactional
     public void deleteUnitWithDependencies(Long id) {
-        List<ReserveDate> reserveDateList = reserveDateRepository.findByUnitId(id);
+        List<ReserveDate> reserveDateList = reserveDateRepository.findListByUnitId(id);
         for (ReserveDate reserveDate: reserveDateList) {
             reserveDateRepository.deleteDateInfoByReserveDateId(reserveDate.getId());
         }
