@@ -27,6 +27,7 @@ public interface UnitGeneralResponseMapper {
     @Mapping(source = "city", target = "cityDtoSample")
     @Mapping(source = "region", target = "regionDto")
     @Mapping(source = "accommodationType", target = "accommodationType")
+    @Mapping(source = "typesOfEventHalls", target = "typesOfEventHalls")
 //    @Mapping(source = "images", target = "images.id")
 //    @Mapping(source = "images.name", target = "images.name")
 //    @Mapping(source = "images.imagePath", target = "images.imagePath")

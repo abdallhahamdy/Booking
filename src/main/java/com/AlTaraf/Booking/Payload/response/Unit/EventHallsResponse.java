@@ -4,6 +4,7 @@ import com.AlTaraf.Booking.Dto.Unit.FeatureForHalls.FeatureForHallsDto;
 import com.AlTaraf.Booking.Dto.Unit.availablePeriodsHalls.AvailablePeriodsDto;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.CityDto;
 import com.AlTaraf.Booking.Dto.cityDtoAndRoleDto.RegionDto;
+import com.AlTaraf.Booking.Entity.unit.typesOfEventHalls.TypesOfEventHalls;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.Set;
 public class EventHallsResponse {
     private Long unitId;
     private String nameUnit;
+    private TypesOfEventHalls typesOfEventHalls;
     private List<String> imagePaths;
     private String description;
     private int capacityHalls;

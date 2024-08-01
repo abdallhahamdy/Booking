@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface EventHallsMapper {
     @Mapping(source = "id", target = "unitId")
+    @Mapping(source = "typesOfEventHalls", target = "typesOfEventHalls")
     @Mapping(target = "imagePaths", expression = "java(extractFilePaths(unit.getFileForUnits()))")
     @Mapping(source = "capacityHalls", target = "capacityHalls")
     @Mapping(source = "nameUnit", target = "nameUnit")

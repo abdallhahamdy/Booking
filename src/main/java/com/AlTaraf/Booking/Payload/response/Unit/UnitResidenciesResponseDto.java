@@ -28,11 +28,9 @@ public class UnitResidenciesResponseDto {
     private List<String> imagePaths;
     private String nameUnit;
     private String description;
-
     private CityDto cityDto;
     private RegionDto regionDto;
     private AccommodationType accommodationType;
-
     private List<FileForUnit> images;
     private HotelClassification hotelClassification;
     private TypeOfApartment typeOfApartment;

@@ -10,6 +10,7 @@ import com.AlTaraf.Booking.Entity.unit.hotelClassification.HotelClassification;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.Entity.unit.typesOfApartments.TypeOfApartment;
+import com.AlTaraf.Booking.Entity.unit.typesOfEventHalls.TypesOfEventHalls;
 import com.AlTaraf.Booking.Payload.request.UnitRequestDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -29,6 +30,7 @@ public interface UnitRequestMapper {
     @Mapping(source = "cityId", target = "city.id")
     @Mapping(source = "regionId", target = "region.id")
     @Mapping(source = "accommodationTypeId", target = "accommodationType", qualifiedByName = "mapAccommodationTypeIdToEntity")
+    @Mapping(source = "typesOfEventHalls", target = "typesOfEventHalls", qualifiedByName = "mapTypesEventHallsToEntity")
     @Mapping(source = "hotelClassificationId", target = "hotelClassification", qualifiedByName = "mapHotelClassificationIdToEntity")
     @Mapping(source = "typeOfApartmentId", target = "typeOfApartment", qualifiedByName = "mapTypeOfApartmentIdToEntity")
     @Mapping(source = "roomAvailableIds", target = "roomAvailableSet", qualifiedByName = "roomAvailableIdsToEntities")
@@ -65,6 +67,16 @@ public interface UnitRequestMapper {
         AccommodationType accommodationType = new AccommodationType();
         accommodationType.setId(accommodationTypeId);
         return accommodationType;
+    }
+
+    @Named("mapTypesEventHallsToEntity")
+    static TypesOfEventHalls mapTypesEventHallsToEntity(Long typesOfEventHallsId) {
+        if (typesOfEventHallsId == null) {
+            return null;
+        }
+        TypesOfEventHalls typesOfEventHalls = new TypesOfEventHalls();
+        typesOfEventHalls.setId(typesOfEventHallsId);
+        return typesOfEventHalls;
     }
 
     @Named("mapHotelClassificationIdToEntity")

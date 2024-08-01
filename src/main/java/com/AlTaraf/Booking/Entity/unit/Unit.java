@@ -18,6 +18,7 @@ import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.Entity.unit.typesOfApartments.TypeOfApartment;
+import com.AlTaraf.Booking.Entity.unit.typesOfEventHalls.TypesOfEventHalls;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
@@ -60,6 +61,10 @@ public class Unit extends Auditable<String> {
     @ManyToOne
     @JoinColumn(name = "ACCOMMODATION_TYPE_ID")
     private AccommodationType accommodationType;
+
+    @ManyToOne
+    @JoinColumn(name = "TYPES_EVENT_HALLS_ID")
+    private TypesOfEventHalls typesOfEventHalls;
 
     @Column(name = "NAME_UNIT")
     private String nameUnit;

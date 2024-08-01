@@ -13,6 +13,7 @@ import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.Entity.unit.typesOfApartments.TypeOfApartment;
+import com.AlTaraf.Booking.Entity.unit.typesOfEventHalls.TypesOfEventHalls;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,6 +37,7 @@ public class UnitGeneralResponseDto {
     private RegionDto regionDto;
 
     private AccommodationType accommodationType;
+    private TypesOfEventHalls typesOfEventHalls;
 
 //    private List<ImageDataDTO> images;
 

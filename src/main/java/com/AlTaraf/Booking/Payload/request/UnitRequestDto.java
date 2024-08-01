@@ -18,6 +18,7 @@ public class UnitRequestDto {
     private Long regionId;
 
     private Long accommodationTypeId;
+    private Long typesOfEventHalls;
     private Long hotelClassificationId;
     private Long typeOfApartmentId;
 

@@ -21,6 +21,7 @@ import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
+import com.AlTaraf.Booking.Entity.unit.typesOfEventHalls.TypesOfEventHalls;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationStatusMapper;
 import com.AlTaraf.Booking.Mapper.Unit.*;
@@ -34,15 +35,11 @@ import com.AlTaraf.Booking.Payload.response.RoomDetails.RoomDetailsResponseDto;
 import com.AlTaraf.Booking.Payload.response.Unit.EventHallsResponse;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitGeneralResponseDto;
 import com.AlTaraf.Booking.Payload.response.Unit.UnitResidenciesResponseDto;
-import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
-import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
-import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsForAvailableAreaRepository;
 import com.AlTaraf.Booking.Repository.unit.RoomDetails.RoomDetailsRepository;
 import com.AlTaraf.Booking.Repository.unit.UnitRepository;
-import com.AlTaraf.Booking.Repository.unit.roomAvailable.RoomAvailableRepository;
 import com.AlTaraf.Booking.Repository.unit.statusUnit.StatusRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.Reservation.ReservationService;
@@ -280,6 +277,9 @@ public class UnitController {
             }
             if (unitRequestDto.getAccommodationTypeId() != null) {
                 unitToUpdate.setAccommodationType(new AccommodationType(unitRequestDto.getAccommodationTypeId()));
+            }
+            if (unitRequestDto.getTypesOfEventHalls() != null) {
+                unitToUpdate.setTypesOfEventHalls(new TypesOfEventHalls(unitRequestDto.getTypesOfEventHalls()));
             }
             if (unitRequestDto.getHotelClassificationId() != null) {
                 unitToUpdate.setHotelClassification(new HotelClassification(unitRequestDto.getHotelClassificationId()));

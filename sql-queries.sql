@@ -38,6 +38,10 @@ insert into accommodation_type  (accommodation_arabic_name, accommodation_name) 
 insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("منتجع","Resort");
 insert into accommodation_type  (accommodation_arabic_name, accommodation_name) values ("استراحة","Lounge");
 
+insert into types_event_halls  (types_event_halls_arabic_name, types_event_halls_name) values ("قاعة مناسبات","Event hall");
+insert into types_event_halls  (types_event_halls_arabic_name, types_event_halls_name) values ("فلل مناسبات","Occasion villas");
+
+
 
 insert into hotel_classification  (hotel_classification_arabic_name, hotel_classification_name) values ("نجمة واحدة","One Star");
 insert into hotel_classification  (hotel_classification_arabic_name, hotel_classification_name) values ("نجمتان","Two Stars");
