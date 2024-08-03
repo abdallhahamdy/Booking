@@ -84,6 +84,10 @@ public class WebSecurityConfig {
                             .requestMatchers("api/roles/all").permitAll()
                             .requestMatchers("/swagger-ui/**").permitAll()
                             .requestMatchers("/bezkoder-api-docs/**").permitAll()
+                            .requestMatchers("/files-for-unit/**").permitAll()
+                            .requestMatchers("/file-for-profile/**").permitAll()
+                            .requestMatchers("/file-for-pdf/**").permitAll()
+                            .requestMatchers("/file-for-ads/**").permitAll()
 
                             .anyRequest().authenticated();
                 });
