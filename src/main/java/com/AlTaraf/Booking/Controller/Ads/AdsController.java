@@ -200,8 +200,8 @@ public class AdsController {
 
             userRepository.save(user);
 
-            PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_ads.message", null, LocaleContextHolder.getLocale()) +  " لوحدة " + existAds.getUnit().getNameUnit(),user.getId());
-            notificationService.processNotification(notificationRequest);
+//            PushNotificationRequest notificationRequest = new PushNotificationRequest(messageSource.getMessage("notification_title.message", null, LocaleContextHolder.getLocale()),messageSource.getMessage("notification_body_ads.message", null, LocaleContextHolder.getLocale()) +  " لوحدة " + existAds.getUnit().getNameUnit(),user.getId());
+//            notificationService.processNotification(notificationRequest);
             Ads createdAds = adsService.createAds(adsMapper.toEntity(adsRequestDto));
             Long createdAdsId = createdAds.getId();
 

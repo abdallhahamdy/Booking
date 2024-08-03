@@ -17,6 +17,7 @@ public interface ReserveDateRepository extends JpaRepository<ReserveDate, Long> 
     List<ReserveDate> findByRoomDetailsForAvailableAreaIdAndUnitId(@Param("roomDetailsForAvailableAreaId") Long roomDetailsForAvailableAreaId, @Param("unitId") Long unitId);
 
 
+
 //    @Query("SELECT rd FROM ReserveDate rd WHERE rd.roomDetailsForAvailableArea.id = :roomDetailsForAvailableAreaId AND rd.unit.id = :unitId AND rd.reserve = true")
 //    List<ReserveDate> findByRoomDetailsForAvailableAreaIdAndUnitIdAndReserveTrue(@Param("roomDetailsForAvailableAreaId") Long roomDetailsForAvailableAreaId, @Param("unitId") Long unitId);
 

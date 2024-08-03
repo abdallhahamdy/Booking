@@ -22,6 +22,7 @@ public interface ReserveDateMapper {
 
     @Mapping(source = "dateInfoList", target = "dateInfoList")
     @Mapping(source = "roomDetailsForAvailableAreaId", target = "roomDetailsForAvailableArea.id")
+//    @Mapping(source = "roomDetailsId", target = "roomDetails.id")
     @Mapping(source = "unitId", target = "unit.id")
 //    @Mapping(source = "accommodationTypeId", target = "unit.accommodationType.id")
 //    @Mapping(source = "unitTypeId", target = "unit.unitType.id")
@@ -29,6 +30,7 @@ public interface ReserveDateMapper {
 
     @Mapping(source = "dateInfoList", target = "dateInfoList")
     @Mapping(source = "roomDetailsForAvailableArea.id", target = "roomDetailsForAvailableAreaId")
+//    @Mapping(source = "roomDetails.id", target = "roomDetailsId")
     @Mapping(source = "unit.id", target = "unitId")
     ReserveDateDto reserveDateToReserveDateRequest(ReserveDate reserveDate);
 

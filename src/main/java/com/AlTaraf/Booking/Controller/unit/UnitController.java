@@ -4,6 +4,7 @@ import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequest;
 import com.AlTaraf.Booking.Dto.Unit.UnitDto;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Dto.Unit.UnitResponse;
+import com.AlTaraf.Booking.Dto.Unit.roomDetails.RoomDetailsResponse;
 import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.User.User;
@@ -659,7 +660,11 @@ public class UnitController {
 
             RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsRequestDto);
             roomDetailsService.addRoomDetails(unitId, roomAvailableId, roomDetails);
-            return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetails.getId());
+
+            RoomDetailsResponse roomDetailsResponse = new RoomDetailsResponse(roomDetails.getId(), messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.CREATED).body(roomDetailsResponse);
+
+//            return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetails.getId());
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (Exception e) {
