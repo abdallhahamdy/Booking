@@ -634,46 +634,6 @@ public class UnitController {
         return ResponseEntity.ok(eventHallsResponse);
     }
 
-    @PostMapping("{unitId}/{roomAvailableId}/Room-Details/Add")
-    @Transactional
-    public ResponseEntity<?> addRoomDetails(@PathVariable Long unitId, @PathVariable Long roomAvailableId, @RequestBody RoomDetailsRequestDto roomDetailsRequestDto,
-                                            @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
-        try {
-
-            Locale locale = LocaleContextHolder.getLocale();
-
-            if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
-                try {
-                    List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
-                    if (!languageRanges.isEmpty()) {
-                        locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
-                    }
-                } catch (IllegalArgumentException e) {
-                    System.out.println("IllegalArgumentException: " + e);
-                }
-            }
-
-            boolean roomDetailsExists = roomDetailsRepository.existsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
-            if (roomDetailsExists) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,messageSource.getMessage("room_details_already_exists.message", null, LocaleContextHolder.getLocale()) + " " + unitId + "  " + roomAvailableId));
-            }
-
-            RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsRequestDto);
-            roomDetailsService.addRoomDetails(unitId, roomAvailableId, roomDetails);
-
-            RoomDetailsResponse roomDetailsResponse = new RoomDetailsResponse(roomDetails.getId(), messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()));
-            return ResponseEntity.status(HttpStatus.CREATED).body(roomDetailsResponse);
-
-//            return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetails.getId());
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }
-
-
     @PostMapping("update/{unitId}/{roomAvailableId}/Room-Details/Add")
     @Transactional(rollbackOn = Exception.class)
     public ResponseEntity<?> updateAddRoomDetails(@PathVariable Long unitId,
@@ -696,29 +656,38 @@ public class UnitController {
             }
 
             Unit unit = unitRepository.findById(unitId).orElse(null);
+            RoomDetails roomDetailsForUpdate = roomDetailsRepository.findRoomDetailsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
 
-            if ( unit.getUnitType().getId() == 1) {
+            if (roomDetailsForUpdate != null) {
 
-                RoomDetails roomDetailsForUpdate = roomDetailsRepository.findRoomDetailsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
-                roomDetailsForUpdate.setRoomNumber(roomDetailsRequestDto.getRoomNumber());
-                roomDetailsForUpdate.setNewPrice(roomDetailsRequestDto.getNewPrice().intValue());
-                roomDetailsForUpdate.setOldPrice(roomDetailsRequestDto.getOldPrice().intValue());
-                roomDetailsForUpdate.setAdultsAllowed(roomDetailsRequestDto.getAdultsAllowed());
-                roomDetailsForUpdate.setChildrenAllowed(roomDetailsRequestDto.getChildrenAllowed());
+                if (unit.getUnitType().getId() == 1) {
 
-                roomDetailsRepository.save(roomDetailsForUpdate);
-                return ResponseEntity.ok(messageSource.getMessage("room_details_edited_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetailsForUpdate.getId());
+                    roomDetailsForUpdate.setRoomNumber(roomDetailsRequestDto.getRoomNumber());
+                    roomDetailsForUpdate.setNewPrice(roomDetailsRequestDto.getNewPrice().intValue());
+                    roomDetailsForUpdate.setOldPrice(roomDetailsRequestDto.getOldPrice().intValue());
+                    roomDetailsForUpdate.setAdultsAllowed(roomDetailsRequestDto.getAdultsAllowed());
+                    roomDetailsForUpdate.setChildrenAllowed(roomDetailsRequestDto.getChildrenAllowed());
 
+                    roomDetailsRepository.save(roomDetailsForUpdate);
+                    return ResponseEntity.ok(messageSource.getMessage("room_details_edited_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetailsForUpdate.getId());
+
+                } else {
+                    RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsRequestDto);
+                    roomDetailsService.addRoomDetails(unitId, roomAvailableId, roomDetails);
+                    List<ReserveDate> reserveDateList = reserveDateRepository.findListByUnitId(unitId);
+                    for (ReserveDate reserveDate : reserveDateList) {
+                        reserveDateRepository.deleteDateInfoByReserveDateId(reserveDate.getId());
+                    }
+                    reserveDateRepository.deleteByUnitId(unitId);
+                    roomDetailsForAvailableAreaRepository.deleteByUnitId(unitId);
+                    return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetails.getId());
+                }
             } else {
                 RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsRequestDto);
                 roomDetailsService.addRoomDetails(unitId, roomAvailableId, roomDetails);
-                List<ReserveDate> reserveDateList = reserveDateRepository.findListByUnitId(unitId);
-                for (ReserveDate reserveDate : reserveDateList) {
-                    reserveDateRepository.deleteDateInfoByReserveDateId(reserveDate.getId());
-                }
-                reserveDateRepository.deleteByUnitId(unitId);
-                roomDetailsForAvailableAreaRepository.deleteByUnitId(unitId);
-                return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetails.getId());
+
+                RoomDetailsResponse roomDetailsResponse = new RoomDetailsResponse(roomDetails.getId(), messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()));
+                return ResponseEntity.status(HttpStatus.CREATED).body(roomDetailsResponse);
             }
         } catch (RuntimeException et) {
             System.out.println("Not Found: " + et);
@@ -730,41 +699,6 @@ public class UnitController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
-
-
-    @PostMapping("{unitId}/{availableAreaId}/Room-Details-For-Available-Area/Add")
-    @Transactional
-    public ResponseEntity<?> addRoomDetailsForAvailableArea(@PathVariable Long unitId, @PathVariable Long availableAreaId,
-                                                            @RequestBody RoomDetailsRequestDto roomDetailsRequestDto,
-                                                            @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
-        try {
-
-            Locale locale = LocaleContextHolder.getLocale();
-
-            if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
-                try {
-                    List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
-                    if (!languageRanges.isEmpty()) {
-                        locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
-                    }
-                } catch (IllegalArgumentException e) {
-                    System.out.println("IllegalArgumentException: " + e);
-                }
-            }
-
-            boolean roomDetailsExists = roomDetailsForAvailableAreaRepository.existsByUnitIdAndAvailableAreaId(unitId, availableAreaId);
-            if (roomDetailsExists) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(400,messageSource.getMessage("room_details_already_exists.message", null, LocaleContextHolder.getLocale()) + " " + unitId + "  " + availableAreaId));
-            }
-            RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsRequestMapper.toEntityAvailableArea(roomDetailsRequestDto);
-            roomDetailsForAvailableAreaService.addRoomDetails(unitId, availableAreaId, roomDetailsForAvailableArea);
-            return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetailsForAvailableArea.getId());
-        } catch (Exception e) {
-            ApiResponse response = new ApiResponse(500, messageSource.getMessage("internal_server_error.message", null, LocaleContextHolder.getLocale()));
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
-    }
-
     @PostMapping("update/{unitId}/{availableAreaId}/Room-Details-For-Available-Area/Add")
     @Transactional
     public ResponseEntity<?> updateAddRoomDetailsForAvailableArea(@PathVariable Long unitId,
@@ -787,18 +721,24 @@ public class UnitController {
             }
 
             Unit unit = unitRepository.findById(unitId).orElse(null);
+            RoomDetailsForAvailableArea roomDetailsForAvailableAreaForUpdate = roomDetailsForAvailableAreaRepository.findByUnitIdAndAvailableAreaId(unitId, availableAreaId);
 
-            if (unit.getUnitType().getId() != 1) {
-                RoomDetailsForAvailableArea roomDetailsForAvailableAreaForUpdate = roomDetailsForAvailableAreaRepository.findByUnitIdAndAvailableAreaId(unitId, availableAreaId);
-                roomDetailsForAvailableAreaForUpdate.setRoomNumber(roomDetailsRequestDto.getRoomNumber());
-                roomDetailsForAvailableAreaForUpdate.setNewPrice(roomDetailsRequestDto.getNewPrice().intValue());
-                roomDetailsForAvailableAreaForUpdate.setOldPrice(roomDetailsRequestDto.getOldPrice().intValue());
-                roomDetailsForAvailableAreaForUpdate.setAdultsAllowed(roomDetailsRequestDto.getAdultsAllowed());
-                roomDetailsForAvailableAreaForUpdate.setChildrenAllowed(roomDetailsRequestDto.getChildrenAllowed());
-                roomDetailsForAvailableAreaRepository.save(roomDetailsForAvailableAreaForUpdate);
-                return ResponseEntity.ok(messageSource.getMessage("room_details_edited_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetailsForAvailableAreaForUpdate.getId());
+            if (roomDetailsForAvailableAreaForUpdate != null) {
+                if (unit.getUnitType().getId() != 1) {
+                    roomDetailsForAvailableAreaForUpdate.setRoomNumber(roomDetailsRequestDto.getRoomNumber());
+                    roomDetailsForAvailableAreaForUpdate.setNewPrice(roomDetailsRequestDto.getNewPrice().intValue());
+                    roomDetailsForAvailableAreaForUpdate.setOldPrice(roomDetailsRequestDto.getOldPrice().intValue());
+                    roomDetailsForAvailableAreaForUpdate.setAdultsAllowed(roomDetailsRequestDto.getAdultsAllowed());
+                    roomDetailsForAvailableAreaForUpdate.setChildrenAllowed(roomDetailsRequestDto.getChildrenAllowed());
+                    roomDetailsForAvailableAreaRepository.save(roomDetailsForAvailableAreaForUpdate);
+                    return ResponseEntity.ok(messageSource.getMessage("room_details_edited_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetailsForAvailableAreaForUpdate.getId());
+                } else {
+                    roomDetailsRepository.deleteByUnitId(unitId);
+                    RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsRequestMapper.toEntityAvailableArea(roomDetailsRequestDto);
+                    roomDetailsForAvailableAreaService.addRoomDetails(unitId, availableAreaId, roomDetailsForAvailableArea);
+                    return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetailsForAvailableArea.getId());
+                }
             } else {
-                roomDetailsRepository.deleteByUnitId(unitId);
                 RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsRequestMapper.toEntityAvailableArea(roomDetailsRequestDto);
                 roomDetailsForAvailableAreaService.addRoomDetails(unitId, availableAreaId, roomDetailsForAvailableArea);
                 return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetailsForAvailableArea.getId());
