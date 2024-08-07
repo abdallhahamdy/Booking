@@ -22,4 +22,9 @@ public class AvailableAreaServiceImpl implements AvailableAreaService {
     public AvailableArea save(AvailableArea availableArea) {
         return availableAreaRepository.save(availableArea);
     }
+
+    @Override
+    public AvailableArea getById(Long availableAreaId) {
+        return availableAreaRepository.findById(availableAreaId).orElse(null);
+    }
 }

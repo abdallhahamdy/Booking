@@ -24,6 +24,7 @@ import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.Entity.unit.typesOfEventHalls.TypesOfEventHalls;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
+import com.AlTaraf.Booking.Exception.RoomDetailsNotFoundException;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationStatusMapper;
 import com.AlTaraf.Booking.Mapper.Unit.*;
 import com.AlTaraf.Booking.Mapper.Unit.RoomDetails.RoomDetailsRequestMapper;
@@ -52,6 +53,7 @@ import com.AlTaraf.Booking.Service.unit.RoomAvailable.RoomAvailableService;
 import com.AlTaraf.Booking.Service.unit.RoomDetails.RoomDetailsService;
 import com.AlTaraf.Booking.Service.unit.RoomDetailsForAvailableArea.RoomDetailsForAvailableAreaService;
 import com.AlTaraf.Booking.Service.unit.UnitService;
+import com.AlTaraf.Booking.Service.unit.availableArea.AvailableAreaService;
 import com.AlTaraf.Booking.Service.unit.feature.FeatureService;
 import com.AlTaraf.Booking.Service.unit.statusUnit.StatusUnitService;
 import jakarta.transaction.Transactional;
@@ -162,6 +164,9 @@ public class UnitController {
 
     @Autowired
     MessageSource messageSource;
+
+    @Autowired
+    AvailableAreaService availableAreaService;
 
     @PostMapping("/Create-Unit")
     public ResponseEntity<?> createUnit(@RequestBody UnitRequestDto unitRequestDto,
@@ -635,6 +640,7 @@ public class UnitController {
     }
 
     @PostMapping("update/{unitId}/{roomAvailableId}/Room-Details/Add")
+    @ExceptionHandler(RoomDetailsNotFoundException.class)
     @Transactional(rollbackOn = Exception.class)
     public ResponseEntity<?> updateAddRoomDetails(@PathVariable Long unitId,
                                                   @PathVariable Long roomAvailableId,
@@ -656,6 +662,13 @@ public class UnitController {
             }
 
             Unit unit = unitRepository.findById(unitId).orElse(null);
+            RoomAvailable roomAvailable = roomAvailableService.getById(roomAvailableId);
+
+            if (!unit.getRoomAvailableSet().contains(roomAvailable)) {
+                unit.getRoomAvailableSet().add(roomAvailable);
+                unitService.saveUnit(unit);
+            }
+
             RoomDetails roomDetailsForUpdate = roomDetailsRepository.findRoomDetailsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
 
             if (roomDetailsForUpdate != null) {
@@ -683,6 +696,7 @@ public class UnitController {
                     return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetails.getId());
                 }
             } else {
+                System.out.println("NO");
                 RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsRequestDto);
                 roomDetailsService.addRoomDetails(unitId, roomAvailableId, roomDetails);
 
@@ -721,6 +735,12 @@ public class UnitController {
             }
 
             Unit unit = unitRepository.findById(unitId).orElse(null);
+            AvailableArea availableArea = availableAreaService.getById(availableAreaId);
+
+            if (!unit.getAvailableAreaSet().contains(availableArea)) {
+                unit.getAvailableAreaSet().add(availableArea);
+                unitService.saveUnit(unit);
+            }
             RoomDetailsForAvailableArea roomDetailsForAvailableAreaForUpdate = roomDetailsForAvailableAreaRepository.findByUnitIdAndAvailableAreaId(unitId, availableAreaId);
 
             if (roomDetailsForAvailableAreaForUpdate != null) {

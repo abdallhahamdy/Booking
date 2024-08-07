@@ -32,6 +32,11 @@ public class RoomAvailableServiceImpl implements RoomAvailableService {
     public List<RoomAvailable> getAllRoomAvailable() {
         return roomAvailableRepository.findAll();
     }
+
+    @Override
+    public RoomAvailable getById(Long roomAvailableId) {
+        return roomAvailableRepository.findById(roomAvailableId).orElse(null);
+    }
 }
 
 //   @Override
