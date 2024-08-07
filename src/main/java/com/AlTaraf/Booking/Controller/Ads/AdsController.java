@@ -1,7 +1,7 @@
 package com.AlTaraf.Booking.Controller.Ads;
 
-import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequest;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
+import com.AlTaraf.Booking.Dto.ads.AdsResponse;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.User.User;
@@ -151,11 +151,10 @@ public class AdsController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createAds(@RequestBody AdsRequestDto adsRequestDto,
-                                       @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) throws IOException, InterruptedException {
+                                       @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
 
-            Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
-
+            Locale locale = LocaleContextHolder.getLocale();
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
                     List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
@@ -204,8 +203,8 @@ public class AdsController {
 //            notificationService.processNotification(notificationRequest);
             Ads createdAds = adsService.createAds(adsMapper.toEntity(adsRequestDto));
             Long createdAdsId = createdAds.getId();
-
-            return ResponseEntity.status(HttpStatus.OK).body(messageSource.getMessage("ads_created.message" , null, LocaleContextHolder.getLocale()) + " id: " + createdAdsId );
+            AdsResponse adsResponse = new AdsResponse(createdAdsId, messageSource.getMessage("ads_created.message" , null, LocaleContextHolder.getLocale()));
+            return ResponseEntity.status(HttpStatus.OK).body(adsResponse);
 
     }
 
