@@ -88,6 +88,8 @@ public class WebSecurityConfig {
                             .requestMatchers("/file-for-profile/**").permitAll()
                             .requestMatchers("/file-for-pdf/**").permitAll()
                             .requestMatchers("/file-for-ads/**").permitAll()
+                            .requestMatchers("/api/admin/get-units-for-dashboard/**").permitAll()
+                            .requestMatchers("/api/admin/get-user-all-or-byrole/**").permitAll()
 
                             .anyRequest().authenticated();
                 });
