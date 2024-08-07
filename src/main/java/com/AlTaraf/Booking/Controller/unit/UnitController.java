@@ -4,6 +4,7 @@ import com.AlTaraf.Booking.Dto.Notifications.PushNotificationRequest;
 import com.AlTaraf.Booking.Dto.Unit.UnitDto;
 import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Dto.Unit.UnitResponse;
+import com.AlTaraf.Booking.Dto.Unit.roomDetails.RoomDetailsForAvailableAreaResponse;
 import com.AlTaraf.Booking.Dto.Unit.roomDetails.RoomDetailsResponse;
 import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
@@ -760,7 +761,9 @@ public class UnitController {
                     roomDetailsRepository.deleteByUnitId(unitId);
                     RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsRequestMapper.toEntityAvailableArea(roomDetailsRequestDto);
                     roomDetailsForAvailableAreaService.addRoomDetails(unitId, availableAreaId, roomDetailsForAvailableArea);
-                    return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetailsForAvailableArea.getId());
+
+                    RoomDetailsForAvailableAreaResponse roomDetailsForAvailableAreaResponse = new RoomDetailsForAvailableAreaResponse(roomDetailsForAvailableArea.getId(), messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()));
+                    return ResponseEntity.status(HttpStatus.CREATED).body(roomDetailsForAvailableAreaResponse);
                 }
             } else {
                 RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsRequestMapper.toEntityAvailableArea(roomDetailsRequestDto);
