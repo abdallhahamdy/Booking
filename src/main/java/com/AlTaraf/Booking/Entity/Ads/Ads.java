@@ -28,7 +28,7 @@ public class Ads {
     @JoinColumn(name = "UNIT_ID")
     private Unit unit;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
 
