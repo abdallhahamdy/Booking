@@ -22,6 +22,7 @@ import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomAvailable;
 import com.AlTaraf.Booking.Entity.unit.roomAvailable.RoomDetails;
 import com.AlTaraf.Booking.Entity.unit.statusUnit.StatusUnit;
 import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
+import com.AlTaraf.Booking.Entity.unit.typesOfApartments.TypeOfApartment;
 import com.AlTaraf.Booking.Entity.unit.typesOfEventHalls.TypesOfEventHalls;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
 import com.AlTaraf.Booking.Exception.RoomDetailsNotFoundException;
@@ -283,6 +284,9 @@ public class UnitController {
             }
             if (unitRequestDto.getAccommodationTypeId() != null) {
                 unitToUpdate.setAccommodationType(new AccommodationType(unitRequestDto.getAccommodationTypeId()));
+            }
+            if (unitRequestDto.getTypeOfApartmentId() != null) {
+                unitToUpdate.setTypeOfApartment(new TypeOfApartment(unitRequestDto.getTypeOfApartmentId()));
             }
             if (unitRequestDto.getTypesOfEventHalls() != null) {
                 unitToUpdate.setTypesOfEventHalls(new TypesOfEventHalls(unitRequestDto.getTypesOfEventHalls()));

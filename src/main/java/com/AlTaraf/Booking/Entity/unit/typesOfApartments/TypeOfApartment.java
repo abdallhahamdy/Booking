@@ -22,4 +22,8 @@ public class TypeOfApartment {
 
     @Column(name = "TYPES_APARTMENT_ARABIC_NAME")
     private String arabicName;
+
+    public TypeOfApartment(Long id) {
+        this.id = id;
+    }
 }
