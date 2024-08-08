@@ -91,6 +91,21 @@ public class WebSecurityConfig {
                             .requestMatchers("/api/admin/get-units-for-dashboard/**").permitAll()
                             .requestMatchers("/api/admin/get-user-all-or-byrole/**").permitAll()
 
+                            .requestMatchers("/api/admin/technical-support-get-all").permitAll()
+                            .requestMatchers("/api/admin/technical-support-unit-get-all").permitAll()
+
+                            .requestMatchers("/api/ads/package-ads").permitAll()
+
+                            .requestMatchers("/api/admin/get-ads-for-dashboard").permitAll()
+                            .requestMatchers("/api/admin/get-counter-ads").permitAll()
+
+                            .requestMatchers("/api/transactions/total").permitAll()
+                            .requestMatchers("/api/transactions/details").permitAll()
+
+                            .requestMatchers("/api/users/**").permitAll()
+
+
+
                             .anyRequest().authenticated();
                 });
 
