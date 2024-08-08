@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoomDetailsForAvailableAreaResponse {
-    private Long roomDetailsId;
+    private Long roomDetailsForAvailableAreaId;
     private String message;
 }
