@@ -652,9 +652,7 @@ public class UnitController {
                                                   @RequestBody RoomDetailsRequestDto roomDetailsRequestDto,
                                                   @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
         try {
-
             Locale locale = LocaleContextHolder.getLocale();
-
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
                 try {
                     List<Locale.LanguageRange> languageRanges = Locale.LanguageRange.parse(acceptLanguageHeader);
@@ -677,31 +675,20 @@ public class UnitController {
             RoomDetails roomDetailsForUpdate = roomDetailsRepository.findRoomDetailsByUnitIdAndRoomAvailableId(unitId, roomAvailableId);
 
             if (roomDetailsForUpdate != null) {
+                roomDetailsForUpdate.setRoomNumber(roomDetailsRequestDto.getRoomNumber());
+                roomDetailsForUpdate.setNewPrice(roomDetailsRequestDto.getNewPrice().intValue());
+                roomDetailsForUpdate.setOldPrice(roomDetailsRequestDto.getOldPrice().intValue());
+                roomDetailsForUpdate.setAdultsAllowed(roomDetailsRequestDto.getAdultsAllowed());
+                roomDetailsForUpdate.setChildrenAllowed(roomDetailsRequestDto.getChildrenAllowed());
 
-                if (unit.getUnitType().getId() == 1) {
+                roomDetailsRepository.save(roomDetailsForUpdate);
 
-                    roomDetailsForUpdate.setRoomNumber(roomDetailsRequestDto.getRoomNumber());
-                    roomDetailsForUpdate.setNewPrice(roomDetailsRequestDto.getNewPrice().intValue());
-                    roomDetailsForUpdate.setOldPrice(roomDetailsRequestDto.getOldPrice().intValue());
-                    roomDetailsForUpdate.setAdultsAllowed(roomDetailsRequestDto.getAdultsAllowed());
-                    roomDetailsForUpdate.setChildrenAllowed(roomDetailsRequestDto.getChildrenAllowed());
+                RoomDetailsResponse roomDetailsResponse = new RoomDetailsResponse(roomDetailsForUpdate.getId(), messageSource.getMessage("room_details_edited_successfully.message", null, LocaleContextHolder.getLocale()));
 
-                    roomDetailsRepository.save(roomDetailsForUpdate);
-                    return ResponseEntity.ok(messageSource.getMessage("room_details_edited_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetailsForUpdate.getId());
+                return ResponseEntity.ok(roomDetailsResponse);
+            }
 
-                } else {
-                    RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsRequestDto);
-                    roomDetailsService.addRoomDetails(unitId, roomAvailableId, roomDetails);
-                    List<ReserveDate> reserveDateList = reserveDateRepository.findListByUnitId(unitId);
-                    for (ReserveDate reserveDate : reserveDateList) {
-                        reserveDateRepository.deleteDateInfoByReserveDateId(reserveDate.getId());
-                    }
-                    reserveDateRepository.deleteByUnitId(unitId);
-                    roomDetailsForAvailableAreaRepository.deleteByUnitId(unitId);
-                    return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetails.getId());
-                }
-            } else {
-                System.out.println("NO");
+            else {
                 RoomDetails roomDetails = roomDetailsRequestMapper.toEntity(roomDetailsRequestDto);
                 roomDetailsService.addRoomDetails(unitId, roomAvailableId, roomDetails);
 
@@ -749,26 +736,23 @@ public class UnitController {
             RoomDetailsForAvailableArea roomDetailsForAvailableAreaForUpdate = roomDetailsForAvailableAreaRepository.findByUnitIdAndAvailableAreaId(unitId, availableAreaId);
 
             if (roomDetailsForAvailableAreaForUpdate != null) {
-                if (unit.getUnitType().getId() != 1) {
+                System.out.println("roomDetailsForAvailableAreaForUpdate != null");
                     roomDetailsForAvailableAreaForUpdate.setRoomNumber(roomDetailsRequestDto.getRoomNumber());
                     roomDetailsForAvailableAreaForUpdate.setNewPrice(roomDetailsRequestDto.getNewPrice().intValue());
                     roomDetailsForAvailableAreaForUpdate.setOldPrice(roomDetailsRequestDto.getOldPrice().intValue());
                     roomDetailsForAvailableAreaForUpdate.setAdultsAllowed(roomDetailsRequestDto.getAdultsAllowed());
                     roomDetailsForAvailableAreaForUpdate.setChildrenAllowed(roomDetailsRequestDto.getChildrenAllowed());
                     roomDetailsForAvailableAreaRepository.save(roomDetailsForAvailableAreaForUpdate);
-                    return ResponseEntity.ok(messageSource.getMessage("room_details_edited_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetailsForAvailableAreaForUpdate.getId());
-                } else {
-                    roomDetailsRepository.deleteByUnitId(unitId);
-                    RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsRequestMapper.toEntityAvailableArea(roomDetailsRequestDto);
-                    roomDetailsForAvailableAreaService.addRoomDetails(unitId, availableAreaId, roomDetailsForAvailableArea);
+                RoomDetailsForAvailableAreaResponse roomDetailsForAvailableAreaResponse = new RoomDetailsForAvailableAreaResponse(roomDetailsForAvailableAreaForUpdate.getId(), messageSource.getMessage("room_details_edited_successfully.message", null, LocaleContextHolder.getLocale()));
 
-                    RoomDetailsForAvailableAreaResponse roomDetailsForAvailableAreaResponse = new RoomDetailsForAvailableAreaResponse(roomDetailsForAvailableArea.getId(), messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()));
-                    return ResponseEntity.status(HttpStatus.CREATED).body(roomDetailsForAvailableAreaResponse);
-                }
+                return ResponseEntity.status(HttpStatus.CREATED).body(roomDetailsForAvailableAreaResponse);
             } else {
+                System.out.println("else else roomDetailsForAvailableAreaForUpdate != null");
                 RoomDetailsForAvailableArea roomDetailsForAvailableArea = roomDetailsRequestMapper.toEntityAvailableArea(roomDetailsRequestDto);
                 roomDetailsForAvailableAreaService.addRoomDetails(unitId, availableAreaId, roomDetailsForAvailableArea);
-                return ResponseEntity.ok(messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()) + " " + roomDetailsForAvailableArea.getId());
+
+                RoomDetailsForAvailableAreaResponse roomDetailsForAvailableAreaResponse = new RoomDetailsForAvailableAreaResponse(roomDetailsForAvailableArea.getId(), messageSource.getMessage("room_details_added_successfully.message", null, LocaleContextHolder.getLocale()));
+                return ResponseEntity.status(HttpStatus.CREATED).body(roomDetailsForAvailableAreaResponse);
             }
         } catch (Exception e) {
             System.out.println("Eror: " + e);
