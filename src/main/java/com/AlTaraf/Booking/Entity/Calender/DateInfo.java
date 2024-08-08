@@ -1,6 +1,5 @@
 package com.AlTaraf.Booking.Entity.Calender;
 
-import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

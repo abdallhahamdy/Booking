@@ -1,10 +1,12 @@
 package com.AlTaraf.Booking.Mapper.Calender;
 
 import com.AlTaraf.Booking.Dto.calender.Date.DateInfoDto;
+import com.AlTaraf.Booking.Dto.calender.Date.DateInfoRequest;
 import com.AlTaraf.Booking.Entity.Calender.DateInfo;
 import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import com.AlTaraf.Booking.Entity.unit.availableArea.RoomDetailsForAvailableArea;
 import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateDto;
+import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateRequest;
 import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateUnitDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -22,31 +24,16 @@ public interface ReserveDateMapper {
 
     @Mapping(source = "dateInfoList", target = "dateInfoList")
     @Mapping(source = "roomDetailsForAvailableAreaId", target = "roomDetailsForAvailableArea.id")
-//    @Mapping(source = "roomDetailsId", target = "roomDetails.id")
     @Mapping(source = "unitId", target = "unit.id")
-//    @Mapping(source = "accommodationTypeId", target = "unit.accommodationType.id")
-//    @Mapping(source = "unitTypeId", target = "unit.unitType.id")
-    ReserveDate reserveDateRequestToReserveDate(ReserveDateDto reserveDateRequest);
+    ReserveDate reserveDateRequestToReserveDate(ReserveDateRequest reserveDateRequest);
 
     @Mapping(source = "dateInfoList", target = "dateInfoList")
     @Mapping(source = "roomDetailsForAvailableArea.id", target = "roomDetailsForAvailableAreaId")
-//    @Mapping(source = "roomDetails.id", target = "roomDetailsId")
     @Mapping(source = "unit.id", target = "unitId")
     ReserveDateDto reserveDateToReserveDateRequest(ReserveDate reserveDate);
 
     @Mapping(source = "dateInfoList", target = "dateInfoList")
-    @Mapping(source = "unit.id", target = "unitId")
-    ReserveDateUnitDto reserveDateToReserveDateUnitRequest(ReserveDate reserveDate);
-
-    @Named("toDateList")
-    default List<Date> toDateList(List<Date> dates) {
-        return dates.stream()
-                .map(date -> new Date(date.getTime()))
-                .collect(Collectors.toList());
-    }
-
-    @Mapping(source = "dateInfoList", target = "dateInfoList")
-    List<DateInfo> mapDateInfoDtoList(List<DateInfoDto> dateInfoList);
+    List<DateInfo> mapDateInfoDtoList(List<DateInfoRequest> dateInfoList);
 
 
     default RoomDetailsForAvailableArea mapRoomDetailsForAvailableArea(Long roomDetailsForAvailableAreaId) {

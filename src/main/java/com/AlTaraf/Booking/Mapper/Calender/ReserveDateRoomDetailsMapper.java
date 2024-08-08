@@ -1,10 +1,10 @@
 package com.AlTaraf.Booking.Mapper.Calender;
 
 import com.AlTaraf.Booking.Dto.calender.Date.DateInfoDto;
+import com.AlTaraf.Booking.Dto.calender.Date.DateInfoRequest;
 import com.AlTaraf.Booking.Entity.Calender.DateInfo;
-import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import com.AlTaraf.Booking.Entity.Calender.ReserveDateRoomDetails;
-import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateDto;
+import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateRequest;
 import com.AlTaraf.Booking.Payload.request.ReserveDate.ReserveDateRoomDetailsDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -23,7 +23,7 @@ public interface ReserveDateRoomDetailsMapper {
     @Mapping(source = "dateInfoList", target = "dateInfoList")
     @Mapping(source = "roomDetailsId", target = "roomDetails.id")
     @Mapping(source = "unitId", target = "unit.id")
-    ReserveDateRoomDetails reserveDateRequestToReserveDateRoomDetails(ReserveDateDto reserveDateDto);
+    ReserveDateRoomDetails reserveDateRequestToReserveDateRoomDetails(ReserveDateRequest reserveDateRequest);
 
     @Mapping(source = "dateInfoList", target = "dateInfoList")
     @Mapping(source = "roomDetails.id", target = "roomDetailsId")
@@ -38,6 +38,6 @@ public interface ReserveDateRoomDetailsMapper {
     }
 
     @Mapping(source = "dateInfoList", target = "dateInfoList")
-    List<DateInfo> mapDateInfoDtoList(List<DateInfoDto> dateInfoList);
+    List<DateInfo> mapDateInfoDtoList(List<DateInfoRequest> dateInfoList);
 
 }
