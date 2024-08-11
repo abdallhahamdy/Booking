@@ -91,14 +91,6 @@ insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("ج�
 insert into sub_feature (sub_feature_arabic_name, sub_feature_name) values ("ساونا","sauna");
 
 
--- insert food_option امكانيات الطعام المتاحة 
-insert into food_option (food_option_arabic_name, food_option_name) values ("افطار","Breakfast");
-insert into food_option (food_option_arabic_name, food_option_name) values ("جميع الوجبات","all meals");
-insert into food_option (food_option_arabic_name, food_option_name) values ("افطار+غذاء","breakfast + lunch");
-insert into food_option (food_option_arabic_name, food_option_name) values ("افطار+عشاء","breakfast + dinner");
-insert into food_option (food_option_arabic_name, food_option_name) values ("اعداد الوجبات ذاتيا","self-preparation of meals");
-insert into food_option (food_option_arabic_name, food_option_name) values ("لا يوفر وجبات","No meals provided");
-
 -- insert status_unit   	حالة الوحدة
 
 insert into status_unit (status_arabic_name, status_name) values ("انتظار","Pending");
