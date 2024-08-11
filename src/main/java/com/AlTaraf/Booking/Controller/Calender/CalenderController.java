@@ -514,7 +514,7 @@ public class CalenderController {
                 }
             }
 
-            List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitIdAndReserveIsTrue(unitId);
+            List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitId(unitId);
 
             if (roomDetailsForAvailableAreaId != null) {
                 List<ReserveDate> reserveDateList = reserveDateRepository.findByRoomDetailsForAvailableAreaIdAndUnitId(roomDetailsForAvailableAreaId, unitId);
@@ -533,8 +533,8 @@ public class CalenderController {
             }
 
             else if (!reserveDateHallsList.isEmpty()) {
-                List<ReserveDateHalls> reserveDateHalls = reserveDateHallsRepository.findByUnitIdAndReserve(unitId);
-                List<ReserveDateHallsRequest> reserveDateHallsDtoList = reserveDateHalls.stream()
+//                List<ReserveDateHalls> reserveDateHalls = reserveDateHallsRepository.findByUnitIdAndReserve(unitId);
+                List<ReserveDateHallsRequest> reserveDateHallsDtoList = reserveDateHallsList.stream()
                         .map(ReserveDateHallsMapper.INSTANCE::toDto)
                         .collect(Collectors.toList());
                 return ResponseEntity.ok(reserveDateHallsDtoList);
