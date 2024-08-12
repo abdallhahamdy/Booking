@@ -20,13 +20,13 @@ public class ReservationRequestDto {
     private Long availableAreaId;
 //    private Set<Long> roomAvailableIds;
 //    private Set<Long> availableAreaIds;
-    private Set<Long> basicFeaturesIds;
-    private Set<Long> subFeaturesIds;
-    private Set<Long> foodOptionsIds;
+//    private Set<Long> basicFeaturesIds;
+//    private Set<Long> subFeaturesIds;
+//    private Set<Long> foodOptionsIds;
     private int capacityHalls;
     private Set<Long> availablePeriodsHallsIds;
-    private int adultsAllowed;
-    private int childrenAllowed;
+//    private int adultsAllowed;
+//    private int childrenAllowed;
 //    private Long evaluationId;
 
     private LocalDate dateOfArrival;
