@@ -16,7 +16,8 @@ public interface UnitFavoriteMapper {
     @Mappings({
             @Mapping(source = "unit.id", target = "unitId"),
             @Mapping(source = "unitType.id", target = "unitTypeId"),
-            @Mapping(target = "imagePath", expression = "java(extractFirstFilePath(unit.getFileForUnits()))"),
+            @Mapping(target = "imagePath", expression = "java(extractFirstFileImagePath(unit.getFileForUnits()))"),
+            @Mapping(target = "videoPath", expression = "java(extractFirstFileVideoPath(unit.getFileForUnits()))"),
             @Mapping(source = "unit.nameUnit", target = "nameUnit"),
             @Mapping(source = "unit.favorite", target = "favorite"),
             @Mapping(source = "unit.city.cityName", target = "cityName"),
@@ -37,11 +38,18 @@ public interface UnitFavoriteMapper {
     // Define a method to extract file paths from ImageData entities
 
     // Define a method to extract the first file path from FileForUnit entities
-    default String extractFirstFilePath(List<FileForUnit> fileForUnits) {
+    default String extractFirstFileImagePath(List<FileForUnit> fileForUnits) {
         if (fileForUnits == null || fileForUnits.isEmpty()) {
             return null; // or return a default value if preferred
         }
-        return fileForUnits.get(0).getFileDownloadUri();
+        return fileForUnits.get(0).getFileImageUrl();
+    }
+
+    default String extractFirstFileVideoPath(List<FileForUnit> fileForUnits) {
+        if (fileForUnits == null || fileForUnits.isEmpty()) {
+            return null; // or return a default value if preferred
+        }
+        return fileForUnits.get(0).getFileVideoUrl();
     }
 
 }

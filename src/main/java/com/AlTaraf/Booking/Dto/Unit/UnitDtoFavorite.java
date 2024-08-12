@@ -13,6 +13,7 @@ public class UnitDtoFavorite {
     private Long unitId;
     private Long unitTypeId;
     private String imagePath; // Single image file path
+    private String videoPath; // Single image file path
     private String nameUnit;
     private String cityName;
     private String regionName;

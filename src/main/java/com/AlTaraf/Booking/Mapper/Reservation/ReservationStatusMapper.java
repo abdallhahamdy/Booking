@@ -15,6 +15,7 @@ public interface ReservationStatusMapper {
     @Mapping(source = "id", target = "reservationId")
     @Mapping(source = "user.deviceToken", target = "deviceToken")
     @Mapping(target = "imagePaths", expression = "java(extractFilePaths(reservation.getUnit().getFileForUnits()))")
+//    @Mapping(target = "videoPaths", expression = "java(extractFirstFileVideoPath(reservation.getUnit().getFileForUnits()))")
     @Mapping(source = "unit.id", target = "unitId")
     @Mapping(source = "unit.nameUnit", target = "unitName")
     @Mapping(source = "unit.city", target = "cityDto")
@@ -29,8 +30,15 @@ public interface ReservationStatusMapper {
 
     public default List<String> extractFilePaths(List<FileForUnit> fileForUnits) {
         return fileForUnits.stream()
-                .map(FileForUnit::getFileDownloadUri)
+                .map(FileForUnit::getFileImageUrl)
                 .collect(Collectors.toList());
     }
+
+//    default String extractFirstFileVideoPath(List<FileForUnit> fileForUnits) {
+//        if (fileForUnits == null || fileForUnits.isEmpty()) {
+//            return null; // or return a default value if preferred
+//        }
+//        return fileForUnits.get(0).getFileVideoUrl();
+//    }
 
 }

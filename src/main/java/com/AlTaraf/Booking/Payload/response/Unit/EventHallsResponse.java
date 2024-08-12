@@ -21,6 +21,7 @@ public class EventHallsResponse {
     private String nameUnit;
     private TypesOfEventHalls typesOfEventHalls;
     private List<String> imagePaths;
+    private String videoPaths;
     private String description;
     private int capacityHalls;
     private CityDto cityDto;

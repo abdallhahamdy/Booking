@@ -31,6 +31,7 @@ public class UnitGeneralResponseDto {
     private Long unitId;
     private UnitType unitType;
     private List<String> imagePaths;
+    private String videoPaths;
     private String nameUnit;
     private String description;
     private CityDtoSample cityDtoSample;

@@ -22,6 +22,7 @@ public interface UnitGeneralResponseMapper {
     @Mapping(source = "unitType", target = "unitType")
     @Mapping(source = "user.deviceToken", target = "deviceToken")
     @Mapping(target = "imagePaths", expression = "java(extractFilePaths(unit.getFileForUnits()))")
+    @Mapping(target = "videoPaths", expression = "java(extractFirstFileVideoPath(unit.getFileForUnits()))")
     @Mapping(source = "nameUnit", target = "nameUnit")
     @Mapping(source = "description", target = "description")
     @Mapping(source = "city", target = "cityDtoSample")
@@ -85,14 +86,21 @@ public interface UnitGeneralResponseMapper {
     default FileForUnitDTO mapToImageDataDTO(FileForUnit fileForUnit) {
         FileForUnitDTO imageDataDTO = new FileForUnitDTO();
         imageDataDTO.setName(fileForUnit.getName());
-        imageDataDTO.setFileDownloadUri(fileForUnit.getFileDownloadUri());
+        imageDataDTO.setFileImageUrl(fileForUnit.getFileImageUrl());
+        imageDataDTO.setFileVideoUrl(fileForUnit.getFileVideoUrl());
         return imageDataDTO;
     }
 
     default List<String> extractFilePaths(List<FileForUnit> fileForUnits) {
         return fileForUnits.stream()
-                .map(FileForUnit::getFileDownloadUri)
+                .map(FileForUnit::getFileImageUrl)
                 .collect(Collectors.toList());
     }
 
+    default String extractFirstFileVideoPath(List<FileForUnit> fileForUnits) {
+        if (fileForUnits == null || fileForUnits.isEmpty()) {
+            return null; // or return a default value if preferred
+        }
+        return fileForUnits.get(0).getFileVideoUrl();
+    }
 }

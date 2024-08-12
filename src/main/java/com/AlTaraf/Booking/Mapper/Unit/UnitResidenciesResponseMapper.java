@@ -15,7 +15,8 @@ public interface UnitResidenciesResponseMapper {
     @Mapping(source = "id", target = "unitId")
     @Mapping(source = "unitType.id", target = "unitTypeId")
 //    @Mapping(target = "imagePaths", expression = "java(extractFilePaths(unit.getFileDownloadUri()))")
-    @Mapping(target = "imagePaths", expression = "java(extractFilePaths(unit.getFileForUnits()))")
+    @Mapping(target = "imagePaths", expression = "java(extractFileImagePaths(unit.getFileForUnits()))")
+    @Mapping(target = "videoPaths", expression = "java(extractFirstFileVideoPath(unit.getFileForUnits()))")
     @Mapping(source = "nameUnit", target = "nameUnit")
     @Mapping(source = "description", target = "description")
     @Mapping(source = "city", target = "cityDto")
@@ -45,13 +46,21 @@ public interface UnitResidenciesResponseMapper {
     default FileForUnitDTO mapToFileForUnitDTO(FileForUnit fileForUnit) {
         FileForUnitDTO fileForUnitDTO = new FileForUnitDTO();
         fileForUnitDTO.setName(fileForUnit.getName());
-        fileForUnitDTO.setFileDownloadUri(fileForUnit.getFileDownloadUri());
+        fileForUnitDTO.setFileImageUrl(fileForUnit.getFileImageUrl());
+        fileForUnitDTO.setFileVideoUrl(fileForUnit.getFileVideoUrl());
         return fileForUnitDTO;
     }
 
-    default List<String> extractFilePaths(List<FileForUnit> images) {
+    default List<String> extractFileImagePaths(List<FileForUnit> images) {
         return images.stream()
-                .map(FileForUnit::getFileDownloadUri)
+                .map(FileForUnit::getFileImageUrl)
                 .collect(Collectors.toList());
+    }
+
+    default String extractFirstFileVideoPath(List<FileForUnit> fileForUnits) {
+        if (fileForUnits == null || fileForUnits.isEmpty()) {
+            return null; // or return a default value if preferred
+        }
+        return fileForUnits.get(0).getFileVideoUrl();
     }
 }

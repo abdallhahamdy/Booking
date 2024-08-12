@@ -31,7 +31,9 @@ public class FileForUnit {
     @Column(columnDefinition = "LONGBLOB")
     private byte[] data;
 
-    private String fileDownloadUri;
+    private String fileImageUrl;
+
+    private String fileVideoUrl;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")

@@ -9,11 +9,13 @@ import org.mapstruct.Mapping;
 public interface FileDataMapper {
     @Mapping(source = "type", target = "type")
     @Mapping(source = "name", target = "name")
-    @Mapping(source = "fileDownloadUri", target = "fileDownloadUri")
+    @Mapping(source = "fileImageUrl", target = "fileImageUrl")
+    @Mapping(source = "fileVideoUrl", target = "fileVideoUrl")
     FileForUnitDTO toDTO(FileForUnit fileForUnit);
 
     @Mapping(source = "type", target = "type")
     @Mapping(source = "name", target = "name")
-    @Mapping(source = "fileDownloadUri", target = "fileDownloadUri")
+    @Mapping(source = "fileImageUrl", target = "fileImageUrl")
+    @Mapping(source = "fileVideoUrl", target = "fileVideoUrl")
     FileForUnit toEntity(FileForUnitDTO fileForUnitDTO);
 }

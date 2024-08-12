@@ -49,7 +49,7 @@ public class FileStorageServiceImpl implements FileStorageService{
     private AdsRepository adsRepository;
 
     @Override
-    public FileForUnit storeForUnit(MultipartFile file, Long userId) throws IOException {
+    public FileForUnit storeForUnit(MultipartFile file, Long userId, Boolean video) throws IOException {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         FileForUnit fileForUnit = new FileForUnit(fileName, file.getContentType(), file.getBytes());
         User user = userRepository.findById(userId)
@@ -64,7 +64,11 @@ public class FileStorageServiceImpl implements FileStorageService{
                 .path(fileForUnit.getId())
                 .toUriString();
 
-        fileForUnit.setFileDownloadUri(fileDownloadUri);
+        if (video != null) {
+            fileForUnit.setFileVideoUrl(fileDownloadUri);
+        }
+
+        fileForUnit.setFileImageUrl(fileDownloadUri);
 
         return  fileForUnitRepository.save(fileForUnit);
     }

@@ -38,6 +38,7 @@ public class FileController {
     @PostMapping("/upload-file-for-unit")
     public ResponseEntity<?> uploadImages(@RequestParam("files") List<MultipartFile> files,
                                           @RequestParam("userId") Long userId,
+                                          @RequestParam("video") Boolean video,
                                           @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
         Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
@@ -71,7 +72,7 @@ public class FileController {
 //                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 //                            .body(new FileResponseMessage(message));
 //                }
-                storageService.storeForUnit(file, userId);
+                storageService.storeForUnit(file, userId, video);
                 System.out.println("I'm here");
             }
 

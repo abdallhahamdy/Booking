@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class FileForUnitDTO {
     private String name;
     private String type;
-    private String fileDownloadUri;
+    private String fileImageUrl;
+    private String fileVideoUrl;
 }
