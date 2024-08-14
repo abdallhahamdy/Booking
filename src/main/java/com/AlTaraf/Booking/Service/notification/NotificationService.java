@@ -37,7 +37,8 @@ public class NotificationService {
     @Autowired
     RoleRepository roleRepository;
 
-    private final String SERVER_KEY = "AAAA22Rv9Jk:APA91bEcJoOKJXEr2-fdzu3aE9RbLFseLRhF4tWj1tLNpg-uqu5R6o1pjHfjMyMo888W9bFsGniaW59wpf1-X8MeUarL4tzwZF4nl-qi8xh2zgPn3RijNogAbFo00hoabzarS5Qwfsxe";
+//    private final String SERVER_KEY = "AAAA22Rv9Jk:APA91bEcJoOKJXEr2-fdzu3aE9RbLFseLRhF4tWj1tLNpg-uqu5R6o1pjHfjMyMo888W9bFsGniaW59wpf1-X8MeUarL4tzwZF4nl-qi8xh2zgPn3RijNogAbFo00hoabzarS5Qwfsxe";
+    private final String SERVER_KEY = "fU4tKVHJTruhZt1xo5UZF4:APA91bFtwRCXDsyko2zjiRF7Q82ijOsQQEHYTF2bdmp8odnwfBkH1G82sCfv7TKvUSuePSjK8wGP4Pa0KtK6CH9zxQHbTwjXerraEIer-MRXoV7FP7ZYwkCMPabQ19mFttGyKJcxf2o9";
     private final String FCM_URL = "https://fcm.googleapis.com/fcm/send";
 
     public void sendPushMessage(String title, String body, Long userId) throws IOException, InterruptedException {

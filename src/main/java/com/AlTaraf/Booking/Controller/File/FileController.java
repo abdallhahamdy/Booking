@@ -60,8 +60,9 @@ public class FileController {
 
         try {
             if (files != null && video != null) {
+                storageService.storeForUnit(userId, video);
                 for (MultipartFile file : files) {
-                    storageService.storeForUnit(file, userId, video);
+                    storageService.storeForUnit(file, userId);
                 }
 
                 message1 = messageSource.getMessage("uploaded_files_successfully.message", null, LocaleContextHolder.getLocale()) + files.stream()
