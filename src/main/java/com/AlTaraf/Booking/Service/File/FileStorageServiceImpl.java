@@ -49,28 +49,97 @@ public class FileStorageServiceImpl implements FileStorageService{
     private AdsRepository adsRepository;
 
     @Override
-    public FileForUnit storeForUnit(MultipartFile file, Long userId, Boolean video) throws IOException {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        FileForUnit fileForUnit = new FileForUnit(fileName, file.getContentType(), file.getBytes());
+    public void storeForUnit(MultipartFile file, Long userId, MultipartFile video) throws IOException {
+
+        String fileNameImage = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileNameVideo = StringUtils.cleanPath(video.getOriginalFilename());
+
+        FileForUnit fileForUnitImage = new FileForUnit(fileNameImage, file.getContentType(), file.getBytes());
+        FileForUnit fileForUnitVideo = new FileForUnit(fileNameVideo, video.getContentType(), video.getBytes());
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
-        fileForUnit.setUser(user);
-         fileForUnitRepository.save(fileForUnit);
 
-        String fileDownloadUri = ServletUriComponentsBuilder
+        fileForUnitImage.setUser(user);
+        fileForUnitVideo.setUser(user);
+
+         fileForUnitRepository.save(fileForUnitImage);
+         fileForUnitRepository.save(fileForUnitVideo);
+
+        String fileDownloadImageUri = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
                 .scheme("https") // Set the scheme to HTTPS
                 .path("/files-for-unit/")
-                .path(fileForUnit.getId())
+                .path(fileForUnitImage.getId())
                 .toUriString();
 
-        if (video != null) {
-            fileForUnit.setFileVideoUrl(fileDownloadUri);
-        }
+        String fileDownloadVideoUri = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .scheme("https") // Set the scheme to HTTPS
+                .path("/files-for-unit/")
+                .path(fileForUnitVideo.getId())
+                .toUriString();
 
-        fileForUnit.setFileImageUrl(fileDownloadUri);
 
-        return  fileForUnitRepository.save(fileForUnit);
+        fileForUnitVideo.setFileVideoUrl(fileDownloadVideoUri);
+
+
+        fileForUnitImage.setFileImageUrl(fileDownloadImageUri);
+
+        fileForUnitRepository.save(fileForUnitImage);
+        fileForUnitRepository.save(fileForUnitVideo);
+
+    }
+
+    @Override
+    public void storeForUnit(Long userId, MultipartFile video) throws IOException {
+
+        String fileNameVideo = StringUtils.cleanPath(video.getOriginalFilename());
+        FileForUnit fileForUnitVideo = new FileForUnit(fileNameVideo, video.getContentType(), video.getBytes());
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        fileForUnitVideo.setUser(user);
+        fileForUnitRepository.save(fileForUnitVideo);
+
+        String fileDownloadVideoUri = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .scheme("https") // Set the scheme to HTTPS
+                .path("/files-for-unit/")
+                .path(fileForUnitVideo.getId())
+                .toUriString();
+
+
+        fileForUnitVideo.setFileVideoUrl(fileDownloadVideoUri);
+
+        fileForUnitRepository.save(fileForUnitVideo);
+    }
+
+    @Override
+    public void storeForUnit( MultipartFile file, Long userId) throws IOException {
+
+        String fileNameImage = StringUtils.cleanPath(file.getOriginalFilename());
+        FileForUnit fileForUnitImage = new FileForUnit(fileNameImage, file.getContentType(), file.getBytes());
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        fileForUnitImage.setUser(user);
+
+        fileForUnitRepository.save(fileForUnitImage);
+
+        String fileDownloadImageUri = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .scheme("https") // Set the scheme to HTTPS
+                .path("/files-for-unit/")
+                .path(fileForUnitImage.getId())
+                .toUriString();
+
+
+        fileForUnitImage.setFileImageUrl(fileDownloadImageUri);
+
+        fileForUnitRepository.save(fileForUnitImage);
     }
 
     @Override
@@ -184,16 +253,6 @@ public class FileStorageServiceImpl implements FileStorageService{
     public void deleteFileForAds(Long adsId) {
         fileForAdsRepository.deleteByAdsId(adsId);
     }
-
-//    @Override
-//    public void deleteByUserIdAndImageBackgroundTrue(Long userId) {
-//        fileForProfileRepository.deleteByUserIdAndImageBackgroundTrue(userId);
-//    }
-//
-//    @Override
-//    public void deleteByUserIdAndImageBackgroundIsNull(Long userId) {
-//        fileForProfileRepository.deleteByUserIdAndImageBackgroundIsNull(userId);
-//    }
 
     @Override
     public FileForUnit getFileForUnit(String id) {

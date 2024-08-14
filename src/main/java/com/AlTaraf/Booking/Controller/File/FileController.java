@@ -36,9 +36,9 @@ public class FileController {
     private MessageSource messageSource;
 
     @PostMapping("/upload-file-for-unit")
-    public ResponseEntity<?> uploadImages(@RequestParam("files") List<MultipartFile> files,
+    public ResponseEntity<?> uploadImages(@RequestParam(value = "files", required = false) List<MultipartFile> files,
+                                          @RequestParam(value = "video", required = false) MultipartFile video,
                                           @RequestParam("userId") Long userId,
-                                          @RequestParam("video") Boolean video,
                                           @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
         Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
@@ -55,34 +55,48 @@ public class FileController {
             }
         }
 
-        List<ImageUploadResponse> responses = new ArrayList<>();
-        String message = "";
-
-        // Check if the number of files exceeds the limit
-//        if (files.size() >= 2) {
-//            message = messageSource.getMessage("error_upload_file.message", null, LocaleContextHolder.getLocale());
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                    .body(new FileResponseMessage(message));
-//        }
+        String message1 = "";
+        String message2 = "";
 
         try {
-            for (MultipartFile file : files) {
-//                if (files.size() >= 2) {
-//                    message = messageSource.getMessage("error_upload_file.message", null, LocaleContextHolder.getLocale());
-//                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                            .body(new FileResponseMessage(message));
-//                }
-                storageService.storeForUnit(file, userId, video);
-                System.out.println("I'm here");
+            if (files != null && video != null) {
+                for (MultipartFile file : files) {
+                    storageService.storeForUnit(file, userId, video);
+                }
+
+                message1 = messageSource.getMessage("uploaded_files_successfully.message", null, LocaleContextHolder.getLocale()) + files.stream()
+                        .map(MultipartFile::getOriginalFilename)
+                        .collect(Collectors.toList());
+
+                message2 = messageSource.getMessage("uploaded_files_successfully.message", null, LocaleContextHolder.getLocale()) + video.getOriginalFilename();
+
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new FileResponseMessage(message1 + " & " + message2));
             }
 
-            message =  messageSource.getMessage("uploaded_files_successfully.message", null, LocaleContextHolder.getLocale()) + files.stream()
-                    .map(MultipartFile::getOriginalFilename)
-                    .collect(Collectors.toList());
+            else if (video == null) {
+                for (MultipartFile file : files) {
+                    storageService.storeForUnit(file, userId);
+                }
+                message1 = messageSource.getMessage("uploaded_files_successfully.message", null, LocaleContextHolder.getLocale()) + files.stream()
+                        .map(MultipartFile::getOriginalFilename)
+                        .collect(Collectors.toList());
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new FileResponseMessage(message1));
+            }
 
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new FileResponseMessage(message));
-        } catch (IOException e) {
+            else {
+                storageService.storeForUnit(userId, video);
+
+                message2 = messageSource.getMessage("uploaded_files_successfully.message", null, LocaleContextHolder.getLocale()) + video.getOriginalFilename();
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new FileResponseMessage(message2));
+            }
+
+        }
+
+        catch (IOException e) {
+            String message = messageSource.getMessage("uploaded_files_failed.message", null, LocaleContextHolder.getLocale()) + video.getOriginalFilename();
             System.out.println("Exception Upload Image: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new FileResponseMessage(message));
