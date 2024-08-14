@@ -6,6 +6,8 @@ import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Entity.Ads.Ads;
 import com.AlTaraf.Booking.Entity.Calender.Halls.ReserveDateHalls;
 import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
+import com.AlTaraf.Booking.Entity.Calender.ReserveDateRoomDetails;
+import com.AlTaraf.Booking.Entity.Calender.ReserveDateUnit;
 import com.AlTaraf.Booking.Entity.Evaluation.Evaluation;
 import com.AlTaraf.Booking.Entity.File.FileForAds;
 import com.AlTaraf.Booking.Entity.File.FileForUnit;
@@ -24,6 +26,8 @@ import com.AlTaraf.Booking.Repository.File.FileForUnitRepository;
 import com.AlTaraf.Booking.Repository.Reservation.ReservationRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateHallsRepository;
 import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRepository;
+import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateRoomDetailsRepository;
+import com.AlTaraf.Booking.Repository.ReserveDateRepository.ReserveDateUnitRepository;
 import com.AlTaraf.Booking.Repository.UserFavoriteUnit.UserFavoriteUnitRepository;
 import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportRepository;
 import com.AlTaraf.Booking.Repository.technicalSupport.TechnicalSupportUnitRepository;
@@ -87,25 +91,31 @@ public class UnitServiceImpl implements UnitService {
     ReservationRepository reservationsRepository;
 
     @Autowired
-    private ReservationRepository reservationRepository;
+    ReservationRepository reservationRepository;
 
     @Autowired
-    private ReserveDateRepository reserveDateRepository;
+    ReserveDateRepository reserveDateRepository;
 
     @Autowired
-    private ReserveDateHallsRepository reserveDateHallsRepository;
+    ReserveDateHallsRepository reserveDateHallsRepository;
 
     @Autowired
-    private RoomDetailsForAvailableAreaRepository roomDetailsForAvailableAreaRepository;
+    ReserveDateRoomDetailsRepository reserveDateRoomDetailsRepository;
 
     @Autowired
-    private UserFavoriteUnitRepository userFavoriteUnitRepository;
+    ReserveDateUnitRepository reserveDateUnitRepository;
 
     @Autowired
-    private RoomDetailsRepository roomDetailsRepository;
+    RoomDetailsForAvailableAreaRepository roomDetailsForAvailableAreaRepository;
 
     @Autowired
-    private AdsService adsService;
+    UserFavoriteUnitRepository userFavoriteUnitRepository;
+
+    @Autowired
+    RoomDetailsRepository roomDetailsRepository;
+
+    @Autowired
+    AdsService adsService;
 
     @Autowired
     UnitService unitService;
@@ -533,19 +543,32 @@ public class UnitServiceImpl implements UnitService {
 
     @Transactional
     public void deleteUnitWithDependencies(Long id) {
+
         List<ReserveDate> reserveDateList = reserveDateRepository.findListByUnitId(id);
         for (ReserveDate reserveDate: reserveDateList) {
             reserveDateRepository.deleteDateInfoByReserveDateId(reserveDate.getId());
         }
 
-//
         List<ReserveDateHalls> reserveDateHallsList = reserveDateHallsRepository.findByUnitId(id);
         for (ReserveDateHalls reserveDateHalls: reserveDateHallsList) {
             reserveDateHallsRepository.deleteDateInfoHallsByReserveDateHallsId(reserveDateHalls.getId());
         }
 
+        List<ReserveDateRoomDetails> reserveDateRoomDetailsList = reserveDateRoomDetailsRepository.findListByUnitId(id);
+        for (ReserveDateRoomDetails reserveDateRoomDetails : reserveDateRoomDetailsList) {
+            reserveDateRoomDetailsRepository.deleteDateInfoByReserveDateId(reserveDateRoomDetails.getId());
+        }
+
+        List<ReserveDateUnit> reserveDateUnitList = reserveDateUnitRepository.findListByUnitId(id);
+        for (ReserveDateUnit reserveDateUnit : reserveDateUnitList) {
+            reserveDateUnitRepository.deleteDateInfoByReserveDateId(reserveDateUnit.getId());
+        }
+
+
         reserveDateHallsRepository.deleteByUnitId(id);
         reserveDateRepository.deleteByUnitId(id);
+        reserveDateRoomDetailsRepository.deleteByUnitId(id);
+        reserveDateUnitRepository.deleteByUnitId(id);
 
         userFavoriteUnitRepository.deleteByUnit(id);
 
