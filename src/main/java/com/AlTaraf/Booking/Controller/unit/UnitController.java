@@ -6,7 +6,6 @@ import com.AlTaraf.Booking.Dto.Unit.UnitDtoFavorite;
 import com.AlTaraf.Booking.Dto.Unit.UnitResponse;
 import com.AlTaraf.Booking.Dto.Unit.roomDetails.RoomDetailsForAvailableAreaResponse;
 import com.AlTaraf.Booking.Dto.Unit.roomDetails.RoomDetailsResponse;
-import com.AlTaraf.Booking.Entity.Calender.ReserveDate;
 import com.AlTaraf.Booking.Entity.Reservation.Reservations;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.cityAndregion.City;
@@ -26,7 +25,6 @@ import com.AlTaraf.Booking.Entity.unit.subFeature.SubFeature;
 import com.AlTaraf.Booking.Entity.unit.typesOfApartments.TypeOfApartment;
 import com.AlTaraf.Booking.Entity.unit.typesOfEventHalls.TypesOfEventHalls;
 import com.AlTaraf.Booking.Entity.unit.unitType.UnitType;
-import com.AlTaraf.Booking.Exception.RoomDetailsNotFoundException;
 import com.AlTaraf.Booking.Mapper.Reservation.ReservationStatusMapper;
 import com.AlTaraf.Booking.Mapper.Unit.*;
 import com.AlTaraf.Booking.Mapper.Unit.RoomDetails.RoomDetailsRequestMapper;
@@ -645,7 +643,6 @@ public class UnitController {
     }
 
     @PostMapping("update/{unitId}/{roomAvailableId}/Room-Details/Add")
-    @ExceptionHandler(RoomDetailsNotFoundException.class)
     @Transactional(rollbackOn = Exception.class)
     public ResponseEntity<?> updateAddRoomDetails(@PathVariable Long unitId,
                                                   @PathVariable Long roomAvailableId,
