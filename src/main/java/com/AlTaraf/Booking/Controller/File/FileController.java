@@ -250,7 +250,7 @@ public class FileController {
         }
 
         storageService.setFileForAds(adsId, userId);
-        return new ResponseEntity<>( messageSource.getMessage("Image_Updated.message ", null, LocaleContextHolder.getLocale()) + adsId, HttpStatus.OK);
+        return new ResponseEntity<>( messageSource.getMessage("Image_Updated.message", null, LocaleContextHolder.getLocale()) + adsId, HttpStatus.OK);
     }
 
     @GetMapping("/files-for-unit/{id}")
