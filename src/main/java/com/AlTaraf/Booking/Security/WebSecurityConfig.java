@@ -103,7 +103,7 @@ public class WebSecurityConfig {
                             .requestMatchers("/Api/Units/By-Id-General/**").permitAll()
                             .requestMatchers("/api/admin/change/status/units/**").permitAll()
                             .requestMatchers("/api/cities/**").permitAll()
-                            .requestMatchers("api/users/Register/**").permitAll()
+                            .requestMatchers("/payment/back-end-url").permitAll()
 
 
 
