@@ -1,6 +1,8 @@
 package com.AlTaraf.Booking.Service.Payment;
 
 import com.AlTaraf.Booking.Dto.TransactionResponseDTO;
+import com.AlTaraf.Booking.Dto.payment.PaymentDto;
+import com.AlTaraf.Booking.Dto.payment.PaymentResponse;
 import com.AlTaraf.Booking.Entity.Transactions.Transactions;
 import com.AlTaraf.Booking.Entity.Transactions.TransactionsDetail;
 import com.AlTaraf.Booking.Entity.User.User;
@@ -179,15 +181,30 @@ public class PaymentServiceImpl implements PaymentService {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode rootNode = objectMapper.readTree(response.getBody());
 
-            // Extract the URL field
+            // Extract custom_ref and URL fields
+            String customRef = rootNode.path("custom_ref").asText();
             String url = rootNode.path("url").asText();
 
-            // Return the extracted URL in a clean format
-            return new ResponseEntity<>(url, response.getStatusCode());
+            // Create and return the response DTO
+            PaymentResponse paymentResponse = new PaymentResponse(customRef, url);
+            return new ResponseEntity<>(paymentResponse, response.getStatusCode());
 
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>("Failed to parse the response", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public ResponseEntity<?> backEndUrl(PaymentDto paymentDto) {
+
+        Payment paymentEntity = payemntRepository.findByCustomRef(paymentDto.getCustom_ref());
+        paymentEntity.setPayment_method(paymentDto.getPayment_method());
+
+        User user = userRepository.findByPhoneForUser(paymentDto.getCustomer_phone());
+        paymentEntity.setUser(user);
+        payemntRepository.save(paymentEntity);
+
+        return null;
     }
 }
