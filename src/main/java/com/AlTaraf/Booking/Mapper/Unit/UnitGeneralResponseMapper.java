@@ -94,13 +94,15 @@ public interface UnitGeneralResponseMapper {
     default List<String> extractFilePaths(List<FileForUnit> fileForUnits) {
         return fileForUnits.stream()
                 .map(FileForUnit::getFileImageUrl)
+                .filter(url -> url != null) // Exclude null URLs
                 .collect(Collectors.toList());
     }
 
     default String extractFirstFileVideoPath(List<FileForUnit> fileForUnits) {
-        if (fileForUnits == null || fileForUnits.isEmpty()) {
-            return null; // or return a default value if preferred
-        }
-        return fileForUnits.get(0).getFileVideoUrl();
+        return fileForUnits.stream()
+                .map(FileForUnit::getFileVideoUrl) // Or whatever method retrieves the video path
+                .filter(url -> url != null) // Exclude null URLs
+                .findFirst()
+                .orElse(null);
     }
 }
