@@ -4,7 +4,6 @@ import com.AlTaraf.Booking.Dto.User.UserDto;
 import com.AlTaraf.Booking.Dto.User.UserEditDto;
 import com.AlTaraf.Booking.Dto.User.UserRegisterDto;
 import com.AlTaraf.Booking.Entity.User.User;
-import com.AlTaraf.Booking.Entity.cityAndregion.City;
 import com.AlTaraf.Booking.Entity.enums.ERole;
 import com.AlTaraf.Booking.Mapper.UserMapper;
 import com.AlTaraf.Booking.Payload.request.LoginRequest;
@@ -42,17 +41,10 @@ public class UserController {
     UserService userService;
 
     @Autowired
-    CityService cityService;
-
-
-    @Autowired
     AuthenticationManager authenticationManager;
 
     @Autowired
     JwtUtils jwtUtils;
-
-    @Autowired
-    PasswordEncoder encoder;
 
     @Autowired
     UserMapper userMapper;
@@ -65,8 +57,6 @@ public class UserController {
 
     @Autowired
     OtpService otpService;
-
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @PostMapping("/send-otp-whats")
     public ResponseEntity<?> sendOtpWhats(@RequestParam String recipient, @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
@@ -118,7 +108,6 @@ public class UserController {
                     .body(response);
         }
 
-        // Perform user registration
         userService.registerUser(userRegisterDto);
 
         ApiResponse response = new ApiResponse(200, messageSource.getMessage("registration.message", null, LocaleContextHolder.getLocale()));
@@ -140,7 +129,6 @@ public class UserController {
                     locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                 }
             } catch (IllegalArgumentException e) {
-                // Handle the exception if needed
                 System.out.println("IllegalArgumentException: " + e);
             }
         }
@@ -217,7 +205,6 @@ public class UserController {
             @RequestParam int otp,
             @RequestHeader(name = "Accept-Language", required = false) String acceptLanguageHeader) {
 
-        // Perform password reset
             Locale locale = LocaleContextHolder.getLocale(); // Default to the locale context holder's locale
 
             if (acceptLanguageHeader != null && !acceptLanguageHeader.isEmpty()) {
@@ -227,12 +214,10 @@ public class UserController {
                         locale = Locale.forLanguageTag(languageRanges.get(0).getRange());
                     }
                 } catch (IllegalArgumentException e) {
-                    // Handle the exception if needed
                     System.out.println("IllegalArgumentException: " + e);
                 }
             }
 
-//            otpService.sendOtp(phone, acceptLanguageHeader);
 
             if (otpService.checkValidateOtp(phone, otp)) {
                 userService.resetPasswordByPhone(phone, passwordResetDto);
@@ -308,6 +293,10 @@ public class UserController {
                 } else {
                     existingUser.setEmail(userEditDto.getEmail());
                 }
+            }
+
+            if (userEditDto.getPhone() != null) {
+                existingUser.setPhone(userEditDto.getPhone());
             }
 
             // Save the updated user
