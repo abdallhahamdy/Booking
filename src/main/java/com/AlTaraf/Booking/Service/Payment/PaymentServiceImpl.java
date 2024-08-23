@@ -10,7 +10,10 @@ import com.AlTaraf.Booking.Repository.Transactions.TransactionsRepository;
 import com.AlTaraf.Booking.Repository.Wallet.WalletRepository;
 import com.AlTaraf.Booking.Repository.payment.PayemntRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpEntity;
@@ -40,8 +43,20 @@ public class PaymentServiceImpl implements PaymentService {
     @Autowired
     WalletRepository walletRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
+    @Value("${api.shop.url}")
+    String apiShopUrl;
+
+    @Value("${api.shop.token}")
+    String apiShopToken;
+
+    @Value("${api.shop.transaction}")
+    String apiShopTransaction;
+
     @Override
-    public ResponseEntity<?> sendTransactionRequest(Long userId, String customRef, String apiShopToken, UserRepository userRepository, String apiShopTransaction) {
+    public ResponseEntity<?> sendTransactionRequest(Long userId, String customRef) {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", "Bearer " + apiShopToken);
@@ -50,14 +65,13 @@ public class PaymentServiceImpl implements PaymentService {
             headers.set("X-RateLimit-Limit", "30");
             headers.set("X-RateLimit-Remaining", "29");
 
-//            Payment paymentEntity = new Payment();
             Payment payment = payemntRepository.findByCustomRef(customRef);
 
             MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
             body.add("store_id", payment.getId());
             body.add("custom_ref", customRef);
             HttpEntity<MultiValueMap<String, String>> httpRequest = new HttpEntity<>(body, headers);
-            System.out.println("user Id: " + userId);
+            //System.out.println("user Id: " + userId);
 
             User user = userRepository.findByUserId(userId);
             payment.setUser(user);
@@ -69,12 +83,12 @@ public class PaymentServiceImpl implements PaymentService {
 
             if (transactionResponseDTO != null && transactionResponseDTO.getData() != null) {
                 Double amount = Double.parseDouble(transactionResponseDTO.getData().getAmount());
-                System.out.println("gateway_name: " + transactionResponseDTO.getData().getGateway_name());
-                System.out.println("gateway: " + transactionResponseDTO.getData().getGateway());
-                System.out.println("custom_ref: " + transactionResponseDTO.getData().getCustom_ref());
-                System.out.println("owner_phone: " + transactionResponseDTO.getData().getOwner_phone());
-                System.out.println("amount: " + amount);
-                System.out.println("user id: " + user.getId());
+                // System.out.println("gateway_name: " + transactionResponseDTO.getData().getGateway_name());
+                // System.out.println("gateway: " + transactionResponseDTO.getData().getGateway());
+                // System.out.println("custom_ref: " + transactionResponseDTO.getData().getCustom_ref());
+                // System.out.println("owner_phone: " + transactionResponseDTO.getData().getOwner_phone());
+                // System.out.println("amount: " + amount);
+                // System.out.println("user id: " + user.getId());
 
                 Transactions transactions = transactionsRepository.findById(3L).orElse(null);
 
@@ -123,6 +137,57 @@ public class PaymentServiceImpl implements PaymentService {
         } catch (Exception e) {
             System.out.println("Error Transaction Payment: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Or handle the error as needed
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> initialPayment(Double amount, String phone, String email) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + apiShopToken);
+        headers.set("Accept", "application/json");
+        headers.set("Content-Type", "application/x-www-form-urlencoded");
+        headers.set("X-RateLimit-Limit", "30");
+        headers.set("X-RateLimit-Remaining", "29");
+
+        Payment paymentEntity = new Payment();
+        paymentEntity.setAmount(amount);
+        paymentEntity.setPhone(phone);
+        paymentEntity.setEmail(email);
+        paymentEntity.setCustom_ref(paymentEntity.getCustom_ref());
+
+        System.out.println("id: " + paymentEntity.getId());
+        System.out.println("custom_ref: " + paymentEntity.getCustom_ref());
+
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("id", paymentEntity.getId());
+        body.add("amount", String.valueOf(amount));
+        body.add("phone", phone);
+        body.add("email", email);
+        body.add("backend_url", "https://api.ihjezly.com/payment/back-end-url");
+        body.add("custom_ref", paymentEntity.getCustom_ref());
+
+        payemntRepository.save(paymentEntity);
+
+        HttpEntity<MultiValueMap<String, String>> httpRequest = new HttpEntity<>(body, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.postForEntity(apiShopUrl, httpRequest, String.class);
+
+        try {
+            // Parse the JSON response
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(response.getBody());
+
+            // Extract the URL field
+            String url = rootNode.path("url").asText();
+
+            // Return the extracted URL in a clean format
+            return new ResponseEntity<>(url, response.getStatusCode());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Failed to parse the response", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
