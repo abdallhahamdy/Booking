@@ -1,7 +1,6 @@
 package com.AlTaraf.Booking.Entity;
 
 import com.AlTaraf.Booking.Entity.User.User;
-import com.AlTaraf.Booking.Payload.request.PaymentMethod;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -36,7 +35,7 @@ public class Payment {
     @Column(name = "Backend_Url")
     private String backend_url;
 
-    private PaymentMethod payment_method;
+    private String payment_method;
 
     private String our_ref;
 
