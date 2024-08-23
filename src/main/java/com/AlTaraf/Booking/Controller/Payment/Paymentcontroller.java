@@ -2,8 +2,6 @@ package com.AlTaraf.Booking.Controller.Payment;
 
 
 import com.AlTaraf.Booking.Dto.payment.PaymentDto;
-import com.AlTaraf.Booking.Entity.Payment;
-import com.AlTaraf.Booking.Repository.payment.PayemntRepository;
 import com.AlTaraf.Booking.Service.Payment.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/payment")
 public class Paymentcontroller {
-
-    @Autowired
-    PayemntRepository payemntRepository;
 
     @Autowired
     PaymentService paymentService;
@@ -38,11 +33,8 @@ public class Paymentcontroller {
 
     @PostMapping("/back-end-url")
     public ResponseEntity<?> backEndUrl(@RequestBody PaymentDto paymentDto) {
-        Payment paymentEntity = payemntRepository.findByCustomRef(paymentDto.getCustom_ref());
-        paymentEntity.setPayment_method(paymentDto.getPayment_method());
-        payemntRepository.save(paymentEntity);
 
-        return ResponseEntity.ok(paymentDto);
+        return paymentService.backEndUrl(paymentDto);
     }
 
 
