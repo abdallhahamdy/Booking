@@ -48,31 +48,28 @@ import java.util.stream.Collectors;
 public class AdsController {
 
     @Autowired
-    private AdsService adsService;
+    AdsService adsService;
 
     @Autowired
-    private UnitGeneralResponseMapper unitGeneralResponseMapper;
+    UnitFavoriteMapper unitFavoriteMapper;
 
     @Autowired
-    private UnitFavoriteMapper unitFavoriteMapper;
+    UnitService unitService;
 
     @Autowired
-    private UnitService unitService;
+    AdsMapper adsMapper;
 
     @Autowired
-    private AdsMapper adsMapper;
+    AdsStatusMapper adsStatusMapper;
 
     @Autowired
-    private AdsStatusMapper adsStatusMapper;
+    UserService userService;
 
     @Autowired
-    private UserService userService;
+    UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private MessageSource messageSource;
+    MessageSource messageSource;
 
     @Autowired
     AdsRepository adsRepository;
@@ -82,9 +79,6 @@ public class AdsController {
 
     @Autowired
     PackageAdsRepository packageAdsRepository;
-
-    @Autowired
-    NotificationService notificationService;
 
     @Autowired
     WalletRepository walletRepository;

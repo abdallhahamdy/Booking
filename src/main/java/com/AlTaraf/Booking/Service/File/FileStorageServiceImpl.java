@@ -8,6 +8,7 @@ import com.AlTaraf.Booking.Entity.File.FileForUnit;
 import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Entity.unit.Unit;
 import com.AlTaraf.Booking.Repository.Ads.AdsRepository;
+import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
 import com.AlTaraf.Booking.Repository.File.FileForAdsRepository;
 import com.AlTaraf.Booking.Repository.File.FileForPdfRepository;
 import com.AlTaraf.Booking.Repository.File.FileForProfileRepository;
@@ -16,6 +17,7 @@ import com.AlTaraf.Booking.Repository.unit.UnitRepository;
 import com.AlTaraf.Booking.Repository.user.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,25 +30,25 @@ import java.util.List;
 public class FileStorageServiceImpl implements FileStorageService{
 
     @Autowired
-    private FileForUnitRepository fileForUnitRepository;
+    FileForUnitRepository fileForUnitRepository;
 
     @Autowired
-    private FileForAdsRepository fileForAdsRepository;
+    FileForAdsRepository fileForAdsRepository;
 
     @Autowired
-    private FileForPdfRepository fileForPdfRepository;
+    FileForPdfRepository fileForPdfRepository;
 
     @Autowired
-    private FileForProfileRepository fileForProfileRepository;
+    FileForProfileRepository fileForProfileRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Autowired
-    private UnitRepository unitRepository;
+    UnitRepository unitRepository;
 
     @Autowired
-    private AdsRepository adsRepository;
+    AdsRepository adsRepository;
 
     @Override
     public void storeForUnit(MultipartFile file, Long userId, MultipartFile video) throws IOException {

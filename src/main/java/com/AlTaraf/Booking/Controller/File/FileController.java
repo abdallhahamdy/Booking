@@ -1,13 +1,17 @@
 package com.AlTaraf.Booking.Controller.File;
 
 
+import com.AlTaraf.Booking.Entity.Ads.PackageAds;
 import com.AlTaraf.Booking.Entity.File.FileForAds;
 import com.AlTaraf.Booking.Entity.File.FileForPdf;
 import com.AlTaraf.Booking.Entity.File.FileForProfile;
 import com.AlTaraf.Booking.Entity.File.FileForUnit;
+import com.AlTaraf.Booking.Entity.User.User;
 import com.AlTaraf.Booking.Payload.response.ApiResponse;
 import com.AlTaraf.Booking.Payload.response.File.FileResponseMessage;
 import com.AlTaraf.Booking.Payload.response.ImageUploadResponse;
+import com.AlTaraf.Booking.Repository.Ads.PackageAdsRepository;
+import com.AlTaraf.Booking.Repository.user.UserRepository;
 import com.AlTaraf.Booking.Service.File.FileStorageService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +34,16 @@ import java.util.stream.Collectors;
 public class FileController {
 
     @Autowired
-    private FileStorageService storageService;
+    FileStorageService storageService;
 
     @Autowired
-    private MessageSource messageSource;
+    MessageSource messageSource;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    PackageAdsRepository packageAdsRepository;
 
     @PostMapping("/upload-file-for-unit")
     public ResponseEntity<?> uploadImages(@RequestParam(value = "files", required = false) List<MultipartFile> files,
@@ -128,6 +138,16 @@ public class FileController {
         List<ImageUploadResponse> responses = new ArrayList<>();
 
         try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+            PackageAds packageAds = packageAdsRepository.findById(0L).orElse(null);
+            int numberAds = user.getNumberAds();
+            if (numberAds == 0) {
+                user.setPackageAds(packageAds);
+                userRepository.save(user);
+                System.out.println("Number Ads is Zero");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(messageSource.getMessage("package_ads_null.message", null, LocaleContextHolder.getLocale()));
+            }
             storageService.storeForAds(file, userId, unitId);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(201, messageSource.getMessage("Successful_Upload.message", null, LocaleContextHolder.getLocale()) + responses));
