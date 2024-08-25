@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import com.AlTaraf.Booking.Entity.Payment;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -56,6 +57,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Value("${api.shop.transaction}")
     String apiShopTransaction;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
 
     @Override
     public ResponseEntity<?> sendTransactionRequest(Long userId, String customRef) {
@@ -125,10 +129,14 @@ public class PaymentServiceImpl implements PaymentService {
                 walletRepository.save(wallet);
 
                 System.out.println("payment: " + paymentEntityToActive.getCustom_ref() + " Payment Active: " + paymentEntityToActive.getIsActive());
+                messagingTemplate.convertAndSend("/topic/payment", response.getBody());
 
                 return new ResponseEntity<>(response.getBody(), response.getStatusCode());
 //            }
             } else {
+                messagingTemplate.convertAndSend("/topic/payment", response.getBody());
+                System.out.println("else Transaction Payment: ");
+
                 String errorMessage = "Payment_Failed.message";
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
             }
@@ -137,6 +145,7 @@ public class PaymentServiceImpl implements PaymentService {
             String errorMessage = "Invalid_Custom_Ref.message";
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
         } catch (Exception e) {
+            messagingTemplate.convertAndSend("/topic/payment", "Payment failed for user " + userId);
             System.out.println("Error Transaction Payment: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Or handle the error as needed
         }
@@ -187,6 +196,12 @@ public class PaymentServiceImpl implements PaymentService {
 
             // Create and return the response DTO
             PaymentResponse paymentResponse = new PaymentResponse(customRef, url);
+
+            User user = userRepository.findByPhoneForUser(phone);
+            paymentEntity.setUser(user);
+
+            sendTransactionRequest(user.getId(), customRef);
+
             return new ResponseEntity<>(paymentResponse, response.getStatusCode());
 
         } catch (Exception e) {
@@ -204,6 +219,10 @@ public class PaymentServiceImpl implements PaymentService {
         User user = userRepository.findByPhoneForUser(paymentDto.getCustomer_phone());
         paymentEntity.setUser(user);
         payemntRepository.save(paymentEntity);
+
+        sendTransactionRequest(user.getId(), paymentDto.getCustom_ref());
+
+        System.out.println("test");
 
         return null;
     }
