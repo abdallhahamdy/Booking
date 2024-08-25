@@ -28,6 +28,6 @@ public class UserDto {
     private Set<Role> roles;
     private String deviceToken;
     private Double wallet;
-
+    private Integer numberAds;
     private PackageAds packageAds;
 }

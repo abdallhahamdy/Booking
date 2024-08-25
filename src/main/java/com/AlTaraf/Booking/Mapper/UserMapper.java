@@ -68,6 +68,7 @@ public interface UserMapper {
     @Mapping(source = "wallet", target = "wallet")
     @Mapping(source = "packageAds", target = "packageAds")
     @Mapping(source = "ban", target = "ban")
+    @Mapping(source = "numberAds", target = "numberAds")
     UserDto userToUserDto(User user);
 
     @Named("roleToRoleDtoList")
