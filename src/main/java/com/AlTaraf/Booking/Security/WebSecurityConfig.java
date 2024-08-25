@@ -104,6 +104,8 @@ public class WebSecurityConfig {
                             .requestMatchers("/api/admin/change/status/units/**").permitAll()
                             .requestMatchers("/api/cities/**").permitAll()
                             .requestMatchers("/payment/back-end-url").permitAll()
+                            .requestMatchers("/ws-payment/**").permitAll()
+                            .requestMatchers("/test.html").permitAll()
 
 
 
